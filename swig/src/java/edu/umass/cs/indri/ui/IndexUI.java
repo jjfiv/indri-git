@@ -706,8 +706,57 @@ public class IndexUI extends JPanel implements ActionListener,
 	    String stemmer = (String)stemmers.getSelectedItem();
 	    env.setStemmer(stemmer);
 	}
-		
+	// add an empty string option
 	String fileClass = (String)docFormat.getSelectedItem();
+	// augment the environment as required
+	Specification spec = env.getFileClassSpec(fileClass);
+	java.util.Vector vec = new java.util.Vector();
+	java.util.Vector incs = null;
+	if (spec.include.length > 0)
+	    incs = new java.util.Vector();
+    
+	// indexed fields
+	for (int i = 0; i < spec.index.length; i++)
+	    vec.add(spec.index[i]);
+	for (int i = 0; i < fields.length; i++) {
+	    if (vec.indexOf(fields[i]) == -1)
+		vec.add(fields[i]);
+	    // add to include tags only if there were some already.
+	    if (incs != null && incs.indexOf(fields[i]) == -1)
+		incs.add(fields[i]);
+	}
+	
+	if (vec.size() > spec.index.length) {
+	    // we added something.
+	    spec.index = new String[vec.size()];
+	    vec.copyInto(spec.index);
+	}
+	
+	// metadata fields.
+	vec.clear();
+	for (int i = 0; i < spec.metadata.length; i++)
+	    vec.add(spec.metadata[i]);
+	for (int i = 0; i < metafields.length; i++) {	    
+	    if (vec.indexOf(metafields[i]) == -1)
+		vec.add(metafields[i]);
+	    // add to include tags only if there were some already.
+	    if (incs != null && incs.indexOf(metafields[i]) == -1)
+		incs.add(metafields[i]);
+	}
+	
+	if (vec.size() > spec.metadata.length) {
+	    // we added something.
+	    spec.metadata = new String[vec.size()];
+	    vec.copyInto(spec.metadata);
+	}
+	// update include if needed.
+	if (incs != null && incs.size() > spec.include.length) {
+	    spec.include = new String[incs.size()];
+	    incs.copyInto(spec.include);
+	}
+	// update the environment.
+	env.addFileClass(spec);
+	
 	String [] datafiles = formatDataFiles();
 		
 	// create a new empty index (after parameters have been set).
@@ -722,6 +771,8 @@ public class IndexUI extends JPanel implements ActionListener,
 	// do the building.
 	for (int i = 0; i < datafiles.length; i++){
 	    String fname = datafiles[i];
+	    // if the fileClass is null, use 
+	    // env.addFile(fname);
 	    env.addFile(fname, fileClass);
 	    ensureMessagesVisible();
 	}
@@ -865,15 +916,15 @@ public class IndexUI extends JPanel implements ActionListener,
     class UIIndexStatus extends IndexStatus {
 	public void status(int code, String documentFile, String error, 
 			   int documentsIndexed, int documentsSeen) {
-	    if (code == IndexStatus.FileOpen) {
+	    if (code == action_code.FileOpen.swigValue()) {
 		messages.append("Documents: " + documentsIndexed + "\n");
 		messages.append("Opened " + documentFile + "\n");
-	    } else if (code == IndexStatus.FileSkip) {
+	    } else if (code == action_code.FileSkip.swigValue()) {
 		messages.append("Skipped " + documentFile + "\n");
-	    } else if (code == IndexStatus.FileError) {
+	    } else if (code == action_code.FileError.swigValue()) {
 		messages.append("Error in " + documentFile + " : " + error + 
 				"\n");
-	    } else if (code == IndexStatus.DocumentCount) {
+	    } else if (code == action_code.DocumentCount.swigValue()) {
 		if( (documentsIndexed % 50) == 0)
 		    messages.append( "Documents: " + documentsIndexed + "\n" );
 	    }

@@ -26,6 +26,8 @@
 %include "MetadataPairVector.i"
 %include "StringMap.i"
 
+%include "Specification.i"
+
 typedef long long INT64;
 typedef long long UINT64;
 
@@ -96,7 +98,7 @@ struct IndexStatus {
     FileClose,
     DocumentCount
   };
-  
+
   virtual void status( int code, const std::string& documentPath, const std::string& error, int documentsIndexed, int documentsSeen ) = 0;
 };
 
@@ -117,6 +119,9 @@ public:
                      const std::vector<std::string>& index,
                      const std::vector<std::string>& metadata, 
                      const std::map<std::string,std::string>& conflations );
+  FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name);
+  void addFileClass( const FileClassEnvironmentFactory::Specification &spec);
+  
   void setIndexedFields( const std::vector<std::string>& fieldNames );
   void setNumericField( const std::string& fieldName, bool isNumeric );
   void setMetadataIndexedFields( const std::vector<std::string>& fieldNames );
