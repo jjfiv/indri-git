@@ -131,7 +131,6 @@ public:
 
 /// Convert an INT64 to a string
 inline std::string i64_to_string( INT64 value ) {
-  assert( value >= 0 );
   std::stringstream number;
 
   if( value > 1000000000 ) {
