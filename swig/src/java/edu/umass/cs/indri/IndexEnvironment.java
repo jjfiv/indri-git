@@ -117,4 +117,12 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_addParsedDocument(swigCPtr, document);
   }
 
+  public int documentsIndexed() {
+    return indriJNI.IndexEnvironment_documentsIndexed(swigCPtr);
+  }
+
+  public int documentsSeen() {
+    return indriJNI.IndexEnvironment_documentsSeen(swigCPtr);
+  }
+
 }

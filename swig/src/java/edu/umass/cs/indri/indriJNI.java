@@ -70,6 +70,8 @@ class indriJNI {
   public final static native void IndexEnvironment_addFile__SWIG_1(long jarg1, String jarg2, String jarg3);
   public final static native void IndexEnvironment_addString(long jarg1, String jarg2, String jarg3, Map jarg4);
   public final static native void IndexEnvironment_addParsedDocument(long jarg1, ParsedDocument jarg2);
+  public final static native int IndexEnvironment_documentsIndexed(long jarg1);
+  public final static native int IndexEnvironment_documentsSeen(long jarg1);
 
 /* Director upcall methods: */
 

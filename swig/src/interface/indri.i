@@ -141,5 +141,7 @@ public:
 
   void addString( const std::string& fileName, const std::string& fileClass, const std::vector<MetadataPair>& metadata );
   void addParsedDocument( ParsedDocument* document );
+  int documentsIndexed();
+  int documentsSeen();
 };
 

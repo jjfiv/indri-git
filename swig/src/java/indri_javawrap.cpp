@@ -2893,6 +2893,52 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addPar
 }
 
 
+JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1documentsIndexed(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jint jresult = 0 ;
+    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    int result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(IndexEnvironment **)&jarg1; 
+    {
+        try {
+            result = (int)(arg1)->documentsIndexed();
+            
+        } catch( Exception& e ) {
+            SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
+        }
+    }
+    jresult = (jint)result; 
+    return jresult;
+}
+
+
+JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1documentsSeen(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jint jresult = 0 ;
+    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    int result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(IndexEnvironment **)&jarg1; 
+    {
+        try {
+            result = (int)(arg1)->documentsSeen();
+            
+        } catch( Exception& e ) {
+            SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
+        }
+    }
+    jresult = (jint)result; 
+    return jresult;
+}
+
+
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_swig_1module_1init(JNIEnv *jenv, jclass jcls) {
     int i;
     
