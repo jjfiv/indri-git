@@ -111,7 +111,7 @@ static int uncompress_int(unsigned long *i, unsigned char p[])
 /*   i.e. the int is compressed from ptr to the left.             */
 
 
-static int compress_int(int i, unsigned char *ptr)
+static int compress_int(unsigned long i, unsigned char *ptr)
 {unsigned char *p;
 
   p = ptr;
@@ -124,7 +124,7 @@ static int compress_int(int i, unsigned char *ptr)
   return(ptr-p);
 }
 
-static int int_lc_if_compressed(int i)
+static int int_lc_if_compressed(unsigned long i)
 {
   if      ( i<128    )    return(1);
   else if ( i<16384  )    return(2);
