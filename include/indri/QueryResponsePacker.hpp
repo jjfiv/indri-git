@@ -90,11 +90,12 @@ public:
 
           for( size_t i=0; i<sendChunk; i++ ) {
             ScoredExtentResult byteSwapped;
-            
-            byteSwapped.begin = htonl(resultList[i + resultsSent].begin);
-            byteSwapped.end = htonl(resultList[i + resultsSent].end);
-            byteSwapped.document = htonl( resultList[i + resultsSent].document );
-            byteSwapped.score = lemur_compat::htond( resultList[i + resultsSent].score );
+            const ScoredExtentResult& unswapped = resultList[i + resultsSent];
+
+            byteSwapped.begin = htonl(unswapped.begin);
+            byteSwapped.end = htonl(unswapped.end);
+            byteSwapped.document = htonl(unswapped.document );
+            byteSwapped.score = lemur_compat::htond(unswapped.score);
 
             memcpy( networkResults + i*resultSize, &byteSwapped.score, sizeof(double) );
             memcpy( networkResults + i*resultSize + 8, &byteSwapped.document, sizeof(INT32) );
