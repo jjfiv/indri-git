@@ -156,6 +156,21 @@ public class RetUI extends JPanel implements ActionListener {
     String acroreadProg;
     /** Are we showing scores? */
     boolean showScores = false;
+
+    /**
+       getDocText Thread
+     */
+    volatile Thread getDocTextThread;
+
+    /**
+       getDocHtml Thread
+     */
+    volatile Thread getDocHtmlThread;
+
+    /**
+       runQuestion Thread
+     */
+    volatile Thread runQuestionThread;
     
     /**
      * Initialize the query environment and indexes model.
@@ -163,6 +178,9 @@ public class RetUI extends JPanel implements ActionListener {
     public RetUI () {
 	env = new QueryEnvironment();
 	indexesModel = new DefaultListModel();
+	getDocTextThread = null;
+	getDocHtmlThread = null;	
+	runQuestionThread = null;
     }
 	
     /**
@@ -694,85 +712,114 @@ public class RetUI extends JPanel implements ActionListener {
 	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
 	// no selection.
 	if (row == -1) return;
-	// this runs twice?!?
+	// this whole interrupt bit is hackish. Rethink.
+	while (getDocTextThread != null) {
+	    try {
+		// we're already highlighting a document, so interrupt.
+		getDocTextThread.interrupt();
+		Thread.sleep(200); // give it some time to end cleanly.
+	    } catch (InterruptedException ex) {
+		// jump to exit
+	    }
+	}
+	
 	Runnable r = new Runnable() {
 		public void run() {
-		    setCursor(wait);
-		    // get the doc text
-		    TableModel m = answerAll.getModel();
-		    //    String name = (String) m.getValueAt(row, 0);
-		    String name = names[row];
-		    status.setText("Getting " + name);
-		    String title = (String) m.getValueAt(row, 1);
-		    if (title.equals(""))
-			docTextFrame.setTitle(name);
-		    else
-			docTextFrame.setTitle(title);
-		    currentDocId = docids[row]; // internal docid
-		    // get the parsed document
-		    int [] ids = new int[1];
-		    ids[0] = currentDocId;
-		    ParsedDocument[] docs = env.documents(ids);
+		    try {
+			setCursor(wait);
+			docTextFrame.setCursor(wait);
+			docTextPane.setCursor(wait);
+			// get the doc text
+			TableModel m = answerAll.getModel();
+			//    String name = (String) m.getValueAt(row, 0);
+			String name = names[row];
+			status.setText("Getting " + name);
+			String title = (String) m.getValueAt(row, 1);
+			if (title.equals(""))
+			    docTextFrame.setTitle(name);
+			else
+			    docTextFrame.setTitle(title);
+			currentDocId = docids[row]; // internal docid
+			// get the parsed document
+			int [] ids = new int[1];
+			ids[0] = currentDocId;
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
 
-		    currentParsedDoc = docs[0];
-		    String myDocText = currentParsedDoc.text;
-		    // if it was a windows formatted file (^M^J for EOL),
-		    // we have to account for the ^M characters, that get
-		    // ignored by StyledDocument when inserting highlighting.
-		    // Nasty hack.
-		    // broken for some powerpoint docs?
-
-		    //		    System.out.println(myDocText);
-		    StringBuffer buf = new StringBuffer();
-		    buf.ensureCapacity(myDocText.length());
-		    // can't get it to match on the char.
-		    // ugh, damn windows.
-		    for (int i = 0; i < myDocText.length(); i++) {
-			char c = myDocText.charAt(i);
-			//			if (c > 140) System.out.println((int) c);
-			// windows smart quote is 3 char wide in a 
-			// StyledDocument.
-			if (c == 8220)
-			    buf.append(" ''");
-			else if (c == 8221)
-			    buf.append("'' ");
-			else if (c == '\r')
-			    buf.append(' ');
-			else 
-			    buf.append(c);
-		    }
-		    
+			ParsedDocument[] docs = env.documents(ids);
 			
-			//		    myDocText = myDocText.replace('\r', ' ');
-			//		    myDocText = myDocText.replaceAll("“", "''");
-			//		    myDocText = myDocText.replaceAll("”", "''");
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
+			currentParsedDoc = docs[0];
+			String myDocText = currentParsedDoc.text;
+			// if it was a windows formatted file (^M^J for EOL),
+			// we have to account for the ^M characters, that get
+			// ignored by StyledDocument when inserting highlighting.
+			// Nasty hack.
+			// broken for some powerpoint docs?
+
+			StringBuffer buf = new StringBuffer();
+			buf.ensureCapacity(myDocText.length());
+			// can't get it to match on the char.
+			// ugh, damn windows.
+			for (int i = 0; i < myDocText.length(); i++) {
+			    char c = myDocText.charAt(i);
+			    // windows smart quote is 3 char wide in a 
+			    // StyledDocument.
+			    if (c == 8220)
+				buf.append(" ''");
+			    else if (c == 8221)
+				buf.append("'' ");
+			    else if (c == '\r')
+				buf.append(' ');
+			    else 
+				buf.append(c);
+			// check for an interrupt every 100 char
+			if ((i%100) == 0 && Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
+
+			}
 			myDocText = buf.toString();
-			//		    System.out.println("##POST");
-		    
-			//		    System.out.println(myDocText);
+			// insert into doc text pane
+			docTextPane.setContentType("text/plain");
+			docTextPane.setText(myDocText);
+			// reset caret to start of doc text.
+			docTextPane.setCaretPosition(0);
+			// get it visible
+			if (! docTextFrame.isShowing()) {
+			    docTextFrame.setLocationRelativeTo(query);
+			    docTextFrame.setVisible(true);
+			}
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
 
-		    //	String myDocText = docs[row].text;
-		    // insert into doc text pane
-		    docTextPane.setContentType("text/plain");
-		    // use this to show html, highlighting is bad then.
-		    //	docTextPane.setContentType("text/html");
-		    docTextPane.setText(myDocText);
-		    // reset caret to start of doc text.
-		    docTextPane.setCaretPosition(0);
-		    // insert the matches markup
-		    DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
-		    DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
-		    docTextFrame.setLocationRelativeTo(query);
-		    docTextFrame.setVisible(true);
-		    // this is painfully slow
-		    highlight(root);
+			// insert the matches markup
+			DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+			DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+			// this is painfully slow
+			highlight(root);
+			status.setText(" ");
+		    } catch (InterruptedException ex) {
+			// jump to exit
+			status.setText(" ");
+		    } catch (OutOfMemoryError er) {
+			status.setText("Out of Memory. Unable to open document");
+		    }
 
-		    status.setText(" ");
 		    setCursor(def);
+		    docTextFrame.setCursor(def);
+		    getDocTextThread = null;
 		}
 	    };
-	Thread t = new Thread(r);
-	t.start();
+	getDocTextThread = new Thread(r);
+	getDocTextThread.start();
     }    
 
     /**
@@ -809,8 +856,10 @@ public class RetUI extends JPanel implements ActionListener {
 		    docHtmlPane.setText(myDocText);
 		    // reset caret to start of doc text.
 		    docHtmlPane.setCaretPosition(0);
-		    docHtmlFrame.setLocationRelativeTo(query);
-		    docHtmlFrame.setVisible(true);
+		    if (! docHtmlFrame.isShowing()) {
+			docHtmlFrame.setLocationRelativeTo(query);
+			docHtmlFrame.setVisible(true);
+		    }
 		    status.setText(" ");
 		    setCursor(def);
 		}
@@ -826,18 +875,23 @@ public class RetUI extends JPanel implements ActionListener {
      * entire tree.
      * @param query The query tree node to highlight
      */
-    private void highlight(DefaultMutableTreeNode query) {
+    private void highlight(DefaultMutableTreeNode query) throws InterruptedException {
 	StyledDocument myDoc = docTextPane.getStyledDocument();
-	int len = myDoc.getLength();
-	// don't highlight long docs
-	//	if (len > 10000) return;
 	
 	MutableAttributeSet highlight = new SimpleAttributeSet();
 	// iterate over matches.
 	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
 	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
 	// clear any attributes.
+	if (Thread.interrupted()) {
+	    throw new InterruptedException();
+	}
+
 	clearHighlight(myDoc, highlight);
+	if (Thread.interrupted()) {
+	    throw new InterruptedException();
+	}
+
 	// set highlighting colors
 	StyleConstants.setForeground(highlight,linen);
 	StyleConstants.setBackground(highlight,Color.red);
@@ -882,7 +936,7 @@ public class RetUI extends JPanel implements ActionListener {
      * @param highlight The highlighting attributes
      */
     private void highlight(UIQueryNode q, StyledDocument myDoc, 
-			   MutableAttributeSet highlight) {
+			   MutableAttributeSet highlight) throws InterruptedException {
 	boolean replace = true;
 	// iterate over matches.
 	// keys query node names (as inserted in QueryTree).
@@ -892,6 +946,9 @@ public class RetUI extends JPanel implements ActionListener {
 
 	if (extents != null) {
 	    for (int i = 0; i < extents.length; i++) {		
+		if (Thread.interrupted()) {
+		    throw new InterruptedException();
+		}
 		if (currentDocId == extents[i].document) {
 		    int s = extents[i].begin;
 		    int e = extents[i].end-1;
@@ -953,7 +1010,10 @@ public class RetUI extends JPanel implements ActionListener {
 		DefaultMutableTreeNode node = 
 		    (DefaultMutableTreeNode)(path.getLastPathComponent());
 		docQueryTree.scrollPathToVisible(path);
-		highlight(node);
+		try {
+		    highlight(node);
+		} catch (InterruptedException ex) {
+		}
 	    }
 	}
     }

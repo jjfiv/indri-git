@@ -25,6 +25,21 @@ the document text. Initially, all matches from the query are
 highlighted. Selecting different nodes within the query tree will update
 the highlighting to reflect the selected node only. 
 </p>
+<p>
+If you receive a status message of the form "Out of Memory. Unable
+to open document" when selecting a document from the table, you will
+need to manually run java on the RetUI.jar file with addtional arguments
+to increase the memory available to java. The java virtual machine can
+run out of available memory when retrieving the text of large
+(multi-megabyte) documents. From a command prompt window,
+run:<br>
+<tt>javaw -Xmx512M -jar "C:\Program Files\Indri\lib\RetUI.jar"</tt>
+<br>
+where -Xmx specifies the maximum memory for java to use, 512 megabytes
+in the above example. If javaw is not found on your path, you will need
+to have windows search for javaw.exe. If you installed indri in a
+different location from the default, adjust the pathname to the jar file accordingly.
+</p> 
 <p> The document display window provides a File menu with the following
 items: </p>
 <dl>
