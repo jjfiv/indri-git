@@ -1,0 +1,169 @@
+--------------
+Building Indri
+--------------
+
+Windows: If you are using a Windows machine, use the Visual Studio
+solution file provided to build the source tree.  Note that the release
+build of this software has Pentium IV optimizations turned on, which may
+or may not work on your machine.
+
+Linux or Solaris: To build on Linux or solaris, first run configure and
+then type "make" in the indri directory.  By  default, the project will
+build in debug mode, meaning that debug symbols are included.  To run in
+release mode (optimizations on, no symbols), type: make STYLE=release 
+Be sure to type 'make clean' first to clean out all the old object
+files.
+
+configure generates MakeDefns and Makefile.app. configure accepts
+following arguments: 
+ * --enable-assert: Enable assert statements in the code. Default is
+   disabled. 
+ * --enable-swig: compiles and installs the swig generated java
+   wrappers. Default is disabled. 
+ * --with-javahome=<path> Path to JAVAHOME for compiling the swig
+   generated shared library.  
+ * --with-swig<path> Path to swig binary. Only required if the wrapper
+   interfaces are changed.  
+ * --prefix=<install-directory> Specifies the base directory for
+   installation. Default is /usr/local.
+
+-------------
+Running Indri
+-------------
+
+buildindex takes these options:
+  memory: (optional) How much memory buildindex should use (default is
+  100mb) The value can include a scaling factor by adding a
+  suffix. Valid values are (case insensitive) K = 1000, M = 1000000, G =
+  1000000000. So 100M would be equivalent to 100000000. The value should
+  contain only decimal digits and the optional suffix.
+
+  index: path to where to place the Indri Repository.
+
+  corpus.path: A directory or file that contains the text you want to
+  index.
+
+  corpus.class: The FileClassEnviroment of the file or directory
+  containing documents to index. The known classes are: 
+
+    html -- web page data. 
+    trecweb -- TREC web format, eg terabyte track. 
+    trectext -- TREC format, eg TREC-3 onward. 
+    doc -- Microsoft Word format (windows platform only). 
+    ppt -- Microsoft Powerpoint format (windows platform only). 
+    pdf -- Adobe PDF format. 
+    txt -- Plain text format. 
+
+  metadata.field: specify the metadata fields to index, eg
+  docno. This parameter may appear multiple times. 
+
+  field.name: specify the fields to index as data, eg title. This
+  parameter may appear multiple times. 
+
+  field.numeric: the symbol true if the field contains numeric data,
+  otherwise the symbol false. Default is false.
+
+  stemmer.name: specify the stemming algorithm to use. Valid options are
+  Porter or Krovetz (case insensitive). This is an optional parameter
+  with the default of no stemming.  
+
+  stopper.word: specify the stopwords to use. This parameter may appear
+  multiple times. This is an optional parameter with the default of no
+  stopping.  
+	
+runquery takes these options:
+  memory: (optional) How much memory buildindex should use (default is
+  100mb) The value can include a scaling factor by adding a
+  suffix. Valid values are (case insensitive) K = 1000, M = 1000000, G =
+  1000000000. So 100M would be equivalent to 100000000. The value should
+  contain only decimal digits and the optional suffix.
+
+  index: Path to the index(es) you want to query
+
+  server: Name or address of a server running a copy of indrid
+  that you want to query (repeat as many times as necessary).  You
+  can optionally specify a port after a colon, like this:
+  -server=localhost:14576 
+
+  query: The query you want to run
+
+  count: (optional) Number of documents you want to retrieve, at
+  most (default is 1000). 
+
+  stopper.word: specify the stopwords to use. This parameter may appear
+  multiple times. This is an optional parameter with the default of no
+  stopping.  
+
+  rule: specifies the smoothing rule (TermScoreFunction) to
+  apply. Format of the rule is:
+
+    ( key ":" value ) [ "," key ":" value ]* 
+    For example:
+
+    -rule=method:linear,collectionLambda:0.2,field:title 
+
+    This corresponds to Jelinek-Mercer smoothing with background lambda
+    equal to 0.2, only for items in a title field. 
+
+    If nothing is listed for a key, all values are assumed. So, a rule
+    that does not specify a field matches all fields. This makes
+    -rule=method:linear,collectionLambda:0.2 a valid rule. 
+
+    Valid keys: 
+
+    method: smoothing method (text) 
+
+    field: field to apply this rule to
+
+    operator: type of item in query to apply to { term, window } 
+
+    Valid methods: 
+
+    dirichlet: (also 'd', 'dir') (default mu=2500) 
+
+    jelinek-mercer: (also 'jm', 'linear') (default collectionLambda=0.4,
+    documentLambda=0.0), collectionLambda is also known as just "lambda",
+    either will work 
+
+    twostage: (also 'two-stage', 'two') (default mu=2500, lambda=0.4) 
+    If the rule doesn't parse correctly, the default is Dirichlet,
+    mu=2500.
+
+Formatting parameters:
+
+  queryOffset: an integer value specifying one less than the starting
+
+  query number, eg 150 for TREC formatted output.
+
+  runID: a string specifying the id for a query run, used in TREC
+  scorable output.
+
+  trecFormat: the symbol true to produce TREC scorable output, otherwise
+  the symbol false.
+
+Pseudo-Relevance Feedback Parameters
+
+  fbDocs: an integer specifying the number of documents to use for
+  feedback.
+
+  fbTerms: an integer specifying the number of terms to use for
+  feedback. 
+
+  fbMu: a floating point value specifying the value of mu to use for
+  feedback.
+
+  fbOrigWeight: a floating point value in the range [0.0..1.0]
+  specifying the weight for the original query in the expanded query.
+
+
+indrid takes the following options:
+  memory: (optional) How much memory buildindex should use (default is
+  100mb) The value can include a scaling factor by adding a
+  suffix. Valid values are (case insensitive) K = 1000, M = 1000000, G =
+  1000000000. So 100M would be equivalent to 100000000. The value should
+  contain only decimal digits and the optional suffix.
+
+  index: Relative path to the index you want to serve.
+
+  port: (optional) The port you want to listen on (default is 16743)
+

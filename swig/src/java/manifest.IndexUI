@@ -1,0 +1,7 @@
+Name: edu/umass/cs/indri/ui
+Main-Class: edu.umass.cs.indri.ui.IndexUI
+Specification-Title:  Index UI
+Specification-Vendor: CIIR
+Specification-Version: 0.6
+Package-Title: edu.umass.cs.indri.ui
+Package-Vendor: CIIR
