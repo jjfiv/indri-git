@@ -14,7 +14,7 @@
 /* $ANTLR 2.7.4: "indrilang.g" -> "QueryParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
-#include "QueryLexerTokenTypes.hpp"
+#include "indri/QueryLexerTokenTypes.hpp"
 #include <antlr/LLkParser.hpp>
 
 ANTLR_BEGIN_NAMESPACE(indri)
@@ -71,6 +71,8 @@ public:
 	public:  indri::lang::ScoredExtentNode*  wsumNode();
 	public:  indri::lang::ScoredExtentNode*  maxNode();
 	public:  indri::lang::PriorNode*  priorNode();
+	public:  indri::lang::FilRejNode*  filrejNode();
+	public:  indri::lang::FilReqNode*  filreqNode();
 	public:  ScoredExtentNode*  scoredRaw();
 	public:  RawExtentNode*  qualifiedTerm();
 	public:  ExtentOr*  context_list();
@@ -93,8 +95,6 @@ public:
 	public:  RawExtentNode*  unscoredTerm();
 	public:  indri::lang::UWNode*  uwNode();
 	public:  indri::lang::BAndNode*  bandNode();
-	public:  indri::lang::FilRejNode*  filrejNode();
-	public:  indri::lang::FilReqNode*  filreqNode();
 	public:  indri::lang::Field*  anyField();
 	public:  ExtentAnd*  field_list();
 	public:  FieldLessNode*  dateBefore();

@@ -225,6 +225,8 @@ scoredExtentNode returns [ indri::lang::ScoredExtentNode* s ] :
   | ( WSUM ) => s=wsumNode
   | ( MAX ) => s=maxNode
   | ( PRIOR ) => s=priorNode
+  | ( FILREJ ) => s=filrejNode
+  | ( FILREQ ) => s=filreqNode
   | s=scoredRaw
   ;
 
@@ -449,23 +451,23 @@ bandNode returns [ indri::lang::BAndNode* b ]
   
 filrejNode returns [ indri::lang::FilRejNode* fj ]
   {
-    RawExtentNode* filtered = 0;
-    RawExtentNode* disallowed = 0;
+    RawExtentNode* filter = 0;
+    ScoredExtentNode* disallowed = 0;
   } :
   FILREJ
-  O_PAREN filtered=unscoredTerm disallowed=unscoredTerm C_PAREN {
-    fj = new FilRejNode( filtered, disallowed );
+  O_PAREN filter=unscoredTerm disallowed=scoredExtentNode C_PAREN {
+    fj = new FilRejNode( filter, disallowed );
     _nodes.push_back(fj);
   }; 
   
 filreqNode returns [ indri::lang::FilReqNode* fq ]
   {
-    RawExtentNode* filtered = 0;
-    RawExtentNode* required = 0;
+    RawExtentNode* filter = 0;
+    ScoredExtentNode* required = 0;
   } :
   FILREQ
-  O_PAREN filtered=unscoredTerm required=unscoredTerm C_PAREN {
-    fq = new FilReqNode( filtered, required );
+  O_PAREN filter=unscoredTerm required=scoredExtentNode C_PAREN {
+    fq = new FilReqNode( filter, required );
     _nodes.push_back(fq);
   }; 
  
@@ -508,8 +510,6 @@ unqualifiedTerm returns [ RawExtentNode* re ] :
   | ( DATEBEFORE ) => re=dateBefore
   | ( DATEAFTER ) => re=dateAfter
   | ( DATEBETWEEN ) => re=dateBetween
-  | ( FILREJ ) => re=filrejNode
-  | ( FILREQ ) => re=filreqNode
   | ( O_ANGLE ) => re=synonym_list
   | ( ANY ) => re=anyField
   | ( LESS ) => re=lessNode
