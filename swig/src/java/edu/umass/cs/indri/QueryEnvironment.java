@@ -41,6 +41,14 @@ public class QueryEnvironment {
     indriJNI.QueryEnvironment_addIndex(swigCPtr, pathname);
   }
 
+  public void removeServer(String hostname) {
+    indriJNI.QueryEnvironment_removeServer(swigCPtr, hostname);
+  }
+
+  public void removeIndex(String pathname) {
+    indriJNI.QueryEnvironment_removeIndex(swigCPtr, pathname);
+  }
+
   public void close() {
     indriJNI.QueryEnvironment_close(swigCPtr);
   }

@@ -62,6 +62,8 @@ class QueryEnvironment {
 public:
   void addServer( const std::string& hostname );
   void addIndex( const std::string& pathname );
+  void removeServer( const std::string& hostname );
+  void removeIndex( const std::string& pathname );
   void close();
   
   void setMemory( UINT64 memory );

@@ -21,6 +21,8 @@ class indriJNI {
   public final static native void delete_QueryAnnotation(long jarg1);
   public final static native void QueryEnvironment_addServer(long jarg1, String jarg2);
   public final static native void QueryEnvironment_addIndex(long jarg1, String jarg2);
+  public final static native void QueryEnvironment_removeServer(long jarg1, String jarg2);
+  public final static native void QueryEnvironment_removeIndex(long jarg1, String jarg2);
   public final static native void QueryEnvironment_close(long jarg1);
   public final static native void QueryEnvironment_setMemory(long jarg1, long jarg2);
   public final static native void QueryEnvironment_setScoringRules(long jarg1, String[] jarg2);

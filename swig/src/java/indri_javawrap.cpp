@@ -1036,6 +1036,64 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addInd
 }
 
 
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1removeServer(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
+    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(QueryEnvironment **)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        try {
+            (arg1)->removeServer((std::string const &)*arg2);
+            
+        } catch( Exception& e ) {
+            SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
+        }
+    }
+}
+
+
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1removeIndex(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
+    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(QueryEnvironment **)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        try {
+            (arg1)->removeIndex((std::string const &)*arg2);
+            
+        } catch( Exception& e ) {
+            SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
+        }
+    }
+}
+
+
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1close(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
     
