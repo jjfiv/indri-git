@@ -37,7 +37,7 @@ void indri::index::DiskIndex::_readManifest( const std::string& path ) {
     if( fields.exists("field") ) {
       Parameters field = fields["field"];
 
-      for( int i=0; i<fields.size(); i++ ) {
+      for( int i=0; i<field.size(); i++ ) {
         bool numeric = field[i].get( "isNumeric", false );
         int documentCount = field[i].get("total-documents", 0 );
         INT64 totalCount = field[i].get("total-terms", INT64(0) );
@@ -127,15 +127,16 @@ void indri::index::DiskIndex::close() {
 indri::index::DiskTermData* indri::index::DiskIndex::_fetchTermData( int termID ) {
   char buffer[16*1024];
   int actual;
+  bool result;
 
-  bool result = _frequentIdToTerm.get( termID, buffer, actual, sizeof buffer );
-
-  if( !result ) {
+  if( termID <= _infrequentTermBase ) {
+    result = _frequentIdToTerm.get( termID, buffer, actual, sizeof buffer );
+  } else {
     result = _infrequentIdToTerm.get( termID - _infrequentTermBase, buffer, actual, sizeof buffer );
-
-    if( !result )
-      return 0;
   }
+
+  if( !result )
+    return 0;
   assert( result );
 
   RVLDecompressStream stream( buffer, actual );

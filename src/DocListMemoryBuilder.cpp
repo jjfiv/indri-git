@@ -204,17 +204,15 @@ void indri::index::DocListMemoryBuilder::addLocation( int position ) {
   assert( _listEnd >= _list );
   assert( remaining < (MIN_SIZE<<(GROW_TIMES+1)) );
 
-  if( remaining >= LOCATION_SPACE ) {
-    // common case -- lots of memory; just compress the posting and shove it in
-    _safeAddLocation( position );
-  } else {
+  if( remaining < LOCATION_SPACE ) {
     size_t size = RVLCompress::compressedSize( position - _lastLocation );
 
-    if( remaining >= size ) {
+    if( remaining < size ) {
       _grow();
-      _safeAddLocation( position );
     }
   }
+
+  _safeAddLocation( position );
 
   assert( (_listEnd - _list) < (MIN_SIZE<<(GROW_TIMES+1)) );
   assert( _listEnd >= _list );

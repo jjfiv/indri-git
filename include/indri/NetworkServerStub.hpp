@@ -29,9 +29,19 @@ private:
   QueryServer* _server;
   NetworkMessageStream* _stream;
 
+  XMLNode* _encodeDocument( const struct ParsedDocument* document );
+  void _decodeMetadataRequest( const class XMLNode* request,
+                               std::string& attributeName,
+                               std::vector<std::string>& attributeValues );
+  void _sendDocumentsResponse( class QueryServerDocumentsResponse* response );
+  void _sendNumericResponse( const char* responseName, UINT64 number );
+
   void _handleDocuments( XMLNode* input );
   void _handleDocumentMetadata( XMLNode* request );
   void _handleDocumentVectors( XMLNode* request );
+
+  void _handleDocumentIDsFromMetadata( XMLNode* request );
+  void _handleDocumentsFromMetadata( XMLNode* request );
 
   void _handleQuery( XMLNode* input );
 

@@ -682,7 +682,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	String [] metafields = colFields.getText().split(",");;
 	String [] stopwords = new String[0];
 	env.setIndexedFields(fields);
-	env.setMetadataIndexedFields(metafields);	
+	env.setMetadataIndexedFields(metafields, metafields);	
 	String stops = stopwordlist.getText();
 	if (! stops.equals("")) {
 	    // load the stopwords into an array.

@@ -11,7 +11,9 @@
 #include <iostream>
 
 const UINT64 TIME_DELAY = 15*1000*1000;
-const UINT64 THRASHING_MERGE_DELAY = 60*1000*1000;
+const UINT64 THRASHING_MERGE_DELAY = 300*1000*1000;
+const int MAXIMUM_INDEX_COUNT = 50;
+
 
 //
 // maintenance_smoothed_load
@@ -34,16 +36,15 @@ static bool maintenance_should_merge( Repository::index_state& state, Repository
   float smoothedDocumentLoad = maintenance_smoothed_load( documentLoad );
   float addRatio = smoothedDocumentLoad / (smoothedQueryLoad+1); 
 
-  bool hasntThrashedRecently = lastThrashing < THRASHING_MERGE_DELAY;
+  bool hasntThrashedRecently = lastThrashing > THRASHING_MERGE_DELAY;
   bool couldUseMerge = state->size() >= 2;
   bool significantQueryLoad = smoothedQueryLoad > 2;
   bool insignificantDocumentLoad = smoothedDocumentLoad < 1;
   int indexesToMerge = state->size(); 
   
   // extremely heuristic choice for when indexes should be merged:
-  //   when we have 50 indexes it makes sense to merge because we'll be out
-  //   of file handles soon probably.  Otherwise, we merge if there seem to be
-  //   a lot of queries relative to the amount of documents added; and this
+  //   we merge if there are a lot of incoming queries relative to
+  //   the amount of documents added; and this
   //   is all weighted by the number of indexes we have to merge.
 
   return couldUseMerge &&
@@ -56,7 +57,7 @@ static bool maintenance_should_merge( Repository::index_state& state, Repository
 //
 
 static bool maintenance_should_trim( Repository::index_state& state, Repository::Load& documentLoad, Repository::Load& queryLoad, UINT64 lastThrashing ) {
-  return state->size() > 50;
+  return state->size() > MAXIMUM_INDEX_COUNT;
 }
 
 //

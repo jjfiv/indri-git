@@ -30,8 +30,6 @@ const int OUTPUT_BUFFER_SIZE = 512*1024;
 
 using namespace indri::index;
 
-#define LOGGING
-
 #ifdef LOGGING
 IndriTimer g_t;
 #define LOGSTART  { g_t.start(); }
@@ -65,8 +63,10 @@ void IndexWriter::_writeSkip( SequentialWriteBuffer* buffer, int document, int l
 void IndexWriter::_writeBatch( SequentialWriteBuffer* buffer, int document, int length, Buffer& data ) {
   assert( length < 100*1000*1000 );
   _writeSkip( buffer, document, length );
-  buffer->write( data.front(), data.position() );
-  data.clear();
+  if( data.position() != 0 ) {
+    buffer->write( data.front(), data.position() );
+    data.clear();
+  }
 }
 
 //
@@ -87,7 +87,7 @@ void IndexWriter::_writeManifest( const std::string& path ) {
   corpus.set("total-terms", (UINT64) _corpus.totalTerms);
   corpus.set("unique-terms", _corpus.uniqueTerms);
   corpus.set("document-base", _documentBase);
-  corpus.set("frequent-terms", (int)_topTerms.size());
+  corpus.set("frequent-terms", _topTermsCount);
 
   manifest.set( "fields", "" );
   Parameters fields = manifest["fields"];
@@ -157,7 +157,7 @@ void IndexWriter::write( std::vector<Index*>& indexes, std::vector<indri::index:
 
   std::vector<WriterIndexContext*> contexts;
 
-  LOGSTART
+  LOGSTART;
   
   LOGMESSAGE( "Starting write" );
   _buildIndexContexts( contexts, indexes );
@@ -310,6 +310,9 @@ void IndexWriter::_writeFieldList( const std::string& fileName, int fieldIndex, 
   const int minimumSkip = 1<<12; //4k
   int lastDocument = 0;
 
+  int documents = 0;
+  int terms = 0;
+
   for( int i=0; i<iterators.size(); i++ ) {
     DocExtentListIterator* iterator = iterators[i];
 
@@ -319,7 +322,7 @@ void IndexWriter::_writeFieldList( const std::string& fileName, int fieldIndex, 
     iterator->startIteration();
     RVLCompressStream stream( dataBuffer );
 
-    while( iterator->currentEntry() ) {
+    while( !iterator->finished() ) {
       DocExtentListIterator::DocumentExtentData* entry = iterator->currentEntry();
 
       if( dataBuffer.position() > minimumSkip ) {
@@ -328,7 +331,6 @@ void IndexWriter::_writeFieldList( const std::string& fileName, int fieldIndex, 
       }
 
       assert( entry->document > lastDocument || lastDocument == 0 );
-      int terms = 0;
 
       // add document difference
       stream << ( entry->document - lastDocument );
@@ -356,15 +358,17 @@ void IndexWriter::_writeFieldList( const std::string& fileName, int fieldIndex, 
           stream << entry->numbers[j];
       }
 
-      assert( _fieldData.size() > fieldIndex );
-      _fieldData[fieldIndex].documentCount++;
-      _fieldData[fieldIndex].totalCount += terms;
 
       iterator->nextEntry();
+      documents++;
     }
 
     delete iterator;
   }
+
+  assert( _fieldData.size() > fieldIndex );
+  _fieldData[fieldIndex].documentCount = documents;
+  _fieldData[fieldIndex].totalCount = terms;
 
   _writeBatch( &output, -1, dataBuffer.position(), dataBuffer );
   output.flush();
@@ -423,12 +427,15 @@ void IndexWriter::_addInvertedListData( greedy_vector<WriterIndexContext*>& list
     Index* index = (*iter)->index;
     RVLCompressStream stream( listBuffer );
 
+    int listDocs = 0;
+    int listPositions = 0;
+
     while( !iterator->finished() ) {
       // get the latest entry from the list
       DocListIterator::DocumentData* documentData = iterator->currentEntry();
 
       // add to document counter
-      docs++;
+      docs++; listDocs++;
 
       // update the topdocs list
       if( hasTopdocs ) {
@@ -471,11 +478,16 @@ void IndexWriter::_addInvertedListData( greedy_vector<WriterIndexContext*>& list
       for( int i=0; i<documentData->positions.size(); i++ ) {
         stream << (documentData->positions[i] - lastPosition);
         lastPosition = documentData->positions[i];
-        positions++;
+        positions++; listPositions++;
       }
 
       iterator->nextEntry();
     }
+
+    indri::index::TermData* td = iterator->termData();
+
+    assert( listPositions == td->corpus.totalCount );
+    assert( listDocs == td->corpus.documentCount );
   }
 
   assert( docs == termData->corpus.documentCount );
@@ -584,6 +596,12 @@ void IndexWriter::_storeFrequentTerms() {
   for( int i=0; i<_topTerms.size(); i++ ) {
     _storeStringEntry( _frequentTerms, _topTerms[i] );
   }
+
+  for( int i=0; i<_topTerms.size(); i++ ) {
+    disktermdata_delete( _topTerms[i] );
+  }
+  _topTermsCount = _topTerms.size();
+  _topTerms.clear();
 
   writeBuffer.flush();
 }
@@ -777,6 +795,7 @@ indri::index::TermTranslator* IndexWriter::_buildTermTranslator( BulkTreeReader&
       frequent->resize( oldFrequentTermID+1, -1 );
 
     int mapping = _lookupTermID( newFrequentTerms, oldFrequentTerm );
+    assert( mapping <= _isFrequentCount );
 
     if( mapping < 0 ) {
       mapping = _lookupTermID( newInfrequentTerms, oldFrequentTerm );
@@ -831,7 +850,6 @@ void IndexWriter::_writeDirectLists( WriterIndexContext* context,
                                     SequentialWriteBuffer* lengthsOutput,
                                     SequentialWriteBuffer* dataOutput ) {
 
-  std::cout << "reading vocab" << std::endl;
   VocabularyIterator* vocabulary = context->index->frequentVocabularyIterator();
   indri::index::Index* index = context->index;
   
@@ -858,8 +876,6 @@ void IndexWriter::_writeDirectLists( WriterIndexContext* context,
   iterator->startIteration();
   TermList writeList;
   Buffer outputBuffer( 256*1024 );
-
-  std::cout << "DONE MAKING TERM TRANSLATOR" << std::endl;
 
   indri::index::DocumentDataIterator* dataIterator = context->index->documentDataIterator();
   dataIterator->startIteration();

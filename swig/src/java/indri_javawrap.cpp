@@ -2398,10 +2398,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNum
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMetadataIndexedFields(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMetadataIndexedFields(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2, jobjectArray jarg3) {
     IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
+    std::vector<std::string > *arg3 = 0 ;
     std::vector<std::string > strin2 ;
+    std::vector<std::string > strin3 ;
     
     (void)jenv;
     (void)jcls;
@@ -2421,8 +2423,22 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMet
         }
     }
     {
+        jclass stringClazz = jenv->FindClass("java/lang/String");
+        jsize arrayLength = jenv->GetArrayLength(jarg3);
+        arg3 = &strin3;
+        
+        for( unsigned int i=0; i<arrayLength; i++ ) {
+            jstring str = (jstring) jenv->GetObjectArrayElement(jarg3, i);
+            jsize stringLength = jenv->GetStringUTFLength(str);
+            const char* stringChars = jenv->GetStringUTFChars(str, 0);
+            std::string stringCopy;
+            stringCopy.assign( stringChars, stringChars + stringLength );
+            arg3->push_back(stringCopy);
+        }
+    }
+    {
         try {
-            (arg1)->setMetadataIndexedFields((std::vector<std::string > const &)*arg2);
+            (arg1)->setMetadataIndexedFields((std::vector<std::string > const &)*arg2,(std::vector<std::string > const &)*arg3);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );

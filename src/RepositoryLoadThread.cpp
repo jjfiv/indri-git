@@ -46,17 +46,22 @@ UINT64 RepositoryLoadThread::work() {
   _repository._incrementLoad();
 
   Repository::index_state state = _repository.indexes();
-  indri::index::MemoryIndex* index = dynamic_cast<indri::index::MemoryIndex*>(state->back());
+  greedy_vector<indri::index::MemoryIndex*> indexes;
+  UINT64 memorySize = 0;
 
-  if( index ) {
-    UINT64 memorySize = index->memorySize();
+  for( int i=0; i<state->size(); i++ ) {
+    indri::index::MemoryIndex* index = dynamic_cast<indri::index::MemoryIndex*>((*state)[i]);
 
-    if( memorySize > 1.25*_memory ) {
-      _repository._setThrashing( true );
-      return HALF_SECOND;
-    } else {
-      _repository._setThrashing( false );
+    if( index ) {
+      memorySize += index->memorySize();
     }
+  }
+
+ if( memorySize > 1.5*_memory ) {
+    _repository._setThrashing( true );
+    return HALF_SECOND;
+  } else {
+    _repository._setThrashing( false );
   }
   
   return FIVE_SECONDS;

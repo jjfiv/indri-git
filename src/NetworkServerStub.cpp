@@ -30,6 +30,97 @@ NetworkServerStub::NetworkServerStub( QueryServer* server, NetworkMessageStream*
 {
 }
 
+void NetworkServerStub::_decodeMetadataRequest( const class XMLNode* request,
+                                               std::string& attributeName,
+                                               std::vector<std::string>& attributeValues )
+{
+  attributeName = request->getChildValue( "attributeName" );
+  const std::vector<XMLNode*>& attributeValueNodes = request->getChild( "attributeValues" )->getChildren();
+
+  for( size_t j=0; j<attributeValueNodes.size(); j++ ) {
+    attributeValues.push_back( attributeValueNodes[j]->getValue() );
+  }
+}
+
+void NetworkServerStub::_sendDocumentsResponse( QueryServerDocumentsResponse* docResponse ) {
+  std::vector<ParsedDocument*> documents = docResponse->getResults();
+  delete docResponse;
+
+  // send them back
+  XMLNode* response = new XMLNode( "documents" );
+  for( unsigned int i=0; i<documents.size(); i++ ) {
+    XMLNode* docNode = _encodeDocument( documents[i] );
+    response->addChild( docNode );
+    delete documents[i];
+  }
+
+  _stream->reply( response );
+  _stream->replyDone();
+  delete response;
+}
+
+void NetworkServerStub::_sendNumericResponse( const char* responseName, UINT64 number ) {
+  XMLNode* response = new XMLNode( responseName, i64_to_string(number) );
+  _stream->reply( response );
+  _stream->replyDone();
+  delete response;
+}
+
+XMLNode* NetworkServerStub::_encodeDocument( const struct ParsedDocument* document ) {
+  XMLNode* docNode = new XMLNode( "document" );
+
+  XMLNode* metadata = 0; 
+  XMLNode* textNode = 0;
+  XMLNode* positions = 0;
+
+  if( document->metadata.size() ) {
+    metadata = new XMLNode( "metadata" );
+
+    for( size_t j=0; j<document->metadata.size(); j++ ) {
+      XMLNode* keyNode = new XMLNode( "key", document->metadata[j].key );
+      std::string value = base64_encode( document->metadata[j].value, document->metadata[j].valueLength );
+      XMLNode* valNode = new XMLNode( "value", value );
+
+      XMLNode* datum = new XMLNode( "datum" );
+      datum->addChild( keyNode );
+      datum->addChild( valNode );
+
+      metadata->addChild( datum );
+    }
+  }
+
+  if( document->text ) {
+    std::string text = base64_encode( document->text, document->textLength );
+    textNode = new XMLNode( "text", text );
+  }
+
+  if( document->positions.size() ) {
+    positions = new XMLNode( "positions" );
+
+    for( size_t j=0; j<document->positions.size(); j++ ) {
+      XMLNode* position = new XMLNode( "position" );
+      XMLNode* begin = new XMLNode( "begin", i64_to_string( document->positions[j].begin ) );
+      XMLNode* end = new XMLNode( "end", i64_to_string( document->positions[j].end ) );
+      
+      position->addChild( begin );
+      position->addChild( end );
+
+      positions->addChild( position );
+    }
+  }
+
+  if( metadata )
+    docNode->addChild( metadata );
+
+  if( textNode )
+    docNode->addChild( textNode );
+
+  if( positions )
+    docNode->addChild( positions );
+
+  return docNode;
+}
+
 void NetworkServerStub::_handleQuery( XMLNode* request ) {
   indri::lang::Unpacker unpacker(request);
   std::vector<indri::lang::Node*> nodes = unpacker.unpack();
@@ -53,66 +144,35 @@ void NetworkServerStub::_handleDocuments( XMLNode* request ) {
 
   // get the documents
   QueryServerDocumentsResponse* docResponse = _server->documents( documentIDs );
-  std::vector<ParsedDocument*> documents = docResponse->getResults();
-  delete docResponse;
+  _sendDocumentsResponse( docResponse );
+}
 
-  // send them back
-  XMLNode* response = new XMLNode( "documents" );
-  for( unsigned int i=0; i<documents.size(); i++ ) {
-    XMLNode* docNode = new XMLNode( "document" );
-    ParsedDocument* document = documents[i];
+void NetworkServerStub::_handleDocumentsFromMetadata( XMLNode* request ) {
+  // decode the request
+  std::string attributeName;
+  std::vector<std::string> attributeValues;
+  QueryServerDocumentsResponse* documents;
 
-    XMLNode* metadata = 0; 
-    XMLNode* textNode = 0;
-    XMLNode* positions = 0;
+  _decodeMetadataRequest( request, attributeName, attributeValues );
+  documents = _server->documentsFromMetadata( attributeName, attributeValues );
+  _sendDocumentsResponse( documents ); 
+}
 
-    if( documents[i]->metadata.size() ) {
-      metadata = new XMLNode( "metadata" );
+void NetworkServerStub::_handleDocumentIDsFromMetadata( XMLNode* request ) {
+  // decode the request
+  std::string attributeName;
+  std::vector<std::string> attributeValues;
+  QueryServerDocumentIDsResponse* documentIDresponse;
 
-      for( size_t j=0; j<document->metadata.size(); j++ ) {
-        XMLNode* keyNode = new XMLNode( "key", document->metadata[j].key );
-        std::string value = base64_encode( document->metadata[j].value, document->metadata[j].valueLength );
-        XMLNode* valNode = new XMLNode( "value", value );
+  _decodeMetadataRequest( request, attributeName, attributeValues );
+  documentIDresponse = _server->documentIDsFromMetadata( attributeName, attributeValues );
+  const std::vector<DOCID_T>& documentIDs = documentIDresponse->getResults();
+  XMLNode* response = new XMLNode( "documentIDs" );
 
-        XMLNode* datum = new XMLNode( "datum" );
-        datum->addChild( keyNode );
-        datum->addChild( valNode );
-
-        metadata->addChild( datum );
-      }
-    }
-
-    if( documents[i]->text ) {
-      std::string text = base64_encode( documents[i]->text, documents[i]->textLength );
-      textNode = new XMLNode( "text", text );
-    }
-
-    if( documents[i]->positions.size() ) {
-      positions = new XMLNode( "positions" );
-
-      for( size_t j=0; j<document->positions.size(); j++ ) {
-        XMLNode* position = new XMLNode( "position" );
-        XMLNode* begin = new XMLNode( "begin", i64_to_string( document->positions[j].begin ) );
-        XMLNode* end = new XMLNode( "end", i64_to_string( document->positions[j].end ) );
-        
-        position->addChild( begin );
-        position->addChild( end );
-
-        positions->addChild( position );
-      }
-    }
-
-    if( metadata )
-      docNode->addChild( metadata );
-
-    if( textNode )
-      docNode->addChild( textNode );
-
-    if( positions )
-      docNode->addChild( positions );
-
-    response->addChild( docNode );
+  for( size_t i=0; i<documentIDs.size(); i++ ) {
+    response->addChild( new XMLNode( "documentID", i64_to_string( documentIDs[i] ) ) );
   }
+  delete documentIDresponse;
 
   _stream->reply( response );
   _stream->replyDone();
@@ -217,26 +277,17 @@ void NetworkServerStub::_handleDocumentVectors( XMLNode* request ) {
 
 void NetworkServerStub::_handleTermCount( XMLNode* request ) {
   INT64 termCount = _server->termCount();
-  XMLNode* response = new XMLNode( "term-count", i64_to_string(termCount) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "term-count", termCount );
 }
 
 void NetworkServerStub::_handleStemCountText( XMLNode* request ) {
   INT64 termCount = _server->stemCount( request->getValue().c_str() );
-  XMLNode* response = new XMLNode( "stem-count-text", i64_to_string(termCount) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "stem-count-text", termCount );
 }
 
 void NetworkServerStub::_handleTermCountText( XMLNode* request ) {
   INT64 termCount = _server->termCount( request->getValue().c_str() );
-  XMLNode* response = new XMLNode( "term-count-text", i64_to_string(termCount) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "term-count-text", termCount );
 }
 
 void NetworkServerStub::_handleTermName( XMLNode* request ) {
@@ -249,10 +300,7 @@ void NetworkServerStub::_handleTermName( XMLNode* request ) {
 
 void NetworkServerStub::_handleTermID( XMLNode* request ) {
   int termID = _server->termID( request->getValue().c_str() );
-  XMLNode* response = new XMLNode( "term-id", i64_to_string(termID) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "term-id", termID );
 }
 
 void NetworkServerStub::_handleTermFieldCount( XMLNode* request ) {
@@ -267,10 +315,7 @@ void NetworkServerStub::_handleTermFieldCount( XMLNode* request ) {
   const std::string& termName = termNode->getValue();
   count = _server->termFieldCount( termName, fieldName );
 
-  XMLNode* response = new XMLNode( "term-field-count", i64_to_string(count) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "term-field-count", count );
 }
 
 void NetworkServerStub::_handleStemFieldCount( XMLNode* request ) {
@@ -285,10 +330,7 @@ void NetworkServerStub::_handleStemFieldCount( XMLNode* request ) {
   const std::string& termName = termNode->getValue();
   count = _server->stemFieldCount( termName, fieldName );
 
-  XMLNode* response = new XMLNode( "term-field-count", i64_to_string(count) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "term-field-count", count );
 }
 
 void NetworkServerStub::_handleFieldList( XMLNode* request ) {
@@ -308,31 +350,18 @@ void NetworkServerStub::_handleDocumentLength( XMLNode* request ) {
   int documentID = string_to_int( request->getValue() );
 
   INT64 length = _server->documentLength( documentID );
-  XMLNode* response = new XMLNode( "document-length", i64_to_string( length ) );
-
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "document-length", length );
 }
 
 void NetworkServerStub::_handleDocumentCount( XMLNode* request ) {
   INT64 count = _server->documentCount();
-  XMLNode* response = new XMLNode( "document-count", i64_to_string( count ) );
-
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "document-count", count );
 }
 
 void NetworkServerStub::_handleDocumentTermCount( XMLNode* request ) {
   const std::string& term = request->getValue();
-
   INT64 count = _server->documentCount( term );
-  XMLNode* response = new XMLNode( "document-term-count", i64_to_string( count ) );
-
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
+  _sendNumericResponse( "document-term-count", count );
 }
 
 void NetworkServerStub::request( XMLNode* input ) {
@@ -369,6 +398,10 @@ void NetworkServerStub::request( XMLNode* input ) {
       _handleDocumentCount( input );
     } else if( type == "document-term-count" ) {
       _handleDocumentTermCount( input );
+    } else if( type == "docids-from-metadata" ) {
+      _handleDocumentIDsFromMetadata( input );
+    } else if( type == "documents-from-metadata" ) {
+      _handleDocumentsFromMetadata( input );
     } else {
       _stream->error( std::string() + "Unknown XML message type: " + input->getName() );
     }

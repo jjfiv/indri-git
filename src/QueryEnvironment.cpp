@@ -377,7 +377,6 @@ void QueryEnvironment::addServer( const std::string& hostname ) {
   _messageStreams.push_back( messageStream );
   _servers.push_back( proxy );
   _serverNameMap[hostname] = std::make_pair(proxy, stream);
-
 }
 
 //
@@ -503,6 +502,75 @@ std::vector<ParsedDocument*> QueryEnvironment::documents( const std::vector<Scor
 
   return documents( documentIDs );
 }
+
+//
+// documentsFromMetadata 
+//
+
+std::vector<ParsedDocument*> QueryEnvironment::documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) {
+  QueryServerDocumentsResponse* response = 0;
+
+  // we have to ask the same query to all nodes, because we don't really know which nodes will have answers.
+  greedy_vector<QueryServerDocumentsResponse*> responses;
+
+  // send out requests for processing
+  for( unsigned int i=0; i<_servers.size(); i++ ) {
+    response = _servers[i]->documentsFromMetadata( attributeName, attributeValues );
+    responses.push_back(response);
+  }
+
+  std::vector<ParsedDocument*> results;
+
+  // gather results
+  for( unsigned int i=0; i<responses.size(); i++ ) {
+    std::vector<ParsedDocument*>& responseResults = responses[i]->getResults();
+    
+    std::copy( responseResults.begin(),
+               responseResults.end(),
+               std::back_inserter( results ) );
+
+    delete response;
+  }
+
+  return results;
+}
+
+//
+// documentIDsFromMetadata
+//
+
+std::vector<DOCID_T> QueryEnvironment::documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) {
+  QueryServerDocumentIDsResponse* response = 0;
+
+  // we have to ask the same query to all nodes, because we don't really know which nodes will have answers.
+  greedy_vector<QueryServerDocumentIDsResponse*> responses;
+
+  // send out requests for processing
+  for( unsigned int i=0; i<_servers.size(); i++ ) {
+    response = _servers[i]->documentIDsFromMetadata( attributeName, attributeValues );
+    responses.push_back(response);
+  }
+
+  std::vector<DOCID_T> results;
+
+  // gather results
+  for( unsigned int i=0; i<responses.size(); i++ ) {
+    std::vector<DOCID_T>& responseResults = responses[i]->getResults();
+
+    for( unsigned int j=0; j<responseResults.size(); j++ ) {
+      DOCID_T converted = (responseResults[j] * _servers.size()) + i;
+      results.push_back( converted );
+    }
+
+    delete response;
+  }
+
+  return results;
+}
+
+//
+// _scoredQuery
+//
 
 void QueryEnvironment::_scoredQuery( InferenceNetwork::MAllResults& results, indri::lang::Node* queryRoot, std::string& accumulatorName, int resultsRequested, const std::vector<DOCID_T>* documentSet ) {
   // add a FilterNode, unique to each server

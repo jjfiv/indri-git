@@ -41,13 +41,15 @@ IndriTimer::IndriTimer()
 
 UINT64 IndriTimer::currentTime() {
 #ifdef WIN32
-  LARGE_INTEGER counts;
-  LARGE_INTEGER frequency;
-  ::QueryPerformanceCounter( &counts );
-  ::QueryPerformanceFrequency( &frequency );
-  UINT64 million = 1000000;
+  FILETIME filetime;
+  ::GetSystemTimeAsFileTime( &filetime );
 
-  return (counts.QuadPart * million)/ frequency.QuadPart;
+  // this time is now in 100 nanosecond increments
+  UINT64 result = filetime.dwHighDateTime;
+  result <<= 32;
+  result += filetime.dwLowDateTime;
+
+  return result / 10;
 #else
   struct timeval tv;
   gettimeofday(&tv, 0);

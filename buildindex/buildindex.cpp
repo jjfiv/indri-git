@@ -422,45 +422,51 @@ static bool copy_parameters_to_string_vector( std::vector<std::string>& vec, Par
   return true;
 }
 
-bool augmentSpec(FileClassEnvironmentFactory::Specification *spec,
-		 std::vector<std::string> &fields,
-		 std::vector<std::string> &metadata) {
-  //add to index and metadata fields in spec if necessary. 
+static bool augmentSpec(FileClassEnvironmentFactory::Specification *spec,
+		                    std::vector<std::string>& fields,
+		                    std::vector<std::string>& metadataForward,
+                        std::vector<std::string>& metadataBackward ) {
+  // add to index and metadata fields in spec if necessary. 
   // return true if a field is changed.
   bool retval = false;
   
-  std::vector<std::string>::iterator i1, i2;
+  std::vector<std::string>::iterator i1;
   for (i1 = fields.begin(); i1 != fields.end(); i1++) {
-    for (i2 = spec->index.begin(); i2 != spec->index.end() && (*i1) != (*i2); 
-	 i2++);
-    if (i2 == spec->index.end()) {
+    // only add the field for indexing if it doesn't already exist
+    if( std::find( spec->index.begin(), spec->index.end(), (*i1) ) == spec->index.end() ) {
       std::cerr << "Adding " << (*i1) << " to " << spec->name << " as an indexed field" << std::endl;
       spec->index.push_back(*i1);
+
       // added a field, make sure it is indexable
       // only add include tags if there are some already.
       // if it is empty, *all* tags are included.
-      if (! spec->include.empty()) {
-	std::vector<std::string>::iterator i3;
-	for (i3 = spec->include.begin(); 
-	     i3 != spec->include.end() && (*i1) != (*i3); i3++);
-	if (i3 == spec->include.end()) {
-	  spec->include.push_back(*i1);
-	  std::cerr << "Adding " << (*i1) << " to " << spec->name << " as an included tag" << std::endl;
-	}
+      if( !spec->include.empty() ) {
+        // only add the tag if it hasn't already been added
+        if( std::find( spec->include.begin(), spec->include.end(), (*i1) ) == spec->include.end() ) {
+          spec->include.push_back(*i1);
+          std::cerr << "Adding " << (*i1) << " to " << spec->name << " as an included tag" << std::endl;
+        }
       }
       retval = true;
     }
   }
   
-  for (i1 = metadata.begin(); i1 != metadata.end(); i1++) {
-    for (i2 = spec->metadata.begin(); 
-	 i2 != spec->metadata.end() && (*i1) != (*i2); i2++);
-    if (i2 == spec->metadata.end()) {
+  for (i1 = metadataForward.begin(); i1 != metadataForward.end(); i1++) {
+    if( std::find( spec->metadata.begin(), spec->metadata.end(), (*i1) ) == spec->index.end() ) {
       std::cerr << "Adding " << (*i1) << " to " << spec->name << " as a metadata field" << std::endl;
       spec->metadata.push_back(*i1);
       retval = true;
     }
   }
+
+  for (i1 = metadataBackward.begin(); i1 != metadataBackward.end(); i1++) {
+    if( std::find( spec->metadata.begin(), spec->metadata.end(), (*i1) ) == spec->index.end() ) {
+      std::cerr << "Adding " << (*i1) << " to " << spec->name << " as a metadata field" << std::endl;
+      spec->metadata.push_back(*i1);
+      retval = true;
+    }
+  }
+
   return retval;
 }
 
@@ -497,9 +503,11 @@ int main(int argc, char * argv[]) {
     if( copy_parameters_to_string_vector( stopwords, parameters, "stopper.word" ) )
       env.setStopwords(stopwords);
     
-    std::vector<std::string> metadata;
-    if( copy_parameters_to_string_vector( metadata, parameters, "metadata.field" ) )
-      env.setMetadataIndexedFields( metadata );
+    std::vector<std::string> metadataForward;
+    std::vector<std::string> metadataBackward;
+    if( copy_parameters_to_string_vector( metadataForward, parameters, "metadata.forward" ) || 
+        copy_parameters_to_string_vector( metadataBackward, parameters, "metadata.backward" ) )
+      env.setMetadataIndexedFields( metadataForward, metadataBackward );
     
     std::vector<std::string> fields;
     std::string subName = "name";
@@ -521,15 +529,16 @@ int main(int argc, char * argv[]) {
       require_parameter( "path", thisCorpus );
       std::string corpusPath = thisCorpus["path"];
       std::string fileClass = thisCorpus.get("class", "");
+      
       // augment field/metadata tags in the environment if needed.
-      if (fileClass.length()) {
-	FileClassEnvironmentFactory::Specification *spec = env.getFileClassSpec(fileClass);
-	if (spec) {
-	  // add fields if necessary, only update if changed.
-	  if (augmentSpec(spec, fields, metadata)) 
-	    env.addFileClass(*spec);
-	  delete(spec);
-	}
+      if( fileClass.length() ) {
+        FileClassEnvironmentFactory::Specification *spec = env.getFileClassSpec(fileClass);
+	      if( spec ) {
+          // add fields if necessary, only update if changed.
+          if( augmentSpec( spec, fields, metadataForward, metadataBackward ) ) 
+            env.addFileClass(*spec);
+          delete(spec);
+        }
       }
       
       bool isDirectory = Path::isDirectory( corpusPath );

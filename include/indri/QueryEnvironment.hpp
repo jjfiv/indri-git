@@ -140,6 +140,19 @@ public:
   /// @param attributeName the name of the metadata attribute
   /// @return the vector of string values for that attribute
   std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
+
+  /// \brief Fetch all documents with a metadata key that matches attributeName, with a value matching one of the attributeValues.
+  /// @param attributeName the name of the metadata attribute (e.g. 'url' or 'docno')
+  /// @param attributeValues values that the metadata attribute should match
+  /// @return a vector of ParsedDocuments that match the given metadata criteria
+  std::vector<ParsedDocument*> documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues );
+
+  /// \brief Return a list of document IDs where the document has a metadata key that matches attributeName, with a value matching one of the attributeValues.
+  /// @param attributeName the name of the metadata attribute (e.g. 'url' or 'docno')
+  /// @param attributeValues values that the metadata attribute should match
+  /// @return a vector of ParsedDocuments that match the given metadata criteria
+  std::vector<DOCID_T> documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue );
+
   /// \brief Return total number of terms.
   /// @return total number of terms in the aggregated collection
   INT64 termCount();

@@ -106,6 +106,21 @@ public:
   }
 };
 
+class LocalQueryServerDocumentIDsResponse : public QueryServerDocumentIDsResponse {
+private:
+  std::vector<DOCID_T> _documentIDs;
+
+public:
+  LocalQueryServerDocumentIDsResponse( const std::vector<DOCID_T>& documents ) : 
+    _documentIDs(documents)
+  {
+  }
+
+  std::vector<DOCID_T>& getResults() {
+    return _documentIDs;
+  }
+};
+
 //
 // Class code
 //
@@ -176,6 +191,30 @@ QueryServerDocumentsResponse* LocalQueryServer::documents( const std::vector<int
     result.push_back( document(documentIDs[i]) );
   }
   return new LocalQueryServerDocumentsResponse( result );
+}
+
+QueryServerDocumentsResponse* LocalQueryServer::documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) {
+  CompressedCollection* collection = _repository.collection();
+  std::vector<ParsedDocument*> result;
+  
+  for( unsigned int i=0; i<attributeValues.size(); i++ ) {
+    std::vector<ParsedDocument*> documents = collection->retrieveByMetadatum( attributeName, attributeValues[i] );
+    std::copy( documents.begin(), documents.end(), std::back_inserter( documents ) );
+  }
+
+  return new LocalQueryServerDocumentsResponse( result );
+}
+
+QueryServerDocumentIDsResponse* LocalQueryServer::documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) {
+  CompressedCollection* collection = _repository.collection();
+  std::vector<DOCID_T> result;
+  
+  for( unsigned int i=0; i<attributeValues.size(); i++ ) {
+    std::vector<DOCID_T> documents = collection->retrieveIDByMetadatum( attributeName, attributeValues[i] );
+    std::copy( documents.begin(), documents.end(), std::back_inserter( documents ) );
+  }
+
+  return new LocalQueryServerDocumentIDsResponse( result );
 }
 
 INT64 LocalQueryServer::termCount() {

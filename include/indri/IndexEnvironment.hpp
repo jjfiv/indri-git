@@ -111,23 +111,32 @@ public:
                      const std::vector<std::string>& index,
                      const std::vector<std::string>& metadata, 
                      const std::map<std::string,std::string>& conflations );
-  /// getthe named file class.
+  /// Get a named file class.
+  /// @param name The name of the file class to retrieve.
   FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name) {
     return _fileClassFactory.getFileClassSpec(name);
   }
-  /// add a file class.
-  void addFileClass( const FileClassEnvironmentFactory::Specification &spec){
+  /// Add a file class.
+  /// @param spec The file class to add.
+  void addFileClass( const FileClassEnvironmentFactory::Specification &spec ){
     _fileClassFactory.addFileClass(spec);
   }
   
-
-  /// set names of fields to be indexed as data
+  /// Set names of fields to be indexed.  This call indicates to the index that information about
+  /// these fields should be stored in the index so they can be used in queries.  This does not
+  /// affect whether or not the text in a particular field is stored in an index.
+  /// @see addFileClass
   /// @param fieldNames the list of fields.
   void setIndexedFields( const std::vector<std::string>& fieldNames );
   void setNumericField( const std::string& fieldName, bool isNumeric );
-  /// set names of fields to be indexed as metadata
+  /// Set names of metadata fields to be indexed for fast retrieval.
+  /// The forward fields are indexed in a B-Tree mapping (documentID, metadataValue).
+  /// If a field is not forward indexed, the documentMetadata calls will still work, but they
+  /// will be slower (the document has to be retrieved, decompressed and parsed to get the metadata back,
+  /// instead of just a B-Tree lookup).  The backward indexed fields store a mapping of (metadataValue, documentID).
+  /// If a field is not backward indexed, the documentIDsFromMetadata and documentFromMetadata calls will not work.
   /// @param fieldNames the list of fields.
-  void setMetadataIndexedFields( const std::vector<std::string>& fieldNames );
+  void setMetadataIndexedFields( const std::vector<std::string>& forwardFieldNames, const std::vector<std::string>& backwardFieldNames );
   /// set the list of stopwords
   /// @param stopwords the list of stopwords
   void setStopwords( const std::vector<std::string>& stopwords );
@@ -137,7 +146,8 @@ public:
   /// set the amount of memory to use for internal structures
   /// @param memory the number of bytes to use.
   void setMemory( UINT64 memory );
-  /// set normalization of case; default is true (normalize during indexing and at query time)
+  /// set normalization of case and some punctuation; default is true (normalize during indexing and at query time)
+  /// @param flag True, if text should be normalized, false otherwise.
   void setNormalization( bool flag );
   /// create a new index and repository
   /// @param repositoryPath the path to the repository
@@ -149,24 +159,41 @@ public:
   void open( const std::string& repositoryPath, IndexStatus* callback = 0 );
   /// close the index and repository
   void close();
-  /// add a file to the index and repository
+  
+  /// Add the text in a file to the index and repository.  The fileClass of this file
+  /// will be chosen based on the file extension.  If the file has no extension, it will
+  /// be skipped.  Information about indexing progress will be passed to the callback.
+  /// @see setCallback()
   /// @param fileName the file to add
   void addFile( const std::string& fileName );
+
   /// add a file of the specified file class to the index and repository
   /// @param fileName the file to add
   /// @param fileClass the file class to add (eg trecweb).
   void addFile( const std::string& fileName, const std::string& fileClass );
-  /// add a string to the index and repository
+
+  /// Adds a string to the index and repository.  The documentString is assumed to contain the kind of
+  /// text that would be found in a file of type fileClass.
   /// @param documentString the document to add
   /// @param fileClass the file class to add (eg trecweb).
   /// @param metadata the metadata pairs associated with the string.
   void addString( const std::string& documentString, const std::string& fileClass, const std::vector<MetadataPair>& metadata );
+
   /// add an already parsed document to the index and repository
   /// @param document the document to add
   void addParsedDocument( ParsedDocument* document );
 
-  /// delete an existing document
+  /// Delete an existing document.
+  /// @param documentID The document to delete.
   void deleteDocument( int documentID );
+
+  /// Returns the number of documents indexed so far in this session.
+  int documentsIndexed();
+
+  /// Returns the number of documents considered for indexing,
+  /// which is the sum of the documents indexed and the documents
+  /// skipped.
+  int documentsSeen();
 };
 
 #endif // INDRI_INDEXENVIRONMENT_HPP

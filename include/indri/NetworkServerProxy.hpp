@@ -31,12 +31,18 @@ class NetworkServerProxy : public QueryServer {
 private:
   NetworkMessageStream* _stream;
 
+  INT64 _numericRequest( XMLNode* node );
+  std::string _stringRequest( XMLNode* node );
+
 public:
   NetworkServerProxy( NetworkMessageStream* stream );
 
   QueryServerResponse* runQuery( std::vector<indri::lang::Node*>& roots, int resultsRequested, bool optimize );
   QueryServerDocumentsResponse* documents( const std::vector<int>& documentIDs );
   QueryServerMetadataResponse* documentMetadata( const std::vector<int>& documentIDs, const std::string& attributeName );
+
+  QueryServerDocumentIDsResponse* documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues );
+  QueryServerDocumentsResponse* documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues );
 
   // terms -- implemented (but not on stub)
   INT64 termCount();

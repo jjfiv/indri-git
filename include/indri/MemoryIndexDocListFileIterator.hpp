@@ -13,6 +13,7 @@
 #include "indri/DocListFileIterator.hpp"
 #include "indri/DocListMemoryBuilder.hpp"
 #include <algorithm>
+#include <iostream> // DEBUG
 
 namespace indri {
   namespace index {
@@ -49,6 +50,9 @@ namespace indri {
           _data.termData = (*_currentTerm)->termData;
           _data.iterator = &_iterator;
           _iterator.reset( (*_currentTerm)->list, _data.termData );
+
+          assert( (*_currentTerm)->list.documentFrequency() == _data.termData->corpus.documentCount );
+          assert( (*_currentTerm)->list.termFrequency() == _data.termData->corpus.totalCount );
         } else {
           _finished = true;
         }
@@ -82,8 +86,11 @@ namespace indri {
           return false;
         }
         
-        _iterator.reset( (*_currentTerm)->list, _data.termData );
         _data.termData = (*_currentTerm)->termData;
+        _iterator.reset( (*_currentTerm)->list, _data.termData );
+
+        assert( (*_currentTerm)->list.documentFrequency() == _data.termData->corpus.documentCount );
+        assert( (*_currentTerm)->list.termFrequency() == _data.termData->corpus.totalCount );
         return true;
       }
     };

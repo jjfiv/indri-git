@@ -126,7 +126,7 @@ public:
   
   void setIndexedFields( const std::vector<std::string>& fieldNames );
   void setNumericField( const std::string& fieldName, bool isNumeric );
-  void setMetadataIndexedFields( const std::vector<std::string>& fieldNames );
+  void setMetadataIndexedFields( const std::vector<std::string>& forward, const std::vector<std::string>& backward );
   void setStopwords( const std::vector<std::string>& stopwords );
   void setStemmer( const std::string& stemmer );
   void setMemory( UINT64 memory );

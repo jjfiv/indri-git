@@ -21,6 +21,7 @@
 
 #include "indri/NetworkStream.hpp"
 #include "indri/Buffer.hpp"
+#include "indri/Mutex.hpp"
 
 class MessageStreamHandler {
 public:
@@ -77,6 +78,7 @@ public:
 
 class NetworkMessageStream {
 private:
+  Mutex _lock;
   Buffer _buffer;
   NetworkStream* _stream;
   int _readPosition;
@@ -95,6 +97,7 @@ public:
   void replyDone();
   void error( const std::string& errorMessage );
   bool alive();
+  Lockable& mutex();
 };
 
 #endif // INDRI_NETWORKMESSAGESTREAM_HPP

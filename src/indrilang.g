@@ -507,7 +507,7 @@ extentRestriction [ indri::lang::ScoredExtentNode* sn ] returns [ indri::lang::S
     
     er = new indri::lang::FixedPassage(sn, windowSize, increment);
   } |
-  O_SQUARE "passage" field:TERM C_SQUARE
+  O_SQUARE field:TERM C_SQUARE
   {
     f = new indri::lang::Field(field->getText());
     _nodes.push_back(f);

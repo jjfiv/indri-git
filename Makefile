@@ -13,7 +13,7 @@ endif
 	$(MAKE) -C buildindex
 	$(MAKE) -C runquery
 	$(MAKE) -C indrid
-#	$(MAKE) -C dumpindex
+	$(MAKE) -C dumpindex
 
 $(INSTALLDIRS):
 	$(INSTALL_DIR) $@
@@ -27,7 +27,7 @@ endif
 	$(MAKE) clean -C buildindex
 	$(MAKE) clean -C runquery
 	$(MAKE) clean -C indrid
-#	$(MAKE) clean -C dumpindex
+	$(MAKE) clean -C dumpindex
 	rm -f depend/*
 
 distclean: clean
@@ -46,6 +46,6 @@ endif
 	$(MAKE) install -C buildindex
 	$(MAKE) install -C runquery
 	$(MAKE) install -C indrid
-	#$(MAKE) install -C dumpindex
+	$(MAKE) install -C dumpindex
 	$(MAKE) install -C doc
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)

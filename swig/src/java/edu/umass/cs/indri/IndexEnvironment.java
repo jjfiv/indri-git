@@ -61,8 +61,8 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_setNumericField(swigCPtr, fieldName, isNumeric);
   }
 
-  public void setMetadataIndexedFields(String[] fieldNames) {
-    indriJNI.IndexEnvironment_setMetadataIndexedFields(swigCPtr, fieldNames);
+  public void setMetadataIndexedFields(String[] forward, String[] backward) {
+    indriJNI.IndexEnvironment_setMetadataIndexedFields(swigCPtr, forward, backward);
   }
 
   public void setStopwords(String[] stopwords) {

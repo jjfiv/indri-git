@@ -22,27 +22,39 @@
 #include "indri/QuerySpec.hpp"
 #include "indri/InferenceNetwork.hpp"
 #include "indri/DocumentVector.hpp"
+#include "lemur/IndexTypes.hpp"
 #include <vector>
 
 class QueryServerResponse {
 public:
+  virtual ~QueryServerResponse() {};
   virtual InferenceNetwork::MAllResults& getResults() = 0;
 };
 
 class QueryServerDocumentsResponse {
 public:
+  virtual ~QueryServerDocumentsResponse() {};
   virtual std::vector<ParsedDocument*>& getResults() = 0;
 };
 
 class QueryServerMetadataResponse {
 public:
+  virtual ~QueryServerMetadataResponse() {};
   virtual std::vector<std::string>& getResults() = 0;
 };
 
 class QueryServerVectorsResponse {
 public:
+  virtual ~QueryServerVectorsResponse() {};
   virtual std::vector<DocumentVector*>& getResults() = 0;
 };
+
+class QueryServerDocumentIDsResponse {
+public:
+  virtual ~QueryServerDocumentIDsResponse() {};
+  virtual std::vector<DOCID_T>& getResults() = 0;
+};
+
 
 class QueryServer {
 public:
@@ -50,6 +62,8 @@ public:
   virtual QueryServerResponse* runQuery( std::vector<indri::lang::Node*>& roots, int resultsRequested, bool optimize ) = 0;
   virtual QueryServerDocumentsResponse* documents( const std::vector<int>& documentIDs ) = 0;
   virtual QueryServerMetadataResponse* documentMetadata( const std::vector<int>& documentIDs, const std::string& attributeName ) = 0;
+  virtual QueryServerDocumentsResponse* documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) = 0;
+  virtual QueryServerDocumentIDsResponse* documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues ) = 0;
 
   // terms
   virtual INT64 termCount() = 0;

@@ -34,6 +34,7 @@
 #include "indri/RepositoryLoadThread.hpp"
 #include "indri/RepositoryMaintenanceThread.hpp"
 #include "indri/IndriTimer.hpp"
+#include <math.h>
 #include <string>
 #include <algorithm>
 
@@ -313,17 +314,26 @@ void Repository::create( const std::string& path, Parameters* options ) {
     if( !Path::exists( collectionPath ) )
       Path::create( collectionPath );
 
-    std::vector<std::string> collectionFields;
+    std::vector<std::string> forwardFields;
+    std::vector<std::string> backwardFields;
 
-    if( options && options->exists( "collection.field" ) ) {
-      Parameters cfields = options->get( "collection.field" );
+    if( options && options->exists( "collection.forward" ) ) {
+      Parameters cfields = options->get( "collection.forward" );
 
       for( size_t i=0; i<cfields.size(); i++ ) {
-        collectionFields.push_back( (std::string) cfields[i] );
+        forwardFields.push_back( (std::string) cfields[i] );
       }
     }
 
-    _collection->create( collectionPath, collectionFields );
+    if( options && options->exists( "collection.backward" ) ) {
+      Parameters cfields = options->get( "collection.backward" );
+
+      for( size_t i=0; i<cfields.size(); i++ ) {
+        backwardFields.push_back( (std::string) cfields[i] );
+      }
+    }
+
+    _collection->create( collectionPath, forwardFields, backwardFields );
 
     _startThreads();
   } catch( Exception& e ) {
@@ -668,26 +678,37 @@ void Repository::_trim() {
   if( state->size() <= 3 )
     return;
 
-  int totalDocumentCount = 0;
   int count = state->size();
   int position;
 
-  // have to merge at least the last three indexes
-  totalDocumentCount =  (*state)[count-1]->documentCount();
-  totalDocumentCount += (*state)[count-2]->documentCount();
-  totalDocumentCount += (*state)[count-3]->documentCount();
+  // here's how this works:
+  //   we're trying to just 'trim' the indexes so that we merge
+  //   together the small indexes, leaving the large ones as they are.
+  //   We merge together a minimum of 3 indexes every time.  We may merge
+  //   more, however.  We start at the most recent indexes, and search
+  //   backward in time.  When we get to an index that is significantly
+  //   larger than the previous index, we stop.
+  //
 
+  // have to merge at least the last three indexes
+  int firstDocumentCount = (*state)[count-1]->documentCount();
+  int lastDocumentCount = (*state)[count-3]->documentCount();
+  int documentCount = 0;
+ 
   // move back until we find a really big index--don't merge with that one
   for( position = count-4; position>=0; position-- ) {
-    int documentCount = (*state)[position]->documentCount();
- 
-    // break if we find a really big index
-    if( totalDocumentCount < documentCount ) {
+    // compute the average number of documents in the indexes we've seen so far
+    documentCount = (*state)[position]->documentCount();
+
+    // break if we find an index more than 50% larger than the last one 
+    if( documentCount > lastDocumentCount*1.5 && 
+        documentCount > firstDocumentCount*4 )
+    {
       position++;
       break;
     }
 
-    totalDocumentCount += (*state)[position]->documentCount();
+    lastDocumentCount = documentCount;
   }
 
   // make sure position is greater than or equal to 0

@@ -156,11 +156,12 @@ indri::index::DocExtentListIterator::DocumentExtentData* indri::index::DocExtent
 
   return 0;
 }
+
 //
 // finished
 //
 
-bool indri::index::DocExtentListMemoryBuilderIterator::finished() {
+bool indri::index::DocExtentListMemoryBuilderIterator::finished() const {
   return _finished;
 }
 

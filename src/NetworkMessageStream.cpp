@@ -237,3 +237,9 @@ void NetworkMessageStream::error( const std::string& errorMessage ) {
 
   _stream->write( fullMessage.c_str(), fullMessage.length() );
 }
+
+Lockable& NetworkMessageStream::mutex() {
+  return _lock;
+}
+
+

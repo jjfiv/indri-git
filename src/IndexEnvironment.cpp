@@ -134,37 +134,68 @@ void IndexEnvironment::setNumericField( const std::string& fieldName, bool isNum
   field.set( "numeric", isNumeric );
 }
 
-void IndexEnvironment::setMetadataIndexedFields( const std::vector<std::string>& fieldNames ) {
+//
+// setMetadataIndexedFields
+//
+
+void IndexEnvironment::setMetadataIndexedFields( const std::vector<std::string>& forwardFields, const std::vector<std::string>& backwardFields ) {
   if( !_parameters.exists("collection") )
     _parameters.set("collection", "");
 
   Parameters collection = _parameters.get("collection");
-  for( unsigned int i=0; i<fieldNames.size(); i++ ) {
+  for( unsigned int i=0; i<forwardFields.size(); i++ ) {
     if( i==0 )
-      collection.set("field", fieldNames[i]);
+      collection.set("forward", forwardFields[i]);
     else
-      collection.append("field").set(fieldNames[i]);
+      collection.append("forward").set(forwardFields[i]);
+  }
+
+  for( unsigned int i=0; i<backwardFields.size(); i++ ) {
+    if( i==0 )
+      collection.set("backward", backwardFields[i]);
+    else
+      collection.append("backward").set(backwardFields[i]);
   }
 }
+
+//
+// create
+//
 
 void IndexEnvironment::create( const std::string& repositoryPath, IndexStatus* callback ) {
   _callback = callback;
   _repository.create( repositoryPath, &_parameters );
 }
 
+//
+// open
+//
+
 void IndexEnvironment::open( const std::string& repositoryPath, IndexStatus* callback ) {
   _callback = callback;
   _repository.open( repositoryPath, &_parameters );
 }
 
+//
+// close
+//
+
 void IndexEnvironment::close() {
   _repository.close();
 }
+
+//
+// addFile
+//
 
 void IndexEnvironment::addFile( const std::string& fileName ) {
   std::string extension = Path::extension( fileName );
   addFile( fileName, extension );
 }
+
+//
+// addFile
+//
 
 void IndexEnvironment::addFile( const std::string& fileName, const std::string& fileClass ) {
   indri::Parser* parser = 0;
@@ -268,5 +299,21 @@ void IndexEnvironment::addParsedDocument( ParsedDocument* document ) {
 
 void IndexEnvironment::deleteDocument( int documentID ) {
   _repository.deleteDocument( documentID );
+}
+
+//
+// documentsIndexed
+//
+
+int IndexEnvironment::documentsIndexed() {
+  return _documentsIndexed;
+}
+
+//
+// documentsSeen
+//
+
+int IndexEnvironment::documentsSeen() {
+  return _documentsSeen;
 }
 

@@ -46,6 +46,9 @@ public:
   ParsedDocument* document( int documentID );
   std::string documentMetadatum( int documentID, const std::string& attributeName );
 
+  QueryServerDocumentIDsResponse* documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues );
+  QueryServerDocumentsResponse* documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValues );
+
   // batch queries
   QueryServerDocumentsResponse* documents( const std::vector<int>& documentIDs );
   QueryServerMetadataResponse* documentMetadata( const std::vector<int>& documentIDs, const std::string& attributeName );

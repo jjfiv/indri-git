@@ -61,7 +61,7 @@ void indri::index::DiskDocExtentListIterator::startIteration() {
 
   // read in the first entry
   _readSkip();
-  _readEntry();
+  nextEntry();
 }
 
 //
@@ -98,6 +98,14 @@ bool indri::index::DiskDocExtentListIterator::nextEntry( int documentID ) {
 
   // now, read entries until we find one that's good
   while( _data.document < documentID && _list != _listEnd ) {
+    _readEntry();
+  }
+
+  // it's possible that documentID < _skipDocument,
+  // but we've run to the end of all the documents in this
+  // skip section.  In this case, skip forward.
+  if( _list == _listEnd && _data.document < documentID && _skipDocument > documentID ) {
+    _readSkip();
     _readEntry();
   }
 

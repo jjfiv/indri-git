@@ -491,11 +491,15 @@ int indri::index::MemoryIndex::addDocument( ParsedDocument& document ) {
     // store this term in the direct list
     _termList.addTerm( entry->termID );
 
+    assert( entry->list.termFrequency() == termData->corpus.totalCount );
+
     // store this term in the inverted list
     if( !entry->marked() )
       entry->list.startDocument( documentID );
     entry->list.addLocation( position ); 
     termData->corpus.totalCount++;
+
+    assert( entry->list.termFrequency() == termData->corpus.totalCount );
 
     // link this term_entry onto a list of ones we've seen
     if( entries == 0 ) {

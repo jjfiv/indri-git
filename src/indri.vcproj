@@ -733,6 +733,9 @@
 				RelativePath="..\include\indri\MemoryIndex.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\MemoryIndexDocListFileIterator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\MetadataPair.hpp">
 			</File>
 			<File

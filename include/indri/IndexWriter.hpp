@@ -125,6 +125,7 @@ namespace indri {
       SequentialWriteBuffer* _invertedOutput;
 
       greedy_vector<indri::index::DiskTermData*> _topTerms;
+      int _topTermsCount;
       Buffer _termDataBuffer;
 
       int _isFrequentCount;

@@ -45,7 +45,7 @@ namespace indri {
       DocExtentListMemoryBuilderIterator( const class DocExtentListMemoryBuilder& builder ); 
       
       void startIteration();
-      bool finished();
+      bool finished() const;
       bool nextEntry( int documentID );
       bool nextEntry();
       indri::index::DocExtentListIterator::DocumentExtentData* currentEntry();
