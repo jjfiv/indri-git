@@ -106,8 +106,8 @@ doc: $(OBJ)/java/docs
 
 
 clean:
-	rm -rf $(OBJ)/java
-
+	rm -rf $(OBJ)/java $(OUTDIRPHP)
+## need to add target for php solib (and fix naming conventions)
 install:
 	$(INSTALL_DATA) $(JARFILES) $(pkgdatadir)
 	$(INSTALL_PROGRAM) $(SOLIB) $(libdir)
