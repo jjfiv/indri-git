@@ -412,9 +412,20 @@ public class IndexUI extends JPanel implements ActionListener,
 	    int returnVal = fc.showOpenDialog(this);
 	    if (returnVal == JFileChooser.APPROVE_OPTION) {
 		File [] files = fc.getSelectedFiles();
-		for (int i = 0; i < files.length; i++)
-		    cfModel.addElement(files[i].getAbsolutePath());
+		for (int i = 0; i < files.length; i++) {
+		    File file = files[i];
+		    String docpath = file.getAbsolutePath();
+		    // if user double clicked a directory to select,
+		    // we get the directory name as the selected file
+		    // in the intended directory.
+		    // so check that the file exists and is a directory.
+		    // if not, try the parent directory.
+		    if (! file.exists())
+			docpath = file.getParentFile().getAbsolutePath();
+		    cfModel.addElement(docpath);
+		}
 	    }
+	    
 	    fc.setMultiSelectionEnabled(false);
 	    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	    // remove the filter.
