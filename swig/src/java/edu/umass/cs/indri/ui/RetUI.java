@@ -85,7 +85,13 @@ public class RetUI extends JPanel implements ActionListener {
     /**
      * Result holder for parsed documents
      */
-    ParsedDocument[] docs = null;
+    //    ParsedDocument[] docs = null;
+    ParsedDocument currentParsedDoc = null;
+    /**
+     * Result holder for currently selected document id
+     */
+    int currentDocId = 0;
+    
     /**
      * Result holder for document external ids
      */
@@ -436,7 +442,8 @@ public class RetUI extends JPanel implements ActionListener {
 			results = env.runAnnotatedQuery( question, maxDocs );
 			scored = results.getResults();
 			names = env.documentMetadata( scored, "docno" );
-			docs = env.documents(scored);
+			// don't populate this table, too much memory wasted.
+			//			docs = env.documents(scored);
 			docids = new int[scored.length];
 			for (int j = 0; j < scored.length; j++)
 			    docids[j] = scored[j].document;
@@ -444,6 +451,7 @@ public class RetUI extends JPanel implements ActionListener {
 			// initialize scored docs table
 			// could put the internal docid into the table,
 			// rather than using the separate docids map.
+			// could use clever tooltips too (to expand title).
 			for( int i = 0; i < scored.length; i++ ) {
 			    m.setValueAt(i, scored[i].score, names[i],
 					 scored[i].begin, scored[i].end);
@@ -546,102 +554,107 @@ public class RetUI extends JPanel implements ActionListener {
     public void getDocText() {
 	// get the selected index from the table.
 	int row = answerAll.getSelectionModel().getMinSelectionIndex();
-	// no selection. add a listener so the state can change 
-	// on selection. Bleah
-	// get the doc text
+	// no selection.
 	if (row == -1) return;
-	currentDoc = row;
+
+	// get the doc text
 	TableModel m = answerAll.getModel();
 	String name = (String) m.getValueAt(row, 1);
 	docTextFrame.setTitle(name);
-	int docid = docids[row]; // internal docid
-	String myDocText = docs[row].text;
+	currentDocId = docids[row]; // internal docid
+	// get the parsed document
+	int [] ids = new int[1];
+	ids[0] = currentDocId;
+	
+	ParsedDocument[] docs = env.documents(ids);
+	currentParsedDoc = docs[0];
+	String myDocText = currentParsedDoc.text;
+	//	String myDocText = docs[row].text;
 	// insert into doc text pane
 	docTextPane.setContentType("text/plain");
 	docTextPane.setText(myDocText);
 	// reset caret to start of doc text.
 	docTextPane.setCaretPosition(0);
 	// insert the matches markup
-	StyledDocument myDoc = docTextPane.getStyledDocument();
-	highlight(myDoc, row, docid);
+	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+	highlight(root);
 	//	docTextFrame.setLocationRelativeTo(this);
 	docTextFrame.setVisible(true);
     }    
 	
+    //rework this to separate clear from single node highlight
     /**
-     * Insert highlighting markup into a styled document, starting from the root node of the query tree.
-     * @param myDoc The document to markup
-     * @param row The row entry index into the retrieved documents table
-     * @param docid The internal document id for the selected document
+     * Insert highlighting markup into a styled document, 
+     * starting from the given node of the query tree.
+     * If the node is the root of the tree, recurse through the
+     * entire tree.
+     * @param query The query tree node to highlight
      */
-    private void highlight(StyledDocument myDoc, int row, int docid) {
+    private void highlight(DefaultMutableTreeNode query) {
+	StyledDocument myDoc = docTextPane.getStyledDocument();
 	MutableAttributeSet highlight = new SimpleAttributeSet();
+	// iterate over matches.
+	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+	// clear any attributes.
+	clearHighlight(myDoc, highlight);
+	// set highlighting colors
+	StyleConstants.setForeground(highlight,linen);
+	StyleConstants.setBackground(highlight,Color.red);
+	boolean replace = false;
+
+	if (query == root) {
+	    Enumeration queryNodes = root.breadthFirstEnumeration();
+	    while (queryNodes.hasMoreElements()) {
+		DefaultMutableTreeNode tn = (DefaultMutableTreeNode) queryNodes.nextElement();
+		UIQueryNode q = (UIQueryNode) tn.getUserObject();
+		QueryAnnotationNode node = q.getNode();
+		// only highlight raw scorer nodes when doing full tree.
+		if (node.type.equals("RawScorerNode")) {
+		    highlight(q, myDoc, highlight);
+		}
+		
+	    } 
+	} else {
+		highlight((UIQueryNode) query.getUserObject(), myDoc, 
+			  highlight);
+	}
+    }
+
+    /**
+     * Clear all highlighting markup in a styled document.
+     * @param myDoc The StyledDocument to highlight
+     * @param highlight The highlighting attributes
+     */
+    private void clearHighlight(StyledDocument myDoc, 
+				MutableAttributeSet highlight) {
 	// clear any attributes.
 	myDoc.setCharacterAttributes(myDoc.getStartPosition().getOffset(), 
 				     myDoc.getEndPosition().getOffset(), 
 				     highlight, true);
-	StyleConstants.setForeground(highlight,linen);
-	StyleConstants.setBackground(highlight,Color.red);
-	boolean replace = false;
-	// iterate over matches.
-	// keys query node names (as inserted in QueryTree).
-	// selection from tree model should matter here.
-	// clear selection on fetch new doc.
-	docQueryTree.clearSelection();
-	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
-	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
-	Enumeration queryNodes = root.breadthFirstEnumeration();
-	while (queryNodes.hasMoreElements()) {
-	    DefaultMutableTreeNode tn = (DefaultMutableTreeNode) queryNodes.nextElement();
-	    UIQueryNode q = (UIQueryNode) tn.getUserObject();
-	    QueryAnnotationNode node = q.getNode();
-	    String name = node.name;
-	    // all prox nodes should have highlights.
-	    //	    System.out.println(q + ":" + docid);
-	    //	    if (node.type.equals("IndexTerm")) {
-	    if (node.type.equals("RawScorerNode")) {
-		// this belongs in the selection listener for the query tree.
-		// default is to highlight all Term nodes.
-		ScoredExtentResult[] extents = (ScoredExtentResult[])annotations.get(name);
-		if (extents != null) {
-		    for (int i = 0; i < extents.length; i++) {		
-			if (docid == extents[i].document) {
-			    int start = docs[row].positions[extents[i].begin].begin;
-			    int end = docs[row].positions[extents[i].end-1].end;
-			    myDoc.setCharacterAttributes(start, (end - start), 
-							 highlight, replace);
-			}
-		    }
-		}
-	    }
-	}
     }
 	
     /**
      * Highlight the current document in the document text pane
      * with respect to the given query node.
      * @param q The query node to highlight extents for
+     * @param myDoc The StyledDocument to highlight
+     * @param highlight The highlighting attributes
      */
-    private void highlight(UIQueryNode q) {
-	StyledDocument myDoc = docTextPane.getStyledDocument();
-	MutableAttributeSet highlight = new SimpleAttributeSet();
-	myDoc.setCharacterAttributes(myDoc.getStartPosition().getOffset(), 
-				     myDoc.getEndPosition().getOffset(), 
-				     highlight, true);
-	StyleConstants.setForeground(highlight,linen);
-	StyleConstants.setBackground(highlight,Color.red);
+    private void highlight(UIQueryNode q, StyledDocument myDoc, 
+			   MutableAttributeSet highlight) {
 	boolean replace = false;
 	// iterate over matches.
 	// keys query node names (as inserted in QueryTree).
 	QueryAnnotationNode node = q.getNode();
 	String name = node.name;
-	int docid = docids[currentDoc];
 	ScoredExtentResult[] extents = (ScoredExtentResult[])annotations.get(name);
 	if (extents != null) {
 	    for (int i = 0; i < extents.length; i++) {		
-		if (docid == extents[i].document) {
-		    int start = docs[currentDoc].positions[extents[i].begin].begin;
-		    int end = docs[currentDoc].positions[extents[i].end-1].end;
+		if (currentDocId == extents[i].document) {
+		    int start = currentParsedDoc.positions[extents[i].begin].begin;
+		    int end = currentParsedDoc.positions[extents[i].end-1].end;
 		    myDoc.setCharacterAttributes(start, (end - start), 
 						 highlight, replace);
 		}
@@ -693,13 +706,7 @@ public class RetUI extends JPanel implements ActionListener {
 		TreePath path = e.getPath();
 		DefaultMutableTreeNode node = 
 		    (DefaultMutableTreeNode)(path.getLastPathComponent());
-		DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
-		DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
-		if (node == root)
-		    highlight(docTextPane.getStyledDocument(),
-			      currentDoc, docids[currentDoc]);
-		else 
-		    highlight((UIQueryNode) node.getUserObject());
+		highlight(node);
 	    }
 	}
     }
@@ -897,6 +904,7 @@ class DocsTableModel extends AbstractTableModel {
     /**
      * Labels for the columns
      */
+    // start and end are uninteresting. internal id/title could be more useful
     private String[] columnNames = {"Score", "Document", "Start", "End" };
     /**
      * Container for the data.
