@@ -27,6 +27,8 @@ public class RetUI extends JPanel implements ActionListener {
 	
     /** Help file for the application */
     private final static String helpFile = "properties/IndriRetrieval.html";
+	/** Little lemur icon */
+	private final static String iconFile = "properties/lemur_icon.GIF";
     /** Frame for help window */
     private JFrame helpFrame;
 	
@@ -62,6 +64,15 @@ public class RetUI extends JPanel implements ActionListener {
      * Document text pane.
      */
     JTextPane docTextPane;
+
+    /**
+     * Frame for showing document html document
+     */
+    JFrame docHtmlFrame;
+    /**
+     * Document html pane.
+     */
+    JTextPane docHtmlPane;
     /**
      * Query tree display
      */
@@ -96,6 +107,11 @@ public class RetUI extends JPanel implements ActionListener {
      * Result holder for document external ids
      */
     String [] names = null;
+
+    /**
+     * Result holder for document titles
+     */
+    String [] titles = null;
     /**
      * Result holder for document internal ids
      */
@@ -129,6 +145,16 @@ public class RetUI extends JPanel implements ActionListener {
     private static final Color navyBlue = new Color(0, 0, 128);
     /** colors */
     private static final Color linen = new Color(250, 240, 230);
+    /** cursors */
+    private static Cursor wait = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+    /** cursors */
+    private static Cursor def = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+    /** external viewers */
+    String wordProg;    
+    /** external viewers */
+    String powerpointProg;    
+    /** external viewers */
+    String acroreadProg;
 	
     /**
      * Initialize the query environment and indexes model.
@@ -142,12 +168,15 @@ public class RetUI extends JPanel implements ActionListener {
      * Create the gui elements, including the help frame.
      */
     public void init() {
+	// set paths to progs
+	setPaths();
 	// initialize help
 	makeHelp();
 	Font myFont = new Font("SansSerif", Font.BOLD, 14);
 	JPanel p;
 	Box myBox = Box.createVerticalBox();
-		
+	// need border layout to get resize behavior.
+	setLayout(new BorderLayout());
 	setBackground(lightYellow);
 	setForeground(navyBlue);
 	// add tool tips
@@ -167,7 +196,8 @@ public class RetUI extends JPanel implements ActionListener {
 	progress.setBackground(lightYellow);	
 		
 	Font anotherFont = new Font("SansSerif", Font.BOLD, 14);
-	query = new JTextField(30);
+	//	query = new JTextField(30);
+	query = new JTextField();
 	query.setBackground(lightYellow);
 	query.setForeground(navyBlue);
 	query.addActionListener(this);
@@ -182,10 +212,11 @@ public class RetUI extends JPanel implements ActionListener {
 	x.setForeground(navyBlue);
 	x.setBackground(lightYellow);
 	p.add(x, BorderLayout.WEST);
-	p.setPreferredSize(new Dimension(600, 20));
+	//	p.setPreferredSize(new Dimension(600, 20));
 	//	p.setMaximumSize(new Dimension(600, 20));
 	p.setForeground(navyBlue);
 	p.setBackground(lightYellow);
+	p.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	myBox.add(p);
 		
 	p = new JPanel();
@@ -199,7 +230,8 @@ public class RetUI extends JPanel implements ActionListener {
 	x.setBackground(lightYellow);
 		
 	p.add(x, BorderLayout.WEST);
-	numDocs = new JTextField(5);
+	//	numDocs = new JTextField(5);
+	numDocs = new JTextField();
 	numDocs.setBackground(lightYellow);
 	numDocs.setForeground(navyBlue);
 	numDocs.setFont(anotherFont);
@@ -208,14 +240,14 @@ public class RetUI extends JPanel implements ActionListener {
 	p.add(numDocs, BorderLayout.CENTER);
 		
 	// Nasty Hack!
-	x = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", null,
-		       JLabel.CENTER);
+	x = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", null, JLabel.CENTER);
 	x.setFont(myFont);
 	x.setForeground(lightYellow);
 	x.setBackground(lightYellow);
 	p.add(x, BorderLayout.EAST);
-	p.setPreferredSize(new Dimension(600, 20));
+	//p.setPreferredSize(new Dimension(600, 20));
 	//	p.setMaximumSize(new Dimension(600, 20));
+	p.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	myBox.add(p);
 		
 	p = new JPanel();
@@ -241,8 +273,9 @@ public class RetUI extends JPanel implements ActionListener {
 	p.add(listScrollPane, BorderLayout.CENTER);
 	p.setForeground(navyBlue);
 	p.setBackground(lightYellow);
-	p.setPreferredSize(new Dimension(600, 60));
+	//	p.setPreferredSize(new Dimension(600, 60));
 	//	p.setMaximumSize(new Dimension(600, 60));
+	p.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	myBox.add(p);
 		
 	p = new JPanel();
@@ -255,10 +288,11 @@ public class RetUI extends JPanel implements ActionListener {
 	p1.add(progress, BorderLayout.NORTH);
 	p1.add(p, BorderLayout.CENTER);
 	p1.add(status, BorderLayout.SOUTH);
-	p1.setPreferredSize(new Dimension(600, 80));
+	//	p1.setPreferredSize(new Dimension(600, 80));
 	//	p1.setMaximumSize(new Dimension(600, 80));
 	p1.setForeground(navyBlue);
 	p1.setBackground(lightYellow);
+	p1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	myBox.add(p1);
 		
 	p = new JPanel();
@@ -267,23 +301,26 @@ public class RetUI extends JPanel implements ActionListener {
 	p.setBackground(lightYellow);
 	anotherFont = new Font("SansSerif", Font.PLAIN, 18);
 	makeDocTextFrame();
+	makeDocHtmlFrame();
 	answerAll = makeDocsTable();
 	answerAll.setFont(anotherFont);
 	answerAll.setBackground(linen);
 	answerAll.setForeground(Color.black);
 	answerAll.setPreferredSize(new Dimension(600, 400));
 	answerAll.setPreferredScrollableViewportSize(new Dimension(600, 400));
-	answerAll.setToolTipText("Select an entry to view the document");
+	// cell tips override this.
+	//answerAll.setToolTipText("Select an entry to view the document");
 	JScrollPane scroll = new JScrollPane(answerAll);
-	scroll.setPreferredSize(new Dimension(600, 400));
+	//	scroll.setPreferredSize(new Dimension(600, 400));
 	//	scroll.setMinimumSize(new Dimension(600, 200));
 	//	scroll.setMaximumSize(new Dimension(600, 400));
 	scroll.setDoubleBuffered(true);
 	p.add(scroll, BorderLayout.CENTER);
-	p.setPreferredSize(new Dimension(600, 400));
+	//	p.setPreferredSize(new Dimension(600, 400));
 	//	p.setMinimumSize(new Dimension(600, 400));
+	p.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 	myBox.add(p);
-	add(myBox);
+	add(myBox, BorderLayout.CENTER);
 	query.setEnabled(envInit);
 	go.setEnabled(envInit);
     }
@@ -299,15 +336,7 @@ public class RetUI extends JPanel implements ActionListener {
 	    // query to run
 	    runQuestion();
 	} else if (act.equals("Clear")) {
-	    query.setText("");
-	    status.setText("");
-	    DocsTableModel m = (DocsTableModel)answerAll.getModel();
-	    m.clear();
-	    // clear the docs frame
-	    docTextPane.setText("");
-	    docTextFrame.setTitle("Document");
-	    // clear the query
-	    docQueryTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Query")));
+	    clearAll();
 	    query.requestFocus();
 	    // need a remove index/server. 
 	} else if (act.equals("Add Index")) {
@@ -325,6 +354,7 @@ public class RetUI extends JPanel implements ActionListener {
 	    query.requestFocus();
 	    status.setText("");
 	} else if (act.equals("Remove Selected Index")) {
+	    clearAll();
 	    status.setText("Removing...");
 	    removeIndex();
 	    query.setEnabled(envInit);
@@ -338,11 +368,35 @@ public class RetUI extends JPanel implements ActionListener {
 	} else if (act.equals("Help")) {
 	    // pop up a help dialog
 	    helpFrame.setVisible(true);
+	} else if (act.equals("Show HTML")) {
+	    // pop up an html frame
+	    getDocHtml();
+	} else if (act.equals("External")) {
+	    // pop up an html frame
+	    spawnViewer();
 	} else if (act.equals("Exit")) {
 	    System.exit(0);
 	}
     }
-	
+
+    /** Clear everything
+     */
+    private void clearAll() {
+	query.setText("");
+	status.setText("");
+	DocsTableModel m = (DocsTableModel)answerAll.getModel();
+	m.clear();
+	// clear the docs frame
+	docTextPane.setText("");
+	docTextFrame.setTitle("Document");
+	docTextFrame.setVisible(false);
+	docHtmlPane.setText("");
+	docHtmlFrame.setTitle("Html");
+	docHtmlFrame.setVisible(false);
+	// clear the query
+	docQueryTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Query")));
+    }
+    
 	
     /**
      * Remove the selected index from the list. Close and
@@ -442,6 +496,7 @@ public class RetUI extends JPanel implements ActionListener {
 			results = env.runAnnotatedQuery( question, maxDocs );
 			scored = results.getResults();
 			names = env.documentMetadata( scored, "docno" );
+			titles = env.documentMetadata( scored, "title" );
 			// don't populate this table, too much memory wasted.
 			//			docs = env.documents(scored);
 			docids = new int[scored.length];
@@ -452,10 +507,17 @@ public class RetUI extends JPanel implements ActionListener {
 			// could put the internal docid into the table,
 			// rather than using the separate docids map.
 			// could use clever tooltips too (to expand title).
+			/*
 			for( int i = 0; i < scored.length; i++ ) {
 			    m.setValueAt(i, scored[i].score, names[i],
 					 scored[i].begin, scored[i].end);
 			}
+			*/
+			for( int i = 0; i < scored.length; i++ ) {
+			    // scores and extents should be optional view.
+			    m.setValueAt(i, names[i], titles[i]);
+			}
+
 			// initialize query tree view for doc text frame
 			// keys query node names (as inserted in QueryTree).
 			// get root node
@@ -476,18 +538,27 @@ public class RetUI extends JPanel implements ActionListener {
 	t.start();
     }    
 
+    /** Set the paths to the external viewer programs
+     */
+    private void setPaths() {
+	wordProg = GetPaths.getPath("winword.exe");
+	powerpointProg = GetPaths.getPath("powerpnt.exe");
+	acroreadProg = GetPaths.getPath("acrord32.exe");
+    }
+    
     /** Create the frame that shows the help file and render the html.
 	Saves time when the user opens the help.
     */
     private void makeHelp() {
 	java.net.URL helpURL = RetUI.class.getResource(helpFile);
+	Image image = createImageIcon(iconFile).getImage();
 	JTextPane help = new JTextPane();
 		
 	//Create and set up the window.
 	helpFrame = new JFrame("Indri Retrieval UI Help");
 	help.setPreferredSize(new Dimension(650, 400));
 	help.setEditable(false);
-	help.addHyperlinkListener(new DocLinkListener());
+	help.addHyperlinkListener(new DocLinkListener(image));
 	JScrollPane scroller =
 	    new JScrollPane(help, 
 			    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -499,8 +570,8 @@ public class RetUI extends JPanel implements ActionListener {
 	}
 
 	helpFrame.getContentPane().add(scroller, BorderLayout.CENTER);
-	helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	//	helpFrame.setIconImage(createImageIcon(iconFile).getImage());
+	helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);	
+	helpFrame.setIconImage(image);
 	helpFrame.pack();
     }
 	
@@ -510,7 +581,21 @@ public class RetUI extends JPanel implements ActionListener {
      * with both document text and the query tree.
      */
     private void  makeDocTextFrame() {
+	// add menu item for Show Html
+	JMenuBar mb = new JMenuBar();
+	mb.setForeground(navyBlue);
+	mb.setBackground(lightYellow);	
+	JMenu m = new JMenu("File");
+	m.setForeground(navyBlue);
+	m.setBackground(lightYellow);
+	m.add(makeMenuItem("Show HTML"));
+	// fix this to be coherent and only shown when appropriate
+	m.add(makeMenuItem("External"));
+	mb.add(m);
+		//add icon here.
 	docTextFrame = new JFrame("Document");
+	docTextFrame.setJMenuBar(mb);
+	docTextFrame.setIconImage(createImageIcon(iconFile).getImage());
 	docTextPane = new JTextPane();
 	docTextPane.setEditable(false);
 	docTextPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -520,65 +605,189 @@ public class RetUI extends JPanel implements ActionListener {
 		
 	JScrollPane scroll = new JScrollPane(docTextPane);
 	scroll.setPreferredSize(new Dimension(600, 350));
-	//	scroll.setMinimumSize(new Dimension(600, 200));
-	//	scroll.setMaximumSize(new Dimension(600, 350));
+	// does not resize nicely in the up down dimension. Bleah
+	//	scroll.setMinimumSize(new Dimension(100, 100));
 	scroll.setDoubleBuffered(true);
-	JPanel p = new JPanel();
-	p.setLayout(new BorderLayout());
-	p.add(scroll, BorderLayout.SOUTH);
+	//	JPanel p = new JPanel();
+	//	p.setLayout(new BorderLayout());
+	//	p.add(scroll, BorderLayout.SOUTH);
 	// query pane table (JTree?);
 	// make this afresh for each query?
 	DefaultMutableTreeNode top = new DefaultMutableTreeNode("Query");
 	docQueryTree = new JTree(top);
 	docQueryTree.addTreeSelectionListener(new QueryTreeListener());
 	docQueryTree.setPreferredSize(new Dimension(550, 180));
-	//	docQueryTree.setMaximumSize(new Dimension(550, 180));
 	JScrollPane treeView = new JScrollPane(docQueryTree);
 	treeView.setPreferredSize(new Dimension(600, 180));
-	//	treeView.setMaximumSize(new Dimension(600, 180));
-	//	treeView.setMinimumSize(new Dimension(600, 180));
 	treeView.setDoubleBuffered(true);
-	p.add(treeView, BorderLayout.NORTH);
-	p.setPreferredSize(new Dimension(600, 600));
-	docTextFrame.getContentPane().add(p);
-	docTextFrame.setSize(600,600);
+	//	treeView.setMinimumSize(new Dimension(100, 100));
+	//	p.add(treeView, BorderLayout.NORTH);
+	//	p.setPreferredSize(new Dimension(600, 600));
+	//	docTextFrame.getContentPane().add(p);
+	docTextFrame.getContentPane().add(treeView, BorderLayout.PAGE_START);
+	docTextFrame.getContentPane().add(scroll, BorderLayout.CENTER);
+	//	docTextFrame.setSize(600,600);
+	docTextFrame.pack();	
 	docTextFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
-	
+
+    /**
+     * Make the frame for displaying html documents
+     */
+    private void  makeDocHtmlFrame() {
+	docHtmlFrame = new JFrame("Html");
+	docHtmlFrame.setIconImage(createImageIcon(iconFile).getImage());
+	docHtmlPane = new JTextPane();
+	docHtmlPane.setEditable(false);
+	docHtmlPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+	docHtmlPane.setBackground(linen);
+	docHtmlPane.setForeground(Color.black);
+	docHtmlPane.setPreferredSize(new Dimension(550, 350));
+		
+	JScrollPane scroll = new JScrollPane(docHtmlPane);
+	scroll.setPreferredSize(new Dimension(600, 350));
+	// does not resize nicely in the up down dimension. Bleah
+	//	scroll.setMinimumSize(new Dimension(100, 100));
+	scroll.setDoubleBuffered(true);
+	docHtmlFrame.getContentPane().add(scroll, BorderLayout.CENTER);
+	docHtmlFrame.pack();	
+	docHtmlFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    }
+
+    /**
+     * Spawn an external viewer for pdf, doc, or ppt (Win only)
+     */	
+    private void spawnViewer() 
+    {
+	// get the selected index from the table.
+	int row = answerAll.getSelectionModel().getMinSelectionIndex();
+	// no selection.
+	if (row == -1) return;
+	TableModel m = answerAll.getModel();
+	String name = (String) m.getValueAt(row, 0);
+	// no docname
+	if (name.equals("")) return;
+	File f = new File(name);
+	// no such file
+	if (! f.exists()) return;
+	// choose prog based on extension
+	name = name.toLowerCase();
+	String prog = null;
+	if (name.endsWith(".doc") )
+	    prog = wordProg;
+	else if (name.endsWith(".ppt"))
+	    prog = powerpointProg;
+	else if (name.endsWith(".pdf"))
+	    prog = acroreadProg;
+	// no such prog
+	if (prog == null) return;
+	String [] cmd = new String[2];
+        cmd[0] = prog;
+	cmd[1] = name;
+	Runtime run = Runtime.getRuntime();
+	Process proc;
+	int res = -1;
+	try {
+	    proc = run.exec(cmd);	
+	} catch (Exception e) {
+	    // do something clever here?
+	    error(e.toString());
+	    //	    e.printStackTrace();
+	}
+    }
+    
     /**
      * Populate the document text frame with the selected document.
      * Highlight the document based on query matches.
      */
     public void getDocText() {
+
 	// get the selected index from the table.
-	int row = answerAll.getSelectionModel().getMinSelectionIndex();
+	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
 	// no selection.
 	if (row == -1) return;
+	Runnable r = new Runnable() {
+		public void run() {
+		    setCursor(wait);
+		    // get the doc text
+		    TableModel m = answerAll.getModel();
+		    String name = (String) m.getValueAt(row, 0);
+		    status.setText("Getting " + name);
+		    String title = (String) m.getValueAt(row, 1);
+		    if (title.equals(""))
+			docTextFrame.setTitle(name);
+		    else
+			docTextFrame.setTitle(title);
+		    currentDocId = docids[row]; // internal docid
+		    // get the parsed document
+		    int [] ids = new int[1];
+		    ids[0] = currentDocId;
+		    
+		    ParsedDocument[] docs = env.documents(ids);
+		    currentParsedDoc = docs[0];
+		    String myDocText = currentParsedDoc.text;
+		    //	String myDocText = docs[row].text;
+		    // insert into doc text pane
+		    docTextPane.setContentType("text/plain");
+		    // use this to show html, highlighting is bad then.
+		    //	docTextPane.setContentType("text/html");
+		    docTextPane.setText(myDocText);
+		    // reset caret to start of doc text.
+		    docTextPane.setCaretPosition(0);
+		    // insert the matches markup
+		    DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+		    DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+		    highlight(root);
+		    //	docTextFrame.setLocationRelativeTo(this);
+		    docTextFrame.setVisible(true);
+		    status.setText(" ");
+		    setCursor(def);
+		}
+	    };
+	Thread t = new Thread(r);
+	t.start();
+    }    
 
-	// get the doc text
-	TableModel m = answerAll.getModel();
-	String name = (String) m.getValueAt(row, 1);
-	docTextFrame.setTitle(name);
-	currentDocId = docids[row]; // internal docid
-	// get the parsed document
-	int [] ids = new int[1];
-	ids[0] = currentDocId;
-	
-	ParsedDocument[] docs = env.documents(ids);
-	currentParsedDoc = docs[0];
-	String myDocText = currentParsedDoc.text;
-	//	String myDocText = docs[row].text;
-	// insert into doc text pane
-	docTextPane.setContentType("text/plain");
-	docTextPane.setText(myDocText);
-	// reset caret to start of doc text.
-	docTextPane.setCaretPosition(0);
-	// insert the matches markup
-	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
-	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
-	highlight(root);
-	//	docTextFrame.setLocationRelativeTo(this);
-	docTextFrame.setVisible(true);
+    /**
+     * Populate a document text frame with html -- no highlighting.
+     */
+    public void getDocHtml() {
+	// get the selected index from the table.
+	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
+	// no selection.
+	if (row == -1) return;
+	Runnable r = new Runnable() {
+		public void run() {
+		    setCursor(wait);
+		    // get the doc text
+		    TableModel m = answerAll.getModel();
+		    String name = (String) m.getValueAt(row, 0);
+		    status.setText("Getting " + name);
+		    String title = (String) m.getValueAt(row, 1);
+		    if (title.equals(""))
+			docHtmlFrame.setTitle(name);
+		    else
+			docHtmlFrame.setTitle(title);
+		    currentDocId = docids[row]; // internal docid
+		    // get the parsed document
+		    int [] ids = new int[1];
+		    ids[0] = currentDocId;
+		    
+		    ParsedDocument[] docs = env.documents(ids);
+		    currentParsedDoc = docs[0];
+		    String myDocText = currentParsedDoc.text;
+		    // insert into doc text pane
+		    docHtmlPane.setContentType("text/html");
+		    docHtmlPane.setText(myDocText);
+		    // reset caret to start of doc text.
+		    docHtmlPane.setCaretPosition(0);
+		    docHtmlFrame.setVisible(true);
+		    status.setText(" ");
+		    setCursor(def);
+		}
+	    };
+	Thread t = new Thread(r);
+	t.start();
     }    
 	
     //rework this to separate clear from single node highlight
@@ -773,7 +982,7 @@ public class RetUI extends JPanel implements ActionListener {
 		public void run() {
 		    String onText = s1;
 		    String doneText = s2;
-		    String offText = "";
+		    String offText = "       ";
 		    int count = 0;
 		    try {
 			while (blinking) {
@@ -809,7 +1018,44 @@ public class RetUI extends JPanel implements ActionListener {
      * @return The JTable with its model and listener initialized.
      */
     private JTable makeDocsTable() {
+		// bruce wants titles if available, don't show scores or extents by default
 	DocsTableModel model = new DocsTableModel();
+	JTable table = new JTable(model) {
+		// add tooltip expansion
+		public String getToolTipText(MouseEvent e) {
+		    String tip = null;
+		    java.awt.Point p = e.getPoint();
+		    int rowIndex = rowAtPoint(p);
+		    int colIndex = columnAtPoint(p);
+		    int realColumnIndex = convertColumnIndexToModel(colIndex);
+		    //		    if (realColumnIndex == 1)
+			tip = (String) getValueAt(rowIndex, colIndex);
+			//		    else 
+			//			tip = "Select an entry to view the document";
+		    // check if string is longer than visible?
+		    return tip;
+		}
+	    };
+	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	table.getSelectionModel().addListSelectionListener(new DocTableListener());
+	TableColumn column;
+	column = table.getColumnModel().getColumn(0);
+	column.setPreferredWidth(50);
+	//	column.setMinWidth(50);
+	column = table.getColumnModel().getColumn(1);
+	column.setPreferredWidth(300);
+	//column.setMinWidth(300);
+	return table;
+    }
+
+    /**
+     * Make a JTable and associated OldDocsTableModel for containing
+     * query result sets.
+     * @return The JTable with its model and listener initialized.
+     */
+    private JTable makeOldDocsTable() {
+		// bruce wants titles if available, don't show scores or extents by default
+	OldDocsTableModel model = new OldDocsTableModel();
 	JTable table = new JTable(model);
 	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	table.getSelectionModel().addListSelectionListener(new DocTableListener());
@@ -837,21 +1083,36 @@ public class RetUI extends JPanel implements ActionListener {
 	item.addActionListener(this);
 	return item;
     }
+
+	/** Returns an ImageIcon, or null if the path was invalid. 
+	 @param path the image file to load.
+	 @return an ImageIcon, or null if the path was invalid. 
+	 */
+	protected static ImageIcon createImageIcon(String path) {
+	    java.net.URL imgURL = RetUI.class.getResource(path);
+	    if (imgURL != null) {
+		return new ImageIcon(imgURL);
+	    } else {
+		return null;
+	    }
+	}
     /**
      * Make the containing frame, menubar, and an instance of RetUI. Initialize.
      */
     private static void createAndShowGUI() {
 	RetUI sim = new RetUI();      
 	JFrame myFrame = new JFrame("Indri -- Retrieval");
+	myFrame.setIconImage(createImageIcon(iconFile).getImage());
 	myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	sim.init();
 	sim.setOpaque(true); //content panes must be opaque
 	myFrame.getContentPane().add(sim, BorderLayout.CENTER);
 	myFrame.setForeground(navyBlue);
 	myFrame.setBackground(lightYellow);
 	myFrame.getContentPane().setForeground(navyBlue);
 	myFrame.getContentPane().setBackground(lightYellow);
-	sim.init();
-	myFrame.setSize(800, 500);
+
+	//	myFrame.setSize(800, 500);
 		
 	JMenuBar mb = new JMenuBar();
 	mb.setForeground(navyBlue);
@@ -894,11 +1155,11 @@ public class RetUI extends JPanel implements ActionListener {
 }
 
 /**
- * Table Model for the scored document results from running a query.
+ * OldTable Model for the scored document results from running a query.
  * @author David Fisher
  *
  */
-class DocsTableModel extends AbstractTableModel {
+class OldDocsTableModel extends AbstractTableModel {
     /**
      * Labels for the columns
      */
@@ -984,6 +1245,96 @@ class DocsTableModel extends AbstractTableModel {
 	data[row][1] = doc;
 	data[row][2] = new Integer(start);
 	data[row][3] = new Integer(end);
+	fireTableRowsUpdated(row, row);
+    }
+}
+
+/**
+ * Table Model for the scored document results from running a query.
+ * @author David Fisher
+ *
+ */
+class DocsTableModel extends AbstractTableModel {
+    /**
+     * Labels for the columns
+     */
+    // docid and title
+    private String[] columnNames = {"Document", "Title"};
+    /**
+     * Container for the data.
+     */
+    private Object[][] data = new Object[0][0];
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#getColumnCount()
+     */
+    public int getColumnCount() {
+	return columnNames.length;
+    }
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#getRowCount()
+     */
+    public int getRowCount() {
+	return data.length;
+    }
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#getColumnName(int)
+     */
+    public String getColumnName(int col) {
+	return columnNames[col];
+    }
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#getValueAt(int, int)
+     */
+    public Object getValueAt(int row, int col) {
+	return data[row][col];
+    }
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#getColumnClass(int)
+     */
+    public Class getColumnClass(int c) {
+	return getValueAt(0, c).getClass();
+    }
+	
+    /**
+     * Resize the data array to contain <code>row</code> number of rows.
+     * @param row Number of rows for the new array.
+     */
+    public void resize(int row) {
+	data = new Object[row][columnNames.length];
+    }
+	
+    /**
+     * Clear the data array.
+     */
+    public void clear() {
+	int last = data.length - 1;
+	if (last >= 0) {
+	    data = new Object[0][columnNames.length];
+	    fireTableRowsDeleted(0, last);
+	}
+    }
+	
+    /* (non-Javadoc)
+     * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
+     */
+    public void setValueAt(Object obj, int row, int col) {
+	data[row][col] = obj;
+	fireTableCellUpdated(row, col);
+    }
+    /**
+     * 	Update an entry for a row
+     * @param row The row index
+     * @param doc The document name
+     * @param title The document title if any
+     */
+    public void setValueAt(int row, String doc, String title) {
+	data[row][0] = doc;
+	data[row][1] = title;
 	fireTableRowsUpdated(row, row);
     }
 }

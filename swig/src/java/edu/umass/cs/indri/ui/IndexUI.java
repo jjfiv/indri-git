@@ -46,7 +46,7 @@ public class IndexUI extends JPanel implements ActionListener,
     /** Help file for the application */
     private final static String helpFile = "properties/IndriIndex.html";
     /** The little icon */
-    private final static String iconFile = null;
+    private final static String iconFile = "properties/lemur_icon.GIF";
     /** The big logo */
     private final static String logoFile = null;
     /** Indri FileClassEnvironments */
@@ -87,11 +87,10 @@ public class IndexUI extends JPanel implements ActionListener,
     private void initGUI() {	
 	// starting with a JPanel using BorderLayout
 	// indexing tab to use GridBagLayout
-	//	indriIcon = createImageIcon(iconFile);
 	// reuse for each labeled component.
 	JLabel label;
 	// set up icon images
-	indriIcon = null;
+	indriIcon = createImageIcon(iconFile);
 	ImageIcon icon = null;  // no icon on tabs
 	// initialize help
 	makeHelp();
@@ -495,7 +494,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	helpFrame = new JFrame("Indri Index Builder Help");
 	help.setPreferredSize(new Dimension(650, 400));
 	help.setEditable(false);
-	help.addHyperlinkListener(new DocLinkListener());
+	help.addHyperlinkListener(new DocLinkListener(indriIcon.getImage()));
 	JScrollPane scroller =
 	    new JScrollPane(help, 
 			    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -508,7 +507,7 @@ public class IndexUI extends JPanel implements ActionListener,
 
 	helpFrame.getContentPane().add(scroller, BorderLayout.CENTER);
 	helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	//	helpFrame.setIconImage(createImageIcon(iconFile).getImage());
+	helpFrame.setIconImage(indriIcon.getImage());
 	helpFrame.pack();
     }
 	
@@ -531,7 +530,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	//Create and set up the window.
 	JFrame frame = new JFrame("Indri Index Builder");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//	frame.setIconImage(createImageIcon(iconFile).getImage());
+	frame.setIconImage(createImageIcon(iconFile).getImage());
 	//Create and set up the content pane.
 	IndexUI newContentPane = new IndexUI();
 	newContentPane.setOpaque(true); //content panes must be opaque
