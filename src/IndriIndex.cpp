@@ -838,7 +838,7 @@ void IndriIndex::_addOpenTags( greedy_vector<indri::index::FieldExtent>& indexed
 
 void IndriIndex::_removeClosedTags( greedy_vector<indri::index::FieldExtent>& tags, unsigned int position ) {
   for( unsigned int i=0; i<tags.size(); ) {
-    if( tags[i].end <= position ) {
+    if( tags[i].end <= (position + 1) ) {
       tags.erase( tags.begin() + i );
     } else {
       i++;
