@@ -137,12 +137,13 @@ public class IndexUI extends JPanel implements ActionListener,
 	cfModel = new DefaultListModel();
 	collectionFiles = new JList(cfModel);
 	collectionFiles.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	String fill = "123456789012345678901234567890123456789";
-	collectionFiles.setPrototypeCellValue(fill);
+	//	String fill = "123456789012345678901234567890123456789";
+	//	collectionFiles.setPrototypeCellValue(fill);
 	collectionFiles.setVisibleRowCount(5);
 	collectionFiles.setToolTipText("Browse to a directory and select " + 
 				       "input files or directories.");
 	JScrollPane listScrollPane = new JScrollPane(collectionFiles);
+	listScrollPane.setPreferredSize(new Dimension(400, 100));
 	// browse button for data files
 	cfbrowse = new JButton("Browse...");
 	cfbrowse.addActionListener(this);
@@ -270,11 +271,6 @@ public class IndexUI extends JPanel implements ActionListener,
 	constraints.gridx = 0;
 	panel.add(doStem, constraints);
 		
-	//	label = new JLabel("Stemmer: ", JLabel.TRAILING);
-	//	constraints.gridx = 1;
-	//	panel.add(label, constraints);
-		
-	//	constraints.gridx = 2;
 	constraints.gridx = 1;
 	constraints.anchor = GridBagConstraints.LINE_START;
 	panel.add(stemmers, constraints);
@@ -302,9 +298,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	messages = new JTextArea(10,40);
 	messages.setEditable(false);
 		
-	JScrollPane messageScrollPane = 
-	    new JScrollPane(messages, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	JScrollPane messageScrollPane = new JScrollPane(messages);
 	panel4.add(messageScrollPane);
 	tabbedPane.addTab("Status", icon, panel4, "Status Messages");
 		
@@ -320,6 +314,13 @@ public class IndexUI extends JPanel implements ActionListener,
 	add(tabbedPane, BorderLayout.NORTH);
 	add(buttons, BorderLayout.CENTER);
 	add(status, BorderLayout.SOUTH);
+	// this way to make the tabbed pane be the one to grow on resize
+	// contents don't resize, however..
+	//	JPanel bp = new JPanel(new BorderLayout());
+	//	add(tabbedPane, BorderLayout.CENTER);
+	//	bp.add(buttons, BorderLayout.NORTH);
+	//	bp.add(status, BorderLayout.SOUTH);
+	//	add(bp, BorderLayout.SOUTH);
     }
     // gui helper functions.
     /** Create the applications menu bar.
@@ -469,7 +470,11 @@ public class IndexUI extends JPanel implements ActionListener,
 	    }
 	} else if (source == hHelp) 	{
 	    // pop up a help dialog
-	    helpFrame.setVisible(true);
+	    if (! helpFrame.isShowing()) {
+		helpFrame.setLocationRelativeTo(tabbedPane);
+		helpFrame.setVisible(true);
+		helpFrame.toFront();
+	    }
 	} else if (source == hAbout) 	{
 	    JOptionPane.showMessageDialog(this, aboutText, "About", 
 					  JOptionPane.INFORMATION_MESSAGE,
@@ -509,10 +514,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	help.setPreferredSize(new Dimension(650, 400));
 	help.setEditable(false);
 	help.addHyperlinkListener(new DocLinkListener(indriIcon.getImage()));
-	JScrollPane scroller =
-	    new JScrollPane(help, 
-			    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	JScrollPane scroller = new JScrollPane(help); 
 	try {
 	    help.setPage(helpURL);
 	} catch (IOException ex) {
@@ -535,12 +537,10 @@ public class IndexUI extends JPanel implements ActionListener,
 	//Make sure we have nice window decorations.
 	JFrame.setDefaultLookAndFeelDecorated(true);
 	// For system look and feel
-	/*
-	  try {
-	  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	  } catch (Exception e) { 
-	  }
-	*/
+	try {
+	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	} catch (Exception e) { 
+	}
 	//Create and set up the window.
 	JFrame frame = new JFrame("Indri Index Builder");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
