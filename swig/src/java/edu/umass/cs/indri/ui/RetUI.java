@@ -466,9 +466,7 @@ public class RetUI extends JPanel implements ActionListener {
 			docQueryTree.setModel(tree);
 			//
 		    } catch (Exception e) {
-			System.err.println("Caught: +" + e.toString());
-					
-			e.printStackTrace();
+			error(e.toString());
 		    }
 		    blinking = false;
 		    blink.interrupt();
