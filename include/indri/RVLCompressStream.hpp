@@ -19,54 +19,57 @@
 #ifndef INDRI_RVLCOMPRESSSTREAM_HPP
 #define INDRI_RVLCOMPRESSSTREAM_HPP
 
+#include "lemur/RVLCompress.hpp"
+#include "indri/Buffer.hpp"
+
 /*! Provide RVL compression on a stream.
  */
 class RVLCompressStream {
 private:
-  char* _buffer;
-  size_t _bufferSize;
-  char* _current;
+  Buffer& _buffer;
 
 public:
   /// Initialize
   /// @param buffer the buffer to use for compressing
   /// @param size the size of buffer
-  RVLCompressStream( char* buffer, size_t size ) {
-    _buffer = buffer;
-    _bufferSize = size;
-    _current = _buffer;
+  RVLCompressStream( Buffer& buffer ) :
+    _buffer(buffer)
+  {
   }
 
   /// @return the buffer
   const char* data() const {
-    return _buffer;
+    return _buffer.front();
   }
   /// @return the size of the data in the buffer
   size_t dataSize() const {
-    return _current - _buffer;
+    return _buffer.position();
   }
 
   /// Compress an int into the buffer
   /// @param value the value to compress
   RVLCompressStream& operator<< ( int value ) {
-    _current = RVLCompress::compress_int( _current, value );
-    assert( _bufferSize >= size_t(_current - _buffer) );
+    char* writePosition = _buffer.write(5);
+    char* endPosition = RVLCompress::compress_int( writePosition, value );
+    _buffer.unwrite( 5 - (endPosition - writePosition) );
     return *this;
   }
 
   /// Compress an unsigned int into the buffer
   /// @param value the value to compress
   RVLCompressStream& operator<< ( unsigned int value ) {
-    _current = RVLCompress::compress_int( _current, value );
-    assert( _bufferSize >= size_t(_current - _buffer) );
+    char* writePosition = _buffer.write(5);
+    char* endPosition = RVLCompress::compress_int( writePosition, value );
+    _buffer.unwrite( 5 - (endPosition - writePosition) );
     return *this;
   }
 
   /// Compress an INT64 into the buffer
   /// @param value the value to compress
   RVLCompressStream& operator<< ( INT64 value ) {
-    _current = RVLCompress::compress_longlong( _current, value );
-    assert( _bufferSize >= size_t(_current - _buffer) );
+    char* writePosition = _buffer.write(10);
+    char* endPosition = RVLCompress::compress_longlong( writePosition, value );
+    _buffer.unwrite( 10 - (endPosition - writePosition) );
     return *this;
   }
 
@@ -74,8 +77,15 @@ public:
   /// @param value the value to compress
   RVLCompressStream& operator << ( float value ) {
     // can't compress a float, unfortunately
-    memcpy( _current, &value, sizeof value );
-    _current += sizeof value;
+    memcpy( _buffer.write(sizeof(float)), &value, sizeof value );
+    return *this;
+  }
+
+  /// Compress a string into the buffer
+  RVLCompressStream& operator << ( const char* value ) {
+    unsigned int length = (unsigned int) strlen( value );
+    (*this) << length;
+    memcpy( _buffer.write(length), value, length );
     return *this;
   }
 };

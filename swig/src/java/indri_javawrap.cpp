@@ -2518,6 +2518,27 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMem
 }
 
 
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNormalization(JNIEnv *jenv, jclass jcls, jlong jarg1, jboolean jarg2) {
+    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    bool arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg2 = jarg2 ? true : false; 
+    {
+        try {
+            (arg1)->setNormalization(arg2);
+            
+        } catch( Exception& e ) {
+            SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
+        }
+    }
+}
+
+
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jlong jarg3) {
     IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;

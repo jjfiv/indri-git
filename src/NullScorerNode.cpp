@@ -57,3 +57,9 @@ void NullScorerNode::annotate( Annotator& annotator, int documentID, int begin, 
 const std::string& NullScorerNode::getName() const {
   return _name;
 }
+
+void NullScorerNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
+

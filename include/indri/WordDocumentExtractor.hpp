@@ -46,6 +46,7 @@ public:
 
   void open( const std::string& filename );
   UnparsedDocument* nextDocument( );
+  void quit();
   void close();
 };
 #endif

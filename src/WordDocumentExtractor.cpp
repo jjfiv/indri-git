@@ -77,8 +77,8 @@ void WordDocumentExtractor::initialize() {
   ::CoInitialize( NULL );
 
   HRESULT hr;
-	CLSID wordClsid;
-	CLSIDFromProgID( L"Word.Application", &wordClsid );  
+  CLSID wordClsid;
+  CLSIDFromProgID( L"Word.Application", &wordClsid );  
 
   hr = ::CoCreateInstance( wordClsid,
                             NULL,

@@ -215,9 +215,6 @@
 				RelativePath=".\src\parseargs.c">
 			</File>
 			<File
-				RelativePath=".\src\xpdfParser.cc">
-			</File>
-			<File
 				RelativePath=".\src\PDFDoc.cc">
 			</File>
 			<File
@@ -240,6 +237,9 @@
 			</File>
 			<File
 				RelativePath=".\src\UnicodeTypeTable.cc">
+			</File>
+			<File
+				RelativePath=".\src\xpdfParser.cc">
 			</File>
 			<File
 				RelativePath=".\src\XRef.cc">

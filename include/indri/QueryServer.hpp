@@ -53,7 +53,6 @@ public:
 
   // terms
   virtual INT64 termCount() = 0;
-  virtual INT64 termCount( int term ) = 0;
   virtual INT64 termCount( const std::string& term ) = 0;
   virtual INT64 stemCount( const std::string& stem ) = 0;
 
@@ -62,7 +61,6 @@ public:
   
   // fields
   virtual std::vector<std::string> fieldList() = 0;
-  virtual INT64 termFieldCount( int term, const std::string& field ) = 0;
   virtual INT64 termFieldCount( const std::string& term, const std::string& field ) = 0;
   virtual INT64 stemFieldCount( const std::string& stem, const std::string& field ) = 0;
 

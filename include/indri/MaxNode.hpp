@@ -118,6 +118,10 @@ public:
     return false;
   }
 
+  void indexChanged( indri::index::Index& index ) {
+    // do nothing
+  }
+
   const std::string& getName() const {
     return _name;
   }

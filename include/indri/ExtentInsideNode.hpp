@@ -40,6 +40,8 @@ public:
   void prepare( int documentID );
   const greedy_vector<Extent>& extents();
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   const std::string& getName() const;
   void annotate( class Annotator& annotator, int documentID, int begin, int end );
 };

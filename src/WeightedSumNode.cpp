@@ -67,8 +67,7 @@ const greedy_vector<ScoredExtentResult>& WeightedSumNode::score( int documentID,
   }
 
   _scores.clear();
-  s = log(s); // return to log space
-  _scores.push_back( ScoredExtentResult(s, documentID, begin, end) );
+  _scores.push_back( ScoredExtentResult( log(s), documentID, begin, end) );
 
   return _scores;
 }
@@ -97,4 +96,8 @@ void WeightedSumNode::addChild( double weight, BeliefNode* child ) {
 
 const std::string& WeightedSumNode::getName() const {
   return _name;
+}
+
+void WeightedSumNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
 }

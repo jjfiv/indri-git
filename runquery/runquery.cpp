@@ -165,6 +165,8 @@ as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
 #include "indri/RMExpander.hpp"
 #include "indri/PonteExpander.hpp"
 
+#include "indri/IndriTimer.hpp"
+
 #ifndef WIN32
 #include <sys/time.h>
 #endif

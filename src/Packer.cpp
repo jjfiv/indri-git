@@ -163,6 +163,21 @@ namespace indri {
       }
     }
 
+    void Packer::put( const char* name, const ::std::vector<std::string>& value ) {
+      assert( _stack.size() );
+      node_element* element = _stack.top();
+
+      if( !element->flushed ) { 
+        XMLNode* node = new XMLNode( name );
+
+        for( unsigned int i=0; i<value.size(); i++ ) {
+          node->addChild( new XMLNode( "string", value[i] ) );
+        }
+
+        element->xmlNode->addChild( node );
+      }
+    }
+
     void Packer::put( const char* name, const ::std::vector<RawExtentNode*>& value ) {
       assert( _stack.size() );
       node_element* element = _stack.top();

@@ -55,7 +55,10 @@ private:
 public:
   OrderedWindowNode( const std::string& name, const std::vector<ListIteratorNode*>& children );
   OrderedWindowNode( const std::string& name, const std::vector<ListIteratorNode*>& children, int windowSize );
+
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   void prepare( int documentID );
   const greedy_vector<Extent>& extents();
   const std::string& getName() const ;

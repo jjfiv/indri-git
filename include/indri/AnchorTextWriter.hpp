@@ -44,13 +44,13 @@ public:
 
     iter = std::find_if( document->metadata.begin(),
                          document->metadata.end(),
-                         MetadataPair::key_equal( "DOCNO" ) );
+                         MetadataPair::key_equal( "docno" ) );
 
     const char* docno = (char*)iter->value;
 
     iter = std::find_if( document->metadata.begin(),
                          document->metadata.end(),
-                         MetadataPair::key_equal( "URL" ) );
+                         MetadataPair::key_equal( "url" ) );
 
     const char* page = (char*)iter->value;
     const char* url = 0;

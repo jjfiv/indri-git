@@ -270,7 +270,8 @@ void Combiner::hashToBuckets( std::ifstream& in, const std::string& path ) {
       int linkBucket = hashString( linkUrl + sizeof "LINKURL=" - 1 );
       std::stringstream* linkFile = _linkBuckets[ linkBucket ];
 
-      (*linkFile) << docUrl << std::endl
+      (*linkFile) << docno << std::endl
+                  << docUrl << std::endl
                   << linkUrl << std::endl
                   << text << std::endl;
     }
@@ -373,6 +374,9 @@ void Combiner::combineBucket( const std::string& outputPath, const std::string& 
     redirectIn.getline( pathline, sizeof pathline );
     redirectIn.getline( docnoline, sizeof docnoline );
     
+    if( strcmp( "ALIAS=", aliasurl ) )
+      break;
+
     // look for the aliasurl in the hash table
     url_entry** entry = urlTable.find( aliasurl + sizeof "ALIAS=" - 1 );
     url_entry* new_entry = _newUrlEntry( aliasurl + sizeof "ALIAS=" - 1,
@@ -380,7 +384,7 @@ void Combiner::combineBucket( const std::string& outputPath, const std::string& 
                                          pathline + sizeof "PATH=" - 1);
 
     if( entry ) {
-      delete *entry;
+      _deleteUrlEntry( *entry );
       urlTable.remove( aliasurl + sizeof "ALIAS=" - 1 );
     }
 
@@ -397,12 +401,14 @@ void Combiner::combineBucket( const std::string& outputPath, const std::string& 
 
   linkIn.open( linkBucketPath.c_str(), std::ios::in );
 
+  char docno[65536];
   char linkurl[65536];
   char linktext[65536];
   int linkCount = 0;
 
   // read the incoming link information and match it with document information
   while( !linkIn.eof() && linkIn.good() ) {
+    linkIn.getline( docno, sizeof docno-1 );
     linkIn.getline( docurl, sizeof docurl-1 );
     linkIn.getline( linkurl, sizeof linkurl-1 );
     linkIn.getline( linktext, sizeof linktext-1 );
@@ -412,7 +418,8 @@ void Combiner::combineBucket( const std::string& outputPath, const std::string& 
 
     // entry exists, so this is a link match
     if( entry ) {
-      (*entry)->addLink( docurl + sizeof "DOCURL=" - 1,
+      (*entry)->addLink( docno + sizeof "DOCNO=" - 1,
+                         docurl + sizeof "DOCURL=" - 1,
                          linktext + sizeof "TEXT=" - 1 );
     }
   }
@@ -546,6 +553,7 @@ void Combiner::sortCorpusFiles( const std::string& outputPath, const std::string
       char linkCountText[512];
       
       char linkFrom[4096];
+      char linkDocno[4096];
       char linkText[65536];
 
       in.getline( docUrl, sizeof docUrl );
@@ -573,12 +581,17 @@ void Combiner::sortCorpusFiles( const std::string& outputPath, const std::string
       }
 
       for( int i=0; i<linkCount; i++ ) {
+        in.getline( linkDocno, sizeof linkDocno );
+        int linkDocnoLen = strlen(linkDocno);
+
         in.getline( linkFrom, sizeof linkFrom );
         int linkFromLen = strlen(linkFrom);
 
         in.getline( linkText, sizeof linkText );
         int linkTextLen = strlen(linkText);
 
+        sprintf( e->linkinfo.write(linkDocnoLen+2), "%s\n", linkDocno );
+        e->linkinfo.unwrite(1);
         sprintf( e->linkinfo.write(linkFromLen+2), "%s\n", linkFrom );
         e->linkinfo.unwrite(1);
         sprintf( e->linkinfo.write(linkTextLen+2), "%s\n", linkText );

@@ -70,6 +70,7 @@ public:
 
   // InferenceNetworkNode interface
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
   double maximumScore();
   double maximumBackgroundScore();
   greedy_vector<ScoredExtentResult>& score( int documentID, int begin, int end, int documentLength );

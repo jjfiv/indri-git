@@ -22,86 +22,17 @@
 #include "indri/QuerySpec.hpp"
 #include "indri/EvaluatorNode.hpp"
 #include "indri/DocumentCount.hpp"
-#include "indri/ListCache.hpp"
 
-ContextCountAccumulator::ContextCountAccumulator( const std::string& name, UINT64 occurrences, UINT64 contextSize ) :
+ContextCountAccumulator::ContextCountAccumulator( const std::string& name, ListIteratorNode* matches, ListIteratorNode* context ) :
   _name(name),
-  _cache(0),
-  _listCache(0),
-  _context(0),
-  _matches(0),
-  _occurrences(occurrences),
-  _contextSize(contextSize),
-  _maximumContextSize(0),
-  _minimumContextSize(MAX_INT64),
-  _maximumOccurrences(occurrences),
-  _maximumContextFraction(1.0)
-{
-}
-
-ContextCountAccumulator::ContextCountAccumulator( const std::string& name,
-                                                  UINT64 occurrences,
-                                                  UINT64 contextSize,
-                                                  UINT64 maxOccurrences,
-                                                  UINT64 minContext,
-                                                  UINT64 maxContext,
-                                                  double maxFraction ) :
-  _name(name),
-  _context(0),
-  _matches(0),
-  _occurrences(occurrences),
-  _contextSize(contextSize),
-  _maximumContextSize(maxContext),
-  _minimumContextSize(minContext),
-  _maximumOccurrences(maxOccurrences),
-  _maximumContextFraction(maxFraction),
-  _listCache(0),
-  _cache(0)
-{
-}
-
-ContextCountAccumulator::ContextCountAccumulator( const std::string& name,
-                                                  ListCache* listCache,
-                                                  ListCache::CachedList* cache,
-                                                  ListIteratorNode* matches,
-                                                  UINT64 collectionSize,
-                                                  UINT64 maxDocumentLength ) :
-  _name(name),
-  _context(0),
   _matches(matches),
-  _occurrences(0),
-  _contextSize(collectionSize),
-  _maximumContextSize(maxDocumentLength),
-  _minimumContextSize(MAX_INT64),
-  _maximumOccurrences(0),
-  _maximumContextFraction(0),
-  _listCache(listCache),
-  _cache(cache)
-{
-}
-
-ContextCountAccumulator::ContextCountAccumulator( const std::string& name,
-                                                  ListCache* listCache,
-                                                  ListCache::CachedList* cache,
-                                                  ListIteratorNode* matches,
-                                                  ListIteratorNode* context ) :
-  _name(name),
   _context(context),
-  _matches(matches),
   _occurrences(0),
-  _contextSize(0),
-  _maximumContextSize(0),
-  _minimumContextSize(MAX_INT64),
-  _maximumOccurrences(0),
-  _maximumContextFraction(0),
-  _listCache(listCache),
-  _cache(cache)
+  _contextSize(0)
 {
 }
 
 ContextCountAccumulator::~ContextCountAccumulator() {
-  if( _cache )
-    delete _cache;
 }
 
 const std::string& ContextCountAccumulator::getName() const {
@@ -118,29 +49,10 @@ UINT64 ContextCountAccumulator::getContextSize() const {
 
 const EvaluatorNode::MResults& ContextCountAccumulator::getResults() {
   // we must be finished, so now is a good time to add our results to the ListCache
-  if( _listCache ) {
-    _cache->occurrences = _occurrences;
-    _cache->contextSize = _contextSize;
-
-    _cache->maximumOccurrences = _maximumOccurrences;
-    _cache->minimumContextSize = _minimumContextSize;
-    _cache->maximumContextSize = _maximumContextSize;
-    _cache->maximumContextFraction = _maximumContextFraction;
-
-    _listCache->add( _cache );
-    _listCache = 0;
-    _cache = 0;
-  }
-
   _results.clear();
 
   _results[ "occurrences" ].push_back( ScoredExtentResult( _occurrences, 0 ) );
   _results[ "contextSize" ].push_back( ScoredExtentResult( _contextSize, 0 ) );
-
-  _results[ "maxOccurrences" ].push_back( ScoredExtentResult( _maximumOccurrences, 0 ) );
-  _results[ "maxContextLength" ].push_back( ScoredExtentResult( _maximumContextSize, 0 ) );
-  _results[ "minContextLength" ].push_back( ScoredExtentResult( _minimumContextSize, 0 ) );
-  _results[ "maxContextFraction" ].push_back( ScoredExtentResult( _maximumContextFraction, 0 ) );
 
   return _results;
 }
@@ -182,23 +94,10 @@ void ContextCountAccumulator::evaluate( int documentID, int documentLength ) {
     for( unsigned int i=0; i<extents.size(); i++ ) {
       documentContextSize += extents[i].end - extents[i].begin;
     }
-
-    _contextSize += documentContextSize;
   } 
 
-  if( documentOccurrences ) {
-    _occurrences += documentOccurrences;
-    _maximumOccurrences = std::max( documentOccurrences, _maximumOccurrences );
-
-    double contextFraction = double(documentOccurrences) / double(documentContextSize);
-
-    _maximumContextSize = lemur_compat::max( _maximumContextSize, documentContextSize );
-    _minimumContextSize = lemur_compat::min( _minimumContextSize, documentContextSize );
-    _maximumContextFraction = lemur_compat::max( _maximumContextFraction, contextFraction );
-  
-    if( _listCache )
-      _cache->entries.push_back( DocumentContextCount( documentID, documentOccurrences, documentContextSize ) );
-  }
+  _occurrences += documentOccurrences;
+  _contextSize += documentContextSize;
 }
 
 int ContextCountAccumulator::nextCandidateDocument() {
@@ -210,3 +109,15 @@ int ContextCountAccumulator::nextCandidateDocument() {
 
   return candidate;
 }
+
+//
+// indexChanged
+//
+
+void ContextCountAccumulator::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
+
+
+

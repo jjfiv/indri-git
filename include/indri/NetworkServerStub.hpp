@@ -38,7 +38,6 @@ private:
   void _handleTermCount( XMLNode* request );
   void _handleStemCountText( XMLNode* request );
   void _handleTermCountText( XMLNode* request );
-  void _handleTermCountID( XMLNode* request );
 
   void _handleTermName( XMLNode* request );
   void _handleTermID( XMLNode* request );

@@ -9,7 +9,6 @@
  *==========================================================================
 */
 
-
 //
 // InferenceNetwork
 //
@@ -24,8 +23,8 @@
 #include "indri/ListIteratorNode.hpp"
 #include "indri/TermScoreFunction.hpp"
 #include "indri/Repository.hpp"
-#include "indri/FieldListIterator.hpp"
-#include "indri/DocListFrequencyIterator.hpp"
+#include "indri/Index.hpp"
+#include "indri/DeletedDocumentList.hpp"
 
 class InferenceNetwork {
 public:
@@ -38,31 +37,44 @@ public:
   //
 
 private:
-  std::vector<class indri::index::FieldListIterator*> _fieldIterators;
-  std::vector<class DocPositionInfoList*> _docIterators;
-  std::vector<class indri::index::DocListFrequencyIterator*> _freqIterators;
+  std::vector<std::string> _termNames;
+  std::vector<std::string> _fieldNames;
+
+  std::vector<class indri::index::DocExtentListIterator*> _fieldIterators;
+  std::vector<class indri::index::DocListIterator*> _docIterators;
   std::vector<ListIteratorNode*> _listIteratorNodes;
   std::vector<BeliefNode*> _beliefNodes;
   std::vector<EvaluatorNode*> _evaluators;
   std::vector<EvaluatorNode*> _complexEvaluators;
   std::vector<TermScoreFunction*> _scoreFunctions;
+
+  greedy_vector<class indri::index::DocListIterator*> _closeIterators;
+  int _closeIteratorBound;
+
   Repository& _repository;
   MAllResults _results;
 
+  void _indexChanged( indri::index::Index& index );
+  void _indexFinished( indri::index::Index& index );
+
   void _moveToDocument( int candidate );
-  int _nextCandidateDocument();
-  void _evaluateDocument( int document );
+  void _moveDocListIterators( int candidate );
+
+  int _nextCandidateDocument( DeletedDocumentList::read_transaction* deleted );
+  void _evaluateDocument( indri::index::Index& index, int document );
+  void _evaluateIndex( indri::index::Index& index );
 
 public:
   InferenceNetwork( Repository& repository );
   ~InferenceNetwork();
 
   const std::vector<EvaluatorNode*>& getEvaluators() const;
-  const EvaluatorNode* getFirstEvaluator() const;
 
-  void addDocIterator( DocPositionInfoList* posInfoList );
-  void addFieldIterator( indri::index::FieldListIterator* fieldIterator );
-  void addFrequencyIterator( indri::index::DocListFrequencyIterator* frequencyIterator );
+  indri::index::DocListIterator* getDocIterator( int index );
+  indri::index::DocExtentListIterator* getFieldIterator( int index );
+
+  int addDocIterator( const std::string& term );
+  int addFieldIterator( const std::string& field );
   void addListNode( ListIteratorNode* listNode );
   void addBeliefNode( BeliefNode* beliefNode );
   void addEvaluatorNode( EvaluatorNode* evaluatorNode );

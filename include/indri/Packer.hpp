@@ -69,6 +69,7 @@ namespace indri {
       void put( const char* name, const std::string& value );
       void put( const char* name, const std::vector<int>& value );
       void put( const char* name, const std::vector<double>& value );
+      void put( const char* name, const std::vector<std::string>& value );
       void put( const char* name, const std::vector<RawExtentNode*>& value );
       void put( const char* name, const std::vector<ScoredExtentNode*>& value );
       void put( const char* name, Node* value );

@@ -57,3 +57,8 @@ const std::string& FieldGreaterNode::getName() const {
 void FieldGreaterNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
+
+void FieldGreaterNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+

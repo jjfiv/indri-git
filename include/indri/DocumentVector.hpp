@@ -24,6 +24,7 @@
 #include <map>
 #include <vector>
 #include "indri/TermListBuilder.hpp"
+#include "indri/Index.hpp"
 
 class DocumentVector {
 public:
@@ -39,12 +40,12 @@ private:
   std::vector<int> _positions;
   std::vector<Field> _fields;
 
-  void _init( class IndriIndex* index, const class indri::index::TermListBuilder* termList, std::map<int,std::string>* termStringMap );
+  void _init( indri::index::Index* index, const class indri::index::TermList* termList, std::map<int,std::string>* termStringMap );
 
 public:
   DocumentVector();
-  DocumentVector( class IndriIndex* index, const class indri::index::TermListBuilder* termList );
-  DocumentVector( class IndriIndex* index, const class indri::index::TermListBuilder* termList, std::map<int,std::string>& termStringMap );
+  DocumentVector( indri::index::Index* index, const class indri::index::TermList* termList );
+  DocumentVector( indri::index::Index* index, const class indri::index::TermList* termList, std::map<int,std::string>& termStringMap );
 
   std::vector<std::string>& stems();
   const std::vector<std::string>& stems() const;

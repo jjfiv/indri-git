@@ -32,13 +32,16 @@ private:
 
 public:
   FilterRequireNode( const std::string& name, ListIteratorNode* filter, 
-		     BeliefNode* required );
+                     BeliefNode* required );
 
   double maximumBackgroundScore();
   double maximumScore();
   const greedy_vector<ScoredExtentResult>& score( int documentID, int start, int end, int documentLength );
   bool hasMatch( int documentID );
+
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   const std::string& getName() const;
   void annotate( class Annotator& annotator, int documentID, int begin, int end );
 };

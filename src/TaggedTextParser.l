@@ -151,16 +151,25 @@ ParsedDocument* TaggedTextParser::parse( UnparsedDocument* document ) {
 void TaggedTextParser::doParse() {
   int tokenType;
 
-  while(tokenType = parserlex())
-    handleToken(parsertext, tokenType, _document.terms.size());
+  while(tokenType = parserlex()) {
+    if( TaggedTextTokenType::word == tokenType ) {
+      writeToken(parsertext, byte_position-parserleng, byte_position);
+    } else if( TaggedTextTokenType::tag == tokenType ) {
+      handleTag(parsertext, _document.terms.size());
+    }
+  }
 }
 
 void TaggedTextParser::handleTag(char* token, long pos) {
   // extract "element" from tag, stripping off any attributes
   char *e = token;
   // lowercase and remove leading <
-  for(char *c = token+1; *c != '\0' && *c != ' ' && *c != '\n' && *c != '\t' && *c != '>'; c++)
-    *(e++) = tolower(*c);
+  for(char *c = token+1; *c != '\0' && *c != ' ' && *c != '\n' && *c != '\t' && *c != '>'; c++) {
+    if( *c >= 'A' && *c <= 'Z' )
+      *(e++) = *c + ('a' - 'A');
+    else
+      *(e++) = *c;;
+  }
   *e = '\0';
   bool atEnd = (*token == '/');
   if(atEnd) token++;
@@ -223,19 +232,10 @@ void TaggedTextParser::handleTag(char* token, long pos) {
 }
 
 void TaggedTextParser::handleToken(char *token, int type, long pos) {
-  switch(type) {
-
-  case TaggedTextTokenType::tag:
-    {
-      handleTag(token, pos);
-      break;
-    }
-
- case TaggedTextTokenType::word:
-   {
-     writeToken(token);
-     break;
-   }
+  if( TaggedTextTokenType::word == type ) {
+    writeToken(token, byte_position-parserleng, byte_position);
+  } else if( TaggedTextTokenType::tag == type ) {
+    handleTag(token, pos);
   }
 }
 
@@ -255,7 +255,7 @@ void TaggedTextParser::writeToken(char *token, int start, int end) {
   _document.positions.push_back(extent);
   
   char* writeLocation = _termBuffer.write(tokenLength+1);
-  strcpy( writeLocation, token );
+  memcpy( writeLocation, token, tokenLength+1 );
   _document.terms.push_back( writeLocation );
 }
 

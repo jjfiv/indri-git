@@ -27,6 +27,9 @@
 #include "indri/Buffer.hpp"
 #include "indri/Path.hpp"
 #include "indri/Parameters.hpp"
+#include "indri/Buffer.hpp"
+#include "indri/File.hpp"
+#include "indri/ScopedLock.hpp"
 #include <algorithm>
 
 const int INPUT_BUFFER_SIZE = 1024;
@@ -34,15 +37,27 @@ const int OUTPUT_BUFFER_SIZE = 128*1024;
 const char POSITIONS_KEY[] = "#POSITIONS#";
 const char TEXT_KEY[] = "#TEXT#";
 
+//
+// zlib_alloc
+//
+
 static void* zlib_alloc( void* opaque, uInt items, uInt size ) {
   return malloc( items*size );
 }
+
+//
+// zlib_free
+//
 
 static void zlib_free( void* opaque, void* address ) {
   free( address );
 }
 
-static void zlib_deflate( z_stream_s& stream, WriteBuffer* outfile ) {
+//
+// zlib_deflate
+//
+
+static void zlib_deflate( z_stream_s& stream, SequentialWriteBuffer* outfile ) {
   if( stream.avail_in == 0 ) {
     // nothing to do...
     return;
@@ -70,7 +85,11 @@ static void zlib_deflate( z_stream_s& stream, WriteBuffer* outfile ) {
   }
 }
 
-static void zlib_deflate_finish( z_stream_s& stream, WriteBuffer* outfile ) {
+//
+// zlib_deflate_finish
+//
+
+static void zlib_deflate_finish( z_stream_s& stream, SequentialWriteBuffer* outfile ) {
   while(true) {
     if( stream.avail_out == 0 ) {
       stream.next_out = (Bytef*) outfile->write( OUTPUT_BUFFER_SIZE );
@@ -90,11 +109,14 @@ static void zlib_deflate_finish( z_stream_s& stream, WriteBuffer* outfile ) {
   deflateReset( &stream );
 }
 
-static void zlib_read_document( z_stream_s& stream, File& infile, File::offset_type offset, Buffer& outputBuffer ) {
+//
+// zlib_read_document
+//
+
+static void zlib_read_document( z_stream_s& stream, File& infile, UINT64 offset, Buffer& outputBuffer ) {
   // read in data from the file until the stream ends
   // split up the data as necessary
   // decompress positional info
-  infile.seekg( offset, std::fstream::beg );
 
   // read some data
   char inputBuffer[INPUT_BUFFER_SIZE];
@@ -106,9 +128,9 @@ static void zlib_read_document( z_stream_s& stream, File& infile, File::offset_t
   
   while(true) {
     if( !stream.avail_in ) {
-      infile.read( inputBuffer, sizeof inputBuffer );
-      File::offset_type readSize = infile.gcount();
-
+      UINT64 readSize = infile.read( inputBuffer, offset, sizeof inputBuffer );
+      offset += readSize; 
+      
       stream.avail_in = readSize;
       stream.next_in = (Bytef*) inputBuffer;
     }
@@ -139,6 +161,10 @@ static void zlib_read_document( z_stream_s& stream, File& infile, File::offset_t
   }
 }
 
+//
+// copy_quad
+//
+
 static int copy_quad( char* buffer ) {
   unsigned char firstByte = buffer[0];
   unsigned char secondByte = buffer[1];
@@ -155,6 +181,10 @@ static int copy_quad( char* buffer ) {
   return result;
 }
 
+//
+// _writeMetadataItem
+//
+
 void CompressedCollection::_writeMetadataItem( ParsedDocument* document, int i, int& keyLength, int& valueLength ) {
   keyLength = strlen(document->metadata[i].key) + 1;
   _stream->next_in = (Bytef*) document->metadata[i].key;
@@ -169,10 +199,14 @@ void CompressedCollection::_writeMetadataItem( ParsedDocument* document, int i, 
   zlib_deflate( *_stream, _output );
 }
 
+//
+// _writePositions
+//
+
 void CompressedCollection::_writePositions( ParsedDocument* document, int& keyLength, int& valueLength ) {
   _positionsBuffer.clear();
   _positionsBuffer.grow( document->positions.size() * 10 );
-  RVLCompressStream compress( _positionsBuffer.write( _positionsBuffer.size() ), _positionsBuffer.size() );
+  RVLCompressStream compress( _positionsBuffer );
   int last = 0;
 
   if( !document->positions.size() )
@@ -198,6 +232,10 @@ void CompressedCollection::_writePositions( ParsedDocument* document, int& keyLe
   zlib_deflate( *_stream, _output );
 }
 
+//
+// _writeText
+//
+
 void CompressedCollection::_writeText( ParsedDocument* document, int& keyLength, int& valueLength ) {
   keyLength = sizeof TEXT_KEY;
   _stream->next_in = (Bytef*) TEXT_KEY;
@@ -208,6 +246,10 @@ void CompressedCollection::_writeText( ParsedDocument* document, int& keyLength,
   _stream->avail_in = document->textLength;
   zlib_deflate( *_stream, _output );
 }
+
+//
+// _readPositions
+//
 
 void CompressedCollection::_readPositions( ParsedDocument* document, const void* positionData, int positionDataLength ) {
   RVLDecompressStream decompress( (const char*) positionData, positionDataLength );
@@ -227,11 +269,12 @@ void CompressedCollection::_readPositions( ParsedDocument* document, const void*
   }
 }
 
+//
+// CompressedCollection
+//
+
 CompressedCollection::CompressedCollection() {
-  // _storage may be seeked. Should probably move creation
-  // into open/openRead/create and only set _exclusiveAccess
-  // to false on open. 
-  _output = new WriteBuffer( _storage, 1024*1024, false );
+  _output = new SequentialWriteBuffer( _storage, 1024*1024 );
 
   _stream = new z_stream_s;
   _stream->zalloc = zlib_alloc;
@@ -239,10 +282,14 @@ CompressedCollection::CompressedCollection() {
   _stream->next_out = 0;
   _stream->avail_out = 0;
 
-  deflateInit( _stream, Z_DEFAULT_COMPRESSION );
+  deflateInit( _stream, Z_BEST_SPEED );
 
   _strings = string_set_create();
 }
+
+//
+// ~CompressedCollection
+//
 
 CompressedCollection::~CompressedCollection() {
   close();
@@ -253,36 +300,73 @@ CompressedCollection::~CompressedCollection() {
   string_set_delete( _strings );
 }
 
+//
+// create
+//
+
 void CompressedCollection::create( const std::string& fileName ) {
   std::vector<std::string> empty;
-  create( fileName, empty );
+  create( fileName, empty, empty );
 }
 
-void CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& indexedFields ) {
+//
+// create
+//
+
+void CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields ) {
+  std::vector<std::string> empty;
+  create( fileName, forwardIndexedFields, empty );
+}
+
+//
+// create
+//
+
+void CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields ) {
   std::string manifestName = Path::combine( fileName, "manifest" );
   std::string lookupName = Path::combine( fileName, "lookup" );
   std::string storageName = Path::combine( fileName, "storage" );
 
-  _storage.open( storageName, std::fstream::out | std::fstream::in | std::fstream::binary | std::fstream::trunc );
+  _storage.create( storageName );
   _lookup.create( lookupName );
 
   Parameters manifest;
+  Parameters forwardParameters = manifest.append( "forward" );
 
-  for( size_t i=0; i<indexedFields.size(); i++ ) {
+  for( size_t i=0; i<forwardIndexedFields.size(); i++ ) {
     std::stringstream metalookupName;
-    metalookupName << "metalookup" << i;
+    metalookupName << "forwardlookup" << i;
 
     std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
     Keyfile* metalookup = new Keyfile;
     metalookup->create( metalookupPath );
 
-    const char* key = string_set_add( indexedFields[i].c_str(), _strings );
-    _metalookups.insert( key, metalookup );
-    manifest.append("field").set("name", indexedFields[i]);
+    const char* key = string_set_add( forwardIndexedFields[i].c_str(), _strings );
+    _forwardLookups.insert( key, metalookup );
+    forwardParameters.append("field").set(forwardIndexedFields[i]);
+  }
+
+  Parameters reverseParameters = manifest.append( "reverse" );
+
+  for( size_t i=0; i<reverseIndexedFields.size(); i++ ) {
+    std::stringstream metalookupName;
+    metalookupName << "reverselookup" << i;
+
+    std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+    Keyfile* metalookup = new Keyfile;
+    metalookup->create( metalookupPath );
+
+    const char* key = string_set_add( reverseIndexedFields[i].c_str(), _strings );
+    _reverseLookups.insert( key, metalookup );
+    forwardParameters.append("field").set(reverseIndexedFields[i]);
   }
 
   manifest.writeFile( manifestName );
 }
+
+//
+// open
+//
 
 void CompressedCollection::open( const std::string& fileName ) {
   std::string lookupName = Path::combine( fileName, "lookup" );
@@ -292,27 +376,52 @@ void CompressedCollection::open( const std::string& fileName ) {
   Parameters manifest;
   manifest.loadFile( manifestName );
 
-  _storage.open( storageName, std::fstream::out | std::ifstream::in |  std::fstream::binary );
+  _storage.open( storageName );
   _lookup.open( lookupName );
-  _storage.seekp( 0, std::fstream::end );
 
-  if( manifest.exists("field") ) {
-    Parameters fields = manifest["field"];
+  Parameters forward = manifest["forward"];
 
-    for( size_t i=0; i<fields.size(); i++ ) {
+  if( forward.exists("field") ) {
+    forward = forward["field"];
+
+    for( size_t i=0; i<forward.size(); i++ ) {
       std::stringstream metalookupName;
-      metalookupName << "metalookup" << i;
+      metalookupName << "forwardLookup" << i;
 
       std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->open( metalookupPath );
 
-      std::string fieldName = fields["name"];
+      std::string fieldName = forward[i];
       const char* key = string_set_add( fieldName.c_str(), _strings );
-      _metalookups.insert( key, metalookup );
+      _forwardLookups.insert( key, metalookup );
     }
   }
+
+  Parameters reverse = manifest["reverse"];
+
+  if( reverse.exists("field") ) {
+    reverse = reverse["field"];
+
+    for( size_t i=0; i<reverse.size(); i++ ) {
+      std::stringstream metalookupName;
+      metalookupName << "reverseLookup" << i;
+
+      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      Keyfile* metalookup = new Keyfile;
+      metalookup->open( metalookupPath );
+
+      std::string fieldName = reverse[i];
+      const char* key = string_set_add( fieldName.c_str(), _strings );
+      _reverseLookups.insert( key, metalookup );
+    }
+  }
+
 }
+
+//
+// openRead
+//
 
 void CompressedCollection::openRead( const std::string& fileName ) {
   std::string lookupName = Path::combine( fileName, "lookup" );
@@ -322,41 +431,77 @@ void CompressedCollection::openRead( const std::string& fileName ) {
   Parameters manifest;
   manifest.loadFile( manifestName );
 
-  _storage.open( storageName, std::ifstream::in |  std::fstream::binary );
+  _storage.openRead( storageName );
   _lookup.openRead( lookupName );
 
-  if( manifest.exists("field") ) {
-    Parameters fields = manifest["field"];
+  Parameters forward = manifest["forward"];
 
-    for( size_t i=0; i<fields.size(); i++ ) {
+  if( forward.exists("field") ) {
+    forward = forward["field"];
+
+    for( size_t i=0; i<forward.size(); i++ ) {
       std::stringstream metalookupName;
-      metalookupName << "metalookup" << i;
+      metalookupName << "forwardLookup" << i;
 
       std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->openRead( metalookupPath );
 
-      std::string fieldName = fields["name"];
+      std::string fieldName = forward[i];
       const char* key = string_set_add( fieldName.c_str(), _strings );
-      _metalookups.insert( key, metalookup );
+      _forwardLookups.insert( key, metalookup );
+    }
+  }
+
+  Parameters reverse = manifest["reverse"];
+
+  if( reverse.exists("field") ) {
+    reverse = reverse["field"];
+
+    for( size_t i=0; i<reverse.size(); i++ ) {
+      std::stringstream metalookupName;
+      metalookupName << "reverseLookup" << i;
+
+      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      Keyfile* metalookup = new Keyfile;
+      metalookup->openRead( metalookupPath );
+
+      std::string fieldName = reverse[i];
+      const char* key = string_set_add( fieldName.c_str(), _strings );
+      _reverseLookups.insert( key, metalookup );
     }
   }
 }
 
+//
+// close
+//
+
 void CompressedCollection::close() {
   _lookup.close();
-  if( _output )
+  if( _output ) {
     _output->flush();
+    delete _output;
+    _output = 0;
+  }
+
   _storage.close();
 
   HashTable<const char*, Keyfile*>::iterator iter;
 
-  for( iter = _metalookups.begin(); iter != _metalookups.end(); iter++ ) {
+  for( iter = _forwardLookups.begin(); iter != _forwardLookups.end(); iter++ ) {
     (*iter->second)->close();
     delete (*iter->second);
   }
 
-  _metalookups.clear();
+  for( iter = _reverseLookups.begin(); iter != _reverseLookups.end(); iter++ ) {
+    (*iter->second)->close();
+    delete (*iter->second);
+  }
+
+  _forwardLookups.clear();
+  _reverseLookups.clear();
+
   string_set_delete( _strings );
   _strings = string_set_create();
 }
@@ -370,11 +515,13 @@ void CompressedCollection::close() {
 //
 
 void CompressedCollection::addDocument( int documentID, ParsedDocument* document ) {
+  ScopedLock l( _lock );
+  
   _stream->zalloc = zlib_alloc;
   _stream->zfree = zlib_free;
   _stream->next_out = 0;
   _stream->avail_out = 0;
-  File::offset_type offset = _output->tellp();
+  UINT64 offset = _output->tell();
   greedy_vector<UINT32> recordOffsets;
   int keyLength;
   int valueLength;
@@ -388,7 +535,7 @@ void CompressedCollection::addDocument( int documentID, ParsedDocument* document
   for( size_t i=0; i<document->metadata.size(); i++ ) {
     _writeMetadataItem( document, i, keyLength, valueLength );
 
-    Keyfile** metalookup = _metalookups.find( document->metadata[i].key );
+    Keyfile** metalookup = _forwardLookups.find( document->metadata[i].key );
 
     if( metalookup ) {
       (*metalookup)->put( documentID,
@@ -425,7 +572,9 @@ void CompressedCollection::addDocument( int documentID, ParsedDocument* document
 
 
 ParsedDocument* CompressedCollection::retrieve( int documentID ) {
-  File::offset_type offset;
+  ScopedLock l( _lock );
+
+  UINT64 offset;
   int actual;
   
   if( !_lookup.get( documentID, &offset, actual, sizeof offset ) ) {
@@ -497,8 +646,14 @@ ParsedDocument* CompressedCollection::retrieve( int documentID ) {
   return document;
 }
 
+//
+// retrieveMetadatum
+//
+
 std::string CompressedCollection::retrieveMetadatum( int documentID, const std::string& attributeName ) {
-  Keyfile** metalookup = _metalookups.find( attributeName.c_str() );
+  ScopedLock l( _lock );
+
+  Keyfile** metalookup = _forwardLookups.find( attributeName.c_str() );
   std::string result;
 
   if( metalookup ) {
@@ -513,6 +668,7 @@ std::string CompressedCollection::retrieveMetadatum( int documentID, const std::
 
     delete[] resultBuffer;
   } else {
+    l.unlock();
     ParsedDocument* document = retrieve( documentID );
 
     greedy_vector<MetadataPair>::iterator iter = std::find_if( document->metadata.begin(),
@@ -529,4 +685,50 @@ std::string CompressedCollection::retrieveMetadatum( int documentID, const std::
   return result;
 }
 
+//
+// retrieveIDByMetadatum 
+//
+
+std::vector<int> CompressedCollection::retrieveIDByMetadatum( const std::string& attributeName, const std::string& value ) {
+  ScopedLock l( _lock );
+
+  // find the lookup associated with this field
+  Keyfile** metalookup = _reverseLookups.find( attributeName.c_str() );
+  std::vector<int> results;
+
+  // if we have a lookup, find the associated documentID for this value
+  if( metalookup ) {
+    int actual = 0;
+    int id;
+    bool success = (*metalookup)->get( value.c_str(), &id, actual, sizeof id );
+
+    if( success ) {
+      char key[Keyfile::MAX_KEY_LENGTH];
+
+      do {     
+        results.push_back( id );
+        int actualKey = 0;
+
+        success = (*metalookup)->getNext( key, actualKey, sizeof key, &id, actual, sizeof id );
+      } while( success && !strcmp( key, value.c_str() ) );
+    }
+  }
+
+  return results;
+}
+
+//
+// retrieveByMetadatum
+//
+
+std::vector<ParsedDocument*> CompressedCollection::retrieveByMetadatum( const std::string& attributeName, const std::string& value ) {
+  std::vector<ParsedDocument*> documents;
+  std::vector<int> results = retrieveIDByMetadatum( attributeName, value );
+
+  for( int i=0; i<results.size(); i++ ) {
+    documents.push_back( retrieve( results[i] ) );
+  }
+
+  return documents;
+}
 

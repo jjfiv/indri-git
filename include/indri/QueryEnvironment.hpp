@@ -29,6 +29,7 @@
 #include "indri/ParsedDocument.hpp"
 #include "indri/Repository.hpp"
 #include "indri/QueryAnnotation.hpp"
+#include "lemur/IndexTypes.hpp"
 
 /*! <p>Principal class for interacting with Indri indexes during retrieval. 
   Provides the API for opening one or more Repository servers, either local
@@ -89,6 +90,10 @@ public:
   /// \brief Add a local repository
   /// @param pathname the path to the repository.
   void addIndex( const std::string& pathname );
+  /// Add an IndexEnvironment object.  Unlike the other add calls, this one
+  /// will not close the index when QueryEnvironment::close is called.
+  /// @param an IndexEnvironment instance
+  void addIndex( class IndexEnvironment& environment );
   /// Close the QueryEnvironment.
   void close();
   /// \brief Remove a remote server
@@ -104,7 +109,7 @@ public:
   /// @return the vector of ScoredExtentResults for the query
   std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
 
-std::vector<ScoredExtentResult> runQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested );
+  std::vector<ScoredExtentResult> runQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested );
 
   /// \brief Run an Indri query language query. @see QueryAnnotation
   /// @param query the query to run

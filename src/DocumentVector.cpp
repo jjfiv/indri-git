@@ -17,10 +17,14 @@
 //
 
 #include "indri/DocumentVector.hpp"
-#include "indri/IndriIndex.hpp"
-#include "indri/TermListBuilder.hpp"
+#include "indri/TermList.hpp"
+#include "indri/Index.hpp"
 
-void DocumentVector::_init( class IndriIndex* index, const indri::index::TermListBuilder* termList, std::map<int,std::string>* termStringMap ) {
+//
+// _init
+//
+
+void DocumentVector::_init( indri::index::Index* index, const indri::index::TermList* termList, std::map<int,std::string>* termStringMap ) {
   const greedy_vector<int>& terms = termList->terms();
   const greedy_vector<indri::index::FieldExtent>& fields = termList->fields();
 
@@ -63,6 +67,7 @@ void DocumentVector::_init( class IndriIndex* index, const indri::index::TermLis
 
   for( unsigned int i=0; i<fields.size(); i++ ) {
     Field f;
+
     f.name = index->field(fields[i].id);
     f.number = fields[i].number;
     f.begin = fields[i].begin;
@@ -75,11 +80,11 @@ void DocumentVector::_init( class IndriIndex* index, const indri::index::TermLis
 DocumentVector::DocumentVector() {
 }
 
-DocumentVector::DocumentVector( IndriIndex* index, const indri::index::TermListBuilder* termList ) {
+DocumentVector::DocumentVector( indri::index::Index* index, const indri::index::TermList* termList ) {
   _init( index, termList, 0 );
 }
 
-DocumentVector::DocumentVector( IndriIndex* index, const indri::index::TermListBuilder* termList, std::map<int,std::string>& termStringMap ) {
+DocumentVector::DocumentVector( indri::index::Index* index, const indri::index::TermList* termList, std::map<int,std::string>& termStringMap ) {
   _init( index, termList, &termStringMap );
 }
 

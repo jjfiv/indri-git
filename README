@@ -1,3 +1,87 @@
+
+Contents:
+  * Help!
+  * What is Indri?
+  * Using Indri
+  * Building Indri
+  * Running Indri
+
+-----
+Help!
+-----
+
+If you have trouble using Indri, check online at lemurproject.org for updated
+documentation.  You can also ask a question in the Lemur public
+forum, also at lemurproject.org.  The Lemur and Indri developers watch the forum
+and can answer your questions.
+
+--------------
+What is Indri?
+--------------
+
+Indri is a new information retrieval system from the Lemur project; a joint effort
+between the University of Massachusetts and Carnegie Mellon University.  It
+combines the language modeling and inference network approaches to information
+retrieval into one system.
+
+For those who have used the Inquery system, Indri uses a query language that is
+very similar, but adds additional features.  In particular, Indri understands 
+tagged documents, like HTML and XML documents, and can therefore understand
+queries like #1(george bush).person (which means 'find the phrase george bush 
+appearing inside a person tag).  Indri can also understand numeric quantities.
+You can find out more about the query language in the query language documentation.
+
+We expect that Indri will be useful both for academic research and for certain
+industrial applications.  Indri has been released under a permissive open source 
+license.  Enterprise support for Indri is available from third parties.
+
+-----------
+Using Indri
+-----------
+
+Indri comes with three command line programs: buildindex, runquery, and indrid.
+In addition, Indri comes with two GUI programs: RetUI and IndexUI.  For many 
+research tasks, these tools may meet your needs completely.  However, if your needs
+are more complex, you may wish to use Indri as a library and build your own
+applications.  You can access Indri from C++, Java or PHP.
+
+Applications: 
+
+The buildindex application can build Indri repositories from TREC formatted documents,
+HTML documents, text documents, and PDF files.  Additionally, on Windows it can index Word
+and PowerPoint documents.  Buildindex understands tags in HTML/XML documents, and it
+can be instructed to index them as well. 
+
+The runquery application evaluates queries against one or more Indri repositories, and
+returns the results in a ranked list of documents.  runquery can be instructed to 
+print the document text as well, or the text of passages if the query is a
+passage retrieval query.
+
+The indrid application is a repository server.  It waits for connections from runquery
+(or from other applications using the QueryEnvironment interface) and processes queries
+from network requests.  One copy of runquery can connect to many indrid instances at once,
+making retrieval using a cluster of machines possible.
+
+Library:
+
+Indri provides the QueryEnvironment and IndexEnvrionment classes, which can be used
+from C++, Java or PHP (although indexing is not supported from PHP).  The 
+buildindex and runquery applications use these classes exclusively.
+
+IndexEnvironment understands many different file types.  However, you can create your
+own file type, as long as it is XML-like, and tell IndexEnvironment how to index it.
+Then, using the addFile method, IndexEnvironment can index your document(s).  If you
+want to do more complex processing on your data, or if your data is arriving in real time,
+you may parse your document into a ParsedDocument structure.  The IndexEnvrionment
+object can index these structures directly.
+
+QueryEnvironment allows you to run queries and retrieve a ranked list of results.
+You can use runAnnotatedQuery to retrieve match information (annotations), which is
+useful for highlighting matched words in documents.  By using the addIndex method
+with an instance of IndexEnvironment, you can evaluate queries on an index that
+is currently being built.  The addServer method allows you to connect to indrid 
+processes for distributed retrieval.
+
 --------------
 Building Indri
 --------------
@@ -7,7 +91,7 @@ solution file provided to build the source tree.  Note that the release
 build of this software has Pentium IV optimizations turned on, which may
 or may not work on your machine.
 
-Linux or Solaris: To build on Linux or solaris, first run configure and
+Linux, Solaris, Mac OS X:  To build on a Unix variant, first run configure and
 then type "make" in the indri directory.  By  default, the project will
 build in debug mode, meaning that debug symbols are included.  To run in
 release mode (optimizations on, no symbols), type: make STYLE=release 

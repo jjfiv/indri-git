@@ -239,14 +239,6 @@ void NetworkServerStub::_handleTermCountText( XMLNode* request ) {
   delete response;
 }
 
-void NetworkServerStub::_handleTermCountID( XMLNode* request ) {
-  INT64 termCount = _server->termCount( string_to_int(request->getValue()) );
-  XMLNode* response = new XMLNode( "term-count-id", i64_to_string(termCount) );
-  _stream->reply( response );
-  _stream->replyDone();
-  delete response;
-}
-
 void NetworkServerStub::_handleTermName( XMLNode* request ) {
   std::string name = _server->termName( string_to_int( request->getValue() ) );
   XMLNode* response = new XMLNode( "term-name", name );
@@ -271,14 +263,9 @@ void NetworkServerStub::_handleTermFieldCount( XMLNode* request ) {
   fieldNode = request->getChild( "field" );
   const std::string& fieldName = request->getValue();
 
-  if( (termNode = request->getChild( "term-id" )) != 0 ) {
-    int termID = string_to_int( termNode->getValue() );
-    count = _server->termFieldCount( termID, fieldName );
-  } else {
-    termNode = request->getChild( "term-text" );
-    const std::string& termName = termNode->getValue();
-    count = _server->termFieldCount( termName, fieldName );
-  }
+  termNode = request->getChild( "term-text" );
+  const std::string& termName = termNode->getValue();
+  count = _server->termFieldCount( termName, fieldName );
 
   XMLNode* response = new XMLNode( "term-field-count", i64_to_string(count) );
   _stream->reply( response );
@@ -370,8 +357,6 @@ void NetworkServerStub::request( XMLNode* input ) {
       _handleTermName( input );
     } else if( type == "term-count" ) {
       _handleTermCount( input );
-    } else if( type == "term-count-id" ) {
-      _handleTermCountID( input );
     } else if( type == "term-count-text" ) {
       _handleTermCountText( input );
     } else if( type == "stem-count-text" ) {

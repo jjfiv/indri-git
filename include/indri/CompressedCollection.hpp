@@ -22,20 +22,25 @@
 #include "indri/Collection.hpp"
 #include "lemur/string-set.h"
 #include <string>
-#include "lemur/File.hpp"
+#include <vector>
 #include "lemur/Keyfile.hpp"
-#include "lemur/WriteBuffer.hpp"
 #include "indri/Buffer.hpp"
+#include "indri/SequentialWriteBuffer.hpp"
 #include "indri/HashTable.hpp"
+#include "indri/File.hpp"
+#include "indri/Mutex.hpp"
 
 class CompressedCollection : public Collection {
 private:
+  Mutex _lock;
+
   Keyfile _lookup;
   File _storage;
-  WriteBuffer* _output;
+  SequentialWriteBuffer* _output;
   Buffer _positionsBuffer;
   struct z_stream_s* _stream;
-  HashTable<const char*, Keyfile*> _metalookups;
+  HashTable<const char*, Keyfile*> _reverseLookups;
+  HashTable<const char*, Keyfile*> _forwardLookups;
   String_set* _strings;
 
   void _writePositions( ParsedDocument* document, int& keyLength, int& valueLength );
@@ -50,12 +55,17 @@ public:
 
   void create( const std::string& fileName );
   void create( const std::string& fileName, const std::vector<std::string>& indexedFields );
+  void create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields );
+
   void open( const std::string& fileName );
   void openRead( const std::string& fileName );
   void close();
 
   ParsedDocument* retrieve( int documentID );
   std::string retrieveMetadatum( int documentID, const std::string& attributeName );
+  std::vector<ParsedDocument*> retrieveByMetadatum( const std::string& attributeName, const std::string& value );
+  std::vector<int> retrieveIDByMetadatum( const std::string& attributeName, const std::string& value );
+
   void addDocument( int documentID, ParsedDocument* document );
 };
 

@@ -34,7 +34,10 @@ public:
   ExtentOrNode( const std::string& name, std::vector<ListIteratorNode*>& children );
   void prepare( int documentID );
   const greedy_vector<Extent>& extents();
+  
+  void indexChanged( indri::index::Index& index );
   int nextCandidateDocument();
+
   const std::string& getName() const;
   void annotate( class Annotator& annotator, int documentID, int begin, int end );
 };

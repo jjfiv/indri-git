@@ -77,3 +77,8 @@ void CachedFrequencyBeliefNode::annotate( Annotator& annotator, int documentID, 
   // can't annotate -- don't have position info
 }
 
+void CachedFrequencyBeliefNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
+

@@ -23,13 +23,14 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../include;../contrib/antlr/include;../contrib/xpdf/include;../contrib/lemur/include;../contrib/zlib/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4267,4018,4244"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -109,7 +110,13 @@
 				RelativePath=".\BooleanAndNode.cpp">
 			</File>
 			<File
+				RelativePath=".\BulkTree.cpp">
+			</File>
+			<File
 				RelativePath=".\CachedFrequencyBeliefNode.cpp">
+			</File>
+			<File
+				RelativePath=".\CombinedVocabularyIterator.cpp">
 			</File>
 			<File
 				RelativePath=".\Combiner.cpp">
@@ -121,28 +128,55 @@
 				RelativePath=".\ContextCountAccumulator.cpp">
 			</File>
 			<File
+				RelativePath=".\ContextSimpleCountAccumulator.cpp">
+			</File>
+			<File
 				RelativePath=".\Copier.cpp">
+			</File>
+			<File
+				RelativePath=".\DeletedDocumentList.cpp">
 			</File>
 			<File
 				RelativePath=".\DirectoryIterator.cpp">
 			</File>
 			<File
-				RelativePath=".\DocListDiskBuilder.cpp">
+				RelativePath=".\DiskDocExtentListIterator.cpp">
 			</File>
 			<File
-				RelativePath=".\DocListFileIterator.cpp">
+				RelativePath=".\DiskDocListFileIterator.cpp">
 			</File>
 			<File
-				RelativePath=".\DocListFrequencyIterator.cpp">
+				RelativePath=".\DiskDocListIterator.cpp">
 			</File>
 			<File
-				RelativePath=".\DocListIterator.cpp">
+				RelativePath=".\DiskDocumentDataIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\DiskFrequentVocabularyIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\DiskIndex.cpp">
+			</File>
+			<File
+				RelativePath=".\DiskKeyfileVocabularyIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\DiskTermListFileIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\DocExtentListMemoryBuilder.cpp">
+			</File>
+			<File
+				RelativePath=".\DocExtentListMemoryBuilderIterator.cpp">
 			</File>
 			<File
 				RelativePath=".\DocListIteratorNode.cpp">
 			</File>
 			<File
 				RelativePath=".\DocListMemoryBuilder.cpp">
+			</File>
+			<File
+				RelativePath=".\DocListMemoryBuilderIterator.cpp">
 			</File>
 			<File
 				RelativePath=".\DocumentIteratorFactory.cpp">
@@ -178,6 +212,9 @@
 				RelativePath=".\FieldLessNode.cpp">
 			</File>
 			<File
+				RelativePath=".\File.cpp">
+			</File>
+			<File
 				RelativePath=".\FileClassEnvironmentFactory.cpp">
 			</File>
 			<File
@@ -190,16 +227,16 @@
 				RelativePath=".\FilterRequireNode.cpp">
 			</File>
 			<File
+				RelativePath=".\FixedPassageNode.cpp">
+			</File>
+			<File
 				RelativePath=".\HTMLParser.cpp">
 			</File>
 			<File
 				RelativePath=".\IndexEnvironment.cpp">
 			</File>
 			<File
-				RelativePath=".\IndriIndex.cpp">
-			</File>
-			<File
-				RelativePath=".\IndriTermInfoList.cpp">
+				RelativePath=".\IndexWriter.cpp">
 			</File>
 			<File
 				RelativePath=".\IndriTimer.cpp">
@@ -221,6 +258,15 @@
 			</File>
 			<File
 				RelativePath=".\LocalQueryServer.cpp">
+			</File>
+			<File
+				RelativePath=".\MemoryDocumentDataIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\MemoryIndex.cpp">
+			</File>
+			<File
+				RelativePath=".\MemoryIndexTermListFileIterator.cpp">
 			</File>
 			<File
 				RelativePath=".\NetworkMessageStream.cpp">
@@ -265,9 +311,6 @@
 				RelativePath=".\PDFDocumentExtractor.cpp">
 			</File>
 			<File
-				RelativePath=".\PonteExpander.cpp">
-			</File>
-			<File
 				RelativePath=".\PorterStemmerTransformation.cpp">
 			</File>
 			<File
@@ -296,6 +339,12 @@
 			</File>
 			<File
 				RelativePath=".\Repository.cpp">
+			</File>
+			<File
+				RelativePath=".\RepositoryLoadThread.cpp">
+			</File>
+			<File
+				RelativePath=".\RepositoryMaintenanceThread.cpp">
 			</File>
 			<File
 				RelativePath=".\RMExpander.cpp">
@@ -328,7 +377,7 @@
 				RelativePath=".\TFIDFTermScoreFunction.cpp">
 			</File>
 			<File
-				RelativePath=".\TopdocsIndex.cpp">
+				RelativePath=".\Thread.cpp">
 			</File>
 			<File
 				RelativePath=".\UnorderedWindowNode.cpp">
@@ -338,6 +387,9 @@
 			</File>
 			<File
 				RelativePath=".\UnpackerInternal.cpp">
+			</File>
+			<File
+				RelativePath=".\UtilityThread.cpp">
 			</File>
 			<File
 				RelativePath=".\Walker.cpp">
@@ -378,13 +430,16 @@
 				RelativePath="..\include\indri\Appliers.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\atomic.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\BeliefNode.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\BooleanAndNode.cpp">
+				RelativePath="..\include\indri\Buffer.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\Buffer.hpp">
+				RelativePath="..\include\indri\BulkTree.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\CachedFrequencyBeliefNode.hpp">
@@ -393,10 +448,16 @@
 				RelativePath="..\include\indri\Collection.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\CombinedVocabularyIterator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\Combiner.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\CompressedCollection.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ConditionVariable.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\ContextCountAccumulator.hpp">
@@ -408,7 +469,13 @@
 				RelativePath="..\include\indri\ContextCountGraphExtractor.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\ContextSimpleCountAccumulator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\ContextSimpleCountCollectorCopier.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ContextSimpleCounterNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Copier.hpp">
@@ -429,10 +496,34 @@
 				RelativePath="..\include\indri\delete_range.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\DeletedDocumentList.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DenseVocabularyMap.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\DirectoryIterator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\DirichletTermScoreFunction.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskDocExtentListIterator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskDocListFileIterator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskDocumentDataIterator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskKeyfileVocabularyIterator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskTermData.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DiskTermListFileIterator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\DocListDiskBlockReader.hpp">
@@ -462,13 +553,13 @@
 				RelativePath="..\include\indri\DocListMemoryBuilder.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\DocPositionInfoList.hpp">
-			</File>
-			<File
 				RelativePath="..\include\indri\DocumentCount.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\DocumentData.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DocumentDataIterator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\DocumentIterator.hpp">
@@ -537,6 +628,9 @@
 				RelativePath="..\include\indri\FieldStatistics.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\File.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\FileClassEnvironment.hpp">
 			</File>
 			<File
@@ -555,6 +649,9 @@
 				RelativePath="..\include\indri\FilterRequireNode.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\FixedPassageNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\FrequencyListCopier.hpp">
 			</File>
 			<File
@@ -567,13 +664,16 @@
 				RelativePath="..\include\indri\HTMLParser.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\Index.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\IndexEnvironment.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\indri-platform.h">
+				RelativePath="..\include\indri\IndexWriter.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\indri-platform.h~">
+				RelativePath="..\include\indri\indri-platform.h">
 			</File>
 			<File
 				RelativePath="..\include\indri\IndriIndex.hpp">
@@ -600,6 +700,9 @@
 				RelativePath="..\include\indri\JelinekMercerTermScoreFunction.hpp">
 			</File>
 			<File
+				RelativePath="..\contrib\lemur\include\lemur\Keyfile.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\KeyfileWordMap.hpp">
 			</File>
 			<File
@@ -618,7 +721,16 @@
 				RelativePath="..\include\indri\LocalQueryServer.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\Lockable.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\MaxNode.hpp">
+			</File>
+			<File
+				RelativePath=".\indri\MemoryDocumentDataIterator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\MemoryIndex.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\MetadataPair.hpp">
@@ -696,37 +808,10 @@
 				RelativePath="..\include\indri\PowerPointDocumentExtractor.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\PriorFactory.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\PriorNode.hpp">
-			</File>
-			<File
 				RelativePath="..\include\indri\QueryAnnotation.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\QueryEnvironment.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryExpander.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryLexer.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryLexerTokenTypes.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryParser.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryResponsePacker.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryResponseUnpacker.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\QueryServer.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\QuerySpec.hpp">
@@ -738,7 +823,25 @@
 				RelativePath="..\include\indri\RawTextParser.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\ReaderLockable.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ReadersWritersLock.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ref_ptr.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\RegionAllocator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\Repository.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\RepositoryLoadThread.h">
+			</File>
+			<File
+				RelativePath="..\include\indri\RepositoryMaintenanceThread.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\RMExpander.hpp">
@@ -754,6 +857,12 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\ScoredExtentResult.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\SequentialReadBuffer.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\SequentialWriteBuffer.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\SimpleCopier.hpp">
@@ -792,6 +901,9 @@
 				RelativePath="..\include\indri\TagList.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\TermBitmap.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\TermData.hpp">
 			</File>
 			<File
@@ -807,10 +919,16 @@
 				RelativePath="..\include\indri\TermListBuilder.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\TermRecorder.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\TermScoreFunction.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\TermScoreFunctionFactory.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\TermTranslator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\TextDocumentExtractor.hpp">
@@ -820,6 +938,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\TFIDFTermScoreFunction.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\Thread.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\TopdocsIndex.hpp">
@@ -846,6 +967,12 @@
 				RelativePath="..\include\indri\UnparsedDocument.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\UtilityThread.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\VocabularyMap.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\Walker.hpp">
 			</File>
 			<File
@@ -859,6 +986,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\WordDocumentExtractor.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\WriterLockable.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\XMLNode.hpp">

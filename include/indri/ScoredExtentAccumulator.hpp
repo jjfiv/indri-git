@@ -20,6 +20,7 @@
 #define INDRI_SCOREDEXTENTACCUMULATOR_HPP
 
 #include "indri/SkippingCapableNode.hpp"
+#include <queue>
 
 class ScoredExtentAccumulator : public EvaluatorNode {
 private:
@@ -86,6 +87,10 @@ public:
     }
 
     return _results;
+  }
+
+  void indexChanged( indri::index::Index& index ) {
+    // do nothing
   }
 };
 

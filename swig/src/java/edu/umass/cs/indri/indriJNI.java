@@ -60,6 +60,7 @@ class indriJNI {
   public final static native void IndexEnvironment_setStopwords(long jarg1, String[] jarg2);
   public final static native void IndexEnvironment_setStemmer(long jarg1, String jarg2);
   public final static native void IndexEnvironment_setMemory(long jarg1, long jarg2);
+  public final static native void IndexEnvironment_setNormalization(long jarg1, boolean jarg2);
   public final static native void IndexEnvironment_create__SWIG_0(long jarg1, String jarg2, long jarg3);
   public final static native void IndexEnvironment_create__SWIG_1(long jarg1, String jarg2);
   public final static native void IndexEnvironment_open__SWIG_0(long jarg1, String jarg2, long jarg3);

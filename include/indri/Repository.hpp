@@ -21,6 +21,10 @@
 
 #include "indri/Parameters.hpp"
 #include "indri/Transformation.hpp"
+#include "indri/MemoryIndex.hpp"
+#include "indri/DiskIndex.hpp"
+#include "indri/ref_ptr.hpp"
+#include "indri/DeletedDocumentList.hpp"
 #include <string>
 
 /*! Encapsulates document manager, index, and field indexes. Provides access 
@@ -28,36 +32,110 @@
  */
 class Repository {
 public:
+  struct Load {
+    float one;
+    float five;
+    float fifteen;
+  };
+
   struct Field {
     std::string name;
     std::string parserName;
     bool numeric;
   };
 
+  typedef std::vector<indri::index::Index*> index_vector;
+  typedef indri::ref_ptr<index_vector> index_state;
+
 private:
-  class IndriIndex* _index;
+  friend class RepositoryMaintenanceThread;
+  friend class RepositoryLoadThread;
+
+  class RepositoryMaintenanceThread* _maintenanceThread;
+  class RepositoryLoadThread* _loadThread;
+
+  Mutex _stateLock; /// protects against state changes
+  std::vector<index_state> _states;
+  index_state _active;
+  int _indexCount;
+
+  // maintenance and load threads
+  ConditionVariable _quitLoadThread;
+  ConditionVariable _quitMaintenanceThread;
+
+  // running flags
+  volatile bool _maintenanceRunning;
+  volatile bool _loadThreadRunning;
+
+  Mutex _addLock; /// protects addDocument
+
   class CompressedCollection* _collection;
-  class TopdocsIndex* _topdocs;
+  DeletedDocumentList _deletedList;
+
   Parameters _parameters;
   std::vector<Transformation*> _transformations;
   std::vector<Field> _fields;
+  std::vector<indri::index::Index::FieldDescription> _indexFields;
 
   std::string _path;
   bool _readOnly;
 
   INT64 _memory;
 
+  UINT64 _lastThrashTime;
+  volatile bool _thrashing;
+
+  enum { LOAD_MINUTES = 15, LOAD_MINUTE_FRACTION = 12 };
+
+  indri::atomic::value_type _queryLoad[ LOAD_MINUTES * LOAD_MINUTE_FRACTION ];
+  indri::atomic::value_type _documentLoad[ LOAD_MINUTES * LOAD_MINUTE_FRACTION ];
+
+  void _writeParameters( const std::string& path );
+
+  void _incrementLoad();
+  void _countDocumentAdd();
+  Load _computeLoad( indri::atomic::value_type* loadArray );
+
   void _buildFields();
-  void _buildChain();
+  void _buildChain( Parameters& parameters );
   void _buildTransientChain( Parameters& parameters );
 
   void _copyParameters( Parameters& options );
 
+  void _removeStates( std::vector<index_state>& toRemove );
+  void _remove( const std::string& path );
+
+  void _openIndexes( Parameters& params, const std::string& parentPath );
+  std::vector<index_state> _statesContaining( std::vector<indri::index::Index*>& indexes );
+  bool _stateContains( index_state& state, std::vector<indri::index::Index*>& indexes );
+  void _swapState( std::vector<indri::index::Index*>& oldIndexes, indri::index::Index* newIndex );
+  void _closeIndexes();
+  std::vector<indri::index::Index::FieldDescription> _fieldsForIndex( std::vector<Repository::Field>& _fields );
+  void _merge( index_state& state );
+
+  // these methods should only be called by the maintenance thread
+  /// merge all known indexes together
+  void _merge(); 
+  /// write the active index to disk
+  void _write();
+  /// merge together some of the more recent indexes
+  void _trim();
+
+  void _startThreads();
+  void _stopThreads();
+
+  void _setThrashing( bool flag );
+  UINT64 _timeSinceThrashing();
+  void _addMemoryIndex();
+
 public:
   Repository() {
-    _index = 0;
     _collection = 0;
     _readOnly = false;
+    _lastThrashTime = 0;
+    _thrashing = false;
+    memset( (void*) _documentLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
+    memset( (void*) _queryLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
   }
 
   ~Repository() {
@@ -66,6 +144,9 @@ public:
   /// add a parsed document to the repository.
   /// @param document the document to add.
   void addDocument( ParsedDocument* document );
+  /// delete a document from the repository
+  /// @param documentID the internal ID of the document to delete
+  void deleteDocument( int documentID );
   /// @return the indexed fields for this collection
   const std::vector<Field>& fields() const;
   /// @return the tags for this collection
@@ -76,9 +157,6 @@ public:
   std::string processTerm( const std::string& term );
   /// @return the compressed document collection
   class CompressedCollection* collection();
-  /// @return the indri document index
-  class IndriIndex* index();
-  class TopdocsIndex* topdocs();
   /// Create a new empty repository.
   /// @param path the directory to create the repository in
   /// @param options additional parameters
@@ -97,6 +175,27 @@ public:
   static bool exists( const std::string& path );
   /// Close the repository
   void close();
+
+  /// Indexes in this repository
+  index_state indexes();
+
+  /// Notify the repository that a query has happened
+  void countQuery();
+
+  /// Write the most recent state out to disk
+  void write();
+
+  /// Merge all indexes together
+  void merge();
+
+  /// List of deleted documents in this repository
+  DeletedDocumentList& deletedList();
+
+  /// Returns the average number of documents added each minute in the last 1, 5 and 15 minutes
+  Load queryLoad();
+
+  /// Returns the average number of documents added each minute in the last 1, 5 and 15 minutes
+  Load documentLoad();
 };
 
 #endif // INDRI_REPOSITORY_HPP

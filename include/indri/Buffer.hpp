@@ -29,6 +29,13 @@ private:
   size_t _position;
 
 public:
+  Buffer( size_t length ) :
+    _buffer( (char*) malloc( length ) ),
+    _size( length ),
+    _position(0)
+  {
+  }
+
   Buffer() :
     _buffer(0),
     _size(0),
@@ -40,30 +47,32 @@ public:
     free( _buffer );
   }
 
-  size_t size() const {
+  inline size_t size() const {
     return _size;
   }
 
-  size_t position() const {
+  inline size_t position() const {
     return _position;
   }
 
-  void clear() {
+  inline void clear() {
     _position = 0;
   }
 
-  char* front() {
+  inline char* front() {
     return _buffer;
   }
 
-  char* write( size_t length ) {
-    grow( _position + length );
+  inline char* write( size_t length ) {
+    if( _position + length > _size )
+      grow( _position + length );
     char* spot = _buffer + _position;
     _position += length;
     return spot;
   }
 
-  void unwrite( size_t length ) {
+  inline void unwrite( size_t length ) {
+    assert( length >= 0 );
     assert( length <= _position );
     _position -= length;
   }
@@ -94,6 +103,10 @@ public:
       grow(64);
     else
       grow(_size*2);
+  }
+
+  size_t remaining() {
+    return size() - position();
   }
 
   void remove( size_t start ) {

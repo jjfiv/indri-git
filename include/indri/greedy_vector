@@ -1,4 +1,4 @@
-/*==========================================================================
+  /*==========================================================================
  * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
  *
  * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
@@ -38,6 +38,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdexcept>
+
 template<typename _Type, int _Count = 16>
 class greedy_vector {
 private:
@@ -84,8 +85,6 @@ private:
 
   template<typename _Iter>
   void _copy( _Type* start, _Iter other, _Iter otherEnd ) {
-//    _Type* current = start;
-    
     for( _Type* current = start; other != otherEnd; current++, other++ ) {
       new(current) _Type(*other);
     }

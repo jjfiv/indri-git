@@ -32,11 +32,14 @@ public:
 protected:
   virtual void initialize( UnparsedDocument* unparsed, ParsedDocument* parsed );
   virtual void cleanup( UnparsedDocument* unparsed, ParsedDocument* parsed );
-  virtual void handleToken(char *token, int type, long pos);
+  virtual void handleTag(char* token, long pos);
   char url[MAX_URL_LENGTH];
   char base_url[MAX_URL_LENGTH];
-  
   bool normalizeURL(char *s);
+
+  tag_properties* _relativeUrlTag;
+  tag_properties* _absoluteUrlTag;
+  tag_properties* _anchorTag;
 
 private:
   bool extractURL(char *token);

@@ -19,6 +19,8 @@
 #include "indri/InferenceNetworkBuilder.hpp"
 
 #include "indri/ContextCountAccumulator.hpp"
+#include "indri/ContextSimpleCountAccumulator.hpp"
+
 #include "indri/DocListIteratorNode.hpp"
 #include "indri/ExtentInsideNode.hpp"
 #include "indri/ExtentAndNode.hpp"
@@ -43,13 +45,13 @@
 #include "indri/MaxNode.hpp"
 #include "indri/PriorNode.hpp"
 #include "indri/ExtentRestrictionNode.hpp"
+#include "indri/FixedPassageNode.hpp"
 #include "indri/FilterNode.hpp"
 #include "indri/NullListNode.hpp"
 #include "indri/TermScoreFunctionFactory.hpp"
 #include "indri/TermFrequencyBeliefNode.hpp"
 #include "indri/CachedFrequencyBeliefNode.hpp"
 #include "indri/BooleanAndNode.hpp"
-#include "indri/TopdocsIndex.hpp"
 
 #include <stdexcept>
 
@@ -103,14 +105,8 @@ void InferenceNetworkBuilder::after( indri::lang::IndexTerm* term ) {
 
     // if it isn't a stopword, we can try to get it from the index
     if( !stopword ) {
-      termID = _repository.index()->term( processed.c_str() );
-    
-      if( termID != 0 ) {
-        DocPositionInfoList* positionList = _repository.index()->docPositionInfoList( termID );
-
-        _network->addDocIterator( positionList );
-        iteratorNode = new DocListIteratorNode( term->nodeName(), positionList );
-      }
+      int listID = _network->addDocIterator( processed );
+      iteratorNode = new DocListIteratorNode( term->nodeName(), *_network, listID );
     }
     
     // if we didn't find anything at the index, make a placeholder
@@ -123,25 +119,26 @@ void InferenceNetworkBuilder::after( indri::lang::IndexTerm* term ) {
   }
 }
 
+//
+// Field
+//
+
 void InferenceNetworkBuilder::after( indri::lang::Field* field ) {
   if( _nodeMap.find( field ) == _nodeMap.end() ) {
-    int fieldID = _repository.index()->field( field->getFieldName().c_str() );
     indri::index::FieldListIterator* iterator = 0;
     ListIteratorNode* iteratorNode = 0;
 
-    if( fieldID != 0 ) {
-      iterator = _repository.index()->fieldPositionListIterator( fieldID );
-      _network->addFieldIterator( iterator );
-      
-      iteratorNode = new FieldIteratorNode( field->nodeName(), iterator );
-    } else {
-      iteratorNode = new NullListNode( field->nodeName(), false );
-    }
+    int listID = _network->addFieldIterator( field->getFieldName() );
+    iteratorNode = new FieldIteratorNode( field->nodeName(), *_network, listID );
 
     _network->addListNode( iteratorNode );
     _nodeMap[field] = iteratorNode;
   }
 }
+
+//
+// ExtentRestriction
+//
 
 void InferenceNetworkBuilder::after( indri::lang::ExtentRestriction* erNode ) {
   if( _nodeMap.find( erNode ) == _nodeMap.end() ) {
@@ -154,6 +151,27 @@ void InferenceNetworkBuilder::after( indri::lang::ExtentRestriction* erNode ) {
   }
 }
 
+//
+// FixedPassage
+//
+
+void InferenceNetworkBuilder::after( indri::lang::FixedPassage* fpNode ) {
+  if( _nodeMap.find( fpNode ) == _nodeMap.end() ) {
+    BeliefNode* childNode = dynamic_cast<BeliefNode*>(_nodeMap[fpNode->getChild()]);
+    FixedPassageNode* fixedPassage = new FixedPassageNode( fpNode->nodeName(),
+                                                           childNode,
+                                                           fpNode->getWindowSize(),
+                                                           fpNode->getIncrement() );
+
+    _network->addBeliefNode( fixedPassage );
+    _nodeMap[fpNode] = fixedPassage;
+  }
+}
+
+//
+// ExtentAnd
+//
+
 void InferenceNetworkBuilder::after( indri::lang::ExtentAnd* extentAnd ) {
   if( _nodeMap.find( extentAnd ) == _nodeMap.end() ) {
     std::vector<ListIteratorNode*> translation = _translate<ListIteratorNode>( extentAnd->getChildren() );
@@ -164,6 +182,10 @@ void InferenceNetworkBuilder::after( indri::lang::ExtentAnd* extentAnd ) {
   }
 }
 
+//
+// ExtentOr
+//
+
 void InferenceNetworkBuilder::after( indri::lang::ExtentOr* extentOr ) {
   if( _nodeMap.find( extentOr ) == _nodeMap.end() ) {
     std::vector<ListIteratorNode*> translation = _translate<ListIteratorNode>( extentOr->getChildren() );
@@ -173,6 +195,10 @@ void InferenceNetworkBuilder::after( indri::lang::ExtentOr* extentOr ) {
     _nodeMap[extentOr] = extentOrNode;
   }
 }
+
+//
+// ExtentInside
+//
 
 void InferenceNetworkBuilder::after( indri::lang::ExtentInside* extentInside ) {
   if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
@@ -535,60 +561,27 @@ void InferenceNetworkBuilder::after( indri::lang::ContextCounterNode* contextCou
     InferenceNetworkNode* untypedContext = _nodeMap[ contextCounterNode->getContext() ];
     ContextCountAccumulator* contextCount = 0;
 
-    if( contextCounterNode->hasMaxScore() ) {
-      // the preprocessor filled in these counts, so we'll put in a placeholder,
-      // but won't mark it as complex (so it won't be evaluated on each doc in the collection)
-      // it also managed to get us some max-score stats, so we'll pass those along
-      contextCount = new ContextCountAccumulator(
-        contextCounterNode->nodeName(),
-        contextCounterNode->getOccurrences(),
-        contextCounterNode->getContextSize(),
-        contextCounterNode->getMaximumOccurrences(),
-        contextCounterNode->getMinimumContextLength(), 
-        contextCounterNode->getMaximumContextLength(),
-        contextCounterNode->getMaximumContextFraction() );
-    } else if( contextCounterNode->hasCounts() ) {
-      // the preprocessor filled in these counts, so we'll put in a placeholder,
-      // but won't mark it as complex (so it won't be evaluated on each doc in the collection)
-      contextCount = new ContextCountAccumulator(
-        contextCounterNode->nodeName(),
-        contextCounterNode->getOccurrences(),
-        contextCounterNode->getContextSize() );
-    } else if( contextCounterNode->hasContextSize() ) {
-      // the preprocessor was able to compute the context size, but not the
-      // occurrences for this term
-      ListCache::CachedList* list = new ListCache::CachedList;
-      contextCounterNode->getRawExtent()->copy( list->raw );
-      if( contextCounterNode->getContext() )
-        contextCounterNode->getContext()->copy( list->context );
-        
-      contextCount = new ContextCountAccumulator(
-        contextCounterNode->nodeName(),
-        &_cache,
-        list,
-        dynamic_cast<ListIteratorNode*>(untypedRawExtent),
-        contextCounterNode->getContextSize(),
-        _repository.index()->maxDocumentLength() );
-      _network->addComplexEvaluatorNode( contextCount );
-    } else {
-      ListCache::CachedList* list = new ListCache::CachedList;
-      contextCounterNode->getRawExtent()->copy( list->raw );
-      if( contextCounterNode->getContext() )
-        contextCounterNode->getContext()->copy( list->context );
-
-      // the preprocessing step wasn't able to calculate counts for this
-      // node, so it's a complex evaluator (needs to be run on each document in the collection)
-      contextCount = new ContextCountAccumulator(
-        contextCounterNode->nodeName(),
-        &_cache,
-        list,
-        dynamic_cast<ListIteratorNode*>(untypedRawExtent),
-        dynamic_cast<ListIteratorNode*>(untypedContext) );
-      _network->addComplexEvaluatorNode( contextCount );
-    }
+    contextCount = new ContextCountAccumulator( contextCounterNode->nodeName(),
+                                                dynamic_cast<ListIteratorNode*>(untypedRawExtent),
+                                                dynamic_cast<ListIteratorNode*>(untypedContext) );
 
     _network->addEvaluatorNode( contextCount );
+    _network->addComplexEvaluatorNode( contextCount );
     _nodeMap[ contextCounterNode ] = contextCount;
+  }
+}
+
+void InferenceNetworkBuilder::after( indri::lang::ContextSimpleCounterNode* contextSimpleCounterNode ) {
+  if( _nodeMap.find( contextSimpleCounterNode ) == _nodeMap.end() ) {
+    ContextSimpleCountAccumulator* contextCount = 0;
+
+    contextCount = new ContextSimpleCountAccumulator( contextSimpleCounterNode->nodeName(),
+                                                      contextSimpleCounterNode->terms(),
+                                                      contextSimpleCounterNode->field(),
+                                                      contextSimpleCounterNode->context() );
+
+    _network->addEvaluatorNode( contextCount );
+    _nodeMap[ contextSimpleCounterNode ] = contextCount;
   }
 }
 
@@ -617,38 +610,8 @@ void InferenceNetworkBuilder::after( indri::lang::AnnotatorNode* annotatorNode )
 }
 
 void InferenceNetworkBuilder::after( indri::lang::CachedFrequencyScorerNode* cachedScorerNode ) {
-  if( _nodeMap.find( cachedScorerNode ) == _nodeMap.end() ) {
-    ListCache::CachedList* list = (ListCache::CachedList*) cachedScorerNode->getList();
-
-    if( !list )
-      LEMUR_THROW( LEMUR_RUNTIME_ERROR, "Trying to expand a CachedFrequencyScoredNode, but the cached list is gone" );
-
-    BeliefNode* belief = 0;
-    TermScoreFunction* function = 0;
-
-    function = _buildTermScoreFunction( cachedScorerNode->getSmoothing(),
-                                        list->occurrences,
-                                        list->contextSize );
-
-    if( list->occurrences ) {
-      UINT64 maxOccurrences = UINT64( ceil( double( list->maximumContextSize ) * list->maximumContextFraction ) );
-
-      double maximumScore = function->scoreOccurrence( maxOccurrences, list->maximumContextSize );
-      double maximumBackgroundScore = function->scoreOccurrence( 0, list->minimumContextSize );
-      
-      belief = new CachedFrequencyBeliefNode( cachedScorerNode->nodeName(),
-                                              list,
-                                              *function,
-                                              maximumBackgroundScore,
-                                              maximumScore );
-    } else {
-      belief = new NullScorerNode( cachedScorerNode->nodeName(), *function );
-    }
-
-    _network->addScoreFunction( function );
-    _network->addBeliefNode( belief );
-    _nodeMap[cachedScorerNode] = belief;
-  }
+  // TODO: either remove this or fix it
+  LEMUR_THROW( LEMUR_RUNTIME_ERROR, "For the time being, InferenceNetworkBuilder does not support CachedFrequencyScorerNodes" );
 }
 
 void InferenceNetworkBuilder::after( indri::lang::TermFrequencyScorerNode* termScorerNode ) {
@@ -673,36 +636,8 @@ void InferenceNetworkBuilder::after( indri::lang::TermFrequencyScorerNode* termS
 
       // if it isn't a stopword, we can try to get it from the index
       if( !stopword ) {
-        termID = _repository.index()->term( processed.c_str() );
-
-        if( termID != 0 ) {
-          indri::index::DocListFrequencyIterator* frequencyList = _repository.index()->docFrequencyInfoList( termID );
-          _network->addFrequencyIterator( frequencyList );
-
-          UINT64 maxOccurrences;
-          double maximumScore;
-          double maximumBackgroundScore;
-          double maximumFraction;
-
-          TopdocsIndex::TopdocsList* topdocs = 0;
-
-          if( Parameters::instance().get( "topdocs", 1 ) )
-            topdocs = _repository.topdocs()->fetch( termID );
-
-          if( topdocs ) {
-            // this is the maximum fraction *not* in the topdocs list
-            maximumFraction = double(topdocs->smallest.count) / double(topdocs->smallest.length);
-          } else {
-            maximumFraction = termScorerNode->getMaxContextFraction();
-          }
-
-          maxOccurrences = UINT64( ceil( double(termScorerNode->getMaxContextLength()) * maximumFraction ) );
-
-          maximumScore = function->scoreOccurrence( maxOccurrences, termScorerNode->getMaxContextLength() );
-          maximumBackgroundScore = function->scoreOccurrence( 0, termScorerNode->getMinContextLength() );
-
-          belief = new TermFrequencyBeliefNode( termScorerNode->nodeName(), *frequencyList, topdocs, *function, maximumBackgroundScore, maximumScore );
-        }
+        int listID = _network->addDocIterator( processed );
+        belief = new TermFrequencyBeliefNode( termScorerNode->nodeName(), *_network, listID, *function );
       }
     }
 
@@ -744,7 +679,7 @@ void InferenceNetworkBuilder::after( indri::lang::RawScorerNode* rawScorerNode )
       // this is here to turn max-score off for this term
       // only frequency lists are "max-scored"
       double maximumScore = INDRI_HUGE_SCORE;
-      double maximumBackgroundScore = INDRI_TINY_SCORE;
+      double maximumBackgroundScore = INDRI_HUGE_SCORE;
       
       belief = new ListBeliefNode( rawScorerNode->nodeName(), *iterator, context, rawIterator, *function, maximumBackgroundScore, maximumScore );
     } else {

@@ -50,7 +50,7 @@ public:
         size_t resultsSent = 0;
 
         while( resultList.size() > resultsSent ) {
-          size_t sendChunk = lemur_compat::min<size_t>( resultList.size() - resultsSent, 100 );
+          size_t sendChunk = lemur_compat::min<size_t>( resultList.size() - resultsSent, (size_t) 100 );
 
           for( size_t i=0; i<sendChunk; i++ ) {
             ScoredExtentResult byteSwapped;

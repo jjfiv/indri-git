@@ -16,39 +16,44 @@
 // 28 July 2004 -- tds
 //
 
+#include "indri/DocListIterator.hpp"
 #include "indri/DocListIteratorNode.hpp"
 #include "indri/Annotator.hpp"
+#include "indri/InferenceNetwork.hpp"
 
-DocListIteratorNode::DocListIteratorNode( const std::string& name, DocPositionInfoList* list ) :
-  _list(list),
-  _name(name)
+DocListIteratorNode::DocListIteratorNode( const std::string& name, class InferenceNetwork& network, int listID ) :
+  _name(name),
+  _network(network),
+  _listID(listID)
 {
-  _list->startIteration();
-  _list->nextEntry();
 }
 
 int DocListIteratorNode::nextCandidateDocument() {
-  DocInfo* info = _list->currentEntry();
+  if( _list ) {
+    indri::index::DocListIterator::DocumentData* info = _list->currentEntry();
+    if( info ) { 
+      return info->document;
+    }
+  }
 
-  if( info )
-    return info->docID();
-  else
-    return MAX_INT32;
+  return MAX_INT32;
 }
 
 void DocListIteratorNode::prepare( int documentID ) {
-  DocInfo* info = _list->currentEntry();
   _extents.clear();
 
-  if( !info || info->docID() != documentID )
+  if( !_list )
     return;
 
-  int count = info->termCount();
-  // dmf FIXME
-  const int* pos = (const int *) info->positions();
+  indri::index::DocListIterator::DocumentData* info = _list->currentEntry();
+
+  if( !info || info->document != documentID )
+    return;
   
-  for( int i = 0; i < count; i++ ) {
-    _extents.push_back( Extent( pos[i], pos[i]+1 ) );
+  greedy_vector<int>& positions = info->positions;
+
+  for( int i = 0; i < positions.size(); i++ ) {
+    _extents.push_back( Extent( positions[i], positions[i]+1 ) );
   }
 }
 
@@ -63,3 +68,8 @@ const std::string& DocListIteratorNode::getName() const {
 void DocListIteratorNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
+
+void DocListIteratorNode::indexChanged( indri::index::Index& index ) {
+  _list = _network.getDocIterator( _listID );
+}
+

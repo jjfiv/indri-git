@@ -47,6 +47,8 @@ public:
   
   bool hasMatch( int documentID );
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   const std::string& getName() const;
 };
 

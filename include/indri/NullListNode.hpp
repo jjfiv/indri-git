@@ -32,7 +32,10 @@ public:
 
   bool isStopword() const;
   const std::string& getName() const;
+
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   void prepare( int documentID );
   const greedy_vector<Extent>& extents();
   void annotate( class Annotator& annotator, int documentID, int begin, int end );

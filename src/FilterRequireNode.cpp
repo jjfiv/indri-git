@@ -22,8 +22,8 @@
 #include "indri/Annotator.hpp"
 
 FilterRequireNode::FilterRequireNode( const std::string& name, 
-				      ListIteratorNode* filter, 
-				      BeliefNode* required ) {
+                                      ListIteratorNode* filter, 
+                                      BeliefNode* required ) {
   _name = name;
   _filter = filter;
   _required = required;
@@ -69,4 +69,8 @@ void FilterRequireNode::annotate( Annotator& annotator, int documentID, int begi
   if( _filter->extents().size() ) {
     _required->annotate( annotator, documentID, begin, end );
   }
+}
+
+void FilterRequireNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
 }

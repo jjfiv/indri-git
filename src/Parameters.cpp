@@ -266,6 +266,11 @@ Parameters Parameters::operator[] ( const char* path ) {
   return get(path);
 }
 
+void Parameters::clear() {
+  parameter_value* root = _getRoot();
+  root->clear();
+}
+
 Parameters Parameters::append( const std::string& path ) {
   parameter_value* current = _createPath(path);
   parameter_value* slice = new parameter_value();
@@ -457,17 +462,18 @@ void Parameters::loadFile( const std::string& filename ) {
   input.seekg( 0, std::ios::end );
   size_t length = input.tellg();
   input.seekg( 0, std::ios::beg );
-  std::auto_ptr<char> buffer( new char[length] );
+  char* buffer = new char[length];
   
   try {
-    input.read( buffer.get(), length );
-    std::auto_ptr<XMLNode> result( reader.read( buffer.get(), length ) );
+    input.read( buffer, length );
+    std::auto_ptr<XMLNode> result( reader.read( buffer, length ) );
 
     _loadXML( result.get() );
   } catch( Exception& e ) {
     LEMUR_RETHROW( e, "Had trouble parsing parameter file '" + filename + "'" );
   }
 
+  delete[] buffer;
   input.close();
 }
 

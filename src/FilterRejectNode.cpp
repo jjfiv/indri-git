@@ -24,8 +24,8 @@
 #include "indri/Annotator.hpp"
 
 FilterRejectNode::FilterRejectNode( const std::string& name, 
-				    ListIteratorNode* filter, 
-				    BeliefNode* disallowed ) {
+                                    ListIteratorNode* filter, 
+                                    BeliefNode* disallowed ) {
   _name = name;
   _filter = filter;
   _disallowed = disallowed;
@@ -52,7 +52,7 @@ double FilterRejectNode::maximumScore() {
 bool FilterRejectNode::hasMatch( int documentID ) {
   // delegate to the children.
   return (_filter->extents().size() == 0 &&
-	  _disallowed->hasMatch( documentID ));
+  _disallowed->hasMatch( documentID ));
 }
 
 const std::string& FilterRejectNode::getName() const {
@@ -75,4 +75,7 @@ void FilterRejectNode::annotate( Annotator& annotator, int documentID, int begin
   }
 }
 
+void FilterRejectNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
 

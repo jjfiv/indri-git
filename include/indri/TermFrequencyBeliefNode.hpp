@@ -23,31 +23,32 @@
 #include <string>
 #include "indri/TermScoreFunction.hpp"
 #include "indri/ListBeliefNode.hpp"
-#include "indri/DocListFrequencyIterator.hpp"
-#include "indri/TopdocsIndex.hpp"
+#include "indri/DocListIterator.hpp"
 
 class TermFrequencyBeliefNode : public BeliefNode {
 private:
+  class InferenceNetwork& _network;
   TermScoreFunction& _function;
   greedy_vector<ScoredExtentResult> _extents;
-  indri::index::DocListFrequencyIterator& _list;
-  TopdocsIndex::TopdocsList* _topdocs;
+  indri::index::DocListIterator* _list;
   double _maximumBackgroundScore;
   double _maximumScore;
   std::string _name;
+  int _listID;
+
+  greedy_vector<indri::index::DocListIterator::TopDocument> _emptyTopdocs;
 
 public:
   TermFrequencyBeliefNode( const std::string& name,
-    indri::index::DocListFrequencyIterator& list,
-    TopdocsIndex::TopdocsList* topdocs,
-    TermScoreFunction& scoreFunction,
-    double maximumBackgroundScore,
-    double maximumScore );
+    class InferenceNetwork& network,
+    int listID,
+    TermScoreFunction& scoreFunction );
 
   ~TermFrequencyBeliefNode();
 
-  const TopdocsIndex::TopdocsList* getTopdocsList() const;
+  const greedy_vector<indri::index::DocListIterator::TopDocument>& topdocs() const;
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
   double maximumBackgroundScore();
   double maximumScore();
   const greedy_vector<ScoredExtentResult>& score( int documentID, int begin, int end, int documentLength );

@@ -57,4 +57,7 @@ void FieldEqualsNode::annotate( class Annotator& annotator, int documentID, int 
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
 
+void FieldEqualsNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
 

@@ -68,3 +68,7 @@ void BooleanAndNode::annotate( class Annotator& annotator, int documentID, int b
    */
 }
 
+void BooleanAndNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+

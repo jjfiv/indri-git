@@ -37,7 +37,10 @@ public:
   void add( InferenceNetworkNode* node, int documentID, int begin, int end );
   void addMatches( greedy_vector<Extent>& extents, InferenceNetworkNode* node, int documentID, int begin, int end );
   void evaluate( int documentID, int documentLength );
+  
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   EvaluatorNode::MResults& getResults();
   const std::string& getName() const;
   const EvaluatorNode::MResults& getResults() const;

@@ -186,8 +186,8 @@ PowerPointDocumentExtractor::PowerPointDocumentExtractor() {
 
   HRESULT hr;
   VARIANT result;
-	CLSID pptClsid;
-	CLSIDFromProgID( L"PowerPoint.Application", &pptClsid );  
+  CLSID pptClsid;
+  CLSIDFromProgID( L"PowerPoint.Application", &pptClsid );  
 
   hr = ::CoCreateInstance( pptClsid,
                            NULL,

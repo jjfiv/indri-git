@@ -2120,6 +2120,111 @@ namespace indri {
       }
     };
 
+    class FixedPassage : public ScoredExtentNode {
+    private:
+      ScoredExtentNode* _child;
+      int _windowSize;
+      int _increment;
+
+    public:
+      FixedPassage( Unpacker& unpacker ) {
+        _child = unpacker.getScoredExtentNode("child");
+        _windowSize = unpacker.getInteger("windowSize");
+        _increment = unpacker.getInteger("increment");
+      }
+
+      FixedPassage( ScoredExtentNode* child, int windowSize, int increment ) :
+        _child(child),
+        _windowSize(windowSize),
+        _increment(increment)
+      {
+      }
+
+      std::string typeName() const {
+        return "FixedPassage";
+      }
+
+      std::string queryText() const {
+        std::stringstream qtext;
+        // this extent restriction is almost certainly because of some #combine or #max operator
+        // in the _child position.  We look for the first parenthesis (e.g. #combine(dog cat)) and
+        // insert the brackets in.
+        
+        std::string childText = _child->queryText();
+        std::string::size_type pos = childText.find( '(' );
+
+        if( pos != std::string::npos ) {
+          qtext << childText.substr(0,pos) 
+                << "[passage"
+                << _windowSize
+                << ":"
+                << _increment
+                << "]"
+                << childText.substr(pos);
+        } else {
+          // couldn't find a parenthesis, so we'll tack the [field] on the front
+          qtext << "[passage"
+                << _windowSize
+                << ":"
+                << _increment
+                << "]"
+                << childText;
+        }
+
+        return qtext.str();
+      } 
+
+      ScoredExtentNode* getChild() {
+        return _child;
+      }
+
+      int getWindowSize() {
+        return _windowSize;
+      }
+
+      int getIncrement() {
+        return _increment;
+      }
+
+      void setChild( ScoredExtentNode* child ) {
+        _child = child;
+      }
+
+      void setWindowSize( int windowSize ) {
+        _windowSize = windowSize;
+      }
+
+      void setIncrement( int increment ) {
+        _increment = increment;
+      }
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.put("child", _child);
+        packer.put("increment", _increment);
+        packer.put("windowSize", _windowSize);
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        _child->walk(walker);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        ScoredExtentNode* duplicateChild = dynamic_cast<indri::lang::ScoredExtentNode*>(_child->copy(copier));
+        FixedPassage* duplicate = new FixedPassage( duplicateChild,
+                                                    _windowSize,
+                                                    _increment );
+        duplicate->setNodeName( nodeName() );
+        
+        return copier.after(this, duplicate);
+      }
+    };
+
     class FilterNode : public ScoredExtentNode {
     private:
       ScoredExtentNode* _child;
@@ -2185,26 +2290,15 @@ namespace indri {
       RawExtentNode* _context;
       bool _hasCounts;
       bool _hasContextSize;
-      bool _hasMaxScore;
       UINT64 _occurrences;
       UINT64 _contextSize;
-
-      UINT64 _minimumContextLength;
-      UINT64 _maximumContextLength;
-      UINT64 _maximumOccurrences;
-      double _maximumContextFraction;
 
     public:
       ContextCounterNode( RawExtentNode* raw, RawExtentNode* context ) :
          _hasCounts(false),
          _hasContextSize(false),
-         _hasMaxScore(false),
          _occurrences(0),
-         _contextSize(0),
-         _minimumContextLength(1),
-         _maximumContextLength(MAX_INT32),
-         _maximumOccurrences(MAX_INT32),
-         _maximumContextFraction(1.0)
+         _contextSize(0)
       {
         _raw = raw;
         _context = context;
@@ -2216,14 +2310,8 @@ namespace indri {
         _occurrences = unpacker.getInteger( "occurrences" );
         _contextSize = unpacker.getInteger( "contextSize" );
 
-        _minimumContextLength = unpacker.getInteger( "minimumContextLength" );
-        _maximumContextLength = unpacker.getInteger( "maximumContextLength" );
-        _maximumOccurrences = unpacker.getInteger( "maximumOccurrences" );
-        _maximumContextFraction = unpacker.getDouble( "maximumContextFraction" );
-
         _hasCounts = unpacker.getBoolean( "hasCounts" );
         _hasContextSize = unpacker.getBoolean( "hasContextSize" );
-        _hasMaxScore = unpacker.getBoolean( "hasMaxScore" );
       }
 
       std::string typeName() const {
@@ -2271,14 +2359,8 @@ namespace indri {
         packer.put( "occurrences", _occurrences );
         packer.put( "contextSize", _contextSize );
 
-        packer.put( "maximumOccurrences", _maximumOccurrences );
-        packer.put( "maximumContextFraction", _maximumContextFraction );
-        packer.put( "maximumContextLength", _maximumContextLength );
-        packer.put( "minimumContextLength", _minimumContextLength );
-
         packer.put( "hasCounts", _hasCounts );
         packer.put( "hasContextSize", _hasContextSize );
-        packer.put( "hasMaxScore", _hasMaxScore );
         packer.after(this);
       }
 
@@ -2307,32 +2389,12 @@ namespace indri {
         return _hasContextSize;
       }
 
-      bool hasMaxScore() const {
-        return _hasMaxScore;
-      }
-
       UINT64 getOccurrences() const {
         return _occurrences;
       }
 
       UINT64 getContextSize() const {
         return _contextSize;
-      }
-
-      UINT64 getMaximumOccurrences() const {
-        return _maximumOccurrences;
-      }
-
-      UINT64 getMinimumContextLength() const {
-        return _minimumContextLength;
-      }
-
-      UINT64 getMaximumContextLength() const {
-        return _maximumContextLength;
-      }
-
-      double getMaximumContextFraction() const {
-        return _maximumContextFraction;
       }
 
       void setContextSize( UINT64 contextSize ) {
@@ -2346,20 +2408,115 @@ namespace indri {
         _occurrences = occurrences;
         setContextSize( contextSize );
       }
+    };
+
+    class ContextSimpleCounterNode : public AccumulatorNode {
+    private:
+      std::vector<std::string> _terms;
+      std::string _field;
+      std::string _context;
+
+      bool _hasCounts;
+      bool _hasContextSize;
+      UINT64 _occurrences;
+      UINT64 _contextSize;
+
+    public:
+      ContextSimpleCounterNode( const std::vector<std::string>& terms, const std::string& field, const std::string& context ) :
+         _hasCounts(false),
+         _hasContextSize(false),
+         _occurrences(0),
+         _contextSize(0),
+         _terms(terms),
+         _field(field),
+         _context(context)
+      {
+      }
+
+      ContextSimpleCounterNode( Unpacker& unpacker ) {
+        _occurrences = unpacker.getInteger( "occurrences" );
+        _contextSize = unpacker.getInteger( "contextSize" );
+
+        _terms = unpacker.getStringVector( "terms" );
+        _field = unpacker.getString( "field" );
+        _context = unpacker.getString( "context" );
+
+        _hasCounts = unpacker.getBoolean( "hasCounts" );
+        _hasContextSize = unpacker.getBoolean( "hasContextSize" );
+      }
+
+      std::string typeName() const {
+        return "ContextSimpleCounterNode";
+      }
+
+      std::string queryText() const {
+        // nothing to see here -- this is an optimization node
+        return std::string();
+      }
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.put( "occurrences", _occurrences );
+        packer.put( "contextSize", _contextSize );
+
+        packer.put( "terms", _terms );
+        packer.put( "field", _field );
+        packer.put( "context", _context );
+
+        packer.put( "hasCounts", _hasCounts );
+        packer.put( "hasContextSize", _hasContextSize );
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+        ContextSimpleCounterNode* duplicate = new ContextSimpleCounterNode(*this);
+        return copier.after(this, duplicate);
+      }
+
+      bool hasCounts() const {
+        return _hasCounts;
+      }
+
+      bool hasContextSize() const {
+        return _hasContextSize;
+      }
+
+      UINT64 getOccurrences() const {
+        return _occurrences;
+      }
+
+      UINT64 getContextSize() const {
+        return _contextSize;
+      }
+
+      const std::vector<std::string>& terms() const {
+        return _terms;
+      }
+
+      const std::string& field() const {
+        return _field;
+      }
+
+      const std::string& context() const {
+        return _context;
+      }
+
+      void setContextSize( UINT64 contextSize ) {
+        _contextSize = contextSize;
+        _hasContextSize = true;
+      }
 
       void setCounts( UINT64 occurrences,
-                      UINT64 contextSize,
-                      UINT64 maximumOccurrences, 
-                      UINT64 minimumContextLength, 
-                      UINT64 maximumContextLength,
-                      double maximumContextFraction )
-      {
-        setCounts( occurrences, contextSize );
-        _hasMaxScore = true;
-        _maximumOccurrences = maximumOccurrences;
-        _minimumContextLength = minimumContextLength;
-        _maximumContextLength = maximumContextLength;
-        _maximumContextFraction = maximumContextFraction;
+                      UINT64 contextSize ) {
+        _hasCounts = true;
+        _occurrences = occurrences;
+        setContextSize( contextSize );
       }
     };
 

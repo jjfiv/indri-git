@@ -72,6 +72,10 @@ public:
     return _belief->hasMatch( documentID );
   }
 
+  void indexChanged( indri::index::Index& index ) {
+    // do nothing
+  }
+
   const std::string& getName() const {
     return _name;
   }

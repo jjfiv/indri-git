@@ -71,3 +71,9 @@ void ExtentInsideNode::annotate( class Annotator& annotator, int documentID, int
     _outer->annotate( annotator, documentID, _extents[i].begin, _extents[i].end );
   }
 }
+
+void ExtentInsideNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
+

@@ -58,4 +58,8 @@ void FieldLessNode::annotate( class Annotator& annotator, int documentID, int be
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
 
+void FieldLessNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
 

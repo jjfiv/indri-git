@@ -23,6 +23,8 @@
 #include <iostream>
 #include "indri/Annotator.hpp"
 #include "indri/TermFrequencyBeliefNode.hpp"
+#include "indri/greedy_vector"
+#include "indri/delete_range.hpp"
 
 double WeightedAndNode::_computeMaxScore( unsigned int start ) {
   // first, find the maximum score of the first few columns
@@ -81,37 +83,50 @@ struct double_greater {
 };
 
 void WeightedAndNode::doneAddingChildren() {
+  // should be removed
+}
+
+void WeightedAndNode::indexChanged( indri::index::Index& index ) {
   _candidates.clear();
   _candidatesIndex = 0;
 
-  greedy_vector< const TopdocsIndex::TopdocsList* > lists;
+  greedy_vector< greedy_vector<indri::index::DocListIterator::TopDocument>* > lists;
 
   // get all the relevant topdocs lists
   for( unsigned int i=0; i<_children.size(); i++ ) {
     TermFrequencyBeliefNode* node = dynamic_cast<TermFrequencyBeliefNode*>(_children[i].node);
-    const TopdocsIndex::TopdocsList* topdocs = 0;
 
     if( node ) {
-      topdocs = node->getTopdocsList();
-    }
+      greedy_vector<indri::index::DocListIterator::TopDocument>* copy = new greedy_vector<indri::index::DocListIterator::TopDocument>( node->topdocs() );
+      lists.push_back( copy );
+      std::sort( copy->begin(), copy->end(), indri::index::DocListIterator::TopDocument::docid_less() );
 
-    if( topdocs ) {
-      assert( topdocs->entries.size() );
-      lists.push_back( topdocs );
+      _children[i].maximumWeightedScore = node->maximumScore() * _children[i].weight;
+      _children[i].backgroundWeightedScore = node->maximumBackgroundScore() * _children[i].weight;
     }
   }
 
+  std::sort( _children.begin(), _children.end(), child_type::maxscore_less() );
+
   // TODO: could compute an initial threshold here, but that may not be necessary
   greedy_vector<int> indexes;
-  indexes.resize( lists.size(), 0 );
+
+  for( unsigned int i=0; i<lists.size(); i++ ) {
+    if( lists[i]->size() )
+      indexes.push_back( 0 );
+    else
+      indexes.push_back( -1 );
+  }
 
   while( true ) {
     // find the smallest document
     int smallestDocument = MAX_INT32;
 
     for( unsigned int i=0; i<lists.size(); i++ ) {
-      if( indexes[i] > 0 )
-        smallestDocument = lemur_compat::min( smallestDocument, lists[i]->entries[indexes[i]].documentID );
+      greedy_vector<indri::index::DocListIterator::TopDocument>& currentList = *lists[i];      
+
+      if( indexes[i] >= 0 )
+        smallestDocument = lemur_compat::min( smallestDocument, currentList[indexes[i]].document );
     }
 
     if( smallestDocument == MAX_INT32 )
@@ -121,15 +136,20 @@ void WeightedAndNode::doneAddingChildren() {
 
     // increment indexes
     for( unsigned int i=0; i<lists.size(); i++ ) {
-      if( lists[i]->entries[indexes[i]].documentID == smallestDocument ) {
+      greedy_vector<indri::index::DocListIterator::TopDocument>& currentList = *lists[i];      
+
+      if( indexes[i] >= 0 && currentList[indexes[i]].document == smallestDocument ) {
         indexes[i]++;
         
-        if( indexes[i] == lists[i]->entries.size() ) {
+        if( indexes[i] == currentList.size() ) {
           indexes[i] = -1;
         }
       }
     }
   }
+
+  for( int i=0; i<lists.size(); i++ )
+    delete lists[i];
 
   // compute quorum
   _computeQuorum();
@@ -220,6 +240,10 @@ greedy_vector<ScoredExtentResult>& WeightedAndNode::score( int documentID, int b
 }
 
 bool WeightedAndNode::hasMatch( int documentID ) {
+  // advance candidates
+  while( _candidatesIndex < _candidates.size() && _candidates[_candidatesIndex] <= documentID )
+    _candidatesIndex++;
+
   for( unsigned int i=0; i<_children.size(); i++ ) {
     if( _children[i].node->hasMatch( documentID ) )
       return true;

@@ -84,4 +84,8 @@ void ExtentOrNode::annotate( class Annotator& annotator, int documentID, int beg
   }
 }
 
+void ExtentOrNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
 

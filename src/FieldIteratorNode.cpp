@@ -18,28 +18,33 @@
 
 #include "indri/FieldIteratorNode.hpp"
 #include "indri/FieldListIterator.hpp"
+#include "indri/InferenceNetwork.hpp"
 #include "indri/Annotator.hpp"
 
-FieldIteratorNode::FieldIteratorNode( const std::string& name, indri::index::FieldListIterator* field ) :
-  _field(field),
-  _name(name)
+FieldIteratorNode::FieldIteratorNode( const std::string& name, InferenceNetwork& network, int listID ) :
+  _name(name),
+  _network(network),
+  _listID(listID)
 {
-  if( _field ) {
-    _field->startIteration();
-    _field->nextEntry();
-  }
+}
+
+void FieldIteratorNode::indexChanged( indri::index::Index& index ) {
+  _list = _network.getFieldIterator( _listID );
+
+  if( _list )
+    _list->startIteration();
 }
 
 void FieldIteratorNode::prepare( int documentID ) {
   _extents.clear();
   _numbers.clear();
 
-  if( !_field )
+  if( !_list )
     return;
 
-  const indri::index::FieldExtentInfo* info = _field->currentEntry();
+  const indri::index::DocExtentListIterator::DocumentExtentData* info = _list->currentEntry();
 
-  if( info && info->documentID == documentID ) {
+  if( info && info->document == documentID ) {
     _extents = info->extents;
     _numbers = info->numbers;
   }
@@ -55,15 +60,15 @@ const greedy_vector<INT64>& FieldIteratorNode::numbers() {
 }
 
 int FieldIteratorNode::nextCandidateDocument() {
-  if( !_field )
+  if( !_list )
     return MAX_INT32;
 
-  const indri::index::FieldExtentInfo* info = _field->currentEntry();
+  const indri::index::DocExtentListIterator::DocumentExtentData* info = _list->currentEntry();
 
   if( !info ) {
     return MAX_INT32;
   } else {
-    return info->documentID;
+    return info->document;
   }
 }
 

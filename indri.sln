@@ -51,6 +51,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dumpindex", "dumpindex\dump
 		{8416A7BD-3BB5-45E6-8A5B-98F8FA933A78} = {8416A7BD-3BB5-45E6-8A5B-98F8FA933A78}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "harvestlinks", "harvestlinks\harvestlinks.vcproj", "{C7A754B4-3D95-4B60-886B-A9EDEC18B974}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5C8D97A4-E7FA-4B9D-B18A-F159560A4A40} = {5C8D97A4-E7FA-4B9D-B18A-F159560A4A40}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -90,9 +95,11 @@ Global
 		{5C8D97A4-E7FA-4B9D-B18A-F159560A4A40}.Release.ActiveCfg = Release|Win32
 		{5C8D97A4-E7FA-4B9D-B18A-F159560A4A40}.Release.Build.0 = Release|Win32
 		{DEFFF621-F1DE-11D8-9669-0800200C9A66}.Debug.ActiveCfg = Debug|Win32
-		{DEFFF621-F1DE-11D8-9669-0800200C9A66}.Debug.Build.0 = Debug|Win32
 		{DEFFF621-F1DE-11D8-9669-0800200C9A66}.Release.ActiveCfg = Release|Win32
-		{DEFFF621-F1DE-11D8-9669-0800200C9A66}.Release.Build.0 = Release|Win32
+		{C7A754B4-3D95-4B60-886B-A9EDEC18B974}.Debug.ActiveCfg = Debug|Win32
+		{C7A754B4-3D95-4B60-886B-A9EDEC18B974}.Debug.Build.0 = Debug|Win32
+		{C7A754B4-3D95-4B60-886B-A9EDEC18B974}.Release.ActiveCfg = Release|Win32
+		{C7A754B4-3D95-4B60-886B-A9EDEC18B974}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

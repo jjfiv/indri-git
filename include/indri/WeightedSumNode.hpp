@@ -40,6 +40,7 @@ public:
   WeightedSumNode( const std::string& name );
 
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
   double maximumScore();
   double maximumBackgroundScore();
 

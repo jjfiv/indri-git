@@ -63,6 +63,10 @@ IndexEnvironment::~IndexEnvironment() {
   delete_map_contents<std::string, FileClassEnvironment>( _environments );
 }
 
+void IndexEnvironment::setNormalization( bool flag ) {
+  _parameters.set( "normalize", flag );
+}
+
 void IndexEnvironment::setMemory( UINT64 memory ) {
   _parameters.set("memory", memory);
 }
@@ -220,6 +224,10 @@ void IndexEnvironment::addFile( const std::string& fileName, const std::string& 
   }
 }
 
+//
+// addString
+//
+
 void IndexEnvironment::addString( const std::string& documentString, const std::string& fileClass, const std::vector<MetadataPair>& metadata ) {
   UnparsedDocument document;
   indri::Parser* parser;
@@ -241,6 +249,10 @@ void IndexEnvironment::addString( const std::string& documentString, const std::
   if( _callback ) (*_callback)( IndexStatus::DocumentCount, nothing, _error, _documentsIndexed, _documentsSeen );
 }
 
+//
+// addParsedDocument
+//
+
 void IndexEnvironment::addParsedDocument( ParsedDocument* document ) {
   std::string nothing;
 
@@ -250,4 +262,11 @@ void IndexEnvironment::addParsedDocument( ParsedDocument* document ) {
   if( _callback ) (*_callback)( IndexStatus::DocumentCount, nothing, _error, _documentsIndexed, _documentsSeen );
 }
 
+//
+// deleteDocument
+//
+
+void IndexEnvironment::deleteDocument( int documentID ) {
+  _repository.deleteDocument( documentID );
+}
 

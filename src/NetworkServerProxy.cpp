@@ -352,17 +352,6 @@ INT64 NetworkServerProxy::stemCount( const std::string& term ) {
   return string_to_i64( reply->getValue() );
 }
 
-INT64 NetworkServerProxy::termCount( int term ) {
-  std::auto_ptr<XMLNode> request( new XMLNode( "term-count-id", i64_to_string(term) ) );
-  _stream->request( request.get() );
-
-  XMLReplyReceiver r;
-  r.wait( _stream );
-
-  XMLNode* reply = r.getReply();
-  return string_to_i64( reply->getValue() );
-}
-
 std::string NetworkServerProxy::termName( int term ) {
   std::auto_ptr<XMLNode> request( new XMLNode( "term-name", i64_to_string(term) ) );
   _stream->request( request.get() );
@@ -383,21 +372,6 @@ int NetworkServerProxy::termID( const std::string& term ) {
 
   XMLNode* reply = r.getReply();
   return string_to_int(reply->getValue());
-}
-
-INT64 NetworkServerProxy::termFieldCount( int term, const std::string& field ) {
-  std::auto_ptr<XMLNode> request( new XMLNode( "term-field-count" ) );
-  XMLNode* termNode = new XMLNode( "term-id", i64_to_string(term) );
-  XMLNode* fieldNode = new XMLNode( "field", field );
-  request->addChild( termNode );
-  request->addChild( fieldNode );
-  _stream->request( request.get() );
-  
-  XMLReplyReceiver r;
-  r.wait( _stream );
-
-  XMLNode* reply = r.getReply();
-  return string_to_i64(reply->getValue());
 }
 
 INT64 NetworkServerProxy::termFieldCount( const std::string& term, const std::string& field ) {

@@ -60,7 +60,8 @@ private:
     int linkCount;
     Buffer linkinfo;
 
-    void addLink( const char* linkDocUrl,
+    void addLink( const char* docno,
+                  const char* linkDocUrl,
                   const char* linkText )
     {
       if( linkinfo.position() ) {
@@ -68,14 +69,17 @@ private:
         linkinfo.unwrite(1);
       }
 
+      int docnoLen = strlen(docno);
       int docUrlLen = strlen(linkDocUrl);
       int textLen = strlen(linkText);
 
-      int total = docUrlLen + sizeof "LINKFROM=" +
+      int total = docnoLen + sizeof "LINKDOCNO=" + 
+                  docUrlLen + sizeof "LINKFROM=" +
                   textLen + sizeof "TEXT=" + 1;
 
       sprintf( linkinfo.write(total),
-               "LINKFROM=%s\nTEXT=%s\n",
+               "LINKDOCNO=%s\nLINKFROM=%s\nTEXT=%s\n",
+               docno,
                linkDocUrl,
                linkText );
 

@@ -32,11 +32,11 @@ int ExtentRestrictionNode::nextCandidateDocument() {
 }
 
 double ExtentRestrictionNode::maximumBackgroundScore() {
-  return _child->maximumBackgroundScore();
+  return INDRI_TINY_SCORE;
 }
 
 double ExtentRestrictionNode::maximumScore() {
-  return _child->maximumScore();
+  return INDRI_HUGE_SCORE;
 }
 
 const greedy_vector<ScoredExtentResult>& ExtentRestrictionNode::score( int documentID, int begin, int end, int documentLength ) {
@@ -102,5 +102,9 @@ bool ExtentRestrictionNode::hasMatch( int documentID ) {
 
 const std::string& ExtentRestrictionNode::getName() const {
   return _name;
+}
+
+void ExtentRestrictionNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
 }
 

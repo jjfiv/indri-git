@@ -113,6 +113,18 @@ namespace indri {
       return result;
     }
 
+    std::vector<std::string> Unpacker::getStringVector( const char* name ) {
+      std::vector<std::string> result;
+      const XMLNode* vector = _current->getChild(name);
+
+      for( unsigned int i=0; i<vector->getChildren().size(); i++ ) {
+        XMLNode* ref = vector->getChildren()[i];
+        result.push_back( ref->getValue() );
+      }
+
+      return result;
+    }
+
     bool Unpacker::getBoolean( const char* name ) {
       return (getInteger(name) ? true : false );
     }  

@@ -35,6 +35,8 @@ public:
   ExtentRestrictionNode( const std::string& name, BeliefNode* child, ListIteratorNode* field );
 
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   double maximumScore();
   double maximumBackgroundScore();
 

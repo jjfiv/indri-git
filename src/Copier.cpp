@@ -64,10 +64,14 @@ namespace indri {
     Node* Copier::after( class WeightNode* oldNode, class WeightNode* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ExtentRestriction* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class ExtentRestriction* oldNode, class ExtentRestriction* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class FixedPassage* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class FixedPassage* oldNode, class FixedPassage* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class FilterNode* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class FilterNode* oldNode, class FilterNode* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ContextCounterNode* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class ContextCounterNode* oldNode, class ContextCounterNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ContextSimpleCounterNode* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ContextSimpleCounterNode* oldNode, class ContextSimpleCounterNode* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ScoreAccumulatorNode* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class ScoreAccumulatorNode* oldNode, class ScoreAccumulatorNode* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class AnnotatorNode* oldNode ) { defaultBefore( oldNode ); }

@@ -35,6 +35,7 @@ private:
 public:
   NullScorerNode( const std::string& name, TermScoreFunction& scoreFunction );
 
+  void indexChanged( indri::index::Index& index );
   int nextCandidateDocument();
   double maximumScore();
   double maximumBackgroundScore();

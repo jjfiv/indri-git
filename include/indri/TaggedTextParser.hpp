@@ -98,7 +98,7 @@ protected:
   tag_properties* _findTag(const char* name);
   tag_properties* _buildTag( const std::string& name, const std::map<std::string,std::string>& conflations );
   HashTable<const char*, tag_properties*> _tagTable;
-  void handleTag(char* token, long pos);
+  virtual void handleTag(char* token, long pos);
 
   const tag_properties* _startExcludeRegion;
   const tag_properties* _startIncludeRegion;

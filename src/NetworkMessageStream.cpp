@@ -1,3 +1,4 @@
+
 /*==========================================================================
  * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
  *
@@ -19,6 +20,7 @@
 #include "indri/NetworkMessageStream.hpp"
 #include "indri/XMLWriter.hpp"
 #include "indri/XMLReader.hpp"
+#include "indri/indri-platform.h"
 #include "lemur/Exception.hpp"
 #include <iostream>
 

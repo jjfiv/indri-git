@@ -130,6 +130,7 @@ public:
   void setStopwords( const std::vector<std::string>& stopwords );
   void setStemmer( const std::string& stemmer );
   void setMemory( UINT64 memory );
+  void setNormalization( bool normalize );
 
   void create( const std::string& repositoryPath, IndexStatus* callback = 0 );
   void open( const std::string& repositoryPath, IndexStatus* callback = 0 );

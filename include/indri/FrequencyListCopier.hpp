@@ -63,6 +63,10 @@ public:
     _disqualifiers.push(exRestrict);
   }
 
+  void before( indri::lang::FixedPassage* fixedPassage ) {
+    _disqualifiers.push(fixedPassage);
+  }
+
   void before( indri::lang::ContextCounterNode* context ) {
     if( context->getContext() != NULL ) {
       _disqualifiedTree = true;

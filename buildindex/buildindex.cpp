@@ -338,6 +338,11 @@ optional parameter with the default of no stopping.</dd>
 #include <map>
 #include "indri/IndriTimer.hpp"
 
+#include "indri/QueryEnvironment.hpp"
+#include "indri/Thread.hpp"
+#include "indri/SequentialWriteBuffer.hpp"
+
+#include <math.h>
 static IndriTimer g_timer;
 
 static void buildindex_start_time() {
@@ -390,10 +395,8 @@ class StatusMonitor : public IndexStatus {
 
       default:
       case IndexStatus::DocumentCount:
-        if( !(documentsParsed % 50) )
+        if( !(documentsParsed % 500) )
           buildindex_print_status( "Documents: ", documentsParsed );
-        
-        if( !(documentsParsed % 250) )
           buildindex_flush_status();
         break;
     }

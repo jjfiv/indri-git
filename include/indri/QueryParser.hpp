@@ -14,7 +14,7 @@
 /* $ANTLR 2.7.4: "indrilang.g" -> "QueryParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
-#include "indri/QueryLexerTokenTypes.hpp"
+#include "QueryLexerTokenTypes.hpp"
 #include <antlr/LLkParser.hpp>
 
 ANTLR_BEGIN_NAMESPACE(indri)
@@ -80,7 +80,7 @@ public:
 	public:  indri::lang::ScoredExtentNode*  weightedList(
 		 indri::lang::WeightedCombinationNode* wn 
 	);
-	public:  indri::lang::ExtentRestriction*  extentRestriction(
+	public:  indri::lang::ScoredExtentNode*  extentRestriction(
 		 indri::lang::ScoredExtentNode* sn 
 	);
 	public:  double  floating();
@@ -125,10 +125,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 62;
+	static const int NUM_TOKENS = 63;
 #else
 	enum {
-		NUM_TOKENS = 62
+		NUM_TOKENS = 63
 	};
 #endif
 	

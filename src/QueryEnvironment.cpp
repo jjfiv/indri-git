@@ -24,7 +24,6 @@
 #include "indri/delete_range.hpp"
 
 #include "indri/InferenceNetwork.hpp"
-#include "indri/IndriIndex.hpp"
 #include "indri/QuerySpec.hpp"
 #include "indri/ScoredExtentResult.hpp"
 
@@ -52,6 +51,8 @@
 
 #include "indri/XMLReader.hpp"
 #include "indri/IndriTimer.hpp"
+
+#include "indri/IndexEnvironment.hpp"
 
 #include <set>
 #include <map>
@@ -160,24 +161,10 @@ void QueryEnvironment::_copyStatistics( std::vector<indri::lang::RawScorerNode*>
     std::vector<ScoredExtentResult>& occurrencesList = statisticsResults[ scorerNodes[i]->nodeName() ][ "occurrences" ];
     std::vector<ScoredExtentResult>& contextSizeList = statisticsResults[ scorerNodes[i]->nodeName() ][ "contextSize" ];
 
-    std::vector<ScoredExtentResult>& maxOccurrencesList = statisticsResults[ scorerNodes[i]->nodeName() ][ "maxOccurrences" ];
-    std::vector<ScoredExtentResult>& maxContextLengthList = statisticsResults[ scorerNodes[i]->nodeName() ][ "maxContextLength" ];
-    std::vector<ScoredExtentResult>& minContextLengthList = statisticsResults[ scorerNodes[i]->nodeName() ][ "minContextLength" ];
-    std::vector<ScoredExtentResult>& maxContextFractionList = statisticsResults[ scorerNodes[i]->nodeName() ][ "maxContextFraction" ];
-
     UINT64 occurrences = UINT64(occurrencesList[0].score);
     UINT64 contextSize = UINT64(contextSizeList[0].score);
 
-    UINT64 maxOccurrences = UINT64(maxOccurrencesList[0].score);
-    UINT64 maxContextLength = UINT64(maxContextLengthList[0].score);
-    UINT64 minContextLength = UINT64(minContextLengthList[0].score);
-    double maxContextFraction = maxContextFractionList[0].score;
-
-    scorerNodes[i]->setStatistics( occurrences, contextSize,
-                                   maxOccurrences,
-                                   minContextLength,
-                                   maxContextLength,
-                                   maxContextFraction );
+    scorerNodes[i]->setStatistics( occurrences, contextSize );
   }
 }
 
@@ -304,16 +291,36 @@ void QueryEnvironment::_mergeServerQuery( InferenceNetwork::MAllResults& results
   delete_vector_contents<QueryServerResponse*>( serverResults );
 }
 
+//
+// addIndex
+//
+
 void QueryEnvironment::addIndex( const std::string& pathname ) {
   Repository* repository = new Repository();
   repository->openRead( pathname, &_parameters );
-
   _repositories.push_back( repository );
+
   LocalQueryServer *server = new LocalQueryServer( *repository ) ;
   _servers.push_back( server );
-  _repositoryNameMap[pathname] = std::make_pair(server,	repository);
+  _repositoryNameMap[pathname] = std::make_pair(server, repository);
   
 }
+
+//
+// addIndex
+//
+// This just adds a pointer to the repository that's
+// owned by some IndexEnvironment object; the 
+// repository will not be closed by this QueryEnvironment.
+//
+
+void QueryEnvironment::addIndex( IndexEnvironment& environment ) {
+  _servers.push_back( new LocalQueryServer( environment._repository ) );
+}
+
+//
+// removeIndex
+//
 
 void QueryEnvironment::removeIndex( const std::string& pathname ) {
   // close, delete, and remove opened Repository from _repositories
@@ -326,22 +333,26 @@ void QueryEnvironment::removeIndex( const std::string& pathname ) {
     Repository * r = iter->second.second;
     for (int i = 0; i < _servers.size(); i++) {
       if (_servers[i] == s) {
-	delete(_servers[i]);
-	_servers.erase(_servers.begin() + i);
-	break;
+        delete(_servers[i]);
+        _servers.erase(_servers.begin() + i);
+        break;
       }
     }
     
     for (int i = 0; i < _repositories.size(); i++) {
       if (_repositories[i] == r) {
-	delete(_repositories[i]);
-	_repositories.erase(_repositories.begin() + i);
-	break;
+        delete(_repositories[i]);
+        _repositories.erase(_repositories.begin() + i);
+        break;
       }
     }
     _repositoryNameMap.erase(iter);
   }
 }
+
+//
+// addServer
+//
 
 void QueryEnvironment::addServer( const std::string& hostname ) {
   NetworkStream* stream = new NetworkStream;
@@ -369,6 +380,10 @@ void QueryEnvironment::addServer( const std::string& hostname ) {
 
 }
 
+//
+// removeServer
+//
+
 void QueryEnvironment::removeServer( const std::string& hostname ) {
   // close, delete, and remove opened NetworkStream from _streams
   // close, delete, and remove opened NetworkMessageStream from _messageStreams
@@ -381,19 +396,19 @@ void QueryEnvironment::removeServer( const std::string& hostname ) {
     NetworkStream * n = iter->second.second;
     for (int i = 0; i < _servers.size(); i++) {
       if (_servers[i] == s) {
-	delete(_servers[i]);
-	_servers.erase(_servers.begin() + i);
-	break;
+        delete(_servers[i]);
+        _servers.erase(_servers.begin() + i);
+        break;
       }
     }
     
     for (int i = 0; i < _streams.size(); i++) {
       if (_streams[i] == n) {
-	delete(_streams[i]);
-	_streams.erase(_streams.begin() + i);
-	delete(_messageStreams[i]);
-	_messageStreams.erase(_messageStreams.begin() + i);
-	break;
+        delete(_streams[i]);
+        _streams.erase(_streams.begin() + i);
+        delete(_messageStreams[i]);
+        _messageStreams.erase(_messageStreams.begin() + i);
+        break;
       }
     }
     _serverNameMap.erase(iter);
@@ -630,9 +645,8 @@ std::vector<ScoredExtentResult> QueryEnvironment::_runQuery( InferenceNetwork::M
 
   try {
     rootNode = parser.query();
-  } catch( antlr::ANTLRException exc ) {
-    //    LEMUR_THROW( LEMUR_PARSE_ERROR, "Couldn't understand this query: " + exc.toString() );
-    LEMUR_THROW( LEMUR_PARSE_ERROR, "Couldn't understand this query: " + exc.getMessage() );
+  } catch( antlr::ANTLRException e ) {
+    LEMUR_THROW( LEMUR_PARSE_ERROR, "Couldn't understand this query: " + e.getMessage() );
   }
   
   PRINT_TIMER( "Parsing complete" );

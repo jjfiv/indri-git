@@ -21,6 +21,7 @@
 
 #include "lemur/lemur-platform.h"
 #include "lemur/lemur-compat.hpp"
+#include "indri/indri-platform.h"
 #include <string>
 
 class NetworkStream {
@@ -55,6 +56,24 @@ public:
   NetworkStream( socket_t s ) : _socket(s) {}
   ~NetworkStream() {
     close();
+  }
+
+  std::string peer() {
+    struct sockaddr_in sa;
+    socklen_t addrlen = sizeof sa;
+    std::string result;
+
+    int error = ::getpeername( _socket, (struct sockaddr*) &sa, &addrlen );
+
+    if( !error ) {
+      hostent* he = ::gethostbyaddr( (const char*) &sa.sin_addr, sizeof sa.sin_addr.s_addr, AF_INET );
+
+      if( he->h_length ) {
+        return he->h_name;
+      }
+    }
+
+    return "unknown";
   }
 
   bool connect( const std::string& name, unsigned int port ) {

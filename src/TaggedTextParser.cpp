@@ -27,6 +27,9 @@
 #define YY_FLEX_MINOR_VERSION 5
 
 #include <stdio.h>
+#ifndef WIN32
+#include <unistd.h>
+#endif
 
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
@@ -548,7 +551,7 @@ YY_MALLOC_DECL
 YY_DECL
 	{
 	register yy_state_type yy_current_state;
-	register char *yy_cp, *yy_bp;
+	register char *yy_cp = NULL, *yy_bp = NULL;
 	register int yy_act;
 
 #line 18 "../src/TaggedTextParser.l"
@@ -1049,6 +1052,7 @@ register char *yy_bp;
 #endif	/* ifndef YY_NO_UNPUT */
 
 
+#ifndef YY_NO_INPUT
 #ifdef __cplusplus
 static int yyinput()
 #else
@@ -1120,7 +1124,7 @@ static int input()
 
 	return c;
 	}
-
+#endif /* YY_NO_INPUT */
 
 #ifdef YY_USE_PROTOS
 void yyrestart( FILE *input_file )
@@ -1231,11 +1235,6 @@ YY_BUFFER_STATE b;
 	}
 
 
-#ifndef YY_ALWAYS_INTERACTIVE
-#ifndef YY_NEVER_INTERACTIVE
-extern int isatty YY_PROTO(( int ));
-#endif
-#endif
 
 #ifdef YY_USE_PROTOS
 void yy_init_buffer( YY_BUFFER_STATE b, FILE *file )
@@ -1682,16 +1681,25 @@ ParsedDocument* TaggedTextParser::parse( UnparsedDocument* document ) {
 void TaggedTextParser::doParse() {
   int tokenType;
 
-  while(tokenType = parserlex())
-    handleToken(parsertext, tokenType, _document.terms.size());
+  while(tokenType = parserlex()) {
+    if( TaggedTextTokenType::word == tokenType ) {
+      writeToken(parsertext, byte_position-parserleng, byte_position);
+    } else if( TaggedTextTokenType::tag == tokenType ) {
+      handleTag(parsertext, _document.terms.size());
+    }
+  }
 }
 
 void TaggedTextParser::handleTag(char* token, long pos) {
   // extract "element" from tag, stripping off any attributes
   char *e = token;
   // lowercase and remove leading <
-  for(char *c = token+1; *c != '\0' && *c != ' ' && *c != '\n' && *c != '\t' && *c != '>'; c++)
-    *(e++) = tolower(*c);
+  for(char *c = token+1; *c != '\0' && *c != ' ' && *c != '\n' && *c != '\t' && *c != '>'; c++) {
+    if( *c >= 'A' && *c <= 'Z' )
+      *(e++) = *c + ('a' - 'A');
+    else
+      *(e++) = *c;;
+  }
   *e = '\0';
   bool atEnd = (*token == '/');
   if(atEnd) token++;
@@ -1754,19 +1762,10 @@ void TaggedTextParser::handleTag(char* token, long pos) {
 }
 
 void TaggedTextParser::handleToken(char *token, int type, long pos) {
-  switch(type) {
-
-  case TaggedTextTokenType::tag:
-    {
-      handleTag(token, pos);
-      break;
-    }
-
- case TaggedTextTokenType::word:
-   {
-     writeToken(token);
-     break;
-   }
+  if( TaggedTextTokenType::word == type ) {
+    writeToken(token, byte_position-parserleng, byte_position);
+  } else if( TaggedTextTokenType::tag == type ) {
+    handleTag(token, pos);
   }
 }
 
@@ -1786,7 +1785,7 @@ void TaggedTextParser::writeToken(char *token, int start, int end) {
   _document.positions.push_back(extent);
   
   char* writeLocation = _termBuffer.write(tokenLength+1);
-  strcpy( writeLocation, token );
+  memcpy( writeLocation, token, tokenLength+1 );
   _document.terms.push_back( writeLocation );
 }
 

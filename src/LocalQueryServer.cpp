@@ -35,6 +35,7 @@
 #include "indri/WeightFoldingCopier.hpp"
 
 #include "indri/Appliers.hpp"
+#include "indri/ScopedLock.hpp"
 
 //
 // Response objects
@@ -114,6 +115,28 @@ LocalQueryServer::LocalQueryServer( Repository& repository ) :
 {
 }
 
+//
+// _indexWithDocument
+//
+
+indri::index::Index* LocalQueryServer::_indexWithDocument( Repository::index_state& indexes, int documentID ) {
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    int lowerBound = (*indexes)[i]->documentBase();
+    int upperBound = (*indexes)[i]->documentBase() + (*indexes)[i]->documentCount();
+    
+    if( lowerBound <= documentID && upperBound > documentID ) {
+      return (*indexes)[i];
+    }
+  }
+  
+  return 0;
+}
+
+//
+// document
+//
+
 ParsedDocument* LocalQueryServer::document( int documentID ) {
   CompressedCollection* collection = _repository.collection();
   ParsedDocument* document = collection->retrieve( documentID );
@@ -156,13 +179,15 @@ QueryServerDocumentsResponse* LocalQueryServer::documents( const std::vector<int
 }
 
 INT64 LocalQueryServer::termCount() {
-  IndriIndex* index = _repository.index();
-  return index->termCount();
-}
+  Repository::index_state indexes = _repository.indexes();
+  INT64 total = 0;
 
-INT64 LocalQueryServer::termCount( int term ) {
-  IndriIndex* index = _repository.index();
-  return index->termCount( term );
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    total += (*indexes)[i]->termCount();
+  }
+
+  return total;
 }
 
 INT64 LocalQueryServer::termCount( const std::string& term ) {
@@ -176,21 +201,20 @@ INT64 LocalQueryServer::termCount( const std::string& term ) {
 }
 
 INT64 LocalQueryServer::stemCount( const std::string& stem ) {
-  IndriIndex* index = _repository.index();
-  int termID = index->term( stem.c_str() );
-  return termCount(termID);
-}
+  Repository::index_state indexes = _repository.indexes();
+  INT64 total = 0;
 
-INT64 LocalQueryServer::termFieldCount( int term, const std::string& field ) {
-  IndriIndex* index = _repository.index();
-  int fieldid = index->field( field.c_str() );
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    total += (*indexes)[i]->termCount( stem );
+  }
 
-  return index->fieldTermCount( fieldid, term );
+  return total;
 }
 
 INT64 LocalQueryServer::termFieldCount( const std::string& term, const std::string& field ) {
   std::string stem = _repository.processTerm( term );
-  // stopwords return a string of length 0, causing Keyfile to throw.
+
   if( stem.length() != 0 ) {
     return stemFieldCount( stem, field );
   } else {
@@ -199,20 +223,30 @@ INT64 LocalQueryServer::termFieldCount( const std::string& term, const std::stri
 }
 
 INT64 LocalQueryServer::stemFieldCount( const std::string& stem, const std::string& field ) {
-  IndriIndex* index = _repository.index();
-  int termid = index->term( stem.c_str() );
-  return termFieldCount( termid, field );
+  Repository::index_state indexes = _repository.indexes();
+  INT64 total = 0;
+
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    total += (*indexes)[i]->fieldTermCount( field, stem );
+  }
+
+  return total;
 }
 
 std::string LocalQueryServer::termName( int term ) {
-  IndriIndex* index = _repository.index();
+  Repository::index_state indexes = _repository.indexes();
+  indri::index::Index* index = (*indexes)[0];
+  ScopedLock lock( index->statisticsLock() );
   return index->term( term );
 }
 
 int LocalQueryServer::termID( const std::string& term ) {
-  IndriIndex* index = _repository.index();
+  Repository::index_state indexes = _repository.indexes();
+  indri::index::Index* index = (*indexes)[0];
   std::string processed = _repository.processTerm( term );
-  // stopwords return a string of length 0, causing Keyfile to throw.
+  ScopedLock lock( index->statisticsLock() );
+
   if( processed.length() != 0 ) {
     return index->term( processed.c_str() );
   } else {
@@ -221,35 +255,50 @@ int LocalQueryServer::termID( const std::string& term ) {
 }
 
 std::vector<std::string> LocalQueryServer::fieldList() {
-  IndriIndex* index = _repository.index();
-  std::vector<std::string> results;
+  std::vector<std::string> result;
+  const std::vector<Repository::Field>& fields = _repository.fields();
 
-  for( unsigned int i=1; ; i++ ) {
-    const char* fieldName = index->field(i);
-    
-    if( !strcmp( fieldName, "[OOV]" ) )
-      break;
-
-    results.push_back( std::string(fieldName) );
+  for( int i=0; i<fields.size(); i++ ) {
+    result.push_back( fields[i].name );
   }
 
-  return results;
+  return result;
 }
 
 int LocalQueryServer::documentLength( int documentID ) {
-  IndriIndex* index = _repository.index();
-  return index->docLength( documentID );
+  Repository::index_state indexes = _repository.indexes();
+  indri::index::Index* index = _indexWithDocument( indexes, documentID );
+
+  if( index ) {
+    ScopedLock lock( index->statisticsLock() );
+    return index->documentLength( documentID );
+  }
+
+  return 0;
 }
 
 INT64 LocalQueryServer::documentCount() {
-  IndriIndex* index = _repository.index();
-  return index->docCount();
+  Repository::index_state indexes = _repository.indexes();
+  INT64 total = 0;
+  
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    total += (*indexes)[i]->documentCount();
+  }
+  
+  return total;
 }
 
 INT64 LocalQueryServer::documentCount( const std::string& term ) {
-  IndriIndex* index = _repository.index();
-  int termid = this->termID( term );
-  return index->docCount( termid );
+  Repository::index_state indexes = _repository.indexes();
+  INT64 total = 0;
+  
+  for( int i=0; i<indexes->size(); i++ ) {
+    ScopedLock lock( (*indexes)[i]->statisticsLock() );
+    total += (*indexes)[i]->documentCount( term );
+  }
+  
+  return total;
 }
 
 QueryServerResponse* LocalQueryServer::runQuery( std::vector<indri::lang::Node*>& roots, int resultsRequested, bool optimize ) {
@@ -258,7 +307,7 @@ QueryServerResponse* LocalQueryServer::runQuery( std::vector<indri::lang::Node*>
   ApplyCopiers<UnnecessaryNodeRemoverCopier> unnecessary( roots );
 
   // run the contextsimplecountcollectorcopier to gather easy stats
-  ApplyCopiers<ContextSimpleCountCollectorCopier> contexts( unnecessary.roots(), _repository, _cache );
+  ApplyCopiers<ContextSimpleCountCollectorCopier> contexts( unnecessary.roots() );
 
   // use frequency-only nodes where appropriate
   ApplyCopiers<FrequencyListCopier> frequency( contexts.roots(), _cache );
@@ -291,13 +340,20 @@ QueryServerResponse* LocalQueryServer::runQuery( std::vector<indri::lang::Node*>
 
 QueryServerVectorsResponse* LocalQueryServer::documentVectors( const std::vector<int>& documentIDs ) {
   LocalQueryServerVectorsResponse* response = new LocalQueryServerVectorsResponse( documentIDs.size() );
+  Repository::index_state indexes = _repository.indexes();
   std::map<int, std::string> termIDStringMap;
 
   for( size_t i=0; i<documentIDs.size(); i++ ) {
-    indri::index::TermListBuilder* termList = _repository.index()->termPositionList( documentIDs[i] );
-    DocumentVector* result = new DocumentVector( _repository.index(), termList, termIDStringMap );
-    delete termList;
-    response->addVector( result );
+    indri::index::Index* index = _indexWithDocument( indexes, documentIDs[i] );
+
+    {
+      ScopedLock lock( index->statisticsLock() );
+  
+      const indri::index::TermList* termList = index->termList( documentIDs[i] );
+      DocumentVector* result = new DocumentVector( index, termList, termIDStringMap );
+      delete termList;
+      response->addVector( result );
+    }
   }
 
   return response;

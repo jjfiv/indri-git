@@ -67,3 +67,7 @@ const std::string& Annotator::getName() const {
 const EvaluatorNode::MResults& Annotator::getResults() const {
   return _annotations;
 }
+
+void Annotator::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}

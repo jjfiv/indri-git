@@ -20,6 +20,7 @@
 #define LEMUR_HASHTABLE_HPP
 
 #include <utility>
+#include "indri/RegionAllocator.hpp"
 
 //
 // GenericHash<_Key>
@@ -45,16 +46,20 @@ public:
   }
 };
 
+
 template<>
 class GenericHash<const char*> {
 public:
   int operator() ( const char* const& kp ) const {
-    int hash = 0;
+    // attributed to Dan Bernstein, comp.lang.c 
+    int hash = 5381;
     const char* k = kp;
-    for( ; *k; k++ ){
-      hash *= 7;
-      hash += *k;
+    char c;
+
+    for( ; c = *k; k++ ){
+      hash = ((hash << 5) + hash) + c;
     }
+
     return hash;
   }
 };
@@ -77,21 +82,9 @@ struct HashBucket {
   _Value value;
   HashBucket<_Key, _Value>* next;
 
-  HashBucket() : next( (HashBucket<_Key, _Value>*) ~0 ) {};
+  HashBucket() : next( 0 ) {};
   HashBucket( const _Key& k, HashBucket<_Key, _Value>* n ) : key(k), next(n) {};
   HashBucket( const _Key& k, const _Value& v, HashBucket<_Key, _Value>* n ) : key(k), value(v), next(n) {};
-  
-  ~HashBucket() {
-    next = (HashBucket<_Key, _Value>*) ~0;
-  }
-
-  bool empty() {
-    return next == (HashBucket<_Key, _Value>*) ~0;
-  }
-
-  void setEmpty() {
-    next = (HashBucket<_Key, _Value>*) ~0;
-  }
 };
 
 //
@@ -102,7 +95,7 @@ template<class _Key, class _Value, class _Comparator>
 class HashTableIterator {
 private:
   typedef HashBucket<_Key, _Value> bucket_type;
-  bucket_type* _table;
+  bucket_type** _table;
   bucket_type* _currentEntry;
   size_t _currentBucket;
   size_t _totalBuckets;
@@ -123,9 +116,9 @@ private:
       _currentBucket++;
 
     for( ; _currentBucket < _totalBuckets; _currentBucket++ ) {
-      _currentEntry = &_table[_currentBucket];
+      _currentEntry = _table[_currentBucket];
 
-      if( ! _currentEntry->empty() ) {
+      if( _currentEntry ) {
         return;
       }
     }
@@ -141,7 +134,7 @@ public:
     _currentEntry = 0;
   }
 
-  HashTableIterator( bucket_type* table, size_t totalBuckets ) {
+  HashTableIterator( bucket_type** table, size_t totalBuckets ) {
     _table = table;
     _totalBuckets = totalBuckets;
 
@@ -192,27 +185,58 @@ public:
   typedef class HashTableIterator<_Key, _Value, _Comparator> iterator;
 
 private:
-  bucket_type* _table;
+  RegionAllocator* _allocator;
+  bucket_type** _table;
   hash_type _hash;
   compare_type _compare;
   size_t _buckets;
   iterator _end;
   size_t _count;
 
-  bucket_type* _parentBucket( const _Key& k ) const {
+  void _deleteBucket( bucket_type* b ) {
+    if( !_allocator )
+      delete b;
+  }
+
+  bucket_type* _newBucket( const _Key& k, bucket_type* p ) {
+    bucket_type* b = 0;
+
+    if( _allocator ) {
+      b = (bucket_type*) _allocator->allocate( sizeof (bucket_type) );
+      new(b) bucket_type( k, p );
+    } else {
+      b = new bucket_type( k, p );
+    }
+
+    return b;
+  }
+
+  bucket_type* _newBucket( const _Key& k, const _Value& v, bucket_type* p ) {
+    bucket_type* b = 0;
+
+    if( _allocator ) {
+      b = (bucket_type*) _allocator->allocate( sizeof (bucket_type) );
+      new(b) bucket_type( k, v, p );
+    } else {
+      b = new bucket_type( k, v, p );
+    }
+
+    return b;
+  }
+
+  bucket_type** _parentBucket( const _Key& k ) const {
     size_t index = _hash(k) % _buckets;
     return &_table[index];
   }
 
 public:
-  HashTable( size_t size = 16384 ) {
-    _buckets = size / sizeof(bucket_type);
-    _table = reinterpret_cast<bucket_type*>(new char[_buckets * sizeof(bucket_type)]);
+  HashTable( size_t size = 16384, RegionAllocator* allocator = 0 ) {
+    _allocator = allocator;
+    _buckets = size / sizeof(bucket_type*);
+    _table = reinterpret_cast<bucket_type**>(new char[_buckets * sizeof(bucket_type*)]);
     _count = 0;
     
-    for( size_t i=0; i<_buckets; i++ ) {
-      _table[i].setEmpty();
-    }
+    memset( _table, 0, _buckets * sizeof(bucket_type*) );
   }
 
   ~HashTable() {
@@ -221,98 +245,75 @@ public:
   }
 
   _Value* find( const _Key& k ) const {
-    bucket_type* bucket = _parentBucket(k);
+    bucket_type* bucket = *_parentBucket(k);
 
-    if( bucket->empty() ) {
-      return 0;
-    } else {
-      while(1) {
-        if( _compare( k, bucket->key ) == 0 ) {
-            return &bucket->value;
-        }
-        
-        if( bucket->next == 0 )
-          return 0;
-        else
-          bucket = bucket->next;
+    for( ; bucket; bucket = bucket->next ) {
+      if( _compare( k, bucket->key ) == 0 ) {
+        return &bucket->value;
       }
     }
+
+    return 0;
   }
 
   _Value* insert( const _Key& k ) {
-    bucket_type* bucket = _parentBucket(k);
+    bucket_type** bucket = _parentBucket(k);
     _count++;
 
-    if( bucket->empty() ) {
-      new(bucket) bucket_type( k, 0 );
-      return &bucket->value;
-    } else {
-      bucket_type* newBucket = new bucket_type( k, bucket->next );
-      bucket->next = newBucket;
-      return &newBucket->value;
-    }
+    // go to the end of the chain
+    while( *bucket )
+      bucket = &(*bucket)->next;
+
+    // insert a new item
+    bucket_type* newItem = _newBucket( k, 0 );
+    *bucket = newItem;
+
+    return &newItem->value;
   }
 
   _Value* insert( const _Key& k, const _Value& v ) {
-    bucket_type* bucket = _parentBucket(k);
+    bucket_type** bucket = _parentBucket(k);
     _count++;
 
-    if( bucket->empty() ) {
-      new(bucket) bucket_type( k, v, 0 );
-      return &bucket->value;
-    } else {
-      bucket_type* newBucket = new bucket_type( k, v, bucket->next );
-      bucket->next = newBucket;
-      return &newBucket->value;
-    }
+    // go to the end of the chain
+    while( *bucket )
+      bucket = &(*bucket)->next;
+
+    // insert a new item
+    bucket_type* newItem = _newBucket( k, v, 0 );
+    *bucket = newItem;
+
+    return &newItem->value;
   }
 
   void remove( const _Key& k ) {
-    bucket_type* bucket = _parentBucket(k);
+    bucket_type** bucket = _parentBucket(k);
 
-    if( !bucket->empty() ) {
-      if( _compare( k, bucket->key ) == 0 ) {
-        if( bucket->next ) {
-          bucket_type* nextBucket = bucket->next;
-          bucket->~bucket_type();
-          new(bucket) bucket_type( nextBucket->key, nextBucket->value, nextBucket->next );
-          delete nextBucket;
-        } else {
-          bucket->~bucket_type();
-        }
-        _count--;
-      } else {
-        bucket_type* parent = bucket;
-        bucket = parent->next;
+    while( *bucket ) {
+      if( _compare( k, (*bucket)->key ) == 0 ) {
+        bucket_type* nextItem = (*bucket)->next;
+        bucket_type* thisItem = (*bucket);
 
-        while( bucket ) {
-          if( _compare( k, bucket->key ) == 0 ) {
-            _count--;
-            parent->next = bucket->next;
-            delete bucket;
-            break;
-          }
-          parent = bucket;
-          bucket = bucket->next;
-        }
+        *bucket = nextItem;
+        _deleteBucket( thisItem );
+        break;
       }
+
+      bucket = &(*bucket)->next;
     }
   }
 
   void clear() {
     for( size_t i=0; i<_buckets; i++ ) {
-      if( !_table[i].empty() ) {
-        bucket_type* current = _table[i].next;
-        bucket_type* next;
+      bucket_type* item = _table[i];
 
-        _table[i].~bucket_type();
-
-        while( current ) {
-          next = current->next;
-          delete current;
-          current = next;
-        }
+      while( item ) {
+        bucket_type* nextItem = item->next;
+        _deleteBucket( item );
+        item = nextItem;
       }
+
+      _table[i] = 0;
     }
     _count = 0;
   }

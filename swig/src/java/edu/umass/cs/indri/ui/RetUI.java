@@ -523,6 +523,8 @@ public class RetUI extends JPanel implements ActionListener {
 			    // no titles, something bad happened.
 			    //			    error(exc.toString());
 			    error("No results: " + exc2.toString());
+			    blinking = false;
+			    blink.interrupt();
 			    return;
 			}
 
@@ -535,9 +537,7 @@ public class RetUI extends JPanel implements ActionListener {
 			    //			    error(exc.toString());
 			    error("No docs: " + exc1.toString());
 			}
-
 			try {
-			    
 			    titles = env.documentMetadata( scored, "title" );
 			} catch (Exception exc) {
 			    // no titles, something bad happened.

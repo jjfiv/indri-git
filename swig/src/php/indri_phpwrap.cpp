@@ -370,9 +370,11 @@ SWIG_PropagateClientData(swig_type_info *type) {
 #ifdef __cplusplus
 extern "C" {
 #endif
+#define HashTable ZEndHashTable
 #include "zend.h"
 #include "zend_API.h"
 #include "php.h"
+#undef HashTable
 
 /* These TSRMLS_ stuff should already be defined now, but with older php under
    redhat are not... */

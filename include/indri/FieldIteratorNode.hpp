@@ -20,22 +20,25 @@
 #define INDRI_FIELDITERATORNODE_HPP
 
 #include "indri/ListIteratorNode.hpp"
-#include "indri/FieldListIterator.hpp"
+#include "indri/DocExtentListIterator.hpp"
 
 class FieldIteratorNode : public ListIteratorNode {
 private:
-  class indri::index::FieldListIterator* _field;
+  class indri::index::DocExtentListIterator* _list;
+  int _listID;
   greedy_vector<Extent> _extents;
   greedy_vector<INT64> _numbers;
+  class InferenceNetwork& _network;
   std::string _name;
 
 public:
-  FieldIteratorNode( const std::string& name, class indri::index::FieldListIterator* field );
+  FieldIteratorNode( const std::string& name, class InferenceNetwork& network, int fieldID );
   void prepare( int documentID );
   /// returns a list of intervals describing positions of children
   const greedy_vector<Extent>& extents(); 
   const greedy_vector<INT64>& numbers();
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
   const std::string& getName() const;
   void annotate( class Annotator& annotator, int documentID, int begin, int end );
 };

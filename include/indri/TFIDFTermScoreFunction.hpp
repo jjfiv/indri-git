@@ -20,7 +20,6 @@
 #define INDRI_TFIDFTERMSCOREFUNCTION_HPP
 
 #include "indri/TermScoreFunction.hpp"
-#include "indri/IndriIndex.hpp"
 #include <math.h>
 
 class TFIDFTermScoreFunction : public TermScoreFunction {
@@ -52,21 +51,7 @@ private:
   }
 
 public:
-  TFIDFTermScoreFunction( IndriIndex& index, int termID, double termWeight, double k1 = 1, double b = 0.5 ) {
-    double idfNumerator = index.docCount()+1;
-    double idfDenominator = 0.5+index.docCount( termID );
-
-    _inverseDocumentFrequency = log( idfNumerator / idfDenominator );
-    _averageDocumentLength = index.docLengthAvg();
-    _termWeight = termWeight;
-
-    _k1 = k1;
-    _b = b;
-
-    _precomputeConstants();
-  }
-
-  TFIDFTermScoreFunction( double idf, double averageDocumentLength, double k1, double b ) {
+  TFIDFTermScoreFunction( double idf, double averageDocumentLength, double k1 = 1.0, double b = 0.5 ) {
     _inverseDocumentFrequency = idf;
     _averageDocumentLength = averageDocumentLength;
 

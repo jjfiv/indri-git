@@ -45,6 +45,7 @@ public:
   UnorderedWindowNode( const std::string& name, std::vector<ListIteratorNode*>& children );
   UnorderedWindowNode( const std::string& name, std::vector<ListIteratorNode*>& children, int windowSize );
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
   void prepare( int documentID );
   const greedy_vector<Extent>& extents();
   const std::string& getName() const;

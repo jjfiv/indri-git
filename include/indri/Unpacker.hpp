@@ -45,6 +45,7 @@ namespace indri {
       RawExtentNode* getRawExtentNode( const char* name );
       std::vector<RawExtentNode*> getRawExtentVector( const char* name );
       std::vector<ScoredExtentNode*> getScoredExtentVector( const char* name );
+      std::vector<std::string> getStringVector( const char* name );
       std::vector<int> getIntVector( const char* name );
       std::vector<double> getDoubleVector( const char* name ) ;
       ScoredExtentNode* getScoredExtentNode( const char* name );

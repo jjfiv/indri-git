@@ -5155,7 +5155,7 @@ static const char* const headwords[] =
 	"credit",
 	"creditor",
 	"credo",
-	"credulous",
+  "credulous",
 	"creed",
 	"creedal",
 	"creek",
@@ -21989,3 +21989,4 @@ void indri_kstem_load_table() {
 int indri_kstem_static_entry_count() {
   return (sizeof headwords / sizeof (char*)) + (sizeof conflations / sizeof(struct conflation_pair));
 }
+

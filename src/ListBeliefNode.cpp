@@ -152,4 +152,8 @@ const std::string& ListBeliefNode::getName() const {
   return _name;
 }
 
+void ListBeliefNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
 

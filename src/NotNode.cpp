@@ -68,3 +68,8 @@ const std::string& NotNode::getName() const {
   return _name;
 }
 
+void NotNode::indexChanged( indri::index::Index& index ) {
+  // do nothing
+}
+
+

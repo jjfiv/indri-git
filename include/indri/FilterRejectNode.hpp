@@ -33,13 +33,15 @@ private:
 
 public:
   FilterRejectNode( const std::string& name, ListIteratorNode* filter, 
-		    BeliefNode* disallowed );
+                    BeliefNode* disallowed );
 
   double maximumBackgroundScore();
   double maximumScore();
   bool hasMatch( int documentID );
   const greedy_vector<ScoredExtentResult>& score( int documentID, int start, int end, int documentLength );
   int nextCandidateDocument();
+  void indexChanged( indri::index::Index& index );
+
   const std::string& getName() const;
   void annotate( class Annotator& annotator, int documentID, int begin, int end );
 };

@@ -77,6 +77,10 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_setMemory(swigCPtr, memory);
   }
 
+  public void setNormalization(boolean normalize) {
+    indriJNI.IndexEnvironment_setNormalization(swigCPtr, normalize);
+  }
+
   public void create(String repositoryPath, IndexStatus callback) {
     indriJNI.IndexEnvironment_create__SWIG_0(swigCPtr, repositoryPath, IndexStatus.getCPtr(callback));
   }
