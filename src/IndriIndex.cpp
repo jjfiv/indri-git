@@ -474,9 +474,7 @@ int IndriIndex::field( const std::string& fieldName ) {
 //
 
 const char* IndriIndex::field( int fieldID ) {
-  assert( fieldID >= 0 && fieldID <= _fieldData.size() );
-
-  if( fieldID == 0 )
+  if( fieldID == 0 || fieldID > _fieldData.size() )
     return "[OOV]";
 
   return _fieldData[fieldID-1]->statistics.name.c_str();
