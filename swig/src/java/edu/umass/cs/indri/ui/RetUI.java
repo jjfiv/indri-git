@@ -787,13 +787,12 @@ public class RetUI extends JPanel implements ActionListener {
 				//				System.out.println ("##" + i +":" + c + ":" + (int)c);
 				buf.append("  ");
 				buf.append(c);
-				//			    } else if (c > 127 && c < 160) {
-				// pdf uses 173 and 183, chars in 128..172
+				// pdf uses 173 and 183, chars in 150..172
 				// may be mishandled here?!?
-			    } else if (c > 127 && c != 173 && c != 183) {
+			    } else if (c > 150 && c != 173 && c != 183 ) {
 				buf.append(" ");
 				buf.append(c);
-				//				System.out.println ("%%" + i +":" + c + ":" + (int)c);
+				//System.out.println ("%%" + i +":" + c + ":" + (int)c);
 			    }
 			    
 			    else if (c == '\r')
