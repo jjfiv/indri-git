@@ -815,6 +815,7 @@ public class RetUI extends JPanel implements ActionListener {
 
 		    setCursor(def);
 		    docTextFrame.setCursor(def);
+		    docTextPane.setCursor(def);
 		    getDocTextThread = null;
 		}
 	    };
