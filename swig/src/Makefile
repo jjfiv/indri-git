@@ -38,7 +38,7 @@ DOC=$(JAVAHOME)/bin/javadoc -classpath java  $(DOCARGS)
 .PHONY: java-lib doc
 
 #all: java-lib php/indri_phpwrap.cpp
-all: java-lib 
+all: java-lib php/libindri.so
 
 
 java-lib: $(OUTDIR) $(OUTDIRUI) $(OUTDIRPROP) $(PROPS) $(SOLIB) doc $(JARFILES)
@@ -58,7 +58,7 @@ php/indri_phpwrap.o: php/indri_phpwrap.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) $(PHPINC)
 
 php/libindri.so: php/indri_phpwrap.o $(LIBS)
-	$(CXX) $(LFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) -g $(LFLAGS) $< -o $@ $(LDFLAGS)
 
 $(OUTDIRPROP) $(OUTDIRUI) $(OUTDIR) $(OBJ)/java/docs:
 	$(INSTALL_DIR) $@
