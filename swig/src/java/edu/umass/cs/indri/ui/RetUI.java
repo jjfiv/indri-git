@@ -706,6 +706,104 @@ public class RetUI extends JPanel implements ActionListener {
      * Populate the document text frame with the selected document.
      * Highlight the document based on query matches.
      */
+    public void altgetDocText() {
+
+	// get the selected index from the table.
+	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
+	// no selection.
+	if (row == -1) return;
+	// this whole interrupt bit is hackish. Rethink.
+	while (getDocTextThread != null) {
+	    try {
+		// we're already highlighting a document, so interrupt.
+		getDocTextThread.interrupt();
+		Thread.sleep(200); // give it some time to end cleanly.
+	    } catch (InterruptedException ex) {
+		// jump to exit
+	    }
+	}
+	
+	Runnable r = new Runnable() {
+		public void run() {
+		    try {
+			setCursor(wait);
+			docTextFrame.setCursor(wait);
+			docTextPane.setCursor(wait);
+			// get the doc text
+			TableModel m = answerAll.getModel();
+			//    String name = (String) m.getValueAt(row, 0);
+			String name = names[row];
+			status.setText("Getting " + name);
+			String title = (String) m.getValueAt(row, 1);
+			if (title.equals(""))
+			    docTextFrame.setTitle(name);
+			else
+			    docTextFrame.setTitle(title);
+			currentDocId = docids[row]; // internal docid
+			// get the parsed document
+			int [] ids = new int[1];
+			ids[0] = currentDocId;
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
+
+			ParsedDocument[] docs = env.documents(ids);
+			
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
+			currentParsedDoc = docs[0];
+			String myDocText = currentParsedDoc.text;
+			// if it was a windows formatted file (^M^J for EOL),
+			// we have to account for the ^M characters, that get
+			// ignored by StyledDocument when inserting highlighting.
+			// Nasty hack.
+			// Try making the underlying string
+			// from a byte array instead.
+			// broken for some powerpoint docs?
+
+			//			myDocText.replace('\r', ' ');
+
+			// insert into doc text pane
+			docTextPane.setContentType("text/plain");
+			docTextPane.setText(myDocText);
+			// reset caret to start of doc text.
+			docTextPane.setCaretPosition(0);
+			// get it visible
+			if (! docTextFrame.isShowing()) {
+			    docTextFrame.setLocationRelativeTo(query);
+			    docTextFrame.setVisible(true);
+			}
+			// check for an interrupt
+			if (Thread.interrupted()) {
+			    throw new InterruptedException();
+			}
+
+			// insert the matches markup
+			DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+			DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+			// this is painfully slow
+			highlight(root);
+			status.setText(" ");
+		    } catch (InterruptedException ex) {
+			// jump to exit
+			status.setText(" ");
+		    } catch (OutOfMemoryError er) {
+			status.setText("Out of Memory. Unable to open document");
+		    }
+
+		    setCursor(def);
+		    docTextFrame.setCursor(def);
+		    docTextPane.setCursor(def);
+		    getDocTextThread = null;
+		}
+	    };
+	getDocTextThread = new Thread(r);
+	getDocTextThread.start();
+    }    
+
     public void getDocText() {
 
 	// get the selected index from the table.
@@ -792,9 +890,15 @@ public class RetUI extends JPanel implements ActionListener {
 				// need to find the individual characters
 				// that do require the filter.
 				// so far 204, 174 are good candidates.
+				// copyright is 169
+				/*
 			    } else if (c > 150 && c != 173 &&
 				       c != 177 && c != 181 && c != 183 &&
-				       c != 215 && c != 216) {
+				       c != 215 && c != 216 &&
+				       c != 169) {
+
+				 */
+			    } else if (c == 204 || c == 174) {
 				buf.append(" ");
 				buf.append(c);
 				//				System.out.println ("%%" + i +":" + c + ":" + (int)c);
