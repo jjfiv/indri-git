@@ -7,6 +7,7 @@ LIBS=$(wildcard ../../obj/*.o) $(wildcard $(patsubst %, ../../contrib/%/obj/*.o,
 
 LDFLAGS = $(LIBPATH) $(LIBS) $(CPPLDFLAGS)
 SRC=interface/indri.i
+PHPSRC=php/indri.i
 LFLAGS=-shared
 OBJ=../obj
 OUTDIR=$(OBJ)/java/edu/umass/cs/indri
@@ -17,8 +18,9 @@ JSRCUI=java/edu/umass/cs/indri/ui
 JAVASRC = $(notdir $(wildcard $(JSRC)/*.java))
 JAVASRCUI = $(notdir $(wildcard $(JSRCUI)/*.java))
 ALLSRC= $(JAVASRC) $(JAVASRCUI)
-PROPS = $(patsubst %,$(OUTDIRPROP)/%, $(notdir $(wildcard $(JSRCUI)/properties/*.html)))
+PROPS = $(patsubst %,$(OUTDIRPROP)/%, $(notdir $(wildcard $(JSRCUI)/properties/*)))
 INTERFACES = $(wildcard interface/*.i)
+PHPINTERFACES = $(wildcard php/*.i)
 JAVAOBJ = $(patsubst %,$(OUTDIR)/%, $(JAVASRC:.java=.class)) $(patsubst %,$(OUTDIRUI)/%, $(JAVASRCUI:.java=.class))
 SOLIB=$(OBJ)/java/libindri.so
 JARFILES=$(OBJ)/java/indri.jar $(OBJ)/java/RetUI.jar $(OBJ)/java/IndexUI.jar
@@ -27,7 +29,7 @@ MFSTRET=java/manifest.RetUI
 MFSTIND=java/manifest.IndexUI
 PCK=edu.umass.cs.indri
 PCKUI=edu.umass.cs.indri.ui
-
+PHPINC=-I/usr/dan/users9/dfisher/ciir/local/include/php -I/usr/dan/users9/dfisher/ciir/local/include/php/main -I/usr/dan/users9/dfisher/ciir/local/include/php/Zend -I/usr/dan/users9/dfisher/ciir/local/include/php/TSRM
 DOCARGS=-private -author -version
 DOCS=$(patsubst %,$(OUTDIR)/%,$(patsubst %.java,%.html,$(JAVASRC)))
 DOCSUI=$(patsubst %,$(OUTDIRUI)/%,$(patsubst %.java,%.html,$(JAVASRCUI)))
@@ -35,7 +37,8 @@ DOC=$(JAVAHOME)/bin/javadoc -classpath java  $(DOCARGS)
 
 .PHONY: java-lib doc
 
-all: java-lib
+#all: java-lib php/indri_phpwrap.cpp
+all: java-lib 
 
 
 java-lib: $(OUTDIR) $(OUTDIRUI) $(OUTDIRPROP) $(PROPS) $(SOLIB) doc $(JARFILES)
@@ -48,6 +51,14 @@ $(OBJ)/java/indri_javawrap.o: java/indri_javawrap.cpp
 
 java/indri_javawrap.cpp: $(INTERFACES)
 	$(SWIG) -c++ -java -package edu.umass.cs.indri -o java/indri_javawrap.cpp -outdir $(JSRC) $(INCLUDES) $(SRC) 
+
+php/indri_phpwrap.cpp: $(PHPINTERFACES)
+	$(SWIG) -php4 -c++ -o php/indri_phpwrap.cpp -outdir php $(INCLUDES) $(PHPSRC) 
+php/indri_phpwrap.o: php/indri_phpwrap.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) $(PHPINC)
+
+php/libindri.so: php/indri_phpwrap.o $(LIBS)
+	$(CXX) $(LFLAGS) $< -o $@ $(LDFLAGS)
 
 $(OUTDIRPROP) $(OUTDIRUI) $(OUTDIR) $(OBJ)/java/docs:
 	$(INSTALL_DIR) $@

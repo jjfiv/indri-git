@@ -40,6 +40,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
+#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -395,52 +396,17 @@ char *yytext;
 #line 1 "../src/TextParser.l"
 #define INITIAL 0
 #define YY_NEVER_INTERACTIVE 1
-#line 6 "../src/TextParser.l"
+#line 5 "../src/TextParser.l"
+
 /*==========================================================================
-  Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
-
-  Use of the Lemur Toolkit for Language Modeling and Information Retrieval
-  is subject to the terms of the software license set forth in the LICENSE
-  file included with this software, and also available at
-  http://www.cs.cmu.edu/~lemur/license.html 
-  as well as the conditions below.
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions
-  are met:
-
-  1. Redistributions of source code must retain the above copyright
-  notice, this list of conditions and the following disclaimer.
-
-  2. Redistributions in binary form must reproduce the above copyright
-  notice, this list of conditions and the following disclaimer in
-  the documentation and/or other materials provided with the
-  distribution.
-
-  3. The names "Indri", "Center for Intelligent Information Retrieval", 
-  "CIIR", and "University of Massachusetts" must not be used to
-  endorse or promote products derived from this software without
-  prior written permission. To obtain permission, contact
-  indri-info@ciir.cs.umass.edu.
-
-  4. Products derived from this software may not be called "Indri" nor 
-  may "Indri" appear in their names without prior written permission of 
-  the University of Massachusetts. To obtain permission, contact 
-  indri-info@ciir.cs.umass.edu.
-
-  THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY OF MASSACHUSETTS AND OTHER
-  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
-  BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-  THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
-  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
-  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
-  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-  DAMAGE.
-  ==========================================================================
+ * Copyright (c) 2003-2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
 */
 
 //
@@ -456,7 +422,7 @@ char *yytext;
   
 static long byte_position;
 
-#line 461 "../src/TextParser.cpp"
+#line 426 "../src/TextParser.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -607,10 +573,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 68 "../src/TextParser.l"
+#line 32 "../src/TextParser.l"
 
 
-#line 615 "../src/TextParser.cpp"
+#line 580 "../src/TextParser.cpp"
 
 	if ( yy_init )
 		{
@@ -695,50 +661,50 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 70 "../src/TextParser.l"
+#line 34 "../src/TextParser.l"
 { byte_position += textparserleng; /* zap symbols */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 71 "../src/TextParser.l"
+#line 35 "../src/TextParser.l"
 { byte_position += textparserleng; /* zap symbols */ } 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 72 "../src/TextParser.l"
+#line 36 "../src/TextParser.l"
 { byte_position += textparserleng; return 1; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 73 "../src/TextParser.l"
+#line 37 "../src/TextParser.l"
 { byte_position += textparserleng; return 1; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 74 "../src/TextParser.l"
+#line 38 "../src/TextParser.l"
 { byte_position += textparserleng; return 1;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 75 "../src/TextParser.l"
+#line 39 "../src/TextParser.l"
 { byte_position += textparserleng; return 1; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 76 "../src/TextParser.l"
+#line 40 "../src/TextParser.l"
 { byte_position += textparserleng; /* zap newline */ }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 77 "../src/TextParser.l"
+#line 41 "../src/TextParser.l"
 { byte_position += textparserleng; /* zap unknown char */ }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 79 "../src/TextParser.l"
+#line 43 "../src/TextParser.l"
 ECHO;
 	YY_BREAK
-#line 743 "../src/TextParser.cpp"
+#line 708 "../src/TextParser.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1624,7 +1590,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 79 "../src/TextParser.l"
+#line 43 "../src/TextParser.l"
 
 
 TextParser::TextParser() :

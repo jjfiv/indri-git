@@ -173,7 +173,7 @@ public class RetUI extends JPanel implements ActionListener {
 	setPaths();
 	// initialize help
 	makeHelp();
-	Font myFont = new Font("SansSerif", Font.BOLD, 14);
+	//	Font myFont = new Font("SansSerif", Font.BOLD, 14);
 	JPanel p;
 	Box myBox = Box.createVerticalBox();
 	// need border layout to get resize behavior.
@@ -192,28 +192,28 @@ public class RetUI extends JPanel implements ActionListener {
 	scoreDisplay.setToolTipText("Toggle display of document scores");
 
 	status = new JLabel("Open an index or server", null, JLabel.CENTER);
-	status.setFont(myFont);
+	//	status.setFont(myFont);
 	status.setForeground(Color.red);
 	status.setBackground(lightYellow);
 	progress = new JLabel("            ", null, JLabel.LEFT);
-	progress.setFont(myFont);
+	//	progress.setFont(myFont);
 	progress.setForeground(Color.red);
 	progress.setBackground(lightYellow);	
 		
-	Font anotherFont = new Font("SansSerif", Font.BOLD, 14);
+	//	Font anotherFont = new Font("SansSerif", Font.BOLD, 14);
 	query = new JTextField();
 	query.setBackground(lightYellow);
 	query.setForeground(navyBlue);
 	query.addActionListener(this);
-	query.setFont(anotherFont);
+	//	query.setFont(anotherFont);
 	query.setToolTipText("Enter a query");
 	p = new JPanel();
 	p.setLayout(new BorderLayout());
 	p.add(query, BorderLayout.CENTER);
 	JLabel x = new JLabel("Enter your query:          ", null, 
 			      JLabel.CENTER);
-	myFont = new Font("SansSerif", Font.BOLD + Font.ITALIC, 14);
-	x.setFont(myFont);
+	//	myFont = new Font("SansSerif", Font.BOLD + Font.ITALIC, 14);
+	//	x.setFont(myFont);
 	x.setForeground(navyBlue);
 	x.setBackground(lightYellow);
 	p.add(x, BorderLayout.WEST);
@@ -226,8 +226,8 @@ public class RetUI extends JPanel implements ActionListener {
 	p.setForeground(navyBlue);
 	p.setBackground(lightYellow);
 		
-	x = new JLabel("Number of documents: ", null, JLabel.CENTER);
-	x.setFont(myFont);
+	x = new JLabel("Number of documents:  ", null, JLabel.CENTER);
+	//	x.setFont(myFont);
 	x.setForeground(navyBlue);
 	x.setBackground(lightYellow);
 		
@@ -235,14 +235,14 @@ public class RetUI extends JPanel implements ActionListener {
 	numDocs = new JTextField();
 	numDocs.setBackground(lightYellow);
 	numDocs.setForeground(navyBlue);
-	numDocs.setFont(anotherFont);
+	//	numDocs.setFont(anotherFont);
 	numDocs.setText("" + maxDocs);
 	numDocs.setToolTipText("Enter maximum number of documents to retrieve");
 	p.add(numDocs, BorderLayout.CENTER);
 		
 	// Nasty Hack!
 	x = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", null, JLabel.CENTER);
-	x.setFont(myFont);
+	//	x.setFont(myFont);
 	x.setForeground(lightYellow);
 	x.setBackground(lightYellow);
 	p.add(x, BorderLayout.EAST);
@@ -254,7 +254,7 @@ public class RetUI extends JPanel implements ActionListener {
 		
 	p.setLayout(new BorderLayout());
 	x = new JLabel("Database(s):                  ", null, JLabel.CENTER);
-	x.setFont(myFont);
+	//	x.setFont(myFont);
 	x.setForeground(navyBlue);
 	x.setBackground(lightYellow);
 	p.add(x, BorderLayout.WEST);
@@ -291,11 +291,11 @@ public class RetUI extends JPanel implements ActionListener {
 	p.setLayout(new BorderLayout());
 	p.setForeground(navyBlue);
 	p.setBackground(lightYellow);
-	anotherFont = new Font("SansSerif", Font.PLAIN, 18);
+	//	anotherFont = new Font("SansSerif", Font.PLAIN, 18);
 	makeDocTextFrame();
 	makeDocHtmlFrame();
 	answerAll = makeDocsTable();
-	answerAll.setFont(anotherFont);
+	//	answerAll.setFont(anotherFont);
 	answerAll.setBackground(linen);
 	answerAll.setForeground(Color.black);
 	answerAll.setPreferredScrollableViewportSize(new Dimension(600, 400));
@@ -604,7 +604,7 @@ public class RetUI extends JPanel implements ActionListener {
 	docTextFrame.setIconImage(createImageIcon(iconFile).getImage());
 	docTextPane = new JTextPane();
 	docTextPane.setEditable(false);
-	docTextPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+	//	docTextPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
 	docTextPane.setBackground(linen);
 	docTextPane.setForeground(Color.black);
 	docTextPane.setPreferredSize(new Dimension(550, 350));
@@ -631,7 +631,7 @@ public class RetUI extends JPanel implements ActionListener {
 	docHtmlFrame.setIconImage(createImageIcon(iconFile).getImage());
 	docHtmlPane = new JTextPane();
 	docHtmlPane.setEditable(false);
-	docHtmlPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+	//	docHtmlPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
 	docHtmlPane.setBackground(linen);
 	docHtmlPane.setForeground(Color.black);
 	docHtmlPane.setPreferredSize(new Dimension(550, 350));
@@ -720,7 +720,37 @@ public class RetUI extends JPanel implements ActionListener {
 		    // we have to account for the ^M characters, that get
 		    // ignored by StyledDocument when inserting highlighting.
 		    // Nasty hack.
-		    myDocText = myDocText.replace('\r', ' ');
+		    // broken for some powerpoint docs?
+
+		    //		    System.out.println(myDocText);
+		    StringBuffer buf = new StringBuffer();
+		    buf.ensureCapacity(myDocText.length());
+		    // can't get it to match on the char.
+		    // ugh, damn windows.
+		    for (int i = 0; i < myDocText.length(); i++) {
+			char c = myDocText.charAt(i);
+			//			if (c > 140) System.out.println((int) c);
+			// windows smart quote is 3 char wide in a 
+			// StyledDocument.
+			if (c == 8220)
+			    buf.append(" ''");
+			else if (c == 8221)
+			    buf.append("'' ");
+			else if (c == '\r')
+			    buf.append(' ');
+			else 
+			    buf.append(c);
+		    }
+		    
+			
+			//		    myDocText = myDocText.replace('\r', ' ');
+			//		    myDocText = myDocText.replaceAll("“", "''");
+			//		    myDocText = myDocText.replaceAll("”", "''");
+			myDocText = buf.toString();
+			//		    System.out.println("##POST");
+		    
+			//		    System.out.println(myDocText);
+
 		    //	String myDocText = docs[row].text;
 		    // insert into doc text pane
 		    docTextPane.setContentType("text/plain");
@@ -732,9 +762,11 @@ public class RetUI extends JPanel implements ActionListener {
 		    // insert the matches markup
 		    DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
 		    DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
-		    highlight(root);
 		    docTextFrame.setLocationRelativeTo(query);
 		    docTextFrame.setVisible(true);
+		    // this is painfully slow
+		    highlight(root);
+
 		    status.setText(" ");
 		    setCursor(def);
 		}
@@ -796,6 +828,10 @@ public class RetUI extends JPanel implements ActionListener {
      */
     private void highlight(DefaultMutableTreeNode query) {
 	StyledDocument myDoc = docTextPane.getStyledDocument();
+	int len = myDoc.getLength();
+	// don't highlight long docs
+	//	if (len > 10000) return;
+	
 	MutableAttributeSet highlight = new SimpleAttributeSet();
 	// iterate over matches.
 	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
@@ -1219,7 +1255,13 @@ class DocsTableModel extends AbstractTableModel {
      * @see javax.swing.table.TableModel#getColumnClass(int)
      */
     public Class getColumnClass(int c) {
-	return getValueAt(0, c).getClass();
+	Object o = getValueAt(0,c);
+	if (o != null)
+	    return o.getClass();
+	else {
+	    String s = "";
+	    return s.getClass();
+	}
     }
 	
     /**
