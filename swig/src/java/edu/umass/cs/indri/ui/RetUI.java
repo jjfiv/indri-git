@@ -789,10 +789,15 @@ public class RetUI extends JPanel implements ActionListener {
 				buf.append(c);
 				// pdf uses 173 and 183, chars in 150..172
 				// may be mishandled here?!?
-			    } else if (c > 150 && c != 173 && c != 183 ) {
+				// need to find the individual characters
+				// that do require the filter.
+				// so far 204, 174 are good candidates.
+			    } else if (c > 150 && c != 173 &&
+				       c != 177 && c != 181 && c != 183 &&
+				       c != 215 && c != 216) {
 				buf.append(" ");
 				buf.append(c);
-				//System.out.println ("%%" + i +":" + c + ":" + (int)c);
+				//				System.out.println ("%%" + i +":" + c + ":" + (int)c);
 			    }
 			    
 			    else if (c == '\r')
