@@ -7,7 +7,7 @@ package edu.umass.cs.indri;
  */
 
 public class DocumentVector {
-  static class Field {
+  static public class Field {
     public int begin;
     public int end;
     public long number;

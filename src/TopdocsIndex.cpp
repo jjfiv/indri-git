@@ -17,7 +17,7 @@
 void TopdocsIndex::create( const std::string& pathname ) {
   _documents = 0;
   _pathname = pathname;
-
+  _readOnly = false;
   // makedir filename
   if( Path::exists( _pathname ) )
     Path::remove( _pathname );
@@ -30,6 +30,7 @@ void TopdocsIndex::create( const std::string& pathname ) {
 }
 
 void TopdocsIndex::openRead( const std::string& pathname ) {
+  _readOnly = true;
   _pathname = pathname;
   Parameters param;
 
@@ -44,6 +45,7 @@ void TopdocsIndex::openRead( const std::string& pathname ) {
 
 void TopdocsIndex::open( const std::string& pathname ) {
   _pathname = pathname;
+  _readOnly = false;
   Parameters param;
   
   std::string manifestPath = Path::combine( _pathname, "manifest" );
@@ -55,11 +57,12 @@ void TopdocsIndex::open( const std::string& pathname ) {
 }
 
 void TopdocsIndex::close() {
-  Parameters param;
-  param.set( "documents", _documents );
-  std::string manifestPath = Path::combine( _pathname, "manifest" );
-
-  param.writeFile( manifestPath );
+  if (! _readOnly) {
+    Parameters param;
+    param.set( "documents", _documents );
+    std::string manifestPath = Path::combine( _pathname, "manifest" );
+    param.writeFile( manifestPath );
+  }
   _lists.close();
 }
 
@@ -188,6 +191,8 @@ TopdocsIndex::TopdocsList* TopdocsIndex::fetch( int term ) {
       output->entries.push_back( entry );
     }
 
+    // delete the buffer allocated by get
+    delete[](data);
     return output;
   } else {
     return 0;

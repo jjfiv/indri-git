@@ -112,7 +112,9 @@ the parameter file and as <tt>metadata.field=fieldname</tt> on the
 command line.</dd> 
 <dt>field</dt>
 <dd>a complex element specifying the fields to index as data, eg
-TITLE. This parameter can appear multiple times. The subelements are: 
+TITLE. This parameter can appear multiple times in a parameter file. 
+<b>If provided on the command line, only the first field specified will 
+be indexed</b>. The subelements are:  
 <dl>
 <dt>name</dt><dd>the field name, specified as
 &lt;field&gt;&lt;name&gt;fieldname&lt;/name&gt;&lt;/field&gt; in the
@@ -329,7 +331,10 @@ specifying the metadata fields to index, eg DOCNO. Specified as
 the parameter file and as <tt>metadata.field=fieldname</tt> on the
 command line.</dd> 
 <dt>field</dt>
-<dd>a complex element specifying the fields to index as data, eg TITLE. This parameter can appear multiple times. The subelements are:
+<dd>a complex element specifying the fields to index as data, eg TITLE.
+This parameter can appear multiple times in a parameter file. 
+<b>If provided on the command line, only the first field specified will 
+be indexed</b>. The subelements are:
 <dl>
 <dt>name</dt><dd>the field name, specified as
 &lt;field&gt;&lt;name&gt;fieldname&lt;/name&gt;&lt;/field&gt; in the

@@ -530,8 +530,8 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
     // put it in the array
     jenv->SetObjectArrayElement( fieldsArray, i, f );
   }
-
-  delete vec;
+// don't delete this twice.
+//  delete vec;
   
   // build the document vector object
   result = jenv->NewObject( docVectorClazz, docVecConstructor );
@@ -1560,7 +1560,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         }
     }
     {
-        jclass docVecClazz = jenv->FindClass( "Ledu/umass/cs/indri/DocumentVector" );
+        jclass docVecClazz = jenv->FindClass( "edu/umass/cs/indri/DocumentVector" );
         jresult = jenv->NewObjectArray((&result)->size(), docVecClazz, NULL);
         
         for( unsigned int i=0; i<(&result)->size(); i++ ) {

@@ -72,8 +72,8 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
     // put it in the array
     jenv->SetObjectArrayElement( fieldsArray, i, f );
   }
-
-  delete vec;
+// don't delete this twice.
+//  delete vec;
   
   // build the document vector object
   result = jenv->NewObject( docVectorClazz, docVecConstructor );
@@ -89,7 +89,10 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
 %}
 
 %typemap(java,out) DocumentVector* {
+// this typemap is currently unused, but should delete
+// the input to be consistent with the vector version
   jobject vec = documentvector_copy( jenv, $1 );
+  delete $1;
   $result = vec;
 }
 
@@ -98,7 +101,7 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
 }
 
 %typemap(java,out) std::vector<DocumentVector*> {
-  jclass docVecClazz = jenv->FindClass( "Ledu/umass/cs/indri/DocumentVector" );
+  jclass docVecClazz = jenv->FindClass( "edu/umass/cs/indri/DocumentVector" );
   $result = jenv->NewObjectArray($1.size(), docVecClazz, NULL);
 
   for( unsigned int i=0; i<$1.size(); i++ ) {

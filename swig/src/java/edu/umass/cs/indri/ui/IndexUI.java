@@ -194,11 +194,12 @@ public class IndexUI extends JPanel implements ActionListener,
 		
 	colFields = new JTextField("docno", 25);
 	colFields.setToolTipText("Comma delimited list of field names, " +
-				 "without spaces");
+				 "without spaces to index as metadata.");
 		
 	indFields = new JTextField("title", 25);
 	indFields.setToolTipText("Comma delimited list of field names, " +
-				 "without spaces");
+				 "without spaces to index as data for " +
+				 "field queries");
 	label = new JLabel("Collection Fields: ", JLabel.TRAILING);
 	label.setLabelFor(colFields);
 	constraints.gridx = 0;
@@ -460,8 +461,8 @@ public class IndexUI extends JPanel implements ActionListener,
 	    helpFrame.setVisible(true);
 	} else if (source == hAbout) 	{
 	    JOptionPane.showMessageDialog(this, aboutText, "About", 
-					  JOptionPane.INFORMATION_MESSAGE);
-	    //  createImageIcon(logoFile));
+					  JOptionPane.INFORMATION_MESSAGE,
+					  createImageIcon(iconFile));
 	}
 	// at least one datafile and a name entered.
 	boolean enabled = (cfModel.getSize() > 0 && 

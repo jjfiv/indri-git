@@ -397,7 +397,7 @@ public class RetUI extends JPanel implements ActionListener {
 	} else if (act.equals("About")) 	{
 	    JOptionPane.showMessageDialog(this, aboutText, "About", 
 					  JOptionPane.INFORMATION_MESSAGE,
-					  null);
+					  createImageIcon(iconFile));
 	} else if (act.equals("Help")) {
 	    // pop up a help dialog
 	    helpFrame.setVisible(true);
@@ -472,6 +472,15 @@ public class RetUI extends JPanel implements ActionListener {
 	if (returnVal == JFileChooser.APPROVE_OPTION) {
 	    File file = fc.getSelectedFile();
 	    String index = file.getAbsolutePath();
+	    // if user double clicked a directory to select,
+	    // we get the directory name as the selected file
+	    // in the intended directory.
+	    // so check that the file exists and is a directory.
+	    // if not, try the parent directory.
+	    if (! file.exists()) {
+		index = file.getParentFile().getAbsolutePath();
+	    }
+	    
 	    indexesModel.addElement(index);
 	    try {
 		env.addIndex(index);
@@ -491,6 +500,8 @@ public class RetUI extends JPanel implements ActionListener {
     public void openServer() {
 	//simple text entry dialog for server name/port
 	String index = JOptionPane.showInputDialog("Enter a server name, with optional port number (host[:portnum]).");
+	// cancel button used.
+	if (index == null) return;
 	indexesModel.addElement("Server: " + index);
 	try {	    
 	    env.addServer(index);
@@ -578,6 +589,8 @@ public class RetUI extends JPanel implements ActionListener {
 	wordProg = GetPaths.getPath("winword.exe");
 	powerpointProg = GetPaths.getPath("powerpnt.exe");
 	acroreadProg = GetPaths.getPath("acrord32.exe");
+	if (acroreadProg == null)
+	    acroreadProg = GetPaths.getPath("acrobat.exe");
     }
     
     /** Create the frame that shows the help file and render the html.
@@ -1145,7 +1158,6 @@ public class RetUI extends JPanel implements ActionListener {
      * @return The JTable with its model and listener initialized.
      */
     private JTable makeDocsTable() {
-		// bruce wants titles if available, don't show scores or extents by default
 	DocsTableModel model = new DocsTableModel();
 	JTable table = new JTable(model) {
 		// add tooltip expansion
@@ -1175,29 +1187,6 @@ public class RetUI extends JPanel implements ActionListener {
 	column = table.getColumnModel().getColumn(1);
 	column.setPreferredWidth(300);
 	//column.setMinWidth(300);
-	return table;
-    }
-
-    /**
-     * Make a JTable and associated OldDocsTableModel for containing
-     * query result sets.
-     * @return The JTable with its model and listener initialized.
-     */
-    private JTable makeOldDocsTable() {
-		// bruce wants titles if available, don't show scores or extents by default
-	OldDocsTableModel model = new OldDocsTableModel();
-	JTable table = new JTable(model);
-	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	table.getSelectionModel().addListSelectionListener(new DocTableListener());
-	TableColumn column;
-	column = table.getColumnModel().getColumn(0);
-	column.setPreferredWidth(50);
-	column = table.getColumnModel().getColumn(1);
-	column.setPreferredWidth(250);
-	column = table.getColumnModel().getColumn(2);
-	column.setPreferredWidth(30);
-	column = table.getColumnModel().getColumn(3);
-	column.setPreferredWidth(30);
 	return table;
     }
 	
@@ -1281,101 +1270,6 @@ public class RetUI extends JPanel implements ActionListener {
 		    createAndShowGUI();
 		}
 	    });
-    }
-}
-
-/**
- * OldTable Model for the scored document results from running a query.
- * @author David Fisher
- *
- */
-class OldDocsTableModel extends AbstractTableModel {
-    /**
-     * Labels for the columns
-     */
-    // start and end are uninteresting. internal id/title could be more useful
-    private String[] columnNames = {"Score", "Document", "Start", "End" };
-    /**
-     * Container for the data.
-     */
-    private Object[][] data = new Object[0][0];
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getColumnCount()
-     */
-    public int getColumnCount() {
-	return columnNames.length;
-    }
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getRowCount()
-     */
-    public int getRowCount() {
-	return data.length;
-    }
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getColumnName(int)
-     */
-    public String getColumnName(int col) {
-	return columnNames[col];
-    }
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getValueAt(int, int)
-     */
-    public Object getValueAt(int row, int col) {
-	return data[row][col];
-    }
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#getColumnClass(int)
-     */
-    public Class getColumnClass(int c) {
-	return getValueAt(0, c).getClass();
-    }
-	
-    /**
-     * Resize the data array to contain <code>row</code> number of rows.
-     * @param row Number of rows for the new array.
-     */
-    public void resize(int row) {
-	data = new Object[row][columnNames.length];
-    }
-	
-    /**
-     * Clear the data array.
-     */
-    public void clear() {
-	int last = data.length - 1;
-	if (last >= 0) {
-	    data = new Object[0][columnNames.length];
-	    fireTableRowsDeleted(0, last);
-	}
-    }
-	
-    /* (non-Javadoc)
-     * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
-     */
-    public void setValueAt(Object obj, int row, int col) {
-	data[row][col] = obj;
-	fireTableCellUpdated(row, col);
-    }
-    /**
-     * 	Update an entry for a row
-     * @param row The row index
-     * @param score The document score
-     * @param doc The document name
-     * @param start The start offset of the extent
-     * @param end The end offset of the extent
-     */
-    public void setValueAt(int row, double score, String doc, int start, 
-			   int end) {
-	data[row][0] = new Double(score);
-	data[row][1] = doc;
-	data[row][2] = new Integer(start);
-	data[row][3] = new Integer(end);
-	fireTableRowsUpdated(row, row);
     }
 }
 

@@ -56,10 +56,10 @@
 #define INDRI_EXTENT_HPP
 
 struct Extent {
-  int begin;
+  int begin; // used unitialized
   int end;
 
-  Extent() {}
+  Extent() : begin(-1), end(-1) {}
   Extent( int b, int e ) : begin(b), end(e) {}
     
   bool contains( const Extent& other ) const {
@@ -71,7 +71,8 @@ struct Extent {
   }
 
   bool beginsBefore( const Extent& other ) const {
-    return begin <= other.begin;
+    //    return begin <= other.begin;
+    return begin < other.begin;
   }
 
   struct begins_before_less {

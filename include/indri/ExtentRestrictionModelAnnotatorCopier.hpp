@@ -95,7 +95,7 @@ public:
     if( newNode->getContext() == 0 && _restrictions.size() ) {
       newNode->setContext( _restrictions.top()->getField() );
     }
-
+    _nodes.push_back( newNode ); // should track for free.
     return newNode;
   }
 };

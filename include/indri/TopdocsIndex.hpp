@@ -57,6 +57,7 @@ private:
   std::string _pathname;
   Keyfile _lists;
   UINT64 _documents;
+  bool _readOnly;
   
   void _getListEntries( std::vector<Entry>& output, Entry& smallest, IndriIndex& index, int term, UINT64 total, UINT64 keep );
   void _writeList( const std::vector<Entry>& input, const Entry& smallest, int term );
