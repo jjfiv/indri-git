@@ -84,6 +84,7 @@
 #include "indri/TermScoreFunctionFactory.hpp"
 #include "indri/TermFrequencyBeliefNode.hpp"
 #include "indri/CachedFrequencyBeliefNode.hpp"
+#include "indri/BooleanAndNode.hpp"
 #include "indri/TopdocsIndex.hpp"
 
 #include <stdexcept>
@@ -434,6 +435,17 @@ void InferenceNetworkBuilder::after( indri::lang::UWNode* uwNode ) {
     }
 
     _nodeMap[uwNode] = unorderedNode;
+  }
+}
+
+void InferenceNetworkBuilder::after( indri::lang::BAndNode* bandNode ) {
+  if( _nodeMap.find( bandNode ) == _nodeMap.end() ) {
+    std::vector<ListIteratorNode*> translation = _translate<ListIteratorNode>( bandNode->getChildren() );
+    BooleanAndNode* booleanAndNode = new BooleanAndNode( bandNode->nodeName(),
+                                                         translation );
+
+    _network->addListNode( booleanAndNode );
+    _nodeMap[bandNode] = booleanAndNode;
   }
 }
 

@@ -74,7 +74,8 @@ public:
     _name(name),
     _skipping(0)
   {
-    _skipping = dynamic_cast<SkippingCapableNode*>(belief);
+    if( Parameters::instance().get( "skipping", 1 ) )
+      _skipping = dynamic_cast<SkippingCapableNode*>(belief);
   }
 
   void evaluate( int documentID, int documentLength ) {
