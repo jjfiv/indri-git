@@ -75,8 +75,15 @@ void FileTreeIterator::_next() {
     }
 
     // have to recurse
-    DirectoryIterator* child = new DirectoryIterator( *top );
-    _stack.push(child);
+    // only if a directory
+    if ( Path::isDirectory( *top ) ) {
+      DirectoryIterator* child = new DirectoryIterator( *top );
+      _stack.push(child);
+    } else {
+      // bad things happening here, not a file, not a directory
+      // perhaps a bad symlink, skip the entry
+      _nextCandidate();
+    }
   }
 }
 

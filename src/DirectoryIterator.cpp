@@ -134,7 +134,7 @@ void* directoryiterator_init( const std::string& path ) {
   unix_iter_data* d = new unix_iter_data;
   d->directory = opendir( path.c_str() );
   d->done = (d->directory == 0);
-  d->entry = (struct dirent*) malloc( sizeof(struct dirent) + PATH_MAX );
+  d->entry = (struct dirent*) malloc( sizeof(struct dirent) + PATH_MAX + 1);
 
   if( !d->done )
     directoryiterator_next(d);
@@ -151,6 +151,7 @@ void directoryiterator_destroy( void* opaque ) {
 
 std::string directoryiterator_current( void* opaque ) {
   unix_iter_data* d = (unix_iter_data*) opaque;
+  if (! d->entry) return "";
   return d->entry->d_name;
 }
 
@@ -229,11 +230,13 @@ void DirectoryIterator::close() {
 }
 
 void DirectoryIterator::operator ++ () {
-  _next();
+  if( !directoryiterator_done( _platform ))
+    _next();
 }
 
 void DirectoryIterator::operator ++ (int) {
-  _next();
+  if( !directoryiterator_done( _platform ))
+    _next();
 }
 
 bool DirectoryIterator::operator == ( const DirectoryIterator& other ) {
