@@ -127,6 +127,8 @@ O_ANGLE:  '<';
 C_ANGLE:  '>';
 O_SQUARE: '[';
 C_SQUARE: ']';
+O_BRACE:  '{';
+C_BRACE:   '}';
 DBL_QUOTE: '\"';
 QUOTE:     '\'';
 DOT:       '.';
@@ -511,6 +513,7 @@ unqualifiedTerm returns [ RawExtentNode* re ] :
   | ( DATEAFTER ) => re=dateAfter
   | ( DATEBETWEEN ) => re=dateBetween
   | ( O_ANGLE ) => re=synonym_list
+  | ( O_BRACE ) => re=synonym_list_brace
   | ( SYN ) => re=synonym_list_alt
   | ( ANY ) => re=anyField
   | ( LESS ) => re=lessNode
@@ -540,8 +543,18 @@ synonym_list returns [ indri::lang::ExtentOr* s ] {
     ( options { greedy=true; }: term=unscoredTerm { s->addChild(term); } )+
   C_ANGLE;
 
+synonym_list_brace returns [ indri::lang::ExtentOr* s ] {
+    indri::lang::RawExtentNode* term = 0;
+    s = new indri::lang::ExtentOr;
+    _nodes.push_back(s);
+  } :
+  O_BRACE
+    ( options { greedy=true; }: term=unscoredTerm { s->addChild(term); } )+
+  C_BRACE;
+
 synonym_list_alt returns [ indri::lang::ExtentOr* s ] {
     indri::lang::RawExtentNode* term = 0;
+    // semantics of this node will change
     s = new indri::lang::ExtentOr;
     _nodes.push_back(s);
   } :

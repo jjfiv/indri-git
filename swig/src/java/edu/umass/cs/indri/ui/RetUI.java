@@ -28,14 +28,16 @@ public class RetUI extends JPanel implements ActionListener {
     /** Help file for the application */
     private final static String helpFile = "properties/IndriRetrieval.html";
 	/** Little lemur icon */
-	private final static String iconFile = "properties/lemur_icon.GIF";
+    //	private final static String iconFile = "properties/lemur_icon.GIF";
+    //	private final static String iconFile = "properties/lemur.GIF";
+    private final static String iconFile = "properties/lemur_head_32.gif";
     /** Frame for help window */
     private JFrame helpFrame;
 	
     /**
      * Search and Clear buttons
      */
-    JButton go, stop;
+    JButton go, stop, scoreDisplay;
     /**
      * Status line output
      */
@@ -155,7 +157,9 @@ public class RetUI extends JPanel implements ActionListener {
     String powerpointProg;    
     /** external viewers */
     String acroreadProg;
-	
+    /** Are we showing scores? */
+    boolean showScores = false;
+    
     /**
      * Initialize the query environment and indexes model.
      */
@@ -186,6 +190,10 @@ public class RetUI extends JPanel implements ActionListener {
 	stop = new JButton("Clear");
 	stop.addActionListener(this);
 	stop.setToolTipText("Clear the display");
+	scoreDisplay = new JButton("Show Scores");
+	scoreDisplay.addActionListener(this);
+	scoreDisplay.setToolTipText("Toggle display of document scores");
+
 	status = new JLabel("Open an index or server", null, JLabel.CENTER);
 	status.setFont(myFont);
 	status.setForeground(Color.red);
@@ -281,6 +289,7 @@ public class RetUI extends JPanel implements ActionListener {
 	p = new JPanel();
 	p.add(go);
 	p.add(stop);
+	p.add(scoreDisplay);
 	p.setForeground(navyBlue);
 	p.setBackground(lightYellow);
 	JPanel p1 = new JPanel();
@@ -338,7 +347,31 @@ public class RetUI extends JPanel implements ActionListener {
 	} else if (act.equals("Clear")) {
 	    clearAll();
 	    query.requestFocus();
-	    // need a remove index/server. 
+	} else if (e.getSource() == scoreDisplay) {
+	    // this should only be enabled if there are docs in the display.
+	    // toggle the flag
+	    showScores = !showScores;
+	    if (showScores) {
+		scoreDisplay.setText("Hide Scores");
+	    } else {
+		scoreDisplay.setText("Show Scores");
+	    }
+	    DocsTableModel m = (DocsTableModel)answerAll.getModel();
+	    m.displayScores(showScores);
+	    TableColumn column;
+	    if (showScores) {
+		column = answerAll.getColumnModel().getColumn(0);
+		column.setPreferredWidth(20);
+		column = answerAll.getColumnModel().getColumn(1);
+		column.setPreferredWidth(50);
+		column = answerAll.getColumnModel().getColumn(2);
+		column.setPreferredWidth(280); 
+	    } else {
+		column = answerAll.getColumnModel().getColumn(0);
+		column.setPreferredWidth(50);
+		column = answerAll.getColumnModel().getColumn(1);
+		column.setPreferredWidth(300);
+	    }
 	} else if (act.equals("Add Index")) {
 	    status.setText("Opening...");
 	    openIndex();
@@ -515,7 +548,8 @@ public class RetUI extends JPanel implements ActionListener {
 			*/
 			for( int i = 0; i < scored.length; i++ ) {
 			    // scores and extents should be optional view.
-			    m.setValueAt(i, trim(names[i]), titles[i]);
+			    //			    m.setValueAt(i, trim(names[i]), titles[i]);
+			    m.setValueAt(i, scored[i].score, trim(names[i]), titles[i]);
 			}
 
 			// initialize query tree view for doc text frame
@@ -616,7 +650,8 @@ public class RetUI extends JPanel implements ActionListener {
 	DefaultMutableTreeNode top = new DefaultMutableTreeNode("Query");
 	docQueryTree = new JTree(top);
 	docQueryTree.addTreeSelectionListener(new QueryTreeListener());
-	docQueryTree.setPreferredSize(new Dimension(550, 180));
+	//	docQueryTree.setPreferredSize(new Dimension(600, 180));
+	docQueryTree.setVisibleRowCount(8);
 	JScrollPane treeView = new JScrollPane(docQueryTree);
 	treeView.setPreferredSize(new Dimension(600, 180));
 	treeView.setDoubleBuffered(true);
@@ -707,6 +742,7 @@ public class RetUI extends JPanel implements ActionListener {
 	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
 	// no selection.
 	if (row == -1) return;
+	// this runs twice?!?
 	Runnable r = new Runnable() {
 		public void run() {
 		    setCursor(wait);
@@ -724,10 +760,15 @@ public class RetUI extends JPanel implements ActionListener {
 		    // get the parsed document
 		    int [] ids = new int[1];
 		    ids[0] = currentDocId;
-		    
 		    ParsedDocument[] docs = env.documents(ids);
+
 		    currentParsedDoc = docs[0];
 		    String myDocText = currentParsedDoc.text;
+		    // if it was a windows formatted file (^M^J for EOL),
+		    // we have to account for the ^M characters, that get
+		    // ignored by StyledDocument when inserting highlighting.
+		    // Nasty hack.
+		    myDocText = myDocText.replace('\r', ' ');
 		    //	String myDocText = docs[row].text;
 		    // insert into doc text pane
 		    docTextPane.setContentType("text/plain");
@@ -749,6 +790,62 @@ public class RetUI extends JPanel implements ActionListener {
 	Thread t = new Thread(r);
 	t.start();
     }    
+
+    /**
+     * Populate the document text frame with the selected document.
+     * Highlight the document based on query matches.
+     */
+    public void getDocTextAlt() {
+
+	// get the selected index from the table.
+	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
+	// no selection.
+	if (row == -1) return;
+	setCursor(wait);
+	// get the doc text
+	TableModel m = answerAll.getModel();
+	//    String name = (String) m.getValueAt(row, 0);
+	String name = names[row];
+	status.setText("Getting " + name);
+	String title = (String) m.getValueAt(row, 1);
+	if (title.equals(""))
+	    docTextFrame.setTitle(name);
+	else
+	    docTextFrame.setTitle(title);
+	currentDocId = docids[row]; // internal docid
+	// get the parsed document
+	int [] ids = new int[1];
+	ids[0] = currentDocId;
+	ParsedDocument[] docs = env.documents(ids);
+	
+	currentParsedDoc = docs[0];
+	String myDocText = currentParsedDoc.text;
+	// if it was a windows formatted file (^M^J for EOL),
+	// we have to account for the ^M characters, that get
+	// ignored by StyledDocument when inserting highlighting.
+	// Nasty hack.
+	myDocText = myDocText.replace('\r', ' ');
+	System.out.println(currentDocId + " got text: " + myDocText.length() +
+			   ":" + currentParsedDoc.positions.length );
+	//	String myDocText = docs[row].text;
+	// insert into doc text pane
+	docTextPane.setContentType("text/plain");
+	// use this to show html, highlighting is bad then.
+	//	docTextPane.setContentType("text/html");
+	docTextPane.setText(myDocText);
+	System.out.println("set text");
+	// reset caret to start of doc text.
+	docTextPane.setCaretPosition(0);
+	// insert the matches markup
+	DefaultTreeModel tree = (DefaultTreeModel) docQueryTree.getModel();
+	DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getRoot();
+	System.out.println("highlighting");
+	highlight(root);
+	//	docTextFrame.setLocationRelativeTo(this);
+	docTextFrame.setVisible(true);
+	status.setText(" ");
+	setCursor(def);
+    }
 
     /**
      * Populate a document text frame with html -- no highlighting.
@@ -854,19 +951,31 @@ public class RetUI extends JPanel implements ActionListener {
      */
     private void highlight(UIQueryNode q, StyledDocument myDoc, 
 			   MutableAttributeSet highlight) {
-	boolean replace = false;
+	boolean replace = true;
 	// iterate over matches.
 	// keys query node names (as inserted in QueryTree).
 	QueryAnnotationNode node = q.getNode();
 	String name = node.name;
 	ScoredExtentResult[] extents = (ScoredExtentResult[])annotations.get(name);
+
 	if (extents != null) {
+	    System.out.println("#highlight " + currentDocId + ": " + name + ": " + extents.length);
 	    for (int i = 0; i < extents.length; i++) {		
 		if (currentDocId == extents[i].document) {
-		    int start = currentParsedDoc.positions[extents[i].begin].begin;
-		    int end = currentParsedDoc.positions[extents[i].end-1].end;
-		    myDoc.setCharacterAttributes(start, (end - start), 
-						 highlight, replace);
+		    int s = extents[i].begin;
+		    int e = extents[i].end-1;
+		    if (s < currentParsedDoc.positions.length &&
+			e < currentParsedDoc.positions.length) {
+			int start = currentParsedDoc.positions[s].begin;
+			int end = currentParsedDoc.positions[e].end;
+			myDoc.setCharacterAttributes(start, (end - start), 
+						     highlight, replace);
+		    } else {
+			System.out.println("#parsedDoc overflow: " +  s + ":" + 
+					   e + ":" +  extents[i].document+ ":" + i);
+
+		    }
+		    
 		}
 	    }
 	}
@@ -912,10 +1021,11 @@ public class RetUI extends JPanel implements ActionListener {
 	 */
 	public void valueChanged(TreeSelectionEvent e) 
 	{
-	    if (e.isAddedPath()) {
-		TreePath path = e.getPath();
+	    TreePath path = e.getPath();
+	    if (e.isAddedPath(path)) {
 		DefaultMutableTreeNode node = 
 		    (DefaultMutableTreeNode)(path.getLastPathComponent());
+		docQueryTree.scrollPathToVisible(path);
 		highlight(node);
 	    }
 	}
@@ -933,7 +1043,14 @@ public class RetUI extends JPanel implements ActionListener {
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 	    // cleared selection?
-	    getDocText();
+	    // this runs twice, need to make this more specific.
+	    // don't run if part of a multiple event sequence.
+	    // eg one row deselected, then new row selected.
+	    // Ought to synchronize on the QueryEnvironment too
+	    // as it is not thread safe.
+	    if (! e.getValueIsAdjusting())
+		getDocText();
+	    //getDocTextAlt();
 	}
     }
 	
@@ -997,6 +1114,7 @@ public class RetUI extends JPanel implements ActionListener {
 			    }
 			    count++;
 			}
+			status.setText(doneText);
 		    } catch (InterruptedException ex) {
 			status.setText(doneText);
 		    }
@@ -1037,7 +1155,10 @@ public class RetUI extends JPanel implements ActionListener {
 		    int rowIndex = rowAtPoint(p);
 		    int colIndex = columnAtPoint(p);
 		    int realColumnIndex = convertColumnIndexToModel(colIndex);
-		    if (realColumnIndex == 0)
+		    int namesIndex = showScores ? 1 : 0;
+		    if (realColumnIndex == -1 || rowIndex == -1)
+			tip = null;
+		    else if (realColumnIndex == namesIndex)
 			tip = names[rowIndex];
 		    else 
 			tip = (String) getValueAt(rowIndex, colIndex);
@@ -1264,15 +1385,35 @@ class OldDocsTableModel extends AbstractTableModel {
  *
  */
 class DocsTableModel extends AbstractTableModel {
+    boolean showScores = false;
+    /**
+     * Labels for the columns docid and title
+     */
+    // docid and title
+    private String[] noScoreColumnNames = {"Document", "Title"};
+    /**
+     * Labels for the columns score, docid and title
+     */
+    // score, docid and title
+    private String[] scoreColumnNames = {"Score", "Document", "Title"};
     /**
      * Labels for the columns
      */
     // docid and title
-    private String[] columnNames = {"Document", "Title"};
+    private String[] columnNames = noScoreColumnNames;
+
+    /**
+     * Container for the data, docid and title.
+     */
+    private Object[][] noScoreData = new Object[0][0];
+    /**
+     * Container for the data, score, docid, and title.
+     */
+    private Object[][] scoreData = new Object[0][0];
     /**
      * Container for the data.
      */
-    private Object[][] data = new Object[0][0];
+    private Object[][] data = noScoreData;
 	
     /* (non-Javadoc)
      * @see javax.swing.table.TableModel#getColumnCount()
@@ -1314,16 +1455,49 @@ class DocsTableModel extends AbstractTableModel {
      * @param row Number of rows for the new array.
      */
     public void resize(int row) {
-	data = new Object[row][columnNames.length];
+	scoreData = new Object[row][scoreColumnNames.length];
+	noScoreData = new Object[row][noScoreColumnNames.length];
+	if (showScores) {
+	    // turn on scores.
+	    data = scoreData;
+	    columnNames = scoreColumnNames;
+	} else {
+	    data = noScoreData;
+	    columnNames = noScoreColumnNames;
+	}
     }
-	
+    /** Turn score display on or off.
+     *  @param display true to display scores, false to not
+     */
+    public void displayScores(boolean display) {
+	showScores = display;
+	if (showScores) {
+	    // turn on scores.
+	    data = scoreData;
+	    columnNames = scoreColumnNames;
+	} else {
+	    data = noScoreData;
+	    columnNames = noScoreColumnNames;
+	}
+	fireTableStructureChanged();
+    }
+    
     /**
      * Clear the data array.
      */
     public void clear() {
 	int last = data.length - 1;
 	if (last >= 0) {
-	    data = new Object[0][columnNames.length];
+	    scoreData = new Object[0][scoreColumnNames.length];
+	    noScoreData = new Object[0][noScoreColumnNames.length];
+	    if (showScores) {
+		// turn on scores.
+		data = scoreData;
+		columnNames = scoreColumnNames;
+	    } else {
+		data = noScoreData;
+		columnNames = noScoreColumnNames;
+	    }
 	    fireTableRowsDeleted(0, last);
 	}
     }
@@ -1346,4 +1520,24 @@ class DocsTableModel extends AbstractTableModel {
 	data[row][1] = title;
 	fireTableRowsUpdated(row, row);
     }
+
+    /**
+     * 	Update an entry for a row
+     * @param row The row index
+     * @param score The document score
+     * @param doc The document name
+     * @param title The document title if any
+     */
+    public void setValueAt(int row, double score, String doc, String title) {
+	// update scored
+	scoreData[row][0] = new Double(score);
+	scoreData[row][1] = doc;
+	scoreData[row][2] = title;
+	// update unscored
+	noScoreData[row][0] = doc;
+	noScoreData[row][1] = title;
+
+	fireTableRowsUpdated(row, row);
+    }
+    
 }

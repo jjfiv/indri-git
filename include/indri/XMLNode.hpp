@@ -153,7 +153,8 @@ inline INT64 string_to_i64( const std::string& str ) {
     i = 1;
   }
 
-  for( unsigned int i=0; i<str.length(); i++ ) {
+  //  for( unsigned int i=0; i<str.length(); i++ ) {
+  for( ; i<str.length(); i++ ) {
     result = result * 10 + (str[i] - '0');
   }
 

@@ -24,7 +24,7 @@ void BooleanAndNode::prepare( int documentID ) {
   }
 
   // if all here, make a null extent
-  _extents.push_back( Extent( 0, 1 ) );
+  _extents.push_back( Extent( 0, 1 ) ); // breaks match highlighting.
 }
 
 greedy_vector<Extent>& BooleanAndNode::extents() {
@@ -47,5 +47,14 @@ const std::string& BooleanAndNode::getName() const {
 
 void BooleanAndNode::annotate( class Annotator& annotator, int documentID, int begin, int end ) {
   annotator.addMatches( _extents, this, documentID, begin, end );
+  /* Should have the same as ODN? Or just the inner loop like OrNode
+     // _children are _lists in this context.
+  for( size_t i=0; i<_extents.size(); i++ ) {
+    for( size_t j=0; j<_children.size(); j++ ) {
+      _children[j]->annotate( annotator, documentID, _extents[i].begin, _extents[i].end );
+    }
+  }
+
+   */
 }
 
