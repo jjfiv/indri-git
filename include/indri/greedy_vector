@@ -37,7 +37,7 @@
 #include "lemur/lemur-compat.hpp"
 #include <stdlib.h>
 #include <iostream>
-
+#include <stdexcept>
 template<typename _Type, int _Count = 16>
 class greedy_vector {
 private:

@@ -4,7 +4,7 @@
  * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
  * is subject to the terms of the software license set forth in the LICENSE
  * file included with this software, and also available at
- * http://www.cs.cmu.edu/~lemur/license.html
+ * http://www.lemurproject.org/license.html
  *
  *==========================================================================
 */
@@ -38,6 +38,7 @@ WordSet::load(const string &filename) {
   ifstream ifstr(filename.c_str());
   // return if the file can't be opened
   if (ifstr == NULL) {
+    LEMUR_THROW(LEMUR_IO_ERROR, "Cannot open file");
     return;
   }
  

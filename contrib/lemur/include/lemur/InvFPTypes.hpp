@@ -4,7 +4,7 @@
  * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
  * is subject to the terms of the software license set forth in the LICENSE
  * file included with this software, and also available at
- * http://www.cs.cmu.edu/~lemur/license.html
+ * http://www.lemurproject.org/license.html
  *
  *==========================================================================
 */
@@ -14,7 +14,7 @@
 #ifndef _INVFPTYPES_H
 #define _INVFPTYPES_H
 
-#define IND_VERSION "3.0"
+#define IND_VERSION "3.1"
 
 #include "common_headers.hpp"
 #include "IndexTypes.hpp"
