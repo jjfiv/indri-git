@@ -82,6 +82,7 @@ public:
 
     if( result ) {
       close();
+      LEMUR_THROW( LEMUR_IO_ERROR, "Wasn't able to listen on port " + i64_to_string(port) );
       return false;
     }
 
