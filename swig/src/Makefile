@@ -52,7 +52,7 @@ endif
 all: $(TARGETS)
 
 
-java-lib: $(OUTDIR) $(OUTDIRUI) $(OUTDIRPROP) $(PROPS) $(SOLIB) $(JARFILES)
+java-lib: $(OUTDIR) $(OUTDIRUI) $(OUTDIRPROP) $(OBJ)/java/docs $(PROPS) $(SOLIB) $(JARFILES)
 
 php-lib: $(OUTDIRPHP) $(PHPLIB)
 
@@ -101,7 +101,7 @@ $(PHPLIB): $(OUTDIRPHP)/indri_phpwrap.o $(LIBS)
 
 $(DOCS) $(DOCSUI): $(OBJ)/java/docs
 
-doc:
+doc: $(OBJ)/java/docs
 	$(DOC) -d $(OBJ)/java/docs -doctitle "Indri" -windowtitle "Indri" $(PCK) $(PCKUI)
 
 
