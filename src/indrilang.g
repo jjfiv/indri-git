@@ -89,7 +89,7 @@ tokens {
   FILREJ = "#filrej";
   ANY = "#any";
   BAND = "#band";
-
+  SYN = "#syn";
   // numerics
   PRIOR = "#prior";
   DATEAFTER = "#date:after";
@@ -511,6 +511,7 @@ unqualifiedTerm returns [ RawExtentNode* re ] :
   | ( DATEAFTER ) => re=dateAfter
   | ( DATEBETWEEN ) => re=dateBetween
   | ( O_ANGLE ) => re=synonym_list
+  | ( SYN ) => re=synonym_list_alt
   | ( ANY ) => re=anyField
   | ( LESS ) => re=lessNode
   | ( GREATER ) => re=greaterNode
@@ -538,6 +539,16 @@ synonym_list returns [ indri::lang::ExtentOr* s ] {
   O_ANGLE
     ( options { greedy=true; }: term=unscoredTerm { s->addChild(term); } )+
   C_ANGLE;
+
+synonym_list_alt returns [ indri::lang::ExtentOr* s ] {
+    indri::lang::RawExtentNode* term = 0;
+    s = new indri::lang::ExtentOr;
+    _nodes.push_back(s);
+  } :
+  SYN
+  O_PAREN
+    ( options { greedy=true; }: term=unscoredTerm { s->addChild(term); } )+
+  C_PAREN;
 
 field_list returns [ ExtentAnd* fields ]
   { 

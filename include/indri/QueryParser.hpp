@@ -101,6 +101,7 @@ public:
 	public:  FieldGreaterNode*  dateAfter();
 	public:  FieldBetweenNode*  dateBetween();
 	public:  indri::lang::ExtentOr*  synonym_list();
+	public:  indri::lang::ExtentOr*  synonym_list_alt();
 	public:  FieldLessNode*  lessNode();
 	public:  FieldGreaterNode*  greaterNode();
 	public:  FieldBetweenNode*  betweenNode();
@@ -123,10 +124,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 59;
+	static const int NUM_TOKENS = 60;
 #else
 	enum {
-		NUM_TOKENS = 59
+		NUM_TOKENS = 60
 	};
 #endif
 	
