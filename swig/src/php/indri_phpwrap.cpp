@@ -1659,6 +1659,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getResults) {
             object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
             add_property_double(obj,"score",r->score);
             add_property_long(obj,"document",r->document);
+            add_property_long(obj,"begin",r->begin);
+            add_property_long(obj,"end",r->end);
             add_property_zval(obj,"_cPtr",_cPtr);
             add_next_index_zval(return_value, obj);
         }

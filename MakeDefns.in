@@ -36,6 +36,7 @@ JAR = @JAR@
 JAVAINC = @JAVAINC@
 JAVAHOME = @JAVAHOME@
 SWIG = @SWIG@
+PHPINCLUDE = @PHPINCLUDE@
 DEPENDENCIES = xpdf antlr lemur
 
 PACKAGE = @PACKAGE_TARNAME@
@@ -46,6 +47,8 @@ top_distdir = $(distdir)
 INDRILIB = lib$(PACKAGE).a
 
 WITH_SWIG = @WITH_SWIG@
+WITH_JAVA = @WITH_JAVA@
+WITH_PHP = @WITH_PHP@
 
 # C++ source files
 CPPSRC1 = $(notdir $(wildcard ../src/*.cpp))

@@ -65,63 +65,97 @@ AC_ARG_ENABLE(assert,
 
 if test "$enable_swig" = "yes" ; then
 # Look for swig
-AC_ARG_WITH(swig, [  --with-swig=path       Set location of swig executable],[SWIG="$withval"], [SWIG=])
+  AC_ARG_WITH(swig, [  --with-swig=path       Set location of swig executable],[SWIG="$withval"], [SWIG=])
 
-if test -z "$SWIG" ; then
-  AC_CHECK_PROGS(SWIG, swig)
+  if test -z "$SWIG" ; then
+     AC_CHECK_PROGS(SWIG, swig)
+  fi
 fi
 AC_SUBST(SWIG)
 
 #----------------------------------------------------------------
 # Look for java
 #----------------------------------------------------------------
-
-AC_ARG_WITH(javahome, [  --with-javahome=path       Set location of JAVAHOME],[JAVAHOME="$withval"; JAVACBIN=$JAVAHOME/bin/javac; JAVAINCDIR=$JAVAHOME/include; JAR=$JAVAHOME/bin/jar], [JAVAHOME=])
-
-if test -z "$JAVACBIN" ; then
-  AC_CHECK_PROGS(JAVAC, javac)
+if test "$enable_swig" = "yes" ; then
+   AC_ARG_WITH(javahome, [  --with-javahome=path       Set location of JAVAHOME],[JAVAHOME="$withval"; JAVACBIN=$JAVAHOME/bin/javac; JAVAINCDIR=$JAVAHOME/include; JAR=$JAVAHOME/bin/jar], [JAVAHOME=])
+   
+   if test -z "$JAVACBIN" ; then
+     AC_CHECK_PROGS(JAVAC, javac)
+   else
+     JAVAC="$JAVACBIN"
+   fi
+   AC_MSG_CHECKING(for java include file jni.h)
+   if test -z "$JAVAINCDIR"; then
+     JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include"
+   fi
+   JAVAINC=""
+   for d in $JAVAINCDIR ; do
+     if test -r $d/jni.h ; then
+       AC_MSG_RESULT($d)
+       JAVAINCDIR=$d
+       JAVAINC="-I$d"
+       break
+     fi
+   done
+## only disable if no java or php
+   if test "$JAVAINC" = "" ; then
+      AC_MSG_RESULT(not found disabling swig java wrappers)
+      WITH_JAVA=0
+      AC_DEFINE(WITH_JAVA, 0, [Enable swig java wrapper generation])
+   else
+      # now look for <arch>/jni_md.h
+      AC_MSG_CHECKING(for java include file jni_md.h)
+      JAVAMDDIR=`find $JAVAINCDIR -follow -name jni_md.h -print`
+      if test "$JAVAMDDIR" = "" ; then
+	 AC_MSG_RESULT(not found)
+	 WITH_JAVA=0
+	 AC_DEFINE(WITH_JAVA, 0, [Enable swig java wrapper generation])
+      else
+	 JAVAMDDIR=`dirname $JAVAMDDIR`
+	 JAVAINC="${JAVAINC} -I$JAVAMDDIR"
+	 AC_MSG_RESULT($JAVAMDDIR)
+	 WITH_JAVA=1
+	 AC_DEFINE(WITH_JAVA, 1, [Enable swig java wrapper generation])
+      fi
+   fi
 else
-  JAVAC="$JAVACBIN"
-fi
-AC_MSG_CHECKING(for java include file jni.h)
-if test -z "$JAVAINCDIR"; then
-  JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include"
-fi
-JAVAINC=""
-for d in $JAVAINCDIR ; do
-  if test -r $d/jni.h ; then
-    AC_MSG_RESULT($d)
-    JAVAINCDIR=$d
-    JAVAINC="-I$d"
-    break
-  fi
-done
-
-if test "$JAVAINC" = "" ; then
-  AC_MSG_RESULT(not found disabling swig wrappers)
-  WITH_SWIG=0
-  AC_DEFINE(WITH_SWIG, 0, [Enable swig wrapper generation])
-else
-  # now look for <arch>/jni_md.h
-  AC_MSG_CHECKING(for java include file jni_md.h)
-  JAVAMDDIR=`find $JAVAINCDIR -follow -name jni_md.h -print`
-  if test "$JAVAMDDIR" = "" ; then
-    AC_MSG_RESULT(not found)
-  else
-    JAVAMDDIR=`dirname $JAVAMDDIR`
-    JAVAINC="${JAVAINC} -I$JAVAMDDIR"
-    AC_MSG_RESULT($JAVAMDDIR)
-  fi
-fi
-else
-JAVAC=
-JAR=
-JAVAINC=
-JAVAHOME=
+   JAVAC=
+   JAR=
+   JAVAINC=
+   JAVAHOME=
+   WITH_JAVA=0
 fi
 AC_SUBST(JAVAC)
 AC_SUBST(JAR)
 AC_SUBST(JAVAINC)
 AC_SUBST(JAVAHOME)
+AC_SUBST(WITH_JAVA)
+
+#----------------------------------------------------------------
+# Look for php
+#----------------------------------------------------------------
+if test "$enable_swig" = "yes" ; then
+   AC_ARG_WITH(php-config, [  --with-php-config=path       Set location of php-config],[PHPCONFIG="$withval"], [PHPCONFIG=])
+   if test -z "$PHPCONFIG" ; then
+      AC_CHECK_PROGS(PHPCONFIG, php-config)
+   fi
+   AC_MSG_CHECKING(for php includes)
+   if test "$PHPCONFIG" = "" ; then
+      AC_MSG_RESULT(not found disabling swig php wrappers)
+      WITH_PHP=0
+      PHPINCLUDE=""
+      AC_DEFINE(WITH_PHP, 0, [Enable swig php wrapper generation])
+   else
+      PHPINCLUDE=`$PHPCONFIG --includes`
+      AC_MSG_RESULT(found)
+      WITH_PHP=1
+      AC_DEFINE(WITH_PHP, 1, [Enable swig php wrapper generation])
+   fi
+else
+   PHPINCLUDE=
+   WITH_PHP=0
+fi
+AC_SUBST(PHPINCLUDE)
+AC_SUBST(WITH_PHP)
 ##
 AC_OUTPUT

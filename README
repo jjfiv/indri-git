@@ -22,8 +22,11 @@ following arguments:
    wrappers. Default is disabled. 
  * --with-javahome=<path> Path to JAVAHOME for compiling the swig
    generated shared library.  
- * --with-swig<path> Path to swig binary. Only required if the wrapper
+ * --with-swig=<path> Path to swig binary. Only required if the wrapper
    interfaces are changed.  
+ * --with-php-config=<path> Path to php-config binary. If not specified,
+   it will be searched for. If not found, php wrapper generation will
+   be disabled.
  * --prefix=<install-directory> Specifies the base directory for
    installation. Default is /usr/local.
 
