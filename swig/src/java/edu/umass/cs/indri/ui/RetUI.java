@@ -368,10 +368,10 @@ public class RetUI extends JPanel implements ActionListener {
 	} else if (act.equals("Help")) {
 	    // pop up a help dialog
 	    helpFrame.setVisible(true);
-	} else if (act.equals("Show HTML")) {
+	} else if (act.equals("View as HTML")) {
 	    // pop up an html frame
 	    getDocHtml();
-	} else if (act.equals("External")) {
+	} else if (act.equals("View Original")) {
 	    // pop up an html frame
 	    spawnViewer();
 	} else if (act.equals("Exit")) {
@@ -515,7 +515,7 @@ public class RetUI extends JPanel implements ActionListener {
 			*/
 			for( int i = 0; i < scored.length; i++ ) {
 			    // scores and extents should be optional view.
-			    m.setValueAt(i, names[i], titles[i]);
+			    m.setValueAt(i, trim(names[i]), titles[i]);
 			}
 
 			// initialize query tree view for doc text frame
@@ -588,9 +588,9 @@ public class RetUI extends JPanel implements ActionListener {
 	JMenu m = new JMenu("File");
 	m.setForeground(navyBlue);
 	m.setBackground(lightYellow);
-	m.add(makeMenuItem("Show HTML"));
+	m.add(makeMenuItem("View as HTML"));
 	// fix this to be coherent and only shown when appropriate
-	m.add(makeMenuItem("External"));
+	m.add(makeMenuItem("View Original")); // fix for view as file type
 	mb.add(m);
 		//add icon here.
 	docTextFrame = new JFrame("Document");
@@ -664,7 +664,8 @@ public class RetUI extends JPanel implements ActionListener {
 	// no selection.
 	if (row == -1) return;
 	TableModel m = answerAll.getModel();
-	String name = (String) m.getValueAt(row, 0);
+	//	String name = (String) m.getValueAt(row, 0);
+	String name = names[row];
 	// no docname
 	if (name.equals("")) return;
 	File f = new File(name);
@@ -711,7 +712,8 @@ public class RetUI extends JPanel implements ActionListener {
 		    setCursor(wait);
 		    // get the doc text
 		    TableModel m = answerAll.getModel();
-		    String name = (String) m.getValueAt(row, 0);
+		    //    String name = (String) m.getValueAt(row, 0);
+		    String name = names[row];
 		    status.setText("Getting " + name);
 		    String title = (String) m.getValueAt(row, 1);
 		    if (title.equals(""))
@@ -761,7 +763,8 @@ public class RetUI extends JPanel implements ActionListener {
 		    setCursor(wait);
 		    // get the doc text
 		    TableModel m = answerAll.getModel();
-		    String name = (String) m.getValueAt(row, 0);
+		    //String name = (String) m.getValueAt(row, 0);
+		    String name = names[row];
 		    status.setText("Getting " + name);
 		    String title = (String) m.getValueAt(row, 1);
 		    if (title.equals(""))
@@ -1011,7 +1014,13 @@ public class RetUI extends JPanel implements ActionListener {
     public void error(String s) {
 	progress.setText(s);
     }	
-	
+    /** Strip leading pathname, if any.
+     */
+    private String trim(String s) {
+	File f = new File(s);
+	return f.getName();
+    }
+    
     /**
      * Make a JTable and associated DocsTableModel for containing
      * query result sets.
@@ -1028,10 +1037,10 @@ public class RetUI extends JPanel implements ActionListener {
 		    int rowIndex = rowAtPoint(p);
 		    int colIndex = columnAtPoint(p);
 		    int realColumnIndex = convertColumnIndexToModel(colIndex);
-		    //		    if (realColumnIndex == 1)
+		    if (realColumnIndex == 0)
+			tip = names[rowIndex];
+		    else 
 			tip = (String) getValueAt(rowIndex, colIndex);
-			//		    else 
-			//			tip = "Select an entry to view the document";
 		    // check if string is longer than visible?
 		    return tip;
 		}
