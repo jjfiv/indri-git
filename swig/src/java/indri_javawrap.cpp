@@ -638,6 +638,8 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getQ
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -671,6 +673,8 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getA
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -738,6 +742,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -759,6 +765,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryAnnotation(JN
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(QueryAnnotation **)&jresult = result; 
@@ -778,6 +786,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryAnnotation(
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -807,6 +817,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addSer
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -837,6 +849,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addInd
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -855,6 +869,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1close(
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -874,6 +890,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setMem
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -907,6 +925,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSco
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -940,6 +960,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSto
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -973,6 +995,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1024,6 +1048,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1062,6 +1088,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(QueryAnnotation **)&jresult = result; 
@@ -1111,6 +1139,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(QueryAnnotation **)&jresult = result; 
@@ -1146,6 +1176,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1202,6 +1234,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1259,6 +1293,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1326,6 +1362,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1357,6 +1395,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jlong)result; 
@@ -1390,6 +1430,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jlong)result; 
@@ -1436,6 +1478,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termF
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jlong)result; 
@@ -1459,6 +1503,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1489,6 +1535,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jlong)result; 
@@ -1522,6 +1570,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jlong)result; 
@@ -1557,6 +1607,8 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     {
@@ -1585,6 +1637,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryEnvironment(J
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(QueryEnvironment **)&jresult = result; 
@@ -1604,6 +1658,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -1621,6 +1677,8 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_get_1IndexStatus_1FileOp
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jint)result; 
@@ -1640,6 +1698,8 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_get_1IndexStatus_1FileSk
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jint)result; 
@@ -1659,6 +1719,8 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_get_1IndexStatus_1FileEr
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jint)result; 
@@ -1678,6 +1740,8 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_get_1IndexStatus_1FileCl
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jint)result; 
@@ -1697,6 +1761,8 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_get_1IndexStatus_1Docume
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     jresult = (jint)result; 
@@ -1746,6 +1812,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1status(JNIE
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg3; 
@@ -1765,6 +1833,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexStatus(JNIEnv
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(IndexStatus **)&jresult = result; 
@@ -1793,6 +1863,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexStatus(JNIE
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -1810,6 +1882,8 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexEnvironment(J
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return 0;
         }
     }
     *(IndexEnvironment **)&jresult = result; 
@@ -1829,6 +1903,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexEnvironment
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -1870,6 +1946,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnc
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2062,6 +2140,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2101,6 +2181,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setInd
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -2132,6 +2214,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNum
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2166,6 +2250,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMet
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -2199,6 +2285,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSto
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -2228,6 +2316,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSte
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2248,6 +2338,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMem
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -2279,6 +2371,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2311,6 +2405,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open(J
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2329,6 +2425,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1close(
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }
@@ -2358,6 +2456,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2400,6 +2500,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2514,6 +2616,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addStr
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
     delete arg2; 
@@ -2535,6 +2639,8 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addPar
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown.
+            return ;
         }
     }
 }

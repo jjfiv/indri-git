@@ -34,6 +34,8 @@ typedef long long UINT64;
     $action
   } catch( Exception& e ) {
     SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+    // control does not leave method when thrown.
+    return $null;
   }
 }
 

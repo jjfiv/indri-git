@@ -530,10 +530,37 @@ public class RetUI extends JPanel implements ActionListener {
 		    }
 		    // results have extents and matches.
 		    try {
-			results = env.runAnnotatedQuery( question, maxDocs );
+			try {
+			    results = env.runAnnotatedQuery( question, maxDocs );
+			} catch (Exception exc2) {
+			    // no titles, something bad happened.
+			    //			    error(exc.toString());
+			    error("No results: " + exc2.toString());
+			    return;
+			}
+
 			scored = results.getResults();
-			names = env.documentMetadata( scored, "docno" );
-			titles = env.documentMetadata( scored, "title" );
+			try {
+			    names = env.documentMetadata( scored, "docno" );
+			} catch (Exception exc1) {
+			    // no titles, something bad happened.
+			    names = new String[scored.length];
+			    //			    error(exc.toString());
+			    error("No docs: " + exc1.toString());
+			}
+
+			try {
+			    
+			    titles = env.documentMetadata( scored, "title" );
+			} catch (Exception exc) {
+			    // no titles, something bad happened.
+			    titles = new String[scored.length];
+			    for (int i = 0; i < titles.length; i++)
+				titles[i] = "";
+			    //			    error(exc.toString());
+			    error("No titles: " + exc.toString());
+			}
+			
 			docids = new int[scored.length];
 			for (int j = 0; j < scored.length; j++)
 			    docids[j] = scored[j].document;
@@ -805,7 +832,8 @@ public class RetUI extends JPanel implements ActionListener {
     }    
 
     public void getDocText() {
-
+	// clear any error bit.
+	error("                  ");
 	// get the selected index from the table.
 	final int row = answerAll.getSelectionModel().getMinSelectionIndex();
 	// no selection.
@@ -845,8 +873,18 @@ public class RetUI extends JPanel implements ActionListener {
 			if (Thread.interrupted()) {
 			    throw new InterruptedException();
 			}
-
-			ParsedDocument[] docs = env.documents(ids);
+			ParsedDocument[] docs = null;
+			try {
+			    docs = env.documents(ids);
+			} catch (Exception exc1) {
+			    error(exc1.toString());
+			    status.setText(" ");
+			    setCursor(def);
+			    docTextFrame.setCursor(def);
+			    docTextPane.setCursor(def);
+			    getDocTextThread = null;
+			    return;
+			}
 			
 			// check for an interrupt
 			if (Thread.interrupted()) {
@@ -978,7 +1016,16 @@ public class RetUI extends JPanel implements ActionListener {
 		    int [] ids = new int[1];
 		    ids[0] = currentDocId;
 		    
-		    ParsedDocument[] docs = env.documents(ids);
+		    ParsedDocument[] docs = null;
+		    try {
+			docs = env.documents(ids);
+		    } catch (Exception exc1) {
+			error(exc1.toString());
+			status.setText(" ");
+			setCursor(def);
+			return;
+		    }
+
 		    currentParsedDoc = docs[0];
 		    String myDocText = currentParsedDoc.text;
 		    // insert into doc text pane
