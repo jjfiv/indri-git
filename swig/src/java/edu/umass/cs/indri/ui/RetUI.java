@@ -424,36 +424,23 @@ public class RetUI extends JPanel implements ActionListener {
 	docQueryTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Query")));
     }
     
-	
+
     /**
-     * Remove the selected index from the list. Close and
-     * reopen the query environment with any remaining indexes.
+     * Remove the selected index from the list.
      */
     public void removeIndex() {
 	// index is selected in the list.
 	int idx = indexes.getSelectedIndex();
 	if (idx == -1) // no selection, we're done
 	    return;
-	indexesModel.remove(idx);
-	// close the env, reopen with remaining indexes.
-	env.close();
-	envInit = false;
-	// iterate over elements. if a host, add a server, else an index.
-	Enumeration elts = indexesModel.elements();
-	while (elts.hasMoreElements()) {
-	    try {
-		String s = (String)elts.nextElement();
-		if (s.startsWith("Server: ")){
-		    s = s.substring(8);
-		    env.addServer(s);
-		} else {
-		    env.addIndex(s);
-		}
-		envInit = true;
-	    } catch (Exception e){
-		error(e.toString());
-	    }
+	String s = (String)indexesModel.get(idx);
+	if (s.startsWith("Server: ")) {
+	    s = s.substring(8);
+	    env.removeServer(s);
+	} else {
+	    env.removeIndex(s);
 	}
+	indexesModel.remove(idx);
     }
 	
     /**
