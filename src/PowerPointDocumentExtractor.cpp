@@ -400,9 +400,10 @@ void PowerPointDocumentExtractor::open( const std::string& filename ) {
 }
 
 UnparsedDocument* PowerPointDocumentExtractor::nextDocument() {
-  if( _documentWaiting )
+  if( _documentWaiting ) {
+    _documentWaiting = false;
     return &_unparsedDocument;
-  _documentWaiting = false;
+  }
   return 0;
 }
 
