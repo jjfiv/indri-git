@@ -766,7 +766,9 @@ public class RetUI extends JPanel implements ActionListener {
 			buf.ensureCapacity(myDocText.length());
 			// can't get it to match on the char.
 			// ugh, damn windows.
+			
 			//			System.out.println(myDocText);
+			
 			for (int i = 0; i < myDocText.length(); i++) {
 			    char c = myDocText.charAt(i);
 			    // windows smart quote is 3 char wide in a 
@@ -785,7 +787,10 @@ public class RetUI extends JPanel implements ActionListener {
 				//				System.out.println ("##" + i +":" + c + ":" + (int)c);
 				buf.append("  ");
 				buf.append(c);
-			    } else if (c > 127) {
+				//			    } else if (c > 127 && c < 160) {
+				// pdf uses 173 and 183, chars in 128..172
+				// may be mishandled here?!?
+			    } else if (c > 127 && c != 173 && c != 183) {
 				buf.append(" ");
 				buf.append(c);
 				//				System.out.println ("%%" + i +":" + c + ":" + (int)c);
