@@ -766,6 +766,7 @@ public class RetUI extends JPanel implements ActionListener {
 			buf.ensureCapacity(myDocText.length());
 			// can't get it to match on the char.
 			// ugh, damn windows.
+			//			System.out.println(myDocText);
 			for (int i = 0; i < myDocText.length(); i++) {
 			    char c = myDocText.charAt(i);
 			    // windows smart quote is 3 char wide in a 
@@ -774,15 +775,30 @@ public class RetUI extends JPanel implements ActionListener {
 				buf.append(" ''");
 			    else if (c == 8221)
 				buf.append("'' ");
+			    else if (c == 931) {
+				// this is Sigma
+				// All others above 255 so far need
+				// 2 spaces. This one needs one.
+				buf.append(" ");
+				buf.append(c);
+			    } else if (c > 255) {
+				//				System.out.println ("##" + i +":" + c + ":" + (int)c);
+				buf.append("  ");
+				buf.append(c);
+			    } else if (c > 127) {
+				buf.append(" ");
+				buf.append(c);
+				//				System.out.println ("%%" + i +":" + c + ":" + (int)c);
+			    }
+			    
 			    else if (c == '\r')
 				buf.append(' ');
 			    else 
 				buf.append(c);
-			// check for an interrupt every 100 char
-			if ((i%100) == 0 && Thread.interrupted()) {
-			    throw new InterruptedException();
-			}
-
+			    // check for an interrupt every 100 char
+			    if ((i%1000) == 0 && Thread.interrupted()) {
+				throw new InterruptedException();
+			    }
 			}
 			myDocText = buf.toString();
 			// insert into doc text pane
