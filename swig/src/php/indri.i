@@ -17,7 +17,8 @@
 %include "std_string.i"
 %include "exception.i"
 %include "indritypemaps.i"
-
+namespace indri{
+namespace api{
 
 class ScoredExtentResult {
   double score;
@@ -25,7 +26,8 @@ class ScoredExtentResult {
   int begin;
   int end;
 };
-
+}
+namespace parse{
 struct TermExtent {
   int begin;
   int end;
@@ -42,14 +44,16 @@ struct MetadataPair {
   int valueLength;
 };
 */
+}
+namespace api{
 class ParsedDocument {
   const char* text;
   size_t textLength;
 
   greedy_vector<char*> terms;
-  greedy_vector<TagExtent> tags;
-  greedy_vector<TermExtent> positions;
-  greedy_vector<MetadataPair> metadata;
+  greedy_vector<indri::parse::TagExtent> tags;
+  greedy_vector<indri::parse::TermExtent> positions;
+  greedy_vector<indri::parse::MetadataPair> metadata;
 
 };
 
@@ -65,7 +69,7 @@ class QueryAnnotationNode {
 class QueryAnnotation {
 public:
   const QueryAnnotationNode* getQueryTree() const;
-  const EvaluatorNode::MResults& getAnnotations() const;
+  const indri::infnet::EvaluatorNode::MResults& getAnnotations() const;
   const std::vector<ScoredExtentResult>& getResults() const;
 };
 
@@ -121,3 +125,4 @@ public:
   INT64 documentCount();
   INT64 onedocumentCount( const std::string& term );
 };
+}}

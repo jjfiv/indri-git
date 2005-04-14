@@ -9,42 +9,38 @@
  *==========================================================================
  */
 
-
 //
-// ExtentInsideNode
+// WeightedExtentOrNode
 //
-// 23 February 2004 -- tds
-//
-// The difference between an include node and an
-// and node is that in the include node, the inner
-// extent must be contained completely within an
-// outer extent.
+// 8 April 2005 -- tds
 //
 
-#ifndef INDRI_EXTENTINSIDENODE_HPP
-#define INDRI_EXTENTINSIDENODE_HPP
+#ifndef INDRI_WEIGHTEDEXTENTORNODE_HPP
+#define INDRI_WEIGHTEDEXTENTORNODE_HPP
 
-#include "indri/ListIteratorNode.hpp"
+#include <vector>
+#include <string>
 #include "indri/greedy_vector"
-#include "indri/Extent.hpp"
+#include "indri/ListIteratorNode.hpp"
 namespace indri
 {
   namespace infnet
   {
     
-    class ExtentInsideNode : public ListIteratorNode {
-      ListIteratorNode* _inner;
-      ListIteratorNode* _outer;
+    class WeightedExtentOrNode : public ListIteratorNode {
+    private:
+      std::vector<ListIteratorNode*> _children;
+      std::vector<double> _weights;
       indri::utility::greedy_vector<indri::index::Extent> _extents;
       std::string _name;
 
     public:
-      ExtentInsideNode( const std::string& name, ListIteratorNode* inner, ListIteratorNode* outer );
-
+      WeightedExtentOrNode( const std::string& name, std::vector<ListIteratorNode*>& children, const std::vector<double>& weights );
       void prepare( int documentID );
       const indri::utility::greedy_vector<indri::index::Extent>& extents();
-      int nextCandidateDocument();
+  
       void indexChanged( indri::index::Index& index );
+      int nextCandidateDocument();
 
       const std::string& getName() const;
       void annotate( class Annotator& annotator, int documentID, int begin, int end );
@@ -52,5 +48,5 @@ namespace indri
   }
 }
 
-#endif // INDRI_EXTENTISIDENODE_HPP
+#endif // INDRI_WEIGHTEDEXTENTORNODE_HPP
 

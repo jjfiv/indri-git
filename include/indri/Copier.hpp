@@ -19,6 +19,8 @@ namespace indri {
       virtual class Node* after( class Field* oldNode, class Field* newNode );
       virtual void before( class ExtentInside* oldNode );
       virtual class Node* after( class ExtentInside* oldNode, class ExtentInside* newNode );
+      virtual void before( class WeightedExtentOr* oldNode );
+      virtual class Node* after( class WeightedExtentOr* oldNode, class WeightedExtentOr* newNode );
       virtual void before( class ExtentOr* oldNode );
       virtual class Node* after( class ExtentOr* oldNode, class ExtentOr* newNode );
       virtual void before( class ExtentAnd* oldNode );

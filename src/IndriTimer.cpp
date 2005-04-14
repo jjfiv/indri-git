@@ -27,7 +27,7 @@
 // IndriTimer
 //
 
-IndriTimer::IndriTimer()
+indri::utility::IndriTimer::IndriTimer()
   :
   _start(0),
   _elapsed(0),
@@ -39,7 +39,7 @@ IndriTimer::IndriTimer()
 // currentTime
 //
 
-UINT64 IndriTimer::currentTime() {
+UINT64 indri::utility::IndriTimer::currentTime() {
 #ifdef WIN32
   FILETIME filetime;
   ::GetSystemTimeAsFileTime( &filetime );
@@ -65,7 +65,7 @@ UINT64 IndriTimer::currentTime() {
 // start
 //
 
-void IndriTimer::start() {
+void indri::utility::IndriTimer::start() {
   _stopped = false;
   _start = currentTime();
 }
@@ -74,7 +74,7 @@ void IndriTimer::start() {
 // stop
 //
 
-void IndriTimer::stop() {
+void indri::utility::IndriTimer::stop() {
   _elapsed += (currentTime() - _start);
   _start = 0;
   _stopped = true;
@@ -84,7 +84,7 @@ void IndriTimer::stop() {
 // reset
 //
 
-void IndriTimer::reset() {
+void indri::utility::IndriTimer::reset() {
   _stopped = true;
   _start = 0;
   _elapsed = 0;
@@ -94,7 +94,7 @@ void IndriTimer::reset() {
 // elapsedTime
 //
 
-UINT64 IndriTimer::elapsedTime() const {
+UINT64 indri::utility::IndriTimer::elapsedTime() const {
   UINT64 total = _elapsed;
 
   if( !_stopped ) {
@@ -108,7 +108,7 @@ UINT64 IndriTimer::elapsedTime() const {
 // printElapsedMicroseconds
 //
 
-void IndriTimer::printElapsedMicroseconds( std::ostream& out ) const {
+void indri::utility::IndriTimer::printElapsedMicroseconds( std::ostream& out ) const {
   UINT64 elapsed = elapsedTime();
   const UINT64 million = 1000000;
 
@@ -129,7 +129,7 @@ void IndriTimer::printElapsedMicroseconds( std::ostream& out ) const {
 // printElapsedSeconds
 //
 
-void IndriTimer::printElapsedSeconds( std::ostream& out ) const {
+void indri::utility::IndriTimer::printElapsedSeconds( std::ostream& out ) const {
   UINT64 elapsed = elapsedTime();
   const UINT64 million = 1000000;
 

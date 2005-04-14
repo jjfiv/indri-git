@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskTermListFileIterator
@@ -11,7 +21,7 @@
 // DiskTermListFileIterator
 //
 
-indri::index::DiskTermListFileIterator::DiskTermListFileIterator( File& termListFile ) :
+indri::index::DiskTermListFileIterator::DiskTermListFileIterator( indri::file::File& termListFile ) :
   _termListFile(termListFile),
   _buffer(_termListFile, 1024*1024),
   _fileSize(termListFile.size()),

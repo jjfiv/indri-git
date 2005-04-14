@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -21,27 +21,33 @@
 
 #include "indri/ListIteratorNode.hpp"
 #include "indri/DocExtentListIterator.hpp"
+namespace indri
+{
+  namespace infnet
+  {
+    
+    class FieldIteratorNode : public ListIteratorNode {
+    private:
+      class indri::index::DocExtentListIterator* _list;
+      int _listID;
+      indri::utility::greedy_vector<indri::index::Extent> _extents;
+      indri::utility::greedy_vector<INT64> _numbers;
+      class InferenceNetwork& _network;
+      std::string _name;
 
-class FieldIteratorNode : public ListIteratorNode {
-private:
-  class indri::index::DocExtentListIterator* _list;
-  int _listID;
-  greedy_vector<Extent> _extents;
-  greedy_vector<INT64> _numbers;
-  class InferenceNetwork& _network;
-  std::string _name;
-
-public:
-  FieldIteratorNode( const std::string& name, class InferenceNetwork& network, int fieldID );
-  void prepare( int documentID );
-  /// returns a list of intervals describing positions of children
-  const greedy_vector<Extent>& extents(); 
-  const greedy_vector<INT64>& numbers();
-  int nextCandidateDocument();
-  void indexChanged( indri::index::Index& index );
-  const std::string& getName() const;
-  void annotate( class Annotator& annotator, int documentID, int begin, int end );
-};
+    public:
+      FieldIteratorNode( const std::string& name, class InferenceNetwork& network, int fieldID );
+      void prepare( int documentID );
+      /// returns a list of intervals describing positions of children
+      const indri::utility::greedy_vector<indri::index::Extent>& extents(); 
+      const indri::utility::greedy_vector<INT64>& numbers();
+      int nextCandidateDocument();
+      void indexChanged( indri::index::Index& index );
+      const std::string& getName() const;
+      void annotate( class Annotator& annotator, int documentID, int begin, int end );
+    };
+  }
+}
 
 #endif // INDRI_FIELDITERATORNODE_HPP
 

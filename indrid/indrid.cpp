@@ -60,14 +60,14 @@ as <tt>-index=/path/to/repository</tt> on the command line.
 //
 
 static bool verbose = false;
-static Mutex loglock;
+static indri::thread::Mutex loglock;
 
 //
 // log_message
 //
 
 void log_message( const char* peer, const char* message ) {
-  ScopedLock lock( loglock );
+  indri::thread::ScopedLock lock( loglock );
   time_t utc;
 
   time( &utc );
@@ -88,9 +88,9 @@ void log_message( const char* peer, const char* message ) {
 
 struct connection_info {
   bool active;
-  Thread* thread;
-  NetworkStream* stream;
-  LocalQueryServer* server;
+  indri::thread::Thread* thread;
+  indri::net::NetworkStream* stream;
+  indri::server::LocalQueryServer* server;
 };
 
 //
@@ -100,8 +100,8 @@ struct connection_info {
 void connection_thread( void* c ) {
   connection_info* info = (connection_info*) c;
 
-  NetworkMessageStream messageStream( info->stream );
-  NetworkServerStub stub( info->server, &messageStream );
+  indri::net::NetworkMessageStream messageStream( info->stream );
+  indri::net::NetworkServerStub stub( info->server, &messageStream );
   std::string peer = info->stream->peer();
 
   log_message( peer.c_str(), "connected" );
@@ -120,14 +120,14 @@ void connection_thread( void* c ) {
 // build_connection
 //
 
-connection_info* build_connection( NetworkStream* stream, LocalQueryServer* server ) {
+connection_info* build_connection( indri::net::NetworkStream* stream, indri::server::LocalQueryServer* server ) {
   connection_info* info = new connection_info;
   
   info->stream = stream;
   info->server = server;
   info->active = true;
 
-  Thread* thread = new Thread( connection_thread, info );
+  indri::thread::Thread* thread = new indri::thread::Thread( connection_thread, info );
   info->thread = thread;
 
   return info;
@@ -166,7 +166,7 @@ void clean_connections( std::list<connection_info*>& connections ) {
 void wait_connections( std::list<connection_info*>& connections ) {
   while( connections.size() ) {
     clean_connections( connections );
-    Thread::yield();
+    indri::thread::Thread::yield();
   }
 }
 
@@ -176,22 +176,22 @@ void wait_connections( std::list<connection_info*>& connections ) {
 
 int main( int argc, char* argv[] ) {
   try {
-    Parameters& parameters = Parameters::instance();
+    indri::api::Parameters& parameters = indri::api::Parameters::instance();
     parameters.loadCommandLine( argc, argv );
 
-    NetworkListener listener;
+    indri::net::NetworkListener listener;
     int port = parameters.get( "port", INDRID_PORT );
     verbose = parameters.get( "verbose", false );
     std::string repositoryPath = parameters["index"];
 
     // wrap the index in a local server that the stub can talk to
-    Repository* repository = new Repository();
+    indri::collection::Repository* repository = new indri::collection::Repository();
     repository->openRead( repositoryPath );
-    LocalQueryServer server( *repository );
+    indri::server::LocalQueryServer server( *repository );
 
     // open for business
     listener.listen( port );
-    NetworkStream* connection;
+    indri::net::NetworkStream* connection;
 
     std::list<connection_info*> connections;
 

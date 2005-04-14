@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskDocExtentListIterator
@@ -13,7 +23,7 @@
 // DiskDocExtentListIterator constructor
 //
 
-indri::index::DiskDocExtentListIterator::DiskDocExtentListIterator( SequentialReadBuffer* buffer, UINT64 startOffset )
+indri::index::DiskDocExtentListIterator::DiskDocExtentListIterator( indri::file::SequentialReadBuffer* buffer, UINT64 startOffset )
   :
   _file(buffer),
   _startOffset(startOffset)

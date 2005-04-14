@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -26,41 +26,47 @@
 #include "indri/EvaluatorNode.hpp"
 #include "indri/QuerySpec.hpp"
 #include "indri/DocumentCount.hpp"
+namespace indri
+{
+  namespace infnet
+  {
+    
+    class ContextCountAccumulator : public EvaluatorNode {
+    private:
+      // this is a ListIteratorNode that contains extents
+      // that compose the context of the operation. _contextSize
+      // is the sum of the lengths of the extents in _context.
+      ListIteratorNode* _context;
 
-class ContextCountAccumulator : public EvaluatorNode {
-private:
-  // this is a ListIteratorNode that contains extents
-  // that compose the context of the operation. _contextSize
-  // is the sum of the lengths of the extents in _context.
-  ListIteratorNode* _context;
+      // this is a ListIteratorNode that emits an extent only for a
+      // true query match; therefore _occurrences is just a simple count
+      // the number of extents in _matches.
+      ListIteratorNode* _matches; 
 
-  // this is a ListIteratorNode that emits an extent only for a
-  // true query match; therefore _occurrences is just a simple count
-  // the number of extents in _matches.
-  ListIteratorNode* _matches; 
+      std::string _name;
+  double _occurrences;
+  double _contextSize;
 
-  std::string _name;
-  UINT64 _occurrences;
-  UINT64 _contextSize;
-
-  EvaluatorNode::MResults _results;
+      EvaluatorNode::MResults _results;
 
 public:
-  ContextCountAccumulator( const std::string& name, ListIteratorNode* matches, ListIteratorNode* context );
-  ~ContextCountAccumulator();
+      ContextCountAccumulator( const std::string& name, ListIteratorNode* matches, ListIteratorNode* context );
+      ~ContextCountAccumulator();
 
-  UINT64 getOccurrences() const;
-  UINT64 getContextSize() const;
+  double getOccurrences() const;
+  double getContextSize() const;
 
-  const ListIteratorNode* getContextNode() const;
-  const ListIteratorNode* getMatchesNode() const;
-  const std::string& getName() const;
+      const ListIteratorNode* getContextNode() const;
+      const ListIteratorNode* getMatchesNode() const;
+      const std::string& getName() const;
 
-  const EvaluatorNode::MResults& getResults();
-  void evaluate( int documentID, int documentLength );
-  int nextCandidateDocument();
-  void indexChanged( indri::index::Index& index );
-};
+      const EvaluatorNode::MResults& getResults();
+      void evaluate( int documentID, int documentLength );
+      int nextCandidateDocument();
+      void indexChanged( indri::index::Index& index );
+    };
+  }
+}
 
 #endif // INDRI_CONTEXTCOUNTACCUMULATOR_HPP
 

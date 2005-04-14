@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // TermRecorder
@@ -28,7 +38,7 @@ namespace indri {
         }
       };
 
-      Buffer _buffer;
+      indri::utility::Buffer _buffer;
       std::vector< std::pair<size_t, int> > _pairs;
 
     public:
@@ -80,8 +90,12 @@ namespace indri {
         return _pairs;
       }
 
-      Buffer& buffer() {
+      indri::utility::Buffer& buffer() {
         return _buffer;
+      }
+
+      int memorySize() {
+        return _buffer.position() + _pairs.size() * sizeof(std::pair<size_t, int>);
       }
     };
   }

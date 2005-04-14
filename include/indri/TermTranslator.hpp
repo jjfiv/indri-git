@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // TermTranslator
@@ -23,7 +33,7 @@ namespace indri {
       int _currentTermCount;
 
       std::vector<int>* _frequentMap;
-      HashTable<int, int>* _wasInfrequentMap;
+      indri::utility::HashTable<int, int>* _wasInfrequentMap;
 
     public:
       ~TermTranslator() {
@@ -35,7 +45,7 @@ namespace indri {
                       int previousTermCount,
                       int currentTermCount,
                       std::vector<int>* frequentMap,
-                      HashTable<int, int>* wasInfrequentMap,
+                      indri::utility::HashTable<int, int>* wasInfrequentMap,
                       TermBitmap* bitmap ) 
         :
         _bitmap(bitmap),

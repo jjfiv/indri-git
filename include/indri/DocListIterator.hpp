@@ -28,7 +28,7 @@ namespace indri {
     public:
       struct DocumentData {
         int document;
-        greedy_vector<int> positions;
+        indri::utility::greedy_vector<int> positions;
       };
 
       struct TopDocument {
@@ -67,7 +67,7 @@ namespace indri {
       virtual TermData* termData() = 0;
 
       // get a list of top documents for this iterator (must call startIteration() first)
-      virtual const greedy_vector<TopDocument>& topDocuments() = 0;
+      virtual const indri::utility::greedy_vector<TopDocument>& topDocuments() = 0;
 
       // return the current document entry if we're not finished, null otherwise.
       virtual DocumentData* currentEntry() = 0;

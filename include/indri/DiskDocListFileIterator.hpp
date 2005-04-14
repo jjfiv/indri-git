@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskDocListFileIterator
@@ -19,11 +29,11 @@ namespace indri {
   namespace index {
     class DiskDocListFileIterator : public DocListFileIterator {
     private:
-      SequentialReadBuffer* _file;
+      indri::file::SequentialReadBuffer* _file;
       UINT64 _fileLength;
 
       int _fieldCount;
-      Buffer _header;
+      indri::utility::Buffer _header;
 
       char _term[ Keyfile::MAX_KEY_LENGTH+1 ];
       TermData* _termData;
@@ -34,7 +44,7 @@ namespace indri {
       void _readEntry();
 
     public:
-      DiskDocListFileIterator( File& docListFile, int fieldCount );
+      DiskDocListFileIterator( indri::file::File& docListFile, int fieldCount );
       ~DiskDocListFileIterator();
       
       bool finished() const;

@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskKeyfileVocabularyIterator
@@ -20,14 +30,14 @@ namespace indri {
     private:
       DiskTermData* _diskTermData;
       int _baseID;
-      BulkTreeReader& _keyfile;
+      indri::file::BulkTreeReader& _keyfile;
       char _data[16*1024];
       int _fieldCount;
 
-      Buffer _compressedData;
-      Buffer _decompressedData;
+      indri::utility::Buffer _compressedData;
+      indri::utility::Buffer _decompressedData;
 
-      Mutex& _mutex;
+      indri::thread::Mutex& _mutex;
       bool _holdingLock;
       bool _finished;
 
@@ -35,7 +45,7 @@ namespace indri {
       void _release();
 
     public:
-      DiskKeyfileVocabularyIterator( int baseID, BulkTreeReader& keyfile, Mutex& mutex, int fieldCount );
+      DiskKeyfileVocabularyIterator( int baseID, indri::file::BulkTreeReader& keyfile, indri::thread::Mutex& mutex, int fieldCount );
       
       void startIteration();
       bool nextEntry();

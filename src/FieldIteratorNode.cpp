@@ -21,21 +21,21 @@
 #include "indri/InferenceNetwork.hpp"
 #include "indri/Annotator.hpp"
 
-FieldIteratorNode::FieldIteratorNode( const std::string& name, InferenceNetwork& network, int listID ) :
+indri::infnet::FieldIteratorNode::FieldIteratorNode( const std::string& name, InferenceNetwork& network, int listID ) :
   _name(name),
   _network(network),
   _listID(listID)
 {
 }
 
-void FieldIteratorNode::indexChanged( indri::index::Index& index ) {
+void indri::infnet::FieldIteratorNode::indexChanged( indri::index::Index& index ) {
   _list = _network.getFieldIterator( _listID );
 
   if( _list )
     _list->startIteration();
 }
 
-void FieldIteratorNode::prepare( int documentID ) {
+void indri::infnet::FieldIteratorNode::prepare( int documentID ) {
   _extents.clear();
   _numbers.clear();
 
@@ -51,15 +51,15 @@ void FieldIteratorNode::prepare( int documentID ) {
 }
 
 /// returns a list of intervals describing positions of children
-const greedy_vector<Extent>& FieldIteratorNode::extents() {
+const indri::utility::greedy_vector<indri::index::Extent>& indri::infnet::FieldIteratorNode::extents() {
   return _extents;
 }
 
-const greedy_vector<INT64>& FieldIteratorNode::numbers() {
+const indri::utility::greedy_vector<INT64>& indri::infnet::FieldIteratorNode::numbers() {
   return _numbers;
 }
 
-int FieldIteratorNode::nextCandidateDocument() {
+int indri::infnet::FieldIteratorNode::nextCandidateDocument() {
   if( !_list )
     return MAX_INT32;
 
@@ -72,11 +72,11 @@ int FieldIteratorNode::nextCandidateDocument() {
   }
 }
 
-const std::string& FieldIteratorNode::getName() const {
+const std::string& indri::infnet::FieldIteratorNode::getName() const {
   return _name;
 }
 
-void FieldIteratorNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
+void indri::infnet::FieldIteratorNode::annotate( indri::infnet::Annotator& annotator, int documentID, int begin, int end ) {
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
 

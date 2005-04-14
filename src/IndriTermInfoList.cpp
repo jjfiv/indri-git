@@ -26,8 +26,8 @@ namespace indri {
   namespace index {
     BagList::BagList( TermListBuilder* list ) : _list(list)
     {
-      greedy_vector<TERMID_T> termIDs = _list->terms();
-      count_iterator<TERMID_T> iter( termIDs.begin(), termIDs.end() );
+      indri::utility::greedy_vector<TERMID_T> termIDs = _list->terms();
+      indri::utility::count_iterator<TERMID_T> iter( termIDs.begin(), termIDs.end() );
       // indri indexes stopwords as [OOV], so skip those
       for( ; iter != termIDs.end(); ++iter ) {
         if ((*iter).object != 0)

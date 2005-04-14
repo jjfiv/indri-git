@@ -126,10 +126,10 @@ inline const char* RVLCompress::decompress_longlong( const char* source, INT64& 
 
   for( i=0; i<10; i++ ) {
     if( source[i] & terminator ) {
-      data |= ((source[i] & mask) << 7*i);
+      data |= (INT64(source[i] & mask) << 7*i);
       break;
     } else {
-      data |= (source[i] << 7*i);
+      data |= (INT64(source[i]) << 7*i);
     }
   }
 

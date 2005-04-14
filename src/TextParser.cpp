@@ -40,7 +40,6 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-//#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -1593,15 +1592,15 @@ int main()
 #line 43 "../src/TextParser.l"
 
 
-TextParser::TextParser() :
+indri::parse::TextParser::TextParser() :
   _handler(0)
 {
 }
 
-TextParser::~TextParser() {
+indri::parse::TextParser::~TextParser() {
 }
 
-void TextParser::setTags( const std::vector<std::string>& include,
+void indri::parse::TextParser::setTags( const std::vector<std::string>& include,
                           const std::vector<std::string>& exclude,
                           const std::vector<std::string>& index,
                           const std::vector<std::string>& metadata, 
@@ -1609,7 +1608,7 @@ void TextParser::setTags( const std::vector<std::string>& include,
   // do nothing
 }
 
-ParsedDocument* TextParser::parse( UnparsedDocument* document ) {
+indri::api::ParsedDocument* indri::parse::TextParser::parse( indri::parse::UnparsedDocument* document ) {
   _termBuffer.clear();
   _termBuffer.grow( document->textLength * 2 ); // leave a little extra room
   _document.terms.clear();
@@ -1632,11 +1631,11 @@ ParsedDocument* TextParser::parse( UnparsedDocument* document ) {
   return &_document;
 }
 
-void TextParser::writeToken(char* token) {
+void indri::parse::TextParser::writeToken(char* token) {
   writeToken(token, byte_position-textparserleng, byte_position);
 }
 
-void TextParser::writeToken(char *token, int start, int end) {
+void indri::parse::TextParser::writeToken(char *token, int start, int end) {
   int tokenLength = strlen(token);
   
   TermExtent extent;
@@ -1649,11 +1648,11 @@ void TextParser::writeToken(char *token, int start, int end) {
   _document.terms.push_back( writeLocation );
 }
 
-void TextParser::handle( UnparsedDocument* document ) {
+void indri::parse::TextParser::handle( indri::parse::UnparsedDocument* document ) {
   _handler->handle( parse(document) );
 }
 
-void TextParser::setHandler( ObjectHandler<ParsedDocument>& h ) {
+void indri::parse::TextParser::setHandler( ObjectHandler<indri::api::ParsedDocument>& h ) {
   _handler = &h;
 }
 

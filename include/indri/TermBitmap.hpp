@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // TermBitmap
@@ -11,19 +21,19 @@
   on every call, and from must always be less than to.
 
   This data is stored in 32-byte bitmap chunks with the following form:
-    4 bytes - fromBase
-    4 bytes - toBase
-    24 bytes - bitmap
+  4 bytes - fromBase
+  4 bytes - toBase
+  24 bytes - bitmap
 
   Each bit set in the bitmap region corresponds to a (from, to) pair.  
   
   Suppose the beginning of the bitmap looks like this:
-    000100100110000....
+  000100100110000....
   This could be represented by the following pairs:
-    (1, 4)
-    (2, 7)
-    (3, 10)
-    (4, 11)
+  (1, 4)
+  (2, 7)
+  (3, 10)
+  (4, 11)
   For instance, the (2, 7) pair says that the second non-zero bit is
   at index 7.  This (2, 7) pair is translated to mean that
   (fromBase + 2, toBase + 7) is a pair stored by some explicit add() call.
@@ -48,7 +58,7 @@ namespace indri {
   namespace index {
     class TermBitmap {
     private:
-      std::vector<Buffer*> _maps;
+      std::vector<indri::utility::Buffer*> _maps;
       int _fromBase;
       int _toBase;
       int _lastFrom;
@@ -56,10 +66,10 @@ namespace indri {
 
       void _addBufferIfNecessary() {
         if( !_maps.size() || _maps.back()->position() == _maps.back()->size() )
-          _maps.push_back( new Buffer( 64*1024 ) );
+          _maps.push_back( new indri::utility::Buffer( 64*1024 ) );
       }
 
-      Buffer* _findBuffer( int from ) {
+      indri::utility::Buffer* _findBuffer( int from ) {
         assert( from >= 0 );
         
         int left = 0;
@@ -70,7 +80,7 @@ namespace indri {
 
         while( right - left > 1 ) {
           int middle = left + (right - left) / 2;
-          Buffer* mid = _maps[ middle ];
+          indri::utility::Buffer* mid = _maps[ middle ];
 
           if( from < *(INT32*) mid->front() ) {
             right = middle;
@@ -91,7 +101,7 @@ namespace indri {
         return _maps[right];
       }
 
-      const char* _findInBuffer( Buffer* b, int from ) {
+      const char* _findInBuffer( indri::utility::Buffer* b, int from ) {
         const char* start = b->front();
         const char* end = b->front() + b->position();
 
@@ -151,7 +161,7 @@ namespace indri {
           _addBufferIfNecessary();
 
           // get the current buffer
-          Buffer* back = _maps.back();
+          indri::utility::Buffer* back = _maps.back();
           _current = back->write( 32 );
 
           *(INT32*)_current = from;
@@ -173,7 +183,7 @@ namespace indri {
         assert( from <= _lastFrom );
 
         // first, binary search through the buffers themselves
-        Buffer* buffer = _findBuffer( from );
+        indri::utility::Buffer* buffer = _findBuffer( from );
         const char* spot = _findInBuffer( buffer, from );
 
         // now, we have to scan through this buffer to find the right value
@@ -211,6 +221,10 @@ namespace indri {
         bits += i;
         assert( (fromBase + found - 1) == from );
         return toBase + bits;
+      }
+
+      size_t memorySize() {
+        return _maps.size() * (64*1024);
       }
     };
   }

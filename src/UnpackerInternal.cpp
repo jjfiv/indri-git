@@ -6,7 +6,7 @@
 #include "indri/XMLNode.hpp"
 #include "lemur/Exception.hpp"
 
-indri::lang::Node* indri::lang::Unpacker::_unpack( XMLNode* child ) {
+indri::lang::Node* indri::lang::Unpacker::_unpack( indri::xml::XMLNode* child ) {
   Node* result = 0;
   std::string type = child->getAttribute( "type" );
   std::string name = child->getAttribute( "name" );
@@ -17,6 +17,8 @@ indri::lang::Node* indri::lang::Unpacker::_unpack( XMLNode* child ) {
     result = new Field(*this);
   } else if( type == "ExtentInside" ) {
     result = new ExtentInside(*this);
+  } else if( type == "WeightedExtentOr" ) {
+    result = new WeightedExtentOr(*this);
   } else if( type == "ExtentOr" ) {
     result = new ExtentOr(*this);
   } else if( type == "ExtentAnd" ) {

@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // UtilityThread
@@ -14,14 +24,14 @@
 //
 
 void utility_thread_run( void* pointer ) {
-  ( (UtilityThread*) pointer )->run();
+  ( (indri::thread::UtilityThread*) pointer )->run();
 }
 
 //
 // UtilityThread
 //
 
-UtilityThread::UtilityThread() :
+indri::thread::UtilityThread::UtilityThread() :
   _thread(0)
 {
 }
@@ -30,8 +40,8 @@ UtilityThread::UtilityThread() :
 // run
 //
 
-void UtilityThread::run() {
-  ScopedLock lock( _lock );
+void indri::thread::UtilityThread::run() {
+  indri::thread::ScopedLock lock( _lock );
 
   try {
     UINT64 waitTime = initialize();
@@ -59,7 +69,7 @@ void UtilityThread::run() {
 // start
 //
 
-void UtilityThread::start() {
+void indri::thread::UtilityThread::start() {
   if( _thread )
     return;
 
@@ -71,7 +81,7 @@ void UtilityThread::start() {
 // signal
 //
 
-void UtilityThread::signal() {
+void indri::thread::UtilityThread::signal() {
   _runThread = false;
   _quit.notifyAll();
 }
@@ -80,7 +90,7 @@ void UtilityThread::signal() {
 // join
 //
 
-void UtilityThread::join() {
+void indri::thread::UtilityThread::join() {
   signal();
 
   if( _thread ) {

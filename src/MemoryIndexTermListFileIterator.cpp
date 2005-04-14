@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // MemoryIndexTermListFileIterator
@@ -8,7 +18,7 @@
 #include "indri/MemoryIndexTermListFileIterator.hpp"
 #include "indri/TermList.hpp"
 
-indri::index::MemoryIndexTermListFileIterator::MemoryIndexTermListFileIterator( std::list<Buffer*>& buffers, std::vector<DocumentData>& data ) :
+indri::index::MemoryIndexTermListFileIterator::MemoryIndexTermListFileIterator( std::list<indri::utility::Buffer*>& buffers, std::vector<DocumentData>& data ) :
   _buffers(buffers),
   _data(data)
 {

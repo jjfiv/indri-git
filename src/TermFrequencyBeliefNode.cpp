@@ -13,10 +13,10 @@
 #include "indri/InferenceNetwork.hpp"
 #include <math.h>
 
-TermFrequencyBeliefNode::TermFrequencyBeliefNode( const std::string& name,
+indri::infnet::TermFrequencyBeliefNode::TermFrequencyBeliefNode( const std::string& name,
                                                   class InferenceNetwork& network,
                                                   int listID,
-                                                  TermScoreFunction& scoreFunction )
+                                                  indri::query::TermScoreFunction& scoreFunction )
   :
   _name(name),
   _network(network),
@@ -25,17 +25,17 @@ TermFrequencyBeliefNode::TermFrequencyBeliefNode( const std::string& name,
 {
 }
 
-TermFrequencyBeliefNode::~TermFrequencyBeliefNode() {
+indri::infnet::TermFrequencyBeliefNode::~TermFrequencyBeliefNode() {
 }
 
-const greedy_vector<indri::index::DocListIterator::TopDocument>& TermFrequencyBeliefNode::topdocs() const {
+const indri::utility::greedy_vector<indri::index::DocListIterator::TopDocument>& indri::infnet::TermFrequencyBeliefNode::topdocs() const {
   if( _list )
     return _list->topDocuments();
 
   return _emptyTopdocs;
 }
 
-int TermFrequencyBeliefNode::nextCandidateDocument() {
+int indri::infnet::TermFrequencyBeliefNode::nextCandidateDocument() {
   if( _list ) {
     const indri::index::DocListIterator::DocumentData* entry = _list->currentEntry();
     
@@ -47,15 +47,15 @@ int TermFrequencyBeliefNode::nextCandidateDocument() {
   return MAX_INT32;
 }
 
-double TermFrequencyBeliefNode::maximumBackgroundScore() {
+double indri::infnet::TermFrequencyBeliefNode::maximumBackgroundScore() {
   return _maximumBackgroundScore;
 }
 
-double TermFrequencyBeliefNode::maximumScore() {
+double indri::infnet::TermFrequencyBeliefNode::maximumScore() {
   return _maximumScore;
 }
 
-const greedy_vector<ScoredExtentResult>& TermFrequencyBeliefNode::score( int documentID, int begin, int end, int documentLength ) {
+const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& indri::infnet::TermFrequencyBeliefNode::score( int documentID, int begin, int end, int documentLength ) {
   assert( begin == 0 && end == documentLength ); // FrequencyListCopier ensures this condition
   _extents.clear();
 
@@ -64,13 +64,13 @@ const greedy_vector<ScoredExtentResult>& TermFrequencyBeliefNode::score( int doc
     int count = ( entry && entry->document == documentID ) ? entry->positions.size() : 0;
     double score = _function.scoreOccurrence( count, documentLength );
 
-    _extents.push_back( ScoredExtentResult( score, documentID, begin, end ) );
+    _extents.push_back( indri::api::ScoredExtentResult( score, documentID, begin, end ) );
   }
 
   return _extents;
 }
 
-bool TermFrequencyBeliefNode::hasMatch( int documentID ) {
+bool indri::infnet::TermFrequencyBeliefNode::hasMatch( int documentID ) {
   if( _list ) {
     const indri::index::DocListIterator::DocumentData* entry = _list->currentEntry();
     return ( entry && entry->document == documentID );
@@ -79,11 +79,18 @@ bool TermFrequencyBeliefNode::hasMatch( int documentID ) {
   return false;
 }
 
-const std::string& TermFrequencyBeliefNode::getName() const {
+const indri::utility::greedy_vector<bool>& indri::infnet::TermFrequencyBeliefNode::hasMatch( int documentID, const indri::utility::greedy_vector<indri::index::Extent>& extents ) {
+  assert( false && "A TermFrequencyBeliefNode should never be asked for position information" );  
+  
+  _matches.resize( extents.size(), false );
+  return _matches;
+}
+
+const std::string& indri::infnet::TermFrequencyBeliefNode::getName() const {
   return _name;
 }
 
-void TermFrequencyBeliefNode::indexChanged( indri::index::Index& index ) {
+void indri::infnet::TermFrequencyBeliefNode::indexChanged( indri::index::Index& index ) {
   // fetch the next inverted list
   _list = _network.getDocIterator( _listID );
 
@@ -108,6 +115,6 @@ void TermFrequencyBeliefNode::indexChanged( indri::index::Index& index ) {
   }
 }
 
-void TermFrequencyBeliefNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
+void indri::infnet::TermFrequencyBeliefNode::annotate( indri::infnet::Annotator& annotator, int documentID, int begin, int end ) {
   // can't annotate -- don't have position info
 }

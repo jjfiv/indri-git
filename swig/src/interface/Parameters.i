@@ -5,13 +5,13 @@
 // 13 August 2004 -- tds
 //
 
-%typemap(jni) Parameters "jobject"
-%typemap(jtype) Parameters "Map"
-%typemap(jstype) Parameters "Map"
+%typemap(jni) indri::api::Parameters "jobject"
+%typemap(jtype) indri::api::Parameters "Map"
+%typemap(jstype) indri::api::Parameters "Map"
 
-%typemap(jni) Parameters* "jobject"
-%typemap(jtype) Parameters* "Map"
-%typemap(jstype) Parameters* "Map"
+%typemap(jni) indri::api::Parameters* "jobject"
+%typemap(jtype) indri::api::Parameters* "Map"
+%typemap(jstype) indri::api::Parameters* "Map"
 
 %{
 
@@ -23,8 +23,8 @@ struct jni_parameters_info {
   jclass arrayOfString;
 };
 
-void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p, jobject obj );
-void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array );
+void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, jobject obj );
+void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array );
 
 void java_parameters_init( JNIEnv* jenv, jni_parameters_info& info ) {
   info.stringClazz = jenv->FindClass("java/lang/String");
@@ -34,7 +34,7 @@ void java_parameters_init( JNIEnv* jenv, jni_parameters_info& info ) {
   info.arrayOfString = jenv->FindClass("[Ljava/lang/String;");
 }
 
-void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array ) {
+void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array ) {
   // get the array size
   jsize arrayLength = jenv->GetArrayLength(array);
 
@@ -49,7 +49,7 @@ void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, 
   }
 }
 
-void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array ) {
+void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array ) {
   // get the array size
   jsize arrayLength = jenv->GetArrayLength(array);
 
@@ -59,7 +59,7 @@ void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Par
   }
 }
 
-void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p, jobject mapObj ) {
+void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, jobject mapObj ) {
   // get map class and entrySet method pointer
   jclass mapClazz = jenv->GetObjectClass(mapObj);
   jmethodID mapEntrySet = jenv->GetMethodID(mapClazz, "entrySet", "()Ljava/util/Set;" );
@@ -99,7 +99,7 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p,
       
       p.set( keyString, valueString );
     } else if( jenv->IsInstanceOf( value, info.mapClazz ) ) {
-      Parameters sub = p.append( keyString );
+      indri::api::Parameters sub = p.append( keyString );
       java_parameters_map( jenv, info, p, value );
     } else if( jenv->IsInstanceOf( value, info.arrayOfMaps ) ) {
       java_parameters_array_of_maps( jenv, info, p, keyString, (jobjectArray) value );
@@ -113,14 +113,14 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p,
 
 %}
 
-%typemap(java,in) Parameters {
+%typemap(java,in) indri::api::Parameters {
   jni_parameters_info info;
   java_parameters_init( jenv, info );
   
   java_parameters_map( jenv, info, $1, $input );
 }
 
-%typemap(java,in) Parameters* ( Parameters p ) {
+%typemap(java,in) indri::api::Parameters* ( indri::api::Parameters p ) {
   if( $input != 0 ) {
     jni_parameters_info info;
     java_parameters_init( jenv, info );
@@ -132,10 +132,10 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p,
   }
 }
   
-%typemap(javain) Parameters "$javainput";
-%typemap(javain) Parameters* "$javainput";
+%typemap(javain) indri::api::Parameters "$javainput";
+%typemap(javain) indri::api::Parameters* "$javainput";
 
-%typemap(javaimports) Parameters "import java.util.Map;";
-%typemap(javaimports) Parameters* "import java.util.Map;";
+%typemap(javaimports) indri::api::Parameters "import java.util.Map;";
+%typemap(javaimports) indri::api::Parameters* "import java.util.Map;";
 
 

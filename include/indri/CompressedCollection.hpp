@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -29,44 +29,55 @@
 #include "indri/HashTable.hpp"
 #include "indri/File.hpp"
 #include "indri/Mutex.hpp"
+// hack around to avoid including zlib.h and
+// get the struct type into the right namespace.
+typedef struct z_stream_s* z_stream_p;
 
-class CompressedCollection : public Collection {
-private:
-  Mutex _lock;
+namespace indri
+{
+  namespace collection
+  {
+    
+    class CompressedCollection : public Collection {
+    private:
+      indri::thread::Mutex _lock;
 
-  Keyfile _lookup;
-  File _storage;
-  SequentialWriteBuffer* _output;
-  Buffer _positionsBuffer;
-  struct z_stream_s* _stream;
-  HashTable<const char*, Keyfile*> _reverseLookups;
-  HashTable<const char*, Keyfile*> _forwardLookups;
-  String_set* _strings;
+      Keyfile _lookup;
+      indri::file::File _storage;
+      indri::file::SequentialWriteBuffer* _output;
+      indri::utility::Buffer _positionsBuffer;
+      //  struct z_stream_s* _stream;
+      z_stream_p _stream;
+      indri::utility::HashTable<const char*, Keyfile*> _reverseLookups;
+      indri::utility::HashTable<const char*, Keyfile*> _forwardLookups;
+      String_set* _strings;
 
-  void _writePositions( ParsedDocument* document, int& keyLength, int& valueLength );
-  void _writeMetadataItem( ParsedDocument* document, int i, int& keyLength, int& valueLength );
-  void _writeText( ParsedDocument* document, int& keyLength, int& valueLength );
+      void _writePositions( indri::api::ParsedDocument* document, int& keyLength, int& valueLength );
+      void _writeMetadataItem( indri::api::ParsedDocument* document, int i, int& keyLength, int& valueLength );
+      void _writeText( indri::api::ParsedDocument* document, int& keyLength, int& valueLength );
 
-  void _readPositions( ParsedDocument* document, const void* positionData, int positionDataLength );
+      void _readPositions( indri::api::ParsedDocument* document, const void* positionData, int positionDataLength );
 
-public:
-  CompressedCollection();
-  ~CompressedCollection();
+    public:
+      CompressedCollection();
+      ~CompressedCollection();
 
-  void create( const std::string& fileName );
-  void create( const std::string& fileName, const std::vector<std::string>& indexedFields );
-  void create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields );
+      void create( const std::string& fileName );
+      void create( const std::string& fileName, const std::vector<std::string>& indexedFields );
+      void create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields );
 
-  void open( const std::string& fileName );
-  void openRead( const std::string& fileName );
-  void close();
+      void open( const std::string& fileName );
+      void openRead( const std::string& fileName );
+      void close();
 
-  ParsedDocument* retrieve( int documentID );
-  std::string retrieveMetadatum( int documentID, const std::string& attributeName );
-  std::vector<ParsedDocument*> retrieveByMetadatum( const std::string& attributeName, const std::string& value );
-  std::vector<int> retrieveIDByMetadatum( const std::string& attributeName, const std::string& value );
+      indri::api::ParsedDocument* retrieve( int documentID );
+      std::string retrieveMetadatum( int documentID, const std::string& attributeName );
+      std::vector<indri::api::ParsedDocument*> retrieveByMetadatum( const std::string& attributeName, const std::string& value );
+      std::vector<int> retrieveIDByMetadatum( const std::string& attributeName, const std::string& value );
 
-  void addDocument( int documentID, ParsedDocument* document );
-};
+      void addDocument( int documentID, indri::api::ParsedDocument* document );
+    };
+  }
+}
 
 #endif // INDRI_COMPRESSEDCOLLECTION_HPP

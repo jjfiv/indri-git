@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskDocumentDataIterator
@@ -11,9 +21,9 @@
 // DiskDocumentDataIterator constructor
 //
 
-indri::index::DiskDocumentDataIterator::DiskDocumentDataIterator( File& documentDataFile ) :
+indri::index::DiskDocumentDataIterator::DiskDocumentDataIterator( indri::file::File& documentDataFile ) :
   _documentDataFile(documentDataFile),
-  _readBuffer( new SequentialReadBuffer( documentDataFile, 1024*1024 ) ),
+  _readBuffer( new indri::file::SequentialReadBuffer( documentDataFile, 1024*1024 ) ),
   _finished(false)
 {
 }

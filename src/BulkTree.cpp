@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // BulkTree
@@ -20,16 +30,16 @@
 
 const int BULK_BLOCK_SIZE = 8*1024;
 
-inline int BulkBlock::_remainingCapacity() {
+inline int indri::file::BulkBlock::_remainingCapacity() {
   int startDataSize = _dataEnd();
   return BULK_BLOCK_SIZE - startDataSize - count()*2*sizeof(UINT16);
 }
 
-inline int BulkBlock::_dataEnd() {
+inline int indri::file::BulkBlock::_dataEnd() {
   return _valueEnd( count()-1 );
 }
 
-inline int BulkBlock::_keyEnd( int index ) {
+inline int indri::file::BulkBlock::_keyEnd( int index ) {
   assert( index < count() );
 
   if( index <= -1 ) {
@@ -42,15 +52,15 @@ inline int BulkBlock::_keyEnd( int index ) {
   return keyEnd;
 }
 
-inline int BulkBlock::_keyStart( int index ) {
+inline int indri::file::BulkBlock::_keyStart( int index ) {
   return _valueEnd( index-1 );
 }
 
-inline int BulkBlock::_valueStart( int index ) {
+inline int indri::file::BulkBlock::_valueStart( int index ) {
   return _keyEnd( index );
 }
 
-inline int BulkBlock::_valueEnd( int index ) {
+inline int indri::file::BulkBlock::_valueEnd( int index ) {
   assert( index < count() );
 
   if( index <= -1 ) {
@@ -63,11 +73,11 @@ inline int BulkBlock::_valueEnd( int index ) {
   return valueEnd;
 }
 
-inline bool BulkBlock::_canInsert( int keyLength, int dataLength ) {
+inline bool indri::file::BulkBlock::_canInsert( int keyLength, int dataLength ) {
   return _remainingCapacity() >= (keyLength + dataLength + 2*sizeof(UINT16));
 }
 
-inline void BulkBlock::_storeKeyValueLength( int insertPoint, int keyLength, int valueLength ) {
+inline void indri::file::BulkBlock::_storeKeyValueLength( int insertPoint, int keyLength, int valueLength ) {
   UINT16* blockEnd = (UINT16*) (_buffer + BULK_BLOCK_SIZE);
   int cnt = count();
 
@@ -75,7 +85,7 @@ inline void BulkBlock::_storeKeyValueLength( int insertPoint, int keyLength, int
   blockEnd[ -(cnt*2+1) ] = (UINT16) valueLength + keyLength + insertPoint;
 }
 
-inline int BulkBlock::_compare( const char* one, int oneLength, const char* two, int twoLength ) {
+inline int indri::file::BulkBlock::_compare( const char* one, int oneLength, const char* two, int twoLength ) {
   int result = memcmp( one, two, lemur_compat::min( oneLength, twoLength ) );
 
   if( result != 0 ) {
@@ -85,7 +95,7 @@ inline int BulkBlock::_compare( const char* one, int oneLength, const char* two,
   return oneLength - twoLength;
 }
 
-inline int BulkBlock::_find( const char* key, int keyLength, bool& exact ) {
+inline int indri::file::BulkBlock::_find( const char* key, int keyLength, bool& exact ) {
   int left = 0;
   int right = count() - 1;
 
@@ -144,25 +154,25 @@ inline int BulkBlock::_find( const char* key, int keyLength, bool& exact ) {
 }
 
 
-BulkBlock::BulkBlock( bool leaf ) {
+indri::file::BulkBlock::BulkBlock( bool leaf ) {
   _buffer = new char[BULK_BLOCK_SIZE];
   *(UINT16*) _buffer = (leaf ? (1<<15) : 0);
   _previous = _next = 0;
 }
 
-BulkBlock::~BulkBlock() {
+indri::file::BulkBlock::~BulkBlock() {
   delete[] _buffer;
 }
 
-inline int BulkBlock::count() {
+inline int indri::file::BulkBlock::count() {
   return (*(UINT16*)_buffer) & ~(1<<15);
 }
 
-inline bool BulkBlock::leaf() {
+inline bool indri::file::BulkBlock::leaf() {
   return ((*(UINT16*)_buffer) & (1<<15)) != 0;
 }
 
-bool BulkBlock::insert( const char* key, int keyLength, const char* data, int dataLength ) {
+bool indri::file::BulkBlock::insert( const char* key, int keyLength, const char* data, int dataLength ) {
   if( _canInsert( keyLength, dataLength ) == false )
     return false;
   
@@ -176,7 +186,7 @@ bool BulkBlock::insert( const char* key, int keyLength, const char* data, int da
   return true;
 }
 
-bool BulkBlock::getIndex( int index, char* key, int& keyActual, int keyLength, char* value, int& valueActual, int valueLength ) {
+bool indri::file::BulkBlock::getIndex( int index, char* key, int& keyActual, int keyLength, char* value, int& valueActual, int valueLength ) {
   int count = *(UINT16*) _buffer;
 
   keyActual = 0;
@@ -204,7 +214,7 @@ bool BulkBlock::getIndex( int index, char* key, int& keyActual, int keyLength, c
   return true;
 }
 
-bool BulkBlock::findGreater( const char* key, int keyLength, char* value, int& actualLength, int valueBufferLength ) {
+bool indri::file::BulkBlock::findGreater( const char* key, int keyLength, char* value, int& actualLength, int valueBufferLength ) {
   bool exact;
   int index = _find( key, keyLength, exact );
   actualLength = 0;
@@ -216,7 +226,7 @@ bool BulkBlock::findGreater( const char* key, int keyLength, char* value, int& a
   return getIndex( index, 0, keyActual, 0, value, actualLength, valueBufferLength );
 }
 
-bool BulkBlock::find( const char* key, int keyLength, char* value, int& actualLength, int valueBufferLength ) {
+bool indri::file::BulkBlock::find( const char* key, int keyLength, char* value, int& actualLength, int valueBufferLength ) {
   bool exact;
   int index = _find( key, keyLength, exact );
   actualLength = 0;
@@ -228,7 +238,7 @@ bool BulkBlock::find( const char* key, int keyLength, char* value, int& actualLe
   return getIndex( index, 0, keyActual, 0, value, actualLength, valueBufferLength );
 }
 
-bool BulkBlock::insertFirstKey( BulkBlock& block, UINT32 blockID ) {
+bool indri::file::BulkBlock::insertFirstKey( indri::file::BulkBlock& block, UINT32 blockID ) {
   assert( block.count() > 0 );
 
   int startKey = block._keyStart( 0 );
@@ -237,15 +247,15 @@ bool BulkBlock::insertFirstKey( BulkBlock& block, UINT32 blockID ) {
   return insert( block._buffer + startKey, endKey - startKey, (const char*) &blockID, sizeof(blockID) );
 }
 
-inline void BulkBlock::clear() {
+inline void indri::file::BulkBlock::clear() {
   *(UINT16*) _buffer = (leaf() ? (1<<15) : 0);
 }
 
-inline char* BulkBlock::data() {
+inline char* indri::file::BulkBlock::data() {
   return _buffer;
 }
 
-int BulkBlock::dataSize() {
+int indri::file::BulkBlock::dataSize() {
   return BULK_BLOCK_SIZE;
 }
 
@@ -253,14 +263,14 @@ int BulkBlock::dataSize() {
 // getID
 //
 
-UINT32 BulkBlock::getID() {
+UINT32 indri::file::BulkBlock::getID() {
   return _id;
 }
 
 //
 // setID
 
-void BulkBlock::setID( UINT32 id ) {
+void indri::file::BulkBlock::setID( UINT32 id ) {
   _id = id;
 }
 //
@@ -269,7 +279,7 @@ void BulkBlock::setID( UINT32 id ) {
 // link
 //
 
-void BulkBlock::link( BulkBlock* previous, BulkBlock* next ) {
+void indri::file::BulkBlock::link( indri::file::BulkBlock* previous, indri::file::BulkBlock* next ) {
   _previous = previous;
   _next = next;
 
@@ -284,7 +294,7 @@ void BulkBlock::link( BulkBlock* previous, BulkBlock* next ) {
 // unlink
 //
 
-void BulkBlock::unlink() {
+void indri::file::BulkBlock::unlink() {
   if( _previous )
     _previous->_next = _next;
 
@@ -298,7 +308,7 @@ void BulkBlock::unlink() {
 // next
 //
 
-BulkBlock* BulkBlock::next() {
+indri::file::BulkBlock* indri::file::BulkBlock::next() {
   return _next;
 }
 
@@ -306,7 +316,7 @@ BulkBlock* BulkBlock::next() {
 // previous
 //
 
-BulkBlock* BulkBlock::previous() {
+indri::file::BulkBlock* indri::file::BulkBlock::previous() {
   return _previous;
 }
 
@@ -316,28 +326,28 @@ BulkBlock* BulkBlock::previous() {
 // ==============
 
 
-void BulkTreeWriter::_flush( int blockIndex ) {
-  BulkBlock& flusher = *_blocks[blockIndex];
+void indri::file::BulkTreeWriter::_flush( int blockIndex ) {
+  indri::file::BulkBlock& flusher = *_blocks[blockIndex];
 
   if( blockIndex < _blocks.size() - 1 ) {
-    BulkBlock& parent = *_blocks[blockIndex+1];
+    indri::file::BulkBlock& parent = *_blocks[blockIndex+1];
     
     if( ! parent.insertFirstKey( flusher, _blockID ) ) {
       _flush( blockIndex+1 );
       parent.insertFirstKey( flusher, _blockID );
     } 
   } else {
-    _blocks.push_back( new BulkBlock );
+    _blocks.push_back( new indri::file::BulkBlock );
     _blocks.back()->insertFirstKey( flusher, _blockID );
   }
 
-  _write.write( flusher.data(), BulkBlock::dataSize() );
+  _write.write( flusher.data(), indri::file::BulkBlock::dataSize() );
   flusher.clear();
   _blockID++;
   _flushLevel = lemur_compat::max( blockIndex, _flushLevel );
 }
 
-void BulkTreeWriter::_flushAll() {
+void indri::file::BulkTreeWriter::_flushAll() {
   // note: _flushLevel may grow during this loop
   int originalSize = _blocks.size();
 
@@ -353,7 +363,7 @@ void BulkTreeWriter::_flushAll() {
   }
 }
 
-BulkTreeWriter::BulkTreeWriter() :
+indri::file::BulkTreeWriter::BulkTreeWriter() :
   _write( _file, 1024*1024 )
 {
   _blockID = 0;
@@ -361,24 +371,24 @@ BulkTreeWriter::BulkTreeWriter() :
   _flushLevel = 0;
 }
 
-BulkTreeWriter::~BulkTreeWriter() {
-  delete_vector_contents( _blocks );
+indri::file::BulkTreeWriter::~BulkTreeWriter() {
+  indri::utility::delete_vector_contents( _blocks );
 }
 
-void BulkTreeWriter::create( const std::string& filename ) {
+void indri::file::BulkTreeWriter::create( const std::string& filename ) {
   _file.create( filename );
 }
 
-void BulkTreeWriter::put( UINT32 key, const char* value, int valueLength ) {
+void indri::file::BulkTreeWriter::put( UINT32 key, const char* value, int valueLength ) {
   key = htonl( key );
   put( (const char*) &key, sizeof(key), value, valueLength );
 }
 
-void BulkTreeWriter::put( const char* key, const char* value, int valueLength ) {
+void indri::file::BulkTreeWriter::put( const char* key, const char* value, int valueLength ) {
   put( key, strlen(key), value, valueLength );
 }
 
-void BulkTreeWriter::put( const char* key, int keyLength, const char* value, int valueLength ) {
+void indri::file::BulkTreeWriter::put( const char* key, int keyLength, const char* value, int valueLength ) {
   bool simple = _blocks.front()->insert( key, keyLength, value, valueLength );
 
   if( !simple ) {
@@ -387,28 +397,28 @@ void BulkTreeWriter::put( const char* key, int keyLength, const char* value, int
   }
 }
 
-bool BulkTreeWriter::get( const char* key, int keyLength, char* value, int& actual, int valueLength ) {
-  BulkTreeReader reader( _file, _blockID*BulkBlock::dataSize() );
+bool indri::file::BulkTreeWriter::get( const char* key, int keyLength, char* value, int& actual, int valueLength ) {
+  indri::file::BulkTreeReader reader( _file, _blockID*indri::file::BulkBlock::dataSize() );
   return reader.get( key, keyLength, value, actual, valueLength );
 }
 
-bool BulkTreeWriter::get( const char* key, char* value, int& actual, int valueLength ) {
-  BulkTreeReader reader( _file, _blockID*BulkBlock::dataSize() );
+bool indri::file::BulkTreeWriter::get( const char* key, char* value, int& actual, int valueLength ) {
+  indri::file::BulkTreeReader reader( _file, _blockID*indri::file::BulkBlock::dataSize() );
   return reader.get( key, value, actual, valueLength );
 }
 
-bool BulkTreeWriter::get( UINT32 key, char* value, int& actual, int valueLength ) {
-  BulkTreeReader reader( _file, _blockID*BulkBlock::dataSize() );
+bool indri::file::BulkTreeWriter::get( UINT32 key, char* value, int& actual, int valueLength ) {
+  indri::file::BulkTreeReader reader( _file, _blockID*indri::file::BulkBlock::dataSize() );
   return reader.get( key, value, actual, valueLength );
 }
 
-void BulkTreeWriter::close() { 
+void indri::file::BulkTreeWriter::close() { 
   _flushAll();
   _write.flush();
   _file.close();
 }
 
-void BulkTreeWriter::flush() {
+void indri::file::BulkTreeWriter::flush() {
   _flushAll();
   _write.flush();
 }
@@ -417,21 +427,21 @@ void BulkTreeWriter::flush() {
 // BulkTreeReader
 // ==============
 
-BulkBlock* BulkTreeReader::_fetch( UINT32 id ) {
-  assert( id < _fileLength / BulkBlock::dataSize() );
-  BulkBlock** result = _cache.find( id );
-  BulkBlock* block;
+indri::file::BulkBlock* indri::file::BulkTreeReader::_fetch( UINT32 id ) {
+  assert( id < _fileLength / indri::file::BulkBlock::dataSize() );
+  indri::file::BulkBlock** result = _cache.find( id );
+  indri::file::BulkBlock* block;
 
   if( !result ) {
-    if( _cache.size() == 256 ) {
+    if( _cache.size() >= 256 ) {
       block = _tail;
       _tail = block->previous();
       _cache.remove( block->getID() );
     } else {
-      block = new BulkBlock;
+      block = new indri::file::BulkBlock;
     }
 
-    _file->read( block->data(), id*BulkBlock::dataSize(), BulkBlock::dataSize() );
+    _file->read( block->data(), id*indri::file::BulkBlock::dataSize(), indri::file::BulkBlock::dataSize() );
     block->setID( id );
     _cache.insert( id, block );
   } else {
@@ -447,11 +457,13 @@ BulkBlock* BulkTreeReader::_fetch( UINT32 id ) {
   if( _tail == 0 )
     _tail = block;
   _head = block;
+
+  assert( _cache.size() <= 256 );
   
   return block;
 }
 
-BulkTreeReader::BulkTreeReader( File& file ) :
+indri::file::BulkTreeReader::BulkTreeReader( File& file ) :
   _file(&file),
   _ownFile(false),
   _head(0),
@@ -459,7 +471,7 @@ BulkTreeReader::BulkTreeReader( File& file ) :
 {
 }
 
-BulkTreeReader::BulkTreeReader( File& file, UINT64 length ) :
+indri::file::BulkTreeReader::BulkTreeReader( File& file, UINT64 length ) :
   _file(&file),
   _ownFile(false),
   _fileLength(length),
@@ -468,7 +480,7 @@ BulkTreeReader::BulkTreeReader( File& file, UINT64 length ) :
 {
 }
 
-BulkTreeReader::BulkTreeReader() :
+indri::file::BulkTreeReader::BulkTreeReader() :
   _ownFile(false),
   _file(0),
   _head(0),
@@ -476,30 +488,30 @@ BulkTreeReader::BulkTreeReader() :
 {
 }
 
-BulkTreeReader::~BulkTreeReader() {
-  HashTable< UINT32, BulkBlock* >::iterator iter;
+indri::file::BulkTreeReader::~BulkTreeReader() {
+  indri::utility::HashTable< UINT32, indri::file::BulkBlock* >::iterator iter;
 
   for( iter = _cache.begin(); iter != _cache.end(); iter++ ) {
     delete *iter->second;
   }
 }
 
-void BulkTreeReader::openRead( const std::string& filename ) {
+void indri::file::BulkTreeReader::openRead( const std::string& filename ) {
   _file = new File;
   _file->open( filename );
   _fileLength = _file->size();
   _ownFile = true;
 }
 
-void BulkTreeReader::close() {
+void indri::file::BulkTreeReader::close() {
   if( _ownFile ) {
     _file->close();
     delete _file;
   }
 }
 
-bool BulkTreeReader::get( const char* key, int keyLength, char* value, int& actual, int valueLength ) {
-  BulkBlock* block = 0;
+bool indri::file::BulkTreeReader::get( const char* key, int keyLength, char* value, int& actual, int valueLength ) {
+  indri::file::BulkBlock* block = 0;
   int rootID = int(_fileLength / BULK_BLOCK_SIZE) - 1;
 
   if( rootID < 0 )
@@ -526,11 +538,11 @@ bool BulkTreeReader::get( const char* key, int keyLength, char* value, int& actu
   return block->find( key, keyLength, value, actual, valueLength );
 }
 
-bool BulkTreeReader::get( const char* key, char* value, int& actual, int valueLength ) {
+bool indri::file::BulkTreeReader::get( const char* key, char* value, int& actual, int valueLength ) {
   return get(key, strlen(key), value, actual, valueLength);
 }
 
-bool BulkTreeReader::get( UINT32 key, char* value, int& actual, int valueLength ) {
+bool indri::file::BulkTreeReader::get( UINT32 key, char* value, int& actual, int valueLength ) {
   key = htonl( key );
   return get( (const char*) &key, sizeof(key), value, actual, valueLength );
 }

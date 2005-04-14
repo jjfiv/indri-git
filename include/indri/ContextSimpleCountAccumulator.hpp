@@ -20,33 +20,41 @@
 #include <string>
 #include <vector>
 
-class ContextSimpleCountAccumulator : public EvaluatorNode {
-private:
-  std::string _name;
+namespace indri
+{
+  namespace infnet
+  {
+    
+    class ContextSimpleCountAccumulator : public EvaluatorNode {
+    private:
+      std::string _name;
 
-  std::vector<std::string> _terms;
-  std::string _field;
-  std::string _context;
+      std::vector<std::string> _terms;
+      std::string _field;
+      std::string _context;
 
-  UINT64 _occurrences;
-  UINT64 _size;
-  int _maximumDocument;
+      UINT64 _occurrences;
+      UINT64 _size;
+      int _maximumDocument;
 
-  EvaluatorNode::MResults _results;
+      EvaluatorNode::MResults _results;
 
-  void _computeCounts( indri::index::Index& index );
+      void _computeCounts( indri::index::Index& index );
 
-public:
-  ContextSimpleCountAccumulator( const std::string& nodeName,
-                                 const std::vector<std::string>& terms,
-                                 const std::string& field,
-                                 const std::string& context );
+    public:
+      ContextSimpleCountAccumulator( const std::string& nodeName,
+				     const std::vector<std::string>& terms,
+				     const std::string& field,
+				     const std::string& context );
 
-  const std::string& getName() const;
-  const EvaluatorNode::MResults& getResults();
-  void indexChanged( indri::index::Index& index );
-  void evaluate( int documentID, int documentLength );
-  int nextCandidateDocument();
-};
+      const std::string& getName() const;
+      const EvaluatorNode::MResults& getResults();
+      void indexChanged( indri::index::Index& index );
+      void evaluate( int documentID, int documentLength );
+      int nextCandidateDocument();
+    };
+  }
+}
+
 
 #endif // INDRI_CONTEXTSIMPLECOUNTACCUMULATOR_HPP

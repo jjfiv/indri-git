@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskTermData
@@ -34,7 +44,7 @@ namespace indri {
 // disktermdata_decompress
 //
 
-inline void disktermdata_compress( RVLCompressStream& stream, indri::index::DiskTermData* diskData, int fieldCount, int mode ) {
+inline void disktermdata_compress( indri::utility::RVLCompressStream& stream, indri::index::DiskTermData* diskData, int fieldCount, int mode ) {
   ::termdata_compress( stream, diskData->termData, fieldCount );
 
   if( mode & indri::index::DiskTermData::WithTermID ) {
@@ -55,7 +65,7 @@ inline void disktermdata_compress( RVLCompressStream& stream, indri::index::Disk
 // disktermdata_decompress
 //
 
-inline indri::index::DiskTermData* disktermdata_decompress( RVLDecompressStream& stream, void* buffer, int fieldCount, int mode ) {
+inline indri::index::DiskTermData* disktermdata_decompress( indri::utility::RVLDecompressStream& stream, void* buffer, int fieldCount, int mode ) {
   indri::index::DiskTermData* diskData = (indri::index::DiskTermData*) buffer;
 
   int termDataSize = ::termdata_size( fieldCount );
@@ -113,12 +123,12 @@ inline indri::index::DiskTermData* disktermdata_create( int fieldCount ) {
   indri::index::DiskTermData* diskTermData = (indri::index::DiskTermData*) dataBlock;
 
   diskTermData->termData = (indri::index::TermData*) (dataBlock +
-                           sizeof (indri::index::DiskTermData));
-  new(diskTermData->termData) indri::index::TermData;
+						      sizeof (indri::index::DiskTermData));
+  termdata_construct( diskTermData->termData, fieldCount );
 
   diskTermData->termData->term = dataBlock +
-                           sizeof (indri::index::DiskTermData) +
-                           termdata_size( fieldCount );
+    sizeof (indri::index::DiskTermData) +
+    termdata_size( fieldCount );
   const_cast<char*>(diskTermData->termData->term)[0] = 0;
 
   return diskTermData;
@@ -128,7 +138,7 @@ inline indri::index::DiskTermData* disktermdata_create( int fieldCount ) {
 // disktermdata_decompress
 //
 
-inline indri::index::DiskTermData* disktermdata_decompress( RVLDecompressStream& stream, int fieldCount, int mode ) {
+inline indri::index::DiskTermData* disktermdata_decompress( indri::utility::RVLDecompressStream& stream, int fieldCount, int mode ) {
   // how much space are we going to need?
   int totalSize = disktermdata_size( fieldCount );
 

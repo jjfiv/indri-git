@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskDocumentDataIterator
@@ -17,15 +27,15 @@ namespace indri {
   namespace index {
     class DiskDocumentDataIterator : public DocumentDataIterator {
     private:
-      SequentialReadBuffer* _readBuffer;
+      indri::file::SequentialReadBuffer* _readBuffer;
       UINT64 _fileSize;
 
       DocumentData _documentData;
-      File& _documentDataFile;
+      indri::file::File& _documentDataFile;
       bool _finished;
 
     public:
-      DiskDocumentDataIterator( File& documentDataFile );
+      DiskDocumentDataIterator( indri::file::File& documentDataFile );
       ~DiskDocumentDataIterator();
 
       void startIteration();

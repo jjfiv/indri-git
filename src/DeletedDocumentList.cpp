@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DeletedDocumentList
@@ -15,7 +25,7 @@
 // DeletedDocumentList constructor
 //
 
-DeletedDocumentList::DeletedDocumentList() :
+indri::index::DeletedDocumentList::DeletedDocumentList() :
   _readLock( _lock ),
   _writeLock( _lock )
 {
@@ -25,7 +35,7 @@ DeletedDocumentList::DeletedDocumentList() :
 // read_transaction constructor
 //
 
-DeletedDocumentList::read_transaction::read_transaction( DeletedDocumentList& list ) :
+indri::index::DeletedDocumentList::read_transaction::read_transaction( DeletedDocumentList& list ) :
   _lock(list._lock),
   _bitmap(list._bitmap)
 {
@@ -36,7 +46,7 @@ DeletedDocumentList::read_transaction::read_transaction( DeletedDocumentList& li
 // ~read_transaction constructor
 //
 
-DeletedDocumentList::read_transaction::~read_transaction() {
+indri::index::DeletedDocumentList::read_transaction::~read_transaction() {
   _lock.unlockRead();
 }
 
@@ -44,7 +54,7 @@ DeletedDocumentList::read_transaction::~read_transaction() {
 // grow
 //
 
-void DeletedDocumentList::_grow( int documentID ) {
+void indri::index::DeletedDocumentList::_grow( int documentID ) {
   // just set an appropriate number of bytes to zero
   int growBytes = (documentID/8)+1 - _bitmap.position();
   memset( _bitmap.write( growBytes ), 0, growBytes );
@@ -56,7 +66,7 @@ void DeletedDocumentList::_grow( int documentID ) {
 // nextDocument
 //
 
-int DeletedDocumentList::read_transaction::nextCandidateDocument( int documentID ) {
+int indri::index::DeletedDocumentList::read_transaction::nextCandidateDocument( int documentID ) {
   _lock.yieldRead();
 
   while( documentID < _bitmap.position()*8 ) {
@@ -76,7 +86,7 @@ int DeletedDocumentList::read_transaction::nextCandidateDocument( int documentID
 // isDeleted
 //
 
-bool DeletedDocumentList::read_transaction::isDeleted( int documentID ) {
+bool indri::index::DeletedDocumentList::read_transaction::isDeleted( int documentID ) {
   if( _bitmap.position() < (documentID/8)+1 )
     return false;
 
@@ -90,8 +100,8 @@ bool DeletedDocumentList::read_transaction::isDeleted( int documentID ) {
 // markDeleted
 //
 
-void DeletedDocumentList::markDeleted( int documentID ) {
-  ScopedLock l( _writeLock );
+void indri::index::DeletedDocumentList::markDeleted( int documentID ) {
+  indri::thread::ScopedLock l( _writeLock );
 
   if( _bitmap.position() < (documentID/8)+1 ) {
     _grow( documentID );
@@ -104,8 +114,8 @@ void DeletedDocumentList::markDeleted( int documentID ) {
 // isDeleted
 //
 
-bool DeletedDocumentList::isDeleted( int documentID ) {
-  ScopedLock l( _readLock );
+bool indri::index::DeletedDocumentList::isDeleted( int documentID ) {
+  indri::thread::ScopedLock l( _readLock );
   if( _bitmap.position() < (documentID/8)+1 )
     return false;
 
@@ -119,7 +129,7 @@ bool DeletedDocumentList::isDeleted( int documentID ) {
 // getReadTransaction
 //
 
-DeletedDocumentList::read_transaction* DeletedDocumentList::getReadTransaction() {
+indri::index::DeletedDocumentList::read_transaction* indri::index::DeletedDocumentList::getReadTransaction() {
   return new read_transaction( *this );
 }
 
@@ -127,8 +137,8 @@ DeletedDocumentList::read_transaction* DeletedDocumentList::getReadTransaction()
 // read
 //
 
-void DeletedDocumentList::read( const std::string& filename ) {
-  File file;
+void indri::index::DeletedDocumentList::read( const std::string& filename ) {
+  indri::file::File file;
 
   if( !file.openRead( filename ) )
     LEMUR_THROW( LEMUR_IO_ERROR, "Unable to open file: " + filename );
@@ -142,11 +152,11 @@ void DeletedDocumentList::read( const std::string& filename ) {
 // write
 //
 
-void DeletedDocumentList::write( const std::string& filename ) {
-  File file;
+void indri::index::DeletedDocumentList::write( const std::string& filename ) {
+  indri::file::File file;
 
-  if( Path::exists( filename ) )
-    Path::remove( filename );
+  if( indri::file::Path::exists( filename ) )
+    indri::file::Path::remove( filename );
   if( !file.create( filename ) )
     LEMUR_THROW( LEMUR_IO_ERROR, "Unable to create file: "  + filename );
 

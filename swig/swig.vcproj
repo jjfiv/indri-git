@@ -24,6 +24,7 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -33,7 +34,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/swig.dll"
+				OutputFile="$(OutDir)/indri.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/swig.pdb"
@@ -69,9 +70,11 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="C:\j2sdk1.4.2_05\include;C:\j2sdk1.4.2_05\include\win32;S:\Development\indri\include;S:\Development\indri\contrib\lemur\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SWIG_EXPORTS"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
@@ -79,7 +82,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/swig.dll"
+				AdditionalDependencies="wsock32.lib"
+				OutputFile="$(OutDir)/indri.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
@@ -119,14 +123,14 @@
 			<File
 				RelativePath=".\src\java\indri_javawrap.cpp">
 			</File>
-			<File
-				RelativePath=".\src\java\indri_javawrap.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath=".\src\java\indri_javawrap.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

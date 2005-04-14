@@ -31,10 +31,10 @@ const static int CLOSE_ITERATOR_RANGE = 5000;
 // _moveDocListIterators
 //
 
-inline void InferenceNetwork::_moveDocListIterators( int candidate ) {
+inline void indri::infnet::InferenceNetwork::_moveDocListIterators( int candidate ) {
   if( _closeIterators.size() && candidate < _closeIteratorBound ) {
     // we're close to this document, so only advance the iterators that are close
-    greedy_vector<indri::index::DocListIterator*>::iterator iter;
+    indri::utility::greedy_vector<indri::index::DocListIterator*>::iterator iter;
 
     for( iter = _closeIterators.begin(); iter != _closeIterators.end(); iter++ ) {
       (*iter)->nextEntry( candidate );
@@ -62,7 +62,7 @@ inline void InferenceNetwork::_moveDocListIterators( int candidate ) {
 // _moveToDocument
 //
 
-void InferenceNetwork::_moveToDocument( int candidate ) {
+void indri::infnet::InferenceNetwork::_moveToDocument( int candidate ) {
   // move all document iterators
   _moveDocListIterators( candidate );
 
@@ -84,19 +84,19 @@ void InferenceNetwork::_moveToDocument( int candidate ) {
 // _indexFinished
 //
 
-void InferenceNetwork::_indexFinished( indri::index::Index& index ) {
+void indri::infnet::InferenceNetwork::_indexFinished( indri::index::Index& index ) {
   // doc iterators
-  delete_vector_contents<indri::index::DocListIterator*>( _docIterators );
+  indri::utility::delete_vector_contents<indri::index::DocListIterator*>( _docIterators );
 
   // field iterators
-  delete_vector_contents<indri::index::DocExtentListIterator*>( _fieldIterators );
+  indri::utility::delete_vector_contents<indri::index::DocExtentListIterator*>( _fieldIterators );
 }
 
 //
 // _indexChanged
 //
 
-void InferenceNetwork::_indexChanged( indri::index::Index& index ) {
+void indri::infnet::InferenceNetwork::_indexChanged( indri::index::Index& index ) {
   _closeIterators.clear();
   _closeIteratorBound = -1;
 
@@ -131,7 +131,7 @@ void InferenceNetwork::_indexChanged( indri::index::Index& index ) {
   }
 
   // evaluator nodes
-  std::vector<EvaluatorNode*>::iterator eiter;
+  std::vector<indri::infnet::EvaluatorNode*>::iterator eiter;
   for( eiter = _evaluators.begin(); eiter != _evaluators.end(); eiter++ ) {
     (*eiter)->indexChanged( index );
   }
@@ -141,7 +141,7 @@ void InferenceNetwork::_indexChanged( indri::index::Index& index ) {
 // _nextCandidateDocument
 //
 
-int InferenceNetwork::_nextCandidateDocument( DeletedDocumentList::read_transaction* deleted ) {
+int indri::infnet::InferenceNetwork::_nextCandidateDocument( indri::index::DeletedDocumentList::read_transaction* deleted ) {
   int candidate = MAX_INT32;
 
   for( unsigned int i=0; i<_complexEvaluators.size(); i++ ) {
@@ -155,7 +155,7 @@ int InferenceNetwork::_nextCandidateDocument( DeletedDocumentList::read_transact
 // _evaluateDocument
 //
 
-void InferenceNetwork::_evaluateDocument( indri::index::Index& index, int document ) {
+void indri::infnet::InferenceNetwork::_evaluateDocument( indri::index::Index& index, int document ) {
   int candidateLength = index.documentLength( document );
 
   for( unsigned int i=0; i<_complexEvaluators.size(); i++ ) {
@@ -167,7 +167,7 @@ void InferenceNetwork::_evaluateDocument( indri::index::Index& index, int docume
 // InferenceNetwork constructor
 //
 
-InferenceNetwork::InferenceNetwork( Repository& repository ) :
+indri::infnet::InferenceNetwork::InferenceNetwork( indri::collection::Repository& repository ) :
   _repository(repository),
   _closeIteratorBound(-1)
 {
@@ -177,59 +177,59 @@ InferenceNetwork::InferenceNetwork( Repository& repository ) :
 // InferenceNetwork destructor
 //
 
-InferenceNetwork::~InferenceNetwork() {
-  delete_vector_contents<indri::index::DocExtentListIterator*>( _fieldIterators );
-  delete_vector_contents<indri::index::DocListIterator*>( _docIterators );
-  delete_vector_contents<ListIteratorNode*>( _listIteratorNodes );
-  delete_vector_contents<BeliefNode*>( _beliefNodes );
-  delete_vector_contents<TermScoreFunction*>( _scoreFunctions );
-  delete_vector_contents<EvaluatorNode*>( _evaluators );
+indri::infnet::InferenceNetwork::~InferenceNetwork() {
+  indri::utility::delete_vector_contents<indri::index::DocExtentListIterator*>( _fieldIterators );
+  indri::utility::delete_vector_contents<indri::index::DocListIterator*>( _docIterators );
+  indri::utility::delete_vector_contents<indri::infnet::ListIteratorNode*>( _listIteratorNodes );
+  indri::utility::delete_vector_contents<indri::infnet::BeliefNode*>( _beliefNodes );
+  indri::utility::delete_vector_contents<indri::query::TermScoreFunction*>( _scoreFunctions );
+  indri::utility::delete_vector_contents<indri::infnet::EvaluatorNode*>( _evaluators );
 }
 
-indri::index::DocListIterator* InferenceNetwork::getDocIterator( int index ) {
+indri::index::DocListIterator* indri::infnet::InferenceNetwork::getDocIterator( int index ) {
   return _docIterators[index];
 }
 
-indri::index::DocExtentListIterator* InferenceNetwork::getFieldIterator( int index ) {
+indri::index::DocExtentListIterator* indri::infnet::InferenceNetwork::getFieldIterator( int index ) {
   return _fieldIterators[index];
 }
 
-int InferenceNetwork::addDocIterator( const std::string& termName ) {
+int indri::infnet::InferenceNetwork::addDocIterator( const std::string& termName ) {
   _termNames.push_back( termName );
   return _termNames.size()-1;
 }
 
-int InferenceNetwork::addFieldIterator( const std::string& fieldName ) {
+int indri::infnet::InferenceNetwork::addFieldIterator( const std::string& fieldName ) {
   _fieldNames.push_back( fieldName );
   return _fieldNames.size()-1;
 }
 
-void InferenceNetwork::addListNode( ListIteratorNode* listNode ) {
+void indri::infnet::InferenceNetwork::addListNode( indri::infnet::ListIteratorNode* listNode ) {
   _listIteratorNodes.push_back( listNode );
 }
 
-void InferenceNetwork::addBeliefNode( BeliefNode* beliefNode ) {
+void indri::infnet::InferenceNetwork::addBeliefNode( indri::infnet::BeliefNode* beliefNode ) {
   _beliefNodes.push_back( beliefNode );
 }
 
-void InferenceNetwork::addEvaluatorNode( EvaluatorNode* evaluatorNode ) {
+void indri::infnet::InferenceNetwork::addEvaluatorNode( EvaluatorNode* evaluatorNode ) {
   _evaluators.push_back( evaluatorNode );
 }
 
-void InferenceNetwork::addScoreFunction( TermScoreFunction* scoreFunction ) {
+void indri::infnet::InferenceNetwork::addScoreFunction( indri::query::TermScoreFunction* scoreFunction ) {
   _scoreFunctions.push_back( scoreFunction );
 }
 
-void InferenceNetwork::addComplexEvaluatorNode( EvaluatorNode* complexEvaluator ) {
+void indri::infnet::InferenceNetwork::addComplexEvaluatorNode( indri::infnet::EvaluatorNode* complexEvaluator ) {
   _complexEvaluators.push_back( complexEvaluator );
 }
 
-const std::vector<EvaluatorNode*>& InferenceNetwork::getEvaluators() const {
+const std::vector<indri::infnet::EvaluatorNode*>& indri::infnet::InferenceNetwork::getEvaluators() const {
   return _evaluators;
 }
 
-void InferenceNetwork::_evaluateIndex( indri::index::Index& index ) {
-  DeletedDocumentList::read_transaction* deleted = _repository.deletedList().getReadTransaction();
+void indri::infnet::InferenceNetwork::_evaluateIndex( indri::index::Index& index ) {
+  indri::index::DeletedDocumentList::read_transaction* deleted = _repository.deletedList().getReadTransaction();
 
   int lastCandidate = MAX_INT32;
   int collectionSize = index.documentBase() + index.documentCount();
@@ -281,18 +281,18 @@ void InferenceNetwork::_evaluateIndex( indri::index::Index& index ) {
 // evaluate
 //
 
-const InferenceNetwork::MAllResults& InferenceNetwork::evaluate() {
+const indri::infnet::InferenceNetwork::MAllResults& indri::infnet::InferenceNetwork::evaluate() {
   // count this query occurrence
   _repository.countQuery();
 
   // fetch the current index state
-  Repository::index_state indexes = _repository.indexes();
+  indri::collection::Repository::index_state indexes = _repository.indexes();
   
   for( int i=0; i<indexes->size(); i++ ) {
     indri::index::Index& index = *(*indexes)[i];
-    ScopedLock iterators( index.iteratorLock() );
+    indri::thread::ScopedLock iterators( index.iteratorLock() );
 
-    ScopedLock statistics( index.statisticsLock() );
+    indri::thread::ScopedLock statistics( index.statisticsLock() );
     _indexChanged( index );
     statistics.unlock();
 

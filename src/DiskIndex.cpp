@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskIndex
@@ -20,10 +30,10 @@
 #include "indri/DiskTermListFileIterator.hpp"
 
 void indri::index::DiskIndex::_readManifest( const std::string& path ) {
-  Parameters manifest;
+  indri::api::Parameters manifest;
   manifest.loadFile( path );
 
-  Parameters corpus = manifest["corpus"];
+  indri::api::Parameters corpus = manifest["corpus"];
 
   _corpusStatistics.totalDocuments = (int) corpus["total-documents"];
   _corpusStatistics.totalTerms = (INT64) corpus["total-terms"];
@@ -32,10 +42,10 @@ void indri::index::DiskIndex::_readManifest( const std::string& path ) {
   _documentBase = (int) corpus["document-base"];
 
   if( manifest.exists("fields") ) {
-    Parameters fields = manifest["fields"];
+    indri::api::Parameters fields = manifest["fields"];
 
     if( fields.exists("field") ) {
-      Parameters field = fields["field"];
+      indri::api::Parameters field = fields["field"];
 
       for( int i=0; i<field.size(); i++ ) {
         bool numeric = field[i].get( "isNumeric", false );
@@ -56,18 +66,18 @@ void indri::index::DiskIndex::_readManifest( const std::string& path ) {
 void indri::index::DiskIndex::open( const std::string& base, const std::string& relative ) {
   _path = relative;
 
-  std::string path = Path::combine( base, relative );
+  std::string path = indri::file::Path::combine( base, relative );
 
-  std::string frequentStringPath = Path::combine( path, "frequentString" );
-  std::string infrequentStringPath = Path::combine( path, "infrequentString" );
-  std::string frequentIDPath = Path::combine( path, "frequentID" );
-  std::string infrequentIDPath = Path::combine( path, "infrequentID" );
-  std::string frequentTermsDataPath = Path::combine( path, "frequentTerms" );
-  std::string documentLengthsPath = Path::combine( path, "documentLengths" );
-  std::string documentStatisticsPath = Path::combine( path, "documentStatistics" );
-  std::string invertedFilePath = Path::combine( path, "invertedFile" );
-  std::string directFilePath = Path::combine( path, "directFile" );
-  std::string manifestPath = Path::combine( path, "manifest" );
+  std::string frequentStringPath = indri::file::Path::combine( path, "frequentString" );
+  std::string infrequentStringPath = indri::file::Path::combine( path, "infrequentString" );
+  std::string frequentIDPath = indri::file::Path::combine( path, "frequentID" );
+  std::string infrequentIDPath = indri::file::Path::combine( path, "infrequentID" );
+  std::string frequentTermsDataPath = indri::file::Path::combine( path, "frequentTerms" );
+  std::string documentLengthsPath = indri::file::Path::combine( path, "documentLengths" );
+  std::string documentStatisticsPath = indri::file::Path::combine( path, "documentStatistics" );
+  std::string invertedFilePath = indri::file::Path::combine( path, "invertedFile" );
+  std::string directFilePath = indri::file::Path::combine( path, "directFile" );
+  std::string manifestPath = indri::file::Path::combine( path, "manifest" );
 
   _readManifest( manifestPath );
 
@@ -89,9 +99,9 @@ void indri::index::DiskIndex::open( const std::string& base, const std::string& 
   for( int field=1; field <= _fieldData.size(); field++ ) {
     std::stringstream fieldFilename;
     fieldFilename << "field" << field;
-    std::string fieldPath = Path::combine( path, fieldFilename.str() );
+    std::string fieldPath = indri::file::Path::combine( path, fieldFilename.str() );
 
-    File* fieldFile = new File();
+      indri::file::File* fieldFile = new indri::file::File();
     fieldFile->openRead( fieldPath );
 
     _fieldFiles.push_back( fieldFile );
@@ -103,7 +113,7 @@ void indri::index::DiskIndex::open( const std::string& base, const std::string& 
 //
 
 void indri::index::DiskIndex::close() {
-  delete_vector_contents( _fieldFiles );
+  indri::utility::delete_vector_contents( _fieldFiles );
 
   _frequentStringToTerm.close();
   _infrequentStringToTerm.close();
@@ -139,7 +149,7 @@ indri::index::DiskTermData* indri::index::DiskIndex::_fetchTermData( int termID 
     return 0;
   assert( result );
 
-  RVLDecompressStream stream( buffer, actual );
+  indri::utility::RVLDecompressStream stream( buffer, actual );
   return disktermdata_decompress( stream, _fieldData.size(), DiskTermData::WithString | DiskTermData::WithOffsets );
 }
 
@@ -163,7 +173,7 @@ indri::index::DiskTermData* indri::index::DiskIndex::_fetchTermData( const char*
     adjust = _infrequentTermBase;
   }
   assert( result );
-  RVLDecompressStream stream( buffer, actual );
+  indri::utility::RVLDecompressStream stream( buffer, actual );
 
   indri::index::DiskTermData* diskTermData = disktermdata_decompress( stream,
                                                                       _fieldData.size(),
@@ -410,7 +420,7 @@ indri::index::DocListIterator* indri::index::DiskIndex::docListIterator( int ter
   // truncate the length argument at 1MB, use it to pick a size for the readbuffer
   length = lemur_compat::min<INT64>( length, 1024*1024 );
 
-  return new DiskDocListIterator( new SequentialReadBuffer( _invertedFile, length ), startOffset, 0 );
+  return new DiskDocListIterator( new indri::file::SequentialReadBuffer( _invertedFile, length ), startOffset, 0 );
 }
 
 //
@@ -432,7 +442,7 @@ indri::index::DocListIterator* indri::index::DiskIndex::docListIterator( const s
   // truncate the length argument at 1MB, use it to pick a size for the readbuffer
   length = lemur_compat::min<INT64>( length, 1024*1024 );
 
-  return new DiskDocListIterator( new SequentialReadBuffer( _invertedFile, length ), startOffset, _fieldData.size() );
+  return new DiskDocListIterator( new indri::file::SequentialReadBuffer( _invertedFile, length ), startOffset, _fieldData.size() );
 }
 
 //
@@ -452,8 +462,8 @@ indri::index::DocExtentListIterator* indri::index::DiskIndex::fieldListIterator(
     return 0;
   }
 
-  File* fieldFile = _fieldFiles[fieldID-1];
-  return new DiskDocExtentListIterator( new SequentialReadBuffer( *fieldFile ), 0 );
+  indri::file::File* fieldFile = _fieldFiles[fieldID-1];
+  return new DiskDocExtentListIterator( new indri::file::SequentialReadBuffer( *fieldFile ), 0 );
 }
 
 //
@@ -466,8 +476,8 @@ indri::index::DocExtentListIterator* indri::index::DiskIndex::fieldListIterator(
   if( fieldID == 0 )
     return 0;
 
-  File* fieldFile = _fieldFiles[fieldID-1];
-  return new DiskDocExtentListIterator( new SequentialReadBuffer( *fieldFile ), 0 );
+  indri::file::File* fieldFile = _fieldFiles[fieldID-1];
+  return new DiskDocExtentListIterator( new indri::file::SequentialReadBuffer( *fieldFile ), 0 );
 }
 
 //
@@ -536,7 +546,7 @@ indri::index::DocumentDataIterator* indri::index::DiskIndex::documentDataIterato
 // iteratorLock
 //
 
-Lockable* indri::index::DiskIndex::iteratorLock() {
+indri::thread::Lockable* indri::index::DiskIndex::iteratorLock() {
   return 0;
 }
 
@@ -544,7 +554,7 @@ Lockable* indri::index::DiskIndex::iteratorLock() {
 // statisticsLock
 //
 
-Lockable* indri::index::DiskIndex::statisticsLock() {
+indri::thread::Lockable* indri::index::DiskIndex::statisticsLock() {
   return &_lock;
 }
 

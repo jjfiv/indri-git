@@ -273,7 +273,7 @@ void parseddocument_init( JNIEnv* jenv, jni_parseddocument_info& info ) {
   info.endField = jenv->GetFieldID(info.teClazz, "end", "I");
 }
 
-jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, ParsedDocument* doc ) {
+jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri::api::ParsedDocument* doc ) {
   // make a parsed document
   jobject result = jenv->NewObject(info.pdClazz, info.pdConstructor);
 
@@ -282,7 +282,7 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, Parsed
 
   // copy metadata information
   for( unsigned int i=0; i<doc->metadata.size(); i++ ) {
-    MetadataPair& pair = doc->metadata[i];
+    indri::parse::MetadataPair& pair = doc->metadata[i];
 
     jstring key = jenv->NewStringUTF(pair.key);
     jbyteArray value = jenv->NewByteArray(pair.valueLength);
@@ -331,7 +331,7 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, Parsed
 
 
 
-jobject java_build_queryannotationnode( QueryAnnotationNode* in,
+jobject java_build_queryannotationnode( indri::api::QueryAnnotationNode* in,
                                    JNIEnv* jenv,
                                    jclass qanClazz,
                                    jmethodID qanConst ) {
@@ -353,7 +353,7 @@ jobject java_build_queryannotationnode( QueryAnnotationNode* in,
 
 
 
-jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<ScoredExtentResult>& input ) {
+jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<indri::api::ScoredExtentResult>& input ) {
   jclass clazz = jenv->FindClass("edu/umass/cs/indri/ScoredExtentResult");
   jmethodID constructor = jenv->GetMethodID(clazz, "<init>", "()V" );
   jobjectArray result;
@@ -394,8 +394,8 @@ struct jni_parameters_info {
   jclass arrayOfString;
 };
 
-void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p, jobject obj );
-void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array );
+void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, jobject obj );
+void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array );
 
 void java_parameters_init( JNIEnv* jenv, jni_parameters_info& info ) {
   info.stringClazz = jenv->FindClass("java/lang/String");
@@ -405,7 +405,7 @@ void java_parameters_init( JNIEnv* jenv, jni_parameters_info& info ) {
   info.arrayOfString = jenv->FindClass("[Ljava/lang/String;");
 }
 
-void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array ) {
+void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array ) {
   // get the array size
   jsize arrayLength = jenv->GetArrayLength(array);
 
@@ -420,7 +420,7 @@ void java_parameters_array_of_strings( JNIEnv* jenv, jni_parameters_info& info, 
   }
 }
 
-void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Parameters p, const std::string& key, jobjectArray array ) {
+void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, const std::string& key, jobjectArray array ) {
   // get the array size
   jsize arrayLength = jenv->GetArrayLength(array);
 
@@ -430,7 +430,7 @@ void java_parameters_array_of_maps( JNIEnv* jenv, jni_parameters_info& info, Par
   }
 }
 
-void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p, jobject mapObj ) {
+void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::Parameters p, jobject mapObj ) {
   // get map class and entrySet method pointer
   jclass mapClazz = jenv->GetObjectClass(mapObj);
   jmethodID mapEntrySet = jenv->GetMethodID(mapClazz, "entrySet", "()Ljava/util/Set;" );
@@ -470,7 +470,7 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p,
       
       p.set( keyString, valueString );
     } else if( jenv->IsInstanceOf( value, info.mapClazz ) ) {
-      Parameters sub = p.append( keyString );
+      indri::api::Parameters sub = p.append( keyString );
       java_parameters_map( jenv, info, p, value );
     } else if( jenv->IsInstanceOf( value, info.arrayOfMaps ) ) {
       java_parameters_array_of_maps( jenv, info, p, keyString, (jobjectArray) value );
@@ -485,7 +485,7 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, Parameters p,
 
 
 
-jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
+jobject documentvector_copy( JNIEnv* jenv, indri::api::DocumentVector* vec ) {
   jobject result;
 
   jclass stringClazz = jenv->FindClass( "java/lang/String" );
@@ -635,7 +635,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  }
  
  jobject specification_copy( JNIEnv* jenv, jni_specification_info& info, 
-			     FileClassEnvironmentFactory::Specification* thisSpec ) {
+			     indri::parse::FileClassEnvironmentFactory::Specification* thisSpec ) {
    jobject result = jenv->NewObject(info.specClazz, info.specConstructor);
    // initialize the fields
    jstring stringField;
@@ -758,7 +758,7 @@ void SwigDirector_IndexStatus::status(int code, std::string const &documentPath,
     jenv = swig_acquire_jenv();
     if (!swig_override[0]) {
         SWIG_JavaThrowException(jenv, SWIG_JavaDirectorPureVirtual,
-        "Attempted to invoke pure virtual method IndexStatus::status.");
+        "Attempted to invoke pure virtual method indri::api::IndexStatus::status.");
         return;
     }
     jcode = (jint) code;
@@ -811,15 +811,15 @@ extern "C" {
 
 JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getQueryTree(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jobject jresult = 0 ;
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    QueryAnnotationNode *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    indri::api::QueryAnnotationNode *result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryAnnotation **)&jarg1; 
+    arg1 = *(indri::api::QueryAnnotation **)&jarg1; 
     {
         try {
-            result = (QueryAnnotationNode *)((QueryAnnotation const *)arg1)->getQueryTree();
+            result = (indri::api::QueryAnnotationNode *)((indri::api::QueryAnnotation const *)arg1)->getQueryTree();
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -843,17 +843,17 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getQ
 
 JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getAnnotations(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jobject jresult = 0 ;
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    EvaluatorNode::MResults *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    indri::infnet::EvaluatorNode::MResults *result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryAnnotation **)&jarg1; 
+    arg1 = *(indri::api::QueryAnnotation **)&jarg1; 
     {
         try {
             {
-                EvaluatorNode::MResults const &_result_ref = ((QueryAnnotation const *)arg1)->getAnnotations();
-                result = (EvaluatorNode::MResults *) &_result_ref;
+                indri::infnet::EvaluatorNode::MResults const &_result_ref = ((indri::api::QueryAnnotation const *)arg1)->getAnnotations();
+                result = (indri::infnet::EvaluatorNode::MResults *) &_result_ref;
             }
             
         } catch( Exception& e ) {
@@ -863,7 +863,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getA
         }
     }
     {
-        EvaluatorNode::MResults::iterator iter;
+        indri::infnet::EvaluatorNode::MResults::iterator iter;
         
         // make the map
         jclass mapClazz = jenv->FindClass("java/util/HashMap");
@@ -881,7 +881,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getA
         jfieldID documentField = jenv->GetFieldID(seClazz, "document", "I" );
         
         for( iter = result->begin(); iter != result->end(); iter++ ) {
-            std::vector<ScoredExtentResult>& vec = iter->second;
+            std::vector<indri::api::ScoredExtentResult>& vec = iter->second;
             
             // make an array for this list of results
             jobjectArray array = jenv->NewObjectArray(vec.size(), seClazz, NULL);
@@ -912,17 +912,17 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getA
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getResults(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jobjectArray jresult = 0 ;
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    std::vector<ScoredExtentResult > *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryAnnotation **)&jarg1; 
+    arg1 = *(indri::api::QueryAnnotation **)&jarg1; 
     {
         try {
             {
-                std::vector<ScoredExtentResult > const &_result_ref = ((QueryAnnotation const *)arg1)->getResults();
-                result = (std::vector<ScoredExtentResult > *) &_result_ref;
+                std::vector<indri::api::ScoredExtentResult > const &_result_ref = ((indri::api::QueryAnnotation const *)arg1)->getResults();
+                result = (std::vector<indri::api::ScoredExtentResult > *) &_result_ref;
             }
             
         } catch( Exception& e ) {
@@ -940,13 +940,13 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryAnnotation(JNIEnv *jenv, jclass jcls) {
     jlong jresult = 0 ;
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     
     (void)jenv;
     (void)jcls;
     {
         try {
-            result = (QueryAnnotation *)new QueryAnnotation();
+            result = (indri::api::QueryAnnotation *)new indri::api::QueryAnnotation();
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -954,17 +954,17 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryAnnotation(JN
             return 0;
         }
     }
-    *(QueryAnnotation **)&jresult = result; 
+    *(indri::api::QueryAnnotation **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryAnnotation(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryAnnotation **)&jarg1; 
+    arg1 = *(indri::api::QueryAnnotation **)&jarg1; 
     {
         try {
             delete arg1;
@@ -979,12 +979,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryAnnotation(
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addServer(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -1008,12 +1008,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addSer
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addIndex(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -1037,12 +1037,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addInd
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1removeServer(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -1066,12 +1066,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1remove
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1removeIndex(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -1095,11 +1095,11 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1remove
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1close(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         try {
             (arg1)->close();
@@ -1114,12 +1114,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1close(
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setMemory(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     UINT64 arg2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     arg2 = (UINT64)jarg2; 
     {
         try {
@@ -1135,13 +1135,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setMem
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setScoringRules(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     std::vector<std::string > strin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg2);
@@ -1170,13 +1170,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSco
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setStopwords(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     std::vector<std::string > strin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg2);
@@ -1206,14 +1206,14 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSto
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runQuery_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jint jarg3) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     int arg3 ;
-    std::vector<ScoredExtentResult > result;
+    std::vector<indri::api::ScoredExtentResult > result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1243,16 +1243,16 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runQuery_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jintArray jarg3, jint jarg4) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::vector<int > *arg3 = 0 ;
     int arg4 ;
-    std::vector<ScoredExtentResult > result;
+    std::vector<indri::api::ScoredExtentResult > result;
     std::vector<int > typemapin3 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1293,14 +1293,14 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAnnotatedQuery_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jint jarg3) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     int arg3 ;
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1313,7 +1313,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
     arg3 = (int)jarg3; 
     {
         try {
-            result = (QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,arg3);
+            result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,arg3);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1321,23 +1321,23 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
             return 0;
         }
     }
-    *(QueryAnnotation **)&jresult = result; 
+    *(indri::api::QueryAnnotation **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAnnotatedQuery_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jintArray jarg3, jint jarg4) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::vector<int > *arg3 = 0 ;
     int arg4 ;
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     std::vector<int > typemapin3 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1361,7 +1361,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
     arg4 = (int)jarg4; 
     {
         try {
-            result = (QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,(std::vector<int > const &)*arg3,arg4);
+            result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,(std::vector<int > const &)*arg3,arg4);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1369,21 +1369,21 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
             return 0;
         }
     }
-    *(QueryAnnotation **)&jresult = result; 
+    *(indri::api::QueryAnnotation **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documents_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jintArray jarg2) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<int > *arg2 = 0 ;
-    std::vector<ParsedDocument * > result;
+    std::vector<indri::api::ParsedDocument * > result;
     std::vector<int > typemapin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jsize arrayLength = jenv->GetArrayLength(jarg2);
         jint* elements = jenv->GetIntArrayElements(jarg2, 0);
@@ -1423,14 +1423,14 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documents_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
-    std::vector<ScoredExtentResult > *arg2 = 0 ;
-    std::vector<ParsedDocument * > result;
-    std::vector<ScoredExtentResult > resin2 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *arg2 = 0 ;
+    std::vector<indri::api::ParsedDocument * > result;
+    std::vector<indri::api::ScoredExtentResult > resin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jsize size = jenv->GetArrayLength(jarg2);
         
@@ -1443,7 +1443,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         
         for( jsize i=0; i<size; i++ ) {
             jobject seobj  = jenv->GetObjectArrayElement(jarg2, i);
-            ScoredExtentResult ser;
+            indri::api::ScoredExtentResult ser;
             
             ser.begin = jenv->GetIntField(seobj, beginField);
             ser.end = jenv->GetIntField(seobj, endField);
@@ -1455,7 +1455,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
     }
     {
         try {
-            result = (arg1)->documents((std::vector<ScoredExtentResult > const &)*arg2);
+            result = (arg1)->documents((std::vector<indri::api::ScoredExtentResult > const &)*arg2);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1481,7 +1481,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentMetadata_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jintArray jarg2, jstring jarg3) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<int > *arg2 = 0 ;
     std::string *arg3 = 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
@@ -1489,7 +1489,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jsize arrayLength = jenv->GetArrayLength(jarg2);
         jint* elements = jenv->GetIntArrayElements(jarg2, 0);
@@ -1536,15 +1536,15 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentMetadata_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2, jstring jarg3) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
-    std::vector<ScoredExtentResult > *arg2 = 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *arg2 = 0 ;
     std::string *arg3 = 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
-    std::vector<ScoredExtentResult > resin2 ;
+    std::vector<indri::api::ScoredExtentResult > resin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jsize size = jenv->GetArrayLength(jarg2);
         
@@ -1557,7 +1557,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         
         for( jsize i=0; i<size; i++ ) {
             jobject seobj  = jenv->GetObjectArrayElement(jarg2, i);
-            ScoredExtentResult ser;
+            indri::api::ScoredExtentResult ser;
             
             ser.begin = jenv->GetIntField(seobj, beginField);
             ser.end = jenv->GetIntField(seobj, endField);
@@ -1578,7 +1578,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
     jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
     {
         try {
-            result = (arg1)->documentMetadata((std::vector<ScoredExtentResult > const &)*arg2,(std::string const &)*arg3);
+            result = (arg1)->documentMetadata((std::vector<indri::api::ScoredExtentResult > const &)*arg2,(std::string const &)*arg3);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1602,12 +1602,12 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termCount_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     INT64 result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         try {
             result = (INT64)(arg1)->termCount();
@@ -1625,13 +1625,13 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termCount_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     INT64 result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1658,14 +1658,14 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termFieldCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     INT64 result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1701,12 +1701,12 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termF
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1fieldList(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         try {
             result = (arg1)->fieldList();
@@ -1733,12 +1733,12 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentCount_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     INT64 result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         try {
             result = (INT64)(arg1)->documentCount();
@@ -1756,13 +1756,13 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentCount_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
     jlong jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     INT64 result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -1789,14 +1789,14 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
 
 JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentVectors(JNIEnv *jenv, jclass jcls, jlong jarg1, jintArray jarg2) {
     jobjectArray jresult = 0 ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<int > *arg2 = 0 ;
-    std::vector<DocumentVector * > result;
+    std::vector<indri::api::DocumentVector * > result;
     std::vector<int > typemapin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         jsize arrayLength = jenv->GetArrayLength(jarg2);
         jint* elements = jenv->GetIntArrayElements(jarg2, 0);
@@ -1834,13 +1834,13 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryEnvironment(JNIEnv *jenv, jclass jcls) {
     jlong jresult = 0 ;
-    QueryEnvironment *result;
+    indri::api::QueryEnvironment *result;
     
     (void)jenv;
     (void)jcls;
     {
         try {
-            result = (QueryEnvironment *)new QueryEnvironment();
+            result = (indri::api::QueryEnvironment *)new indri::api::QueryEnvironment();
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1848,17 +1848,17 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryEnvironment(J
             return 0;
         }
     }
-    *(QueryEnvironment **)&jresult = result; 
+    *(indri::api::QueryEnvironment **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryEnvironment(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(QueryEnvironment **)&jarg1; 
+    arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
     {
         try {
             delete arg1;
@@ -1873,7 +1873,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryEnvironment
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1status(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2, jstring jarg3, jstring jarg4, jint jarg5, jint jarg6) {
-    IndexStatus *arg1 = (IndexStatus *) 0 ;
+    indri::api::IndexStatus *arg1 = (indri::api::IndexStatus *) 0 ;
     int arg2 ;
     std::string *arg3 = 0 ;
     std::string *arg4 = 0 ;
@@ -1882,7 +1882,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1status(JNIE
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexStatus **)&jarg1; 
+    arg1 = *(indri::api::IndexStatus **)&jarg1; 
     arg2 = (int)jarg2; 
     if(!jarg3) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
@@ -1919,13 +1919,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1status(JNIE
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexStatus(JNIEnv *jenv, jclass jcls) {
     jlong jresult = 0 ;
-    IndexStatus *result;
+    indri::api::IndexStatus *result;
     
     (void)jenv;
     (void)jcls;
     {
         try {
-            result = (IndexStatus *)new SwigDirector_IndexStatus(jenv);
+            result = (indri::api::IndexStatus *)new SwigDirector_IndexStatus(jenv);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1933,13 +1933,13 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexStatus(JNIEnv
             return 0;
         }
     }
-    *(IndexStatus **)&jresult = result; 
+    *(indri::api::IndexStatus **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1director_1connect(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg) {
-    IndexStatus *obj = *((IndexStatus **) &objarg);
+    indri::api::IndexStatus *obj = *((indri::api::IndexStatus **) &objarg);
     (void)jcls;
     SwigDirector_IndexStatus *director = dynamic_cast<SwigDirector_IndexStatus *>(obj);
     if (director) {
@@ -1949,11 +1949,11 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1director_1c
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexStatus(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    IndexStatus *arg1 = (IndexStatus *) 0 ;
+    indri::api::IndexStatus *arg1 = (indri::api::IndexStatus *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexStatus **)&jarg1; 
+    arg1 = *(indri::api::IndexStatus **)&jarg1; 
     {
         try {
             delete arg1;
@@ -1969,13 +1969,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexStatus(JNIE
 
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexEnvironment(JNIEnv *jenv, jclass jcls) {
     jlong jresult = 0 ;
-    IndexEnvironment *result;
+    indri::api::IndexEnvironment *result;
     
     (void)jenv;
     (void)jcls;
     {
         try {
-            result = (IndexEnvironment *)new IndexEnvironment();
+            result = (indri::api::IndexEnvironment *)new indri::api::IndexEnvironment();
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -1983,17 +1983,17 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexEnvironment(J
             return 0;
         }
     }
-    *(IndexEnvironment **)&jresult = result; 
+    *(indri::api::IndexEnvironment **)&jresult = result; 
     return jresult;
 }
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexEnvironment(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         try {
             delete arg1;
@@ -2008,13 +2008,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexEnvironment
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnchorTextPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2047,7 +2047,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnc
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFileClass_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3, jstring jarg4, jstring jarg5, jstring jarg6, jstring jarg7, jobjectArray jarg8, jobjectArray jarg9, jobjectArray jarg10, jobjectArray jarg11, jobjectArray jarg12) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     std::string *arg4 = 0 ;
@@ -2067,7 +2067,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2228,13 +2228,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
 
 JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1getFileClassSpec(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
     jobject jresult = 0 ;
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
-    FileClassEnvironmentFactory::Specification *result;
+    indri::parse::FileClassEnvironmentFactory::Specification *result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return 0;
@@ -2246,7 +2246,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1get
     jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
     {
         try {
-            result = (FileClassEnvironmentFactory::Specification *)(arg1)->getFileClassSpec((std::string const &)*arg2);
+            result = (indri::parse::FileClassEnvironmentFactory::Specification *)(arg1)->getFileClassSpec((std::string const &)*arg2);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2267,13 +2267,13 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1get
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFileClass_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
-    FileClassEnvironmentFactory::Specification *arg2 = 0 ;
-    FileClassEnvironmentFactory::Specification spec2 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    indri::parse::FileClassEnvironmentFactory::Specification *arg2 = 0 ;
+    indri::parse::FileClassEnvironmentFactory::Specification spec2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         // look up information about Specification
         jni_specification_info info;
@@ -2321,7 +2321,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
     }
     {
         try {
-            (arg1)->addFileClass((FileClassEnvironmentFactory::Specification const &)*arg2);
+            (arg1)->addFileClass((indri::parse::FileClassEnvironmentFactory::Specification const &)*arg2);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2333,13 +2333,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setIndexedFields(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     std::vector<std::string > strin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg2);
@@ -2368,13 +2368,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setInd
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNumericField(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jboolean jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     bool arg3 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2399,7 +2399,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNum
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMetadataIndexedFields(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2, jobjectArray jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     std::vector<std::string > *arg3 = 0 ;
     std::vector<std::string > strin2 ;
@@ -2407,7 +2407,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMet
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg2);
@@ -2450,13 +2450,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMet
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setStopwords(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     std::vector<std::string > strin2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg2);
@@ -2485,12 +2485,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSto
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setStemmer(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2514,12 +2514,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSte
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMemory(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     UINT64 arg2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     arg2 = (UINT64)jarg2; 
     {
         try {
@@ -2535,12 +2535,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMem
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNormalization(JNIEnv *jenv, jclass jcls, jlong jarg1, jboolean jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     bool arg2 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     arg2 = jarg2 ? true : false; 
     {
         try {
@@ -2556,13 +2556,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNor
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jlong jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
-    IndexStatus *arg3 = (IndexStatus *) 0 ;
+    indri::api::IndexStatus *arg3 = (indri::api::IndexStatus *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2572,7 +2572,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
     std::string arg2_str(arg2_pstr);
     arg2 = &arg2_str;
     jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-    arg3 = *(IndexStatus **)&jarg3; 
+    arg3 = *(indri::api::IndexStatus **)&jarg3; 
     {
         try {
             (arg1)->create((std::string const &)*arg2,arg3);
@@ -2587,12 +2587,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2616,13 +2616,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jlong jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
-    IndexStatus *arg3 = (IndexStatus *) 0 ;
+    indri::api::IndexStatus *arg3 = (indri::api::IndexStatus *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2632,7 +2632,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1
     std::string arg2_str(arg2_pstr);
     arg2 = &arg2_str;
     jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-    arg3 = *(IndexStatus **)&jarg3; 
+    arg3 = *(indri::api::IndexStatus **)&jarg3; 
     {
         try {
             (arg1)->open((std::string const &)*arg2,arg3);
@@ -2647,12 +2647,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2676,11 +2676,11 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1close(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         try {
             (arg1)->close();
@@ -2695,12 +2695,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1close(
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFile_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2724,13 +2724,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
 
 
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFile_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
@@ -2762,32 +2762,34 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addString(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3, jobjectArray jarg4) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addString(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3, jobjectArray jarg4) {
+    jint jresult = 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
-    std::vector<MetadataPair > *arg4 = 0 ;
-    std::vector<MetadataPair > mdin4 ;
-    Buffer mdbuf4 ;
+    std::vector<indri::parse::MetadataPair > *arg4 = 0 ;
+    int result;
+    std::vector<indri::parse::MetadataPair > mdin4 ;
+    indri::utility::Buffer mdbuf4 ;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
-        return ;
+        return 0;
     }
     const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
-    if (!arg2_pstr) return ;
+    if (!arg2_pstr) return 0;
     std::string arg2_str(arg2_pstr);
     arg2 = &arg2_str;
     jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
     if(!jarg3) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
-        return ;
+        return 0;
     }
     const char *arg3_pstr = (const char *)jenv->GetStringUTFChars(jarg3, 0); 
-    if (!arg3_pstr) return ;
+    if (!arg3_pstr) return 0;
     std::string arg3_str(arg3_pstr);
     arg3 = &arg3_str;
     jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
@@ -2806,9 +2808,10 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addStr
         jsize arrayLength = jenv->GetArrayLength( entryArray );
         arg4 = &mdin4;
         
-        jclass stringClazz = jenv->FindClass("edu/java/lang/String");
+        jclass stringClazz = jenv->FindClass("java/lang/String");
+        unsigned int i;
         
-        for( unsigned int i=0; i<arrayLength; i++ ) {
+        for( i=0; i<arrayLength; i++ ) {
             jobject mapEntry = jenv->GetObjectArrayElement( entryArray, i );
             jclass mapEntryClazz = jenv->GetObjectClass( mapEntry );
             jmethodID mapEntryGetKeyMethod = jenv->GetMethodID( mapEntryClazz, "getKey", "()Ljava/lang/Object;" );
@@ -2817,12 +2820,15 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addStr
             jobject key = jenv->CallObjectMethod( mapEntry, mapEntryGetKeyMethod );
             jobject value = jenv->CallObjectMethod( mapEntry, mapEntryGetValueMethod );
             
+            size_t keyOffset = mdbuf4.position();
             const char* keyChars = jenv->GetStringUTFChars( (jstring) key, 0 );
             jsize keyLength = jenv->GetStringUTFLength( (jstring) key);
             std::string keyString = keyChars;
             char* keyPosition = mdbuf4.write( keyLength+1 );
             strncpy( keyPosition, keyChars, keyLength );
             keyPosition[keyLength] = 0;
+            
+            size_t valueOffset = mdbuf4.position();
             char* valuePosition = 0;
             jsize valueLength;
             
@@ -2850,57 +2856,69 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addStr
                 jenv->ReleaseByteArrayElements(valueArray, valueBytes, 0);
             }
             
-            MetadataPair pair;
-            pair.key = keyPosition;
-            pair.value = valuePosition;
+            indri::parse::MetadataPair pair;
+            pair.key = (char*) keyOffset;
+            pair.value = (char*) valueOffset;
             pair.valueLength = valueLength;
             mdin4.push_back(pair);
             
             jenv->ReleaseStringUTFChars( (jstring)key, keyChars);
         }
+        
+        // now we need to fix up the key and value positions
+        for( i=0; i<arrayLength; i++ ) {
+            mdin4[i].key = mdbuf4.front() + (size_t) mdin4[i].key;
+            mdin4[i].value = mdbuf4.front() + (size_t) mdin4[i].value;
+        }
     }
     {
         try {
-            (arg1)->addString((std::string const &)*arg2,(std::string const &)*arg3,(std::vector<MetadataPair > const &)*arg4);
+            result = (int)(arg1)->addString((std::string const &)*arg2,(std::string const &)*arg3,(std::vector<indri::parse::MetadataPair > const &)*arg4);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
-            return ;
+            return 0;
         }
     }
+    jresult = (jint)result; 
+    return jresult;
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addParsedDocument(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg2) {
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
-    ParsedDocument *arg2 = (ParsedDocument *) 0 ;
+JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addParsedDocument(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg2) {
+    jint jresult = 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    indri::api::ParsedDocument *arg2 = (indri::api::ParsedDocument *) 0 ;
+    int result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
-    arg2 = *(ParsedDocument **)&jarg2; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
+    arg2 = *(indri::api::ParsedDocument **)&jarg2; 
     {
         try {
-            (arg1)->addParsedDocument(arg2);
+            result = (int)(arg1)->addParsedDocument(arg2);
             
         } catch( Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
-            return ;
+            return 0;
         }
     }
+    jresult = (jint)result; 
+    return jresult;
 }
 
 
 JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1documentsIndexed(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jint jresult = 0 ;
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     int result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         try {
             result = (int)(arg1)->documentsIndexed();
@@ -2918,12 +2936,12 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1docume
 
 JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1documentsSeen(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jint jresult = 0 ;
-    IndexEnvironment *arg1 = (IndexEnvironment *) 0 ;
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     int result;
     
     (void)jenv;
     (void)jcls;
-    arg1 = *(IndexEnvironment **)&jarg1; 
+    arg1 = *(indri::api::IndexEnvironment **)&jarg1; 
     {
         try {
             result = (int)(arg1)->documentsSeen();

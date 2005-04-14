@@ -6,11 +6,11 @@
 // 24 August 2004 -- tds
 //
 
-%typemap(jni) const std::vector<MetadataPair>& "jobjectArray"
-%typemap(jtype) const std::vector<MetadataPair>& "Map"
-%typemap(jstype) const std::vector<MetadataPair>& "Map"
+%typemap(jni) const std::vector<indri::parse::MetadataPair>& "jobjectArray"
+%typemap(jtype) const std::vector<indri::parse::MetadataPair>& "Map"
+%typemap(jstype) const std::vector<indri::parse::MetadataPair>& "Map"
 
-%typemap(java,in) const std::vector<MetadataPair>& ( std::vector<MetadataPair> mdin, Buffer mdbuf ) {
+%typemap(java,in) const std::vector<indri::parse::MetadataPair>& ( std::vector<indri::parse::MetadataPair> mdin, indri::utility::Buffer mdbuf ) {
   // call map.entrySet()
   jclass mapClazz = jenv->GetObjectClass( $input );
   jmethodID mapEntrySetMethod = jenv->GetMethodID( mapClazz, "entrySet", "()Ljava/util/Set;" );
@@ -25,9 +25,10 @@
   jsize arrayLength = jenv->GetArrayLength( entryArray );
   $1 = &mdin;
 
-  jclass stringClazz = jenv->FindClass("edu/java/lang/String");
+  jclass stringClazz = jenv->FindClass("java/lang/String");
+  unsigned int i;
 
-  for( unsigned int i=0; i<arrayLength; i++ ) {
+  for( i=0; i<arrayLength; i++ ) {
     jobject mapEntry = jenv->GetObjectArrayElement( entryArray, i );
     jclass mapEntryClazz = jenv->GetObjectClass( mapEntry );
     jmethodID mapEntryGetKeyMethod = jenv->GetMethodID( mapEntryClazz, "getKey", "()Ljava/lang/Object;" );
@@ -36,12 +37,15 @@
     jobject key = jenv->CallObjectMethod( mapEntry, mapEntryGetKeyMethod );
     jobject value = jenv->CallObjectMethod( mapEntry, mapEntryGetValueMethod );
 
+    size_t keyOffset = mdbuf.position();
     const char* keyChars = jenv->GetStringUTFChars( (jstring) key, 0 );
     jsize keyLength = jenv->GetStringUTFLength( (jstring) key);
     std::string keyString = keyChars;
     char* keyPosition = mdbuf.write( keyLength+1 );
     strncpy( keyPosition, keyChars, keyLength );
     keyPosition[keyLength] = 0;
+    
+    size_t valueOffset = mdbuf.position();
     char* valuePosition = 0;
     jsize valueLength;
 
@@ -69,15 +73,21 @@
       jenv->ReleaseByteArrayElements(valueArray, valueBytes, 0);
     }
 
-    MetadataPair pair;
-    pair.key = keyPosition;
-    pair.value = valuePosition;
+    indri::parse::MetadataPair pair;
+    pair.key = (char*) keyOffset;
+    pair.value = (char*) valueOffset;
     pair.valueLength = valueLength;
     mdin.push_back(pair);
 
     jenv->ReleaseStringUTFChars( (jstring)key, keyChars);
   }
+  
+  // now we need to fix up the key and value positions
+  for( i=0; i<arrayLength; i++ ) {
+    mdin[i].key = mdbuf.front() + (size_t) mdin[i].key;
+    mdin[i].value = mdbuf.front() + (size_t) mdin[i].value;
+  }
 }
 
-%typemap(javain) const std::vector<MetadataPair>& "$javainput";
+%typemap(javain) const std::vector<indri::parse::MetadataPair>& "$javainput";
 

@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DeletedDocumentList
@@ -17,39 +27,45 @@
 #include "indri/ReaderLockable.hpp"
 #include "indri/WriterLockable.hpp"
 #include "indri/Buffer.hpp"
+namespace indri
+{
+  namespace index
+  {
+    
+    class DeletedDocumentList {
+    private:
+      indri::thread::ReadersWritersLock _lock;
+      indri::thread::ReaderLockable _readLock;
+      indri::thread::WriterLockable _writeLock;
 
-class DeletedDocumentList {
-private:
-  ReadersWritersLock _lock;
-  ReaderLockable _readLock;
-  WriterLockable _writeLock;
+      indri::utility::Buffer _bitmap;
+      void _grow( int documentID );
 
-  Buffer _bitmap;
-  void _grow( int documentID );
+    public:
+      class read_transaction {
+      private:
+	indri::thread::ReadersWritersLock& _lock;
+	indri::utility::Buffer& _bitmap;
 
-public:
-  class read_transaction {
-  private:
-    ReadersWritersLock& _lock;
-    Buffer& _bitmap;
+      public:
+	read_transaction( DeletedDocumentList& list );
+	~read_transaction();
 
-  public:
-    read_transaction( DeletedDocumentList& list );
-    ~read_transaction();
+	int nextCandidateDocument( int documentID );
+	bool isDeleted( int documentID );
+      };
 
-    int nextCandidateDocument( int documentID );
-    bool isDeleted( int documentID );
-  };
+      DeletedDocumentList();
 
-  DeletedDocumentList();
+      void markDeleted( int documentID );
+      bool isDeleted( int documentID );
+      read_transaction* getReadTransaction();
 
-  void markDeleted( int documentID );
-  bool isDeleted( int documentID );
-  read_transaction* getReadTransaction();
-
-  void read( const std::string& filename );
-  void write( const std::string& filename );
-};
+      void read( const std::string& filename );
+      void write( const std::string& filename );
+    };
+  }
+}
 
 #endif // INDRI_DELETEDDOCUMENTLIST_HPP
 

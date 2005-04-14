@@ -5,13 +5,13 @@
 // 10 August 2004 -- tds
 //
 
-%typemap(jni) QueryAnnotationNode* "jobject"
-%typemap(jtype) QueryAnnotationNode* "QueryAnnotationNode"
-%typemap(jstype) QueryAnnotationNode* "QueryAnnotationNode"
+%typemap(jni) indri::api::QueryAnnotationNode* "jobject"
+%typemap(jtype) indri::api::QueryAnnotationNode* "QueryAnnotationNode"
+%typemap(jstype) indri::api::QueryAnnotationNode* "QueryAnnotationNode"
 
 %{
 
-jobject java_build_queryannotationnode( QueryAnnotationNode* in,
+jobject java_build_queryannotationnode( indri::api::QueryAnnotationNode* in,
                                    JNIEnv* jenv,
                                    jclass qanClazz,
                                    jmethodID qanConst ) {
@@ -33,7 +33,7 @@ jobject java_build_queryannotationnode( QueryAnnotationNode* in,
 
 %}
 
-%typemap(java,out) QueryAnnotationNode* {
+%typemap(java,out) indri::api::QueryAnnotationNode* {
   jclass qanClazz = jenv->FindClass("edu/umass/cs/indri/QueryAnnotationNode" );
   const char* signature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ledu/umass/cs/indri/QueryAnnotationNode;)V";
   jmethodID qanConst = jenv->GetMethodID(qanClazz, "<init>", signature );
@@ -44,7 +44,7 @@ jobject java_build_queryannotationnode( QueryAnnotationNode* in,
                                             qanConst );
 }
 
-%typemap(javaout) QueryAnnotationNode* {
+%typemap(javaout) indri::api::QueryAnnotationNode* {
   return $jnicall;
 }
 

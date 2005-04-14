@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // RepositoryMaintenanceThread
@@ -10,7 +20,8 @@
 #include "indri/ScopedLock.hpp"
 #include <iostream>
 
-const UINT64 TIME_DELAY = 15*1000*1000;
+const UINT64 TIME_DELAY = 10*1000*1000;
+const UINT64 SHORT_TIME_DELAY = 3*1000*1000;
 const UINT64 THRASHING_MERGE_DELAY = 300*1000*1000;
 const int MAXIMUM_INDEX_COUNT = 50;
 
@@ -19,7 +30,7 @@ const int MAXIMUM_INDEX_COUNT = 50;
 // maintenance_smoothed_load
 //
 
-static float maintenance_smoothed_load( Repository::Load& load ) {
+static float maintenance_smoothed_load( indri::collection::Repository::Load& load ) {
   const float fifteenWeight = 0.2f;
   const float fiveWeight = 0.2f;
   const float oneWeight = 0.6f;
@@ -31,7 +42,7 @@ static float maintenance_smoothed_load( Repository::Load& load ) {
 // maintenance_should_merge
 //
 
-static bool maintenance_should_merge( Repository::index_state& state, Repository::Load& documentLoad, Repository::Load& queryLoad, UINT64 lastThrashing ) {
+static bool maintenance_should_merge( indri::collection::Repository::index_state& state, indri::collection::Repository::Load& documentLoad, indri::collection::Repository::Load& queryLoad, UINT64 lastThrashing ) {
   float smoothedQueryLoad = maintenance_smoothed_load( queryLoad ) + 1;
   float smoothedDocumentLoad = maintenance_smoothed_load( documentLoad );
   float addRatio = smoothedDocumentLoad / (smoothedQueryLoad+1); 
@@ -56,7 +67,7 @@ static bool maintenance_should_merge( Repository::index_state& state, Repository
 // maintenance_should_trim
 //
 
-static bool maintenance_should_trim( Repository::index_state& state, Repository::Load& documentLoad, Repository::Load& queryLoad, UINT64 lastThrashing ) {
+static bool maintenance_should_trim( indri::collection::Repository::index_state& state, indri::collection::Repository::Load& documentLoad, indri::collection::Repository::Load& queryLoad, UINT64 lastThrashing ) {
   return state->size() > MAXIMUM_INDEX_COUNT;
 }
 
@@ -64,7 +75,7 @@ static bool maintenance_should_trim( Repository::index_state& state, Repository:
 // constructor
 //
 
-RepositoryMaintenanceThread::RepositoryMaintenanceThread( Repository& repository, UINT64 memory ) :
+indri::collection::RepositoryMaintenanceThread::RepositoryMaintenanceThread( indri::collection::Repository& repository, UINT64 memory ) :
   UtilityThread(),
   _repository( repository ),
   _memory( memory )
@@ -75,7 +86,7 @@ RepositoryMaintenanceThread::RepositoryMaintenanceThread( Repository& repository
 // initialize
 //
 
-UINT64 RepositoryMaintenanceThread::initialize() {
+UINT64 indri::collection::RepositoryMaintenanceThread::initialize() {
   return TIME_DELAY;
 }
 
@@ -83,7 +94,7 @@ UINT64 RepositoryMaintenanceThread::initialize() {
 // deinitialize
 //
 
-void RepositoryMaintenanceThread::deinitialize() {
+void indri::collection::RepositoryMaintenanceThread::deinitialize() {
   // do nothing
 }
 
@@ -91,15 +102,16 @@ void RepositoryMaintenanceThread::deinitialize() {
 // work
 //
 
-UINT64 RepositoryMaintenanceThread::work() {
+UINT64 indri::collection::RepositoryMaintenanceThread::work() {
   // fetch current index state
   bool write = false;
   bool merge = false;
   bool trim = false;
+  UINT64 memorySize = 0;
 
   {
     // lock the request queue
-    ScopedLock l( _requestLock );
+    indri::thread::ScopedLock l( _requestLock );
 
     // if nobody has any requests, check to see if we should be working
     if( ! _requests.size() ) {
@@ -109,7 +121,9 @@ UINT64 RepositoryMaintenanceThread::work() {
 
       if( index ) {
         // if the index is too big, we'd better get to work
-        if( _memory < index->memorySize() ) {
+        memorySize = index->memorySize();
+
+        if( _memory < memorySize ) {
           _requests.push( WRITE );
         }
 
@@ -157,15 +171,19 @@ UINT64 RepositoryMaintenanceThread::work() {
     _repository._write();
   }
 
+  if( memorySize > 0.75*_memory ) {
+    return SHORT_TIME_DELAY;
+  } else {
   return TIME_DELAY;
+  }
 }
 
 //
 // hasWork
 //
 
-bool RepositoryMaintenanceThread::hasWork() {
-  ScopedLock l( _requestLock );
+bool indri::collection::RepositoryMaintenanceThread::hasWork() {
+  indri::thread::ScopedLock l( _requestLock );
   return _requests.size() > 0;
 }
 
@@ -173,8 +191,8 @@ bool RepositoryMaintenanceThread::hasWork() {
 // write
 //
 
-void RepositoryMaintenanceThread::write() {
-  ScopedLock l( _requestLock );
+void indri::collection::RepositoryMaintenanceThread::write() {
+  indri::thread::ScopedLock l( _requestLock );
   _requests.push( WRITE );
 }
 
@@ -182,8 +200,8 @@ void RepositoryMaintenanceThread::write() {
 // merge
 //
 
-void RepositoryMaintenanceThread::merge() {
-  ScopedLock l( _requestLock );
+void indri::collection::RepositoryMaintenanceThread::merge() {
+  indri::thread::ScopedLock l( _requestLock );
   _requests.push( MERGE );
 }
 

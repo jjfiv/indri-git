@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // Thread
@@ -12,21 +22,21 @@
 #endif
 
 void* pthread_start( void* parameter ) {
-  Thread* t = (Thread*) parameter;
+  indri::thread::Thread* t = (indri::thread::Thread*) parameter;
   t->execute();
   return 0;
 }
 
 #ifdef WIN32
 unsigned int __stdcall win32_start( void* parameter ) {
-  Thread* t = (Thread*) parameter;
+  indri::thread::Thread* t = (indri::thread::Thread*) parameter;
   t->execute();
   _endthreadex(0);
   return 0;
 }
 #endif
 
-Thread::Thread( void (*function)(void*), void* data ) {
+indri::thread::Thread::Thread( void (*function)(void*), void* data ) {
   _function = function;
   _data = data;
 
@@ -37,11 +47,11 @@ Thread::Thread( void (*function)(void*), void* data ) {
   #endif
 }
 
-void Thread::execute() {
+void indri::thread::Thread::execute() {
   _function( _data );
 }
 
-void Thread::join() {
+void indri::thread::Thread::join() {
   #ifdef WIN32
     WaitForSingleObject( (HANDLE) _thread, INFINITE );
     CloseHandle( (HANDLE) _thread );
@@ -50,7 +60,7 @@ void Thread::join() {
   #endif
 }
 
-int Thread::id() {
+int indri::thread::Thread::id() {
 #ifdef WIN32
   return ::GetCurrentThreadId( );
 #else
@@ -58,7 +68,7 @@ int Thread::id() {
 #endif
 }
 
-void Thread::sleep( int milliseconds ) {
+void indri::thread::Thread::sleep( int milliseconds ) {
 #ifdef WIN32
   ::Sleep( milliseconds );
 #else
@@ -66,11 +76,11 @@ void Thread::sleep( int milliseconds ) {
 #endif
 }
 
-void Thread::yield() {
+void indri::thread::Thread::yield() {
 #ifdef WIN32
   ::SwitchToThread();
 #else
-  Thread::sleep(0);
+  indri::thread::Thread::sleep(0);
 #endif
 }
 

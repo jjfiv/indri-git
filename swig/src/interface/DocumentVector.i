@@ -5,17 +5,17 @@
 // 16 August 2004 -- tds
 //
 
-%typemap(jni) DocumentVector* "jobject"
-%typemap(jtype) DocumentVector* "DocumentVector"
-%typemap(jstype) DocumentVector* "DocumentVector"
+%typemap(jni) indri::api::DocumentVector* "jobject"
+%typemap(jtype) indri::api::DocumentVector* "DocumentVector"
+%typemap(jstype) indri::api::DocumentVector* "DocumentVector"
 
-%typemap(jni) std::vector<DocumentVector*> "jobjectArray"
-%typemap(jtype) std::vector<DocumentVector*> "DocumentVector[]"
-%typemap(jstype) std::vector<DocumentVector*> "DocumentVector[]"
+%typemap(jni) std::vector<indri::api::DocumentVector*> "jobjectArray"
+%typemap(jtype) std::vector<indri::api::DocumentVector*> "DocumentVector[]"
+%typemap(jstype) std::vector<indri::api::DocumentVector*> "DocumentVector[]"
 
 %{
 
-jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
+jobject documentvector_copy( JNIEnv* jenv, indri::api::DocumentVector* vec ) {
   jobject result;
 
   jclass stringClazz = jenv->FindClass( "java/lang/String" );
@@ -88,7 +88,7 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
 
 %}
 
-%typemap(java,out) DocumentVector* {
+%typemap(java,out) indri::api::DocumentVector* {
 // this typemap is currently unused, but should delete
 // the input to be consistent with the vector version
   jobject vec = documentvector_copy( jenv, $1 );
@@ -100,7 +100,7 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
   return $jnicall;
 }
 
-%typemap(java,out) std::vector<DocumentVector*> {
+%typemap(java,out) std::vector<indri::api::DocumentVector*> {
   jclass docVecClazz = jenv->FindClass( "edu/umass/cs/indri/DocumentVector" );
   $result = jenv->NewObjectArray($1.size(), docVecClazz, NULL);
 
@@ -111,7 +111,7 @@ jobject documentvector_copy( JNIEnv* jenv, DocumentVector* vec ) {
   }
 }
 
-%typemap(javaout) std::vector<DocumentVector*> {
+%typemap(javaout) std::vector<indri::api::DocumentVector*> {
   return $jnicall;
 }
 

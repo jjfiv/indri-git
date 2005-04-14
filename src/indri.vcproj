@@ -398,6 +398,9 @@
 				RelativePath=".\WeightedAndNode.cpp">
 			</File>
 			<File
+				RelativePath=".\WeightedExtentOrNode.cpp">
+			</File>
+			<File
 				RelativePath=".\WeightedSumNode.cpp">
 			</File>
 			<File
@@ -980,6 +983,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\WeightedAndNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\WeightedExtentOrNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\WeightedSumNode.hpp">

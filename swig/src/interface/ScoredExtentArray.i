@@ -8,16 +8,16 @@
 // 10 August 2004 -- tds
 //
 
-%typemap(jni) std::vector<ScoredExtentResult> "jobjectArray"
-%typemap(jtype) std::vector<ScoredExtentResult> "ScoredExtentResult[]"
-%typemap(jstype) std::vector<ScoredExtentResult> "ScoredExtentResult[]"
+%typemap(jni) std::vector<indri::api::ScoredExtentResult> "jobjectArray"
+%typemap(jtype) std::vector<indri::api::ScoredExtentResult> "ScoredExtentResult[]"
+%typemap(jstype) std::vector<indri::api::ScoredExtentResult> "ScoredExtentResult[]"
 
-%typemap(jni) const std::vector<ScoredExtentResult>& "jobjectArray"
-%typemap(jtype) const std::vector<ScoredExtentResult>& "ScoredExtentResult[]"
-%typemap(jstype) const std::vector<ScoredExtentResult>& "ScoredExtentResult[]"
+%typemap(jni) const std::vector<indri::api::ScoredExtentResult>& "jobjectArray"
+%typemap(jtype) const std::vector<indri::api::ScoredExtentResult>& "ScoredExtentResult[]"
+%typemap(jstype) const std::vector<indri::api::ScoredExtentResult>& "ScoredExtentResult[]"
 
 %{
-jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<ScoredExtentResult>& input ) {
+jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<indri::api::ScoredExtentResult>& input ) {
   jclass clazz = jenv->FindClass("edu/umass/cs/indri/ScoredExtentResult");
   jmethodID constructor = jenv->GetMethodID(clazz, "<init>", "()V" );
   jobjectArray result;
@@ -49,16 +49,16 @@ jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<Scor
 }
 %}
 
-%typemap(java,out) std::vector<ScoredExtentResult>
+%typemap(java,out) std::vector<indri::api::ScoredExtentResult>
 {
   $result = java_build_scoredextentresult( jenv, $1 );
 }
 
-%typemap(java,out) const std::vector<ScoredExtentResult>& {
+%typemap(java,out) const std::vector<indri::api::ScoredExtentResult>& {
   $result = java_build_scoredextentresult( jenv, *($1) );
 }
 
-%typemap(java,in) const std::vector<ScoredExtentResult>& ( std::vector<ScoredExtentResult> resin )
+%typemap(java,in) const std::vector<indri::api::ScoredExtentResult>& ( std::vector<indri::api::ScoredExtentResult> resin )
 {
   jsize size = jenv->GetArrayLength($input);
 
@@ -71,7 +71,7 @@ jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<Scor
 
   for( jsize i=0; i<size; i++ ) {
     jobject seobj  = jenv->GetObjectArrayElement($input, i);
-    ScoredExtentResult ser;
+    indri::api::ScoredExtentResult ser;
 
     ser.begin = jenv->GetIntField(seobj, beginField);
     ser.end = jenv->GetIntField(seobj, endField);
@@ -82,12 +82,12 @@ jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<Scor
   }
 }
 
-%typemap(javain) const std::vector<ScoredExtentResult>& "$javainput"
-%typemap(javaout) std::vector<ScoredExtentResult> {
+%typemap(javain) const std::vector<indri::api::ScoredExtentResult>& "$javainput"
+%typemap(javaout) std::vector<indri::api::ScoredExtentResult> {
   return $jnicall;
 }
 
-%typemap(javaout) const std::vector<ScoredExtentResult>& {
+%typemap(javaout) const std::vector<indri::api::ScoredExtentResult>& {
   return $jnicall;
 }
 

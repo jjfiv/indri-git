@@ -6,13 +6,13 @@
 // 14 February 2005 -- dmf
 //
 
-%typemap(jni) const FileClassEnvironmentFactory::Specification& "jobject"
-%typemap(jtype) const FileClassEnvironmentFactory::Specification& "Specification"
-%typemap(jstype) const FileClassEnvironmentFactory::Specification& "Specification"
+%typemap(jni) const indri::parse::FileClassEnvironmentFactory::Specification& "jobject"
+%typemap(jtype) const indri::parse::FileClassEnvironmentFactory::Specification& "Specification"
+%typemap(jstype) const indri::parse::FileClassEnvironmentFactory::Specification& "Specification"
 
-%typemap(jni) FileClassEnvironmentFactory::Specification* "jobject"
-%typemap(jtype) FileClassEnvironmentFactory::Specification* "Specification"
-%typemap(jstype) FileClassEnvironmentFactory::Specification* "Specification"
+%typemap(jni) indri::parse::FileClassEnvironmentFactory::Specification* "jobject"
+%typemap(jtype) indri::parse::FileClassEnvironmentFactory::Specification* "Specification"
+%typemap(jstype) indri::parse::FileClassEnvironmentFactory::Specification* "Specification"
 
 %{
 struct jni_specification_info {
@@ -92,7 +92,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  }
  
  jobject specification_copy( JNIEnv* jenv, jni_specification_info& info, 
-			     FileClassEnvironmentFactory::Specification* thisSpec ) {
+			     indri::parse::FileClassEnvironmentFactory::Specification* thisSpec ) {
    jobject result = jenv->NewObject(info.specClazz, info.specConstructor);
    // initialize the fields
    jstring stringField;
@@ -192,7 +192,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  
 %}
 
-%typemap(java,in) const FileClassEnvironmentFactory::Specification& (FileClassEnvironmentFactory::Specification spec) {
+%typemap(java,in) const indri::parse::FileClassEnvironmentFactory::Specification& (indri::parse::FileClassEnvironmentFactory::Specification spec) {
   // look up information about Specification
   jni_specification_info info;
   specification_init(jenv, info);
@@ -238,10 +238,10 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
   $1 = &spec;
 }
 
-%typemap(javain) const FileClassEnvironmentFactory::Specification& "$javainput";
+%typemap(javain) const indri::parse::FileClassEnvironmentFactory::Specification& "$javainput";
 
 
-%typemap(java,out) FileClassEnvironmentFactory::Specification*
+%typemap(java,out) indri::parse::FileClassEnvironmentFactory::Specification*
 {
   // look up information about Specification
   jni_specification_info info;
@@ -251,7 +251,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
   delete($1);
 }
 
-%typemap(javaout) FileClassEnvironmentFactory::Specification* {
+%typemap(javaout) indri::parse::FileClassEnvironmentFactory::Specification* {
   return $jnicall;
 }
 

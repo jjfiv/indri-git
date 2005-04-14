@@ -7,13 +7,13 @@
 // 10 August 2004 -- tds
 //
 
-%typemap(jni) const EvaluatorNode::MResults& "jobject"
-%typemap(jtype) const EvaluatorNode::MResults& "java.util.Map"
-%typemap(jstype) const EvaluatorNode::MResults& "java.util.Map"
+%typemap(jni) const indri::infnet::EvaluatorNode::MResults& "jobject"
+%typemap(jtype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
+%typemap(jstype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
 
-%typemap(java,out) const EvaluatorNode::MResults&
+%typemap(java,out) const indri::infnet::EvaluatorNode::MResults&
 {
-  EvaluatorNode::MResults::iterator iter;
+  indri::infnet::EvaluatorNode::MResults::iterator iter;
 
   // make the map
   jclass mapClazz = jenv->FindClass("java/util/HashMap");
@@ -31,7 +31,7 @@
   jfieldID documentField = jenv->GetFieldID(seClazz, "document", "I" );
 
   for( iter = $1->begin(); iter != $1->end(); iter++ ) {
-    std::vector<ScoredExtentResult>& vec = iter->second;
+    std::vector<indri::api::ScoredExtentResult>& vec = iter->second;
 
     // make an array for this list of results
     jobjectArray array = jenv->NewObjectArray(vec.size(), seClazz, NULL);
@@ -57,7 +57,7 @@
   }
 }
 
-%typemap(javaout) const EvaluatorNode::MResults& {
+%typemap(javaout) const indri::infnet::EvaluatorNode::MResults& {
   return $jnicall;
 }
 

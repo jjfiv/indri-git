@@ -84,8 +84,8 @@ namespace indri {
       virtual VocabularyIterator* vocabularyIterator() = 0;
 
       // Locks
-      virtual Lockable* iteratorLock() = 0;
-      virtual Lockable* statisticsLock() = 0;
+      virtual indri::thread::Lockable* iteratorLock() = 0;
+      virtual indri::thread::Lockable* statisticsLock() = 0;
     };
   }
 }

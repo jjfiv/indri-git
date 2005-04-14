@@ -18,9 +18,9 @@
 // 24 August 2004 -- tds
 //
 
-%typemap(jni) const std::vector<MetadataPair>& "jobjectArray"
-%typemap(jtype) const std::vector<MetadataPair>& "Map"
-%typemap(jstype) const std::vector<MetadataPair>& "Map"
+%typemap(jni) const std::vector<indri::parse::MetadataPair>& "jobjectArray"
+%typemap(jtype) const std::vector<indri::parse::MetadataPair>& "Map"
+%typemap(jstype) const std::vector<indri::parse::MetadataPair>& "Map"
 
 %typemap(java,in) const std::map<std::string,std::string>& ( std::map<std::string,std::string> mapin ) {
   // call map.entrySet()

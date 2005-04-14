@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskDocListFileIterator 
@@ -23,7 +33,7 @@ void indri::index::DiskDocListFileIterator::_readEntry() {
   _header.clear();
 
   _file->read( _header.write( headerLength ), headerLength );
-  RVLDecompressStream stream( _header.front(), _header.position() );
+  indri::utility::RVLDecompressStream stream( _header.front(), _header.position() );
 
   // header is RVLCompressed with the term first, followed by a termData structure
   stream >> _term;
@@ -42,8 +52,8 @@ void indri::index::DiskDocListFileIterator::_readEntry() {
 // DiskDocListFileIterator
 //
 
-indri::index::DiskDocListFileIterator::DiskDocListFileIterator( File& docListFile, int fieldCount ) : 
-  _file( new SequentialReadBuffer( docListFile ) ),
+indri::index::DiskDocListFileIterator::DiskDocListFileIterator( indri::file::File& docListFile, int fieldCount ) : 
+  _file( new indri::file::SequentialReadBuffer( docListFile ) ),
   _fileLength( docListFile.size() ),
   _fieldCount( fieldCount ),
   _iterator( _file, 0, 0 ),

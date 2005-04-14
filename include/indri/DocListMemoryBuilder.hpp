@@ -41,10 +41,10 @@ namespace indri {
     };
 
     class DocListMemoryBuilderIterator : public DocListIterator {
-      const greedy_vector< DocListMemoryBuilderSegment, 4 >* _lists;
-      greedy_vector< DocListMemoryBuilderSegment, 4 >::const_iterator _current;
+      const indri::utility::greedy_vector< DocListMemoryBuilderSegment, 4 >* _lists;
+      indri::utility::greedy_vector< DocListMemoryBuilderSegment, 4 >::const_iterator _current;
       indri::index::DocListIterator::DocumentData _data;
-      greedy_vector<DocListIterator::TopDocument> _emptyTopDocuments;
+      indri::utility::greedy_vector<DocListIterator::TopDocument> _emptyTopDocuments;
       
       const char* _list;
       const char* _listEnd;
@@ -57,7 +57,7 @@ namespace indri {
       DocListMemoryBuilderIterator( class DocListMemoryBuilder& builder, TermData* termData );
 
       void reset( class DocListMemoryBuilder& builder, TermData* termData );
-      void reset( const greedy_vector< DocListMemoryBuilderSegment, 4 >& lists, TermData* termData );
+      void reset( const indri::utility::greedy_vector< DocListMemoryBuilderSegment, 4 >& lists, TermData* termData );
 
       void startIteration();
       bool finished();
@@ -65,7 +65,7 @@ namespace indri {
       bool nextEntry();
       TermData* termData();
       DocListIterator::DocumentData* currentEntry();
-      greedy_vector<DocListIterator::TopDocument>& topDocuments();
+      indri::utility::greedy_vector<DocListIterator::TopDocument>& topDocuments();
     };
 
     class DocListMemoryBuilder {
@@ -77,7 +77,7 @@ namespace indri {
       int _documentFrequency;
       int _termFrequency;
 
-      greedy_vector< DocListMemoryBuilderSegment, 4 > _lists;
+      indri::utility::greedy_vector< DocListMemoryBuilderSegment, 4 > _lists;
 
       char* _list;
       char* _listBegin;
@@ -90,14 +90,14 @@ namespace indri {
       int _lastDocument;
       int _lastTermFrequency;
 
-      RegionAllocator* _allocator;
+      indri::utility::RegionAllocator* _allocator;
 
       inline void _safeAddLocation( int position );
       void _grow();
       void _terminateDocument();
 
     public:
-      DocListMemoryBuilder( class RegionAllocator* allocator );
+      DocListMemoryBuilder( indri::utility::RegionAllocator* allocator );
       ~DocListMemoryBuilder();
       const DocListMemoryBuilder& operator=( DocListMemoryBuilder& other );
       

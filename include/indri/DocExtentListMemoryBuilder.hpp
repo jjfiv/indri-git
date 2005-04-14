@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DocExtentListMemoryBuilder
@@ -29,8 +39,8 @@ namespace indri {
     };
 
     class DocExtentListMemoryBuilderIterator : public DocExtentListIterator {
-      const greedy_vector< DocExtentListMemoryBuilderSegment, 4 >* _lists;
-      greedy_vector< DocExtentListMemoryBuilderSegment, 4 >::const_iterator _current;
+      const indri::utility::greedy_vector< DocExtentListMemoryBuilderSegment, 4 >* _lists;
+      indri::utility::greedy_vector< DocExtentListMemoryBuilderSegment, 4 >::const_iterator _current;
       indri::index::DocExtentListIterator::DocumentExtentData _data;
       
       const char* _list;
@@ -39,7 +49,7 @@ namespace indri {
       bool _finished;
 
     public:
-      void reset( const greedy_vector< DocExtentListMemoryBuilderSegment, 4 >& lists, bool numeric );
+      void reset( const indri::utility::greedy_vector< DocExtentListMemoryBuilderSegment, 4 >& lists, bool numeric );
       void reset( class DocExtentListMemoryBuilder& builder );
 
       DocExtentListMemoryBuilderIterator( const class DocExtentListMemoryBuilder& builder ); 
@@ -58,7 +68,7 @@ namespace indri {
       int _documentFrequency;
       int _extentFrequency;
 
-      greedy_vector< DocExtentListMemoryBuilderSegment, 4 > _lists;
+      indri::utility::greedy_vector< DocExtentListMemoryBuilderSegment, 4 > _lists;
 
       char* _list;
       char* _listBegin;

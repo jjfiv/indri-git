@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskDocListIterator
@@ -20,13 +30,13 @@ namespace indri {
       const char* _listEnd;
       int _skipDocument;
 
-      SequentialReadBuffer* _file;
+      indri::file::SequentialReadBuffer* _file;
       UINT64 _startOffset;
       UINT64 _endOffset;
       bool _hasTopdocs;
       bool _isFrequent;
 
-      greedy_vector<TopDocument> _topdocs;
+      indri::utility::greedy_vector<TopDocument> _topdocs;
       DocumentData _data;
       DocumentData* _result;
       
@@ -41,11 +51,11 @@ namespace indri {
       void _readTermData( int headerLength );
 
     public:
-      DiskDocListIterator( SequentialReadBuffer* buffer, UINT64 startOffset, int fieldCount );
+      DiskDocListIterator( indri::file::SequentialReadBuffer* buffer, UINT64 startOffset, int fieldCount );
       ~DiskDocListIterator();
       void setStartOffset( UINT64 startOffset, TermData* termData );
 
-      const greedy_vector<TopDocument>& topDocuments();
+      const indri::utility::greedy_vector<TopDocument>& topDocuments();
 
       void startIteration();
       bool nextEntry();

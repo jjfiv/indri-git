@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 //
 // FieldEqualsNode.hpp
@@ -21,26 +21,32 @@
 #include "indri/ListIteratorNode.hpp"
 #include "indri/greedy_vector"
 #include "lemur/lemur-platform.h"
+namespace indri
+{
+  namespace infnet
+  {
+    
+    class FieldEqualsNode : public ListIteratorNode {
+    private:
+      class FieldIteratorNode* _field;
+      indri::utility::greedy_vector<indri::index::Extent> _extents;
+      INT64 _constant;
+      std::string _name;
 
-class FieldEqualsNode : public ListIteratorNode {
-private:
-  class FieldIteratorNode* _field;
-  greedy_vector<Extent> _extents;
-  INT64 _constant;
-  std::string _name;
+    public:
+      FieldEqualsNode( const std::string& name, class FieldIteratorNode* iterator, INT64 constant );
 
-public:
-  FieldEqualsNode( const std::string& name, class FieldIteratorNode* iterator, INT64 constant );
-
-  void prepare( int documentID );
-  greedy_vector<Extent>& extents();
+      void prepare( int documentID );
+      indri::utility::greedy_vector<indri::index::Extent>& extents();
   
-  int nextCandidateDocument();
-  void indexChanged( indri::index::Index& index );
+      int nextCandidateDocument();
+      void indexChanged( indri::index::Index& index );
 
-  const std::string& getName() const;
-  void annotate( class Annotator& annotator, int documentID, int begin, int end );
-};
+      const std::string& getName() const;
+      void annotate( class Annotator& annotator, int documentID, int begin, int end );
+    };
+  }
+}
 
 #endif // INDRI_FIELDEQUALSNODE_HPP
 

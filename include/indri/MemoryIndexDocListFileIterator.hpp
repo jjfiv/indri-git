@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // MemoryIndexDocListFileIterator
@@ -42,7 +52,7 @@ namespace indri {
         }
 
         std::sort( _alphabetical.begin(), _alphabetical.end(), MemoryIndex::term_entry::term_less() );\
-        _currentTerm = _alphabetical.begin();
+													_currentTerm = _alphabetical.begin();
         _data.termData = 0;
         _data.iterator = 0;
 

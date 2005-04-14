@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 
 //
@@ -20,8 +30,8 @@ namespace indri {
   namespace index {
     class TermList {
     private:
-      greedy_vector<int> _terms;
-      greedy_vector<FieldExtent> _fields;
+      indri::utility::greedy_vector<int> _terms;
+      indri::utility::greedy_vector<FieldExtent> _fields;
 
     public:
       void clear() {
@@ -37,31 +47,31 @@ namespace indri {
         _terms.push_back( termID );
       }
       
-      greedy_vector<int>& terms() {
+      indri::utility::greedy_vector<int>& terms() {
         return _terms;
       }
       
-      const greedy_vector<int>& terms() const {
+      const indri::utility::greedy_vector<int>& terms() const {
         return _terms;
       }
       
-      greedy_vector<indri::index::FieldExtent>& fields() {
+      indri::utility::greedy_vector<indri::index::FieldExtent>& fields() {
         return _fields;
       }
       
-      const greedy_vector<indri::index::FieldExtent>& fields() const {
+      const indri::utility::greedy_vector<indri::index::FieldExtent>& fields() const {
         return _fields;
       }
       
       void read( const char* buffer, int size ) {
         clear();
-        RVLDecompressStream stream( buffer, size );
+        indri::utility::RVLDecompressStream stream( buffer, size );
         
         int termCount;
         int fieldCount;
         
         stream >> termCount
-          >> fieldCount;
+	       >> fieldCount;
         
         for( int i=0; i<termCount; i++ ) {
           int termID;
@@ -73,15 +83,15 @@ namespace indri {
           FieldExtent extent;
           
           stream >> extent.id
-            >> extent.begin
-            >> extent.end
-            >> extent.number;
+		 >> extent.begin
+		 >> extent.end
+		 >> extent.number;
           
           _fields.push_back( extent );
         }
       }
       
-      void write( Buffer& buffer ) {
+      void write( indri::utility::Buffer& buffer ) {
         // format:
         //   term count
         //   field count

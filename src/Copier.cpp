@@ -18,6 +18,8 @@ namespace indri {
     Node* Copier::after( class Field* oldNode, class Field* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ExtentInside* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class ExtentInside* oldNode, class ExtentInside* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class WeightedExtentOr* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class WeightedExtentOr* oldNode, class WeightedExtentOr* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ExtentOr* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class ExtentOr* oldNode, class ExtentOr* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class ExtentAnd* oldNode ) { defaultBefore( oldNode ); }

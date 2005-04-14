@@ -19,6 +19,8 @@ namespace indri {
       virtual void after( class Field* n );
       virtual void before( class ExtentInside* n );
       virtual void after( class ExtentInside* n );
+      virtual void before( class WeightedExtentOr* n );
+      virtual void after( class WeightedExtentOr* n );
       virtual void before( class ExtentOr* n );
       virtual void after( class ExtentOr* n );
       virtual void before( class ExtentAnd* n );

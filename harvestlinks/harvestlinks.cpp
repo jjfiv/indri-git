@@ -21,8 +21,8 @@
 #include "lemur/Exception.hpp"
 #include "indri/Combiner.hpp"
 
-static void harvest_anchor_text_file( const std::string& path, const std::string& harvestPath, HTMLParser& parser ) {
-  TaggedDocumentIterator iterator;
+static void harvest_anchor_text_file( const std::string& path, const std::string& harvestPath, indri::parse::HTMLParser& parser ) {
+  indri::parse::TaggedDocumentIterator iterator;
   iterator.open( path );
   iterator.setTags( 
     "<DOC>",              // startDocTag
@@ -30,11 +30,11 @@ static void harvest_anchor_text_file( const std::string& path, const std::string
     "</DOCHDR>"          // endMetadataTag
   );
 
-  UnparsedDocument* unparsed;
-  AnchorTextWriter writer( harvestPath );
+  indri::parse::UnparsedDocument* unparsed;
+  indri::parse::AnchorTextWriter writer( harvestPath );
 
   while( (unparsed = iterator.nextDocument()) != 0 ) {
-    ParsedDocument* parsed = parser.parse( unparsed );
+    indri::api::ParsedDocument* parsed = parser.parse( unparsed );
     writer.handle(parsed);
   }
   
@@ -49,16 +49,16 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
   std::vector<std::string> empty;
   std::map<std::string,std::string> mempty;
 
-  HTMLParser parser;
+  indri::parse::HTMLParser parser;
   parser.setTags( empty, empty, include, empty, mempty );
 
-  if( Path::isDirectory( corpusPath ) ) {
-    FileTreeIterator files( corpusPath );
+  if( indri::file::Path::isDirectory( corpusPath ) ) {
+    indri::file::FileTreeIterator files( corpusPath );
 
-    for( ; files != FileTreeIterator::end(); files++ ) {
+    for( ; files != indri::file::FileTreeIterator::end(); files++ ) {
       std::string filePath = *files;
-      std::string relative = Path::relative( corpusPath, filePath );
-      std::string anchorText = Path::combine( harvestPath, relative );      
+      std::string relative = indri::file::Path::relative( corpusPath, filePath );
+      std::string anchorText = indri::file::Path::combine( harvestPath, relative );      
       std::cout << "harvesting " << filePath << std::endl;
 
       try {
@@ -68,14 +68,14 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
       }
     }
   } else {
-    std::string anchorText = Path::combine( harvestPath, "data" );
+    std::string anchorText = indri::file::Path::combine( harvestPath, "data" );
     harvest_anchor_text_file( corpusPath, anchorText, parser );
   }
 }
 
 int main(int argc, char * argv[]) {
   try {
-    Parameters& parameters = Parameters::instance();
+    indri::api::Parameters& parameters = indri::api::Parameters::instance();
     parameters.loadCommandLine( argc, argv );
 
     if( parameters.get( "version", 0 ) ) {
@@ -87,32 +87,32 @@ int main(int argc, char * argv[]) {
     std::string redirectPath = parameters["redirect"];
     int bins = parameters.get( "bins", 10 );
 
-    std::string harvestPath = Path::combine( outputPath, "harvest" );
-    std::string bucketPath = Path::combine( outputPath, "buckets" );
-    std::string preSortPath = Path::combine( outputPath, "presort" );
-    std::string sortedPath = Path::combine( outputPath, "sorted" );
+    std::string harvestPath = indri::file::Path::combine( outputPath, "harvest" );
+    std::string bucketPath = indri::file::Path::combine( outputPath, "buckets" );
+    std::string preSortPath = indri::file::Path::combine( outputPath, "presort" );
+    std::string sortedPath = indri::file::Path::combine( outputPath, "sorted" );
 
     if( parameters.get( "delete", 1 ) ) {
-      if( Path::isDirectory( harvestPath ) )
-        Path::remove( harvestPath );
-      if( Path::isDirectory( bucketPath ) )
-        Path::remove( bucketPath );
-      if( Path::isDirectory( preSortPath ) )
-        Path::remove( preSortPath );
-      if( Path::isDirectory( sortedPath ) )
-        Path::remove( sortedPath );
+      if( indri::file::Path::isDirectory( harvestPath ) )
+        indri::file::Path::remove( harvestPath );
+      if( indri::file::Path::isDirectory( bucketPath ) )
+        indri::file::Path::remove( bucketPath );
+      if( indri::file::Path::isDirectory( preSortPath ) )
+        indri::file::Path::remove( preSortPath );
+      if( indri::file::Path::isDirectory( sortedPath ) )
+        indri::file::Path::remove( sortedPath );
 
-      Path::make( harvestPath ); 
-      Path::make( bucketPath ); 
-      Path::make( preSortPath ); 
-      Path::make( sortedPath ); 
+      indri::file::Path::make( harvestPath ); 
+      indri::file::Path::make( bucketPath ); 
+      indri::file::Path::make( preSortPath ); 
+      indri::file::Path::make( sortedPath ); 
     }
 
     // step 1: harvest text
     if( parameters.get( "harvest", 1 ) )
       harvest_anchor_text( corpusPath, harvestPath );
    
-    Combiner combiner( bins );
+    indri::parse::Combiner combiner( bins );
     
     // step 2: hash all text into buckets
     if( parameters.get( "buckets", 1 ) )

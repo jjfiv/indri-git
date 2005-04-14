@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskIndex
@@ -24,28 +34,28 @@ namespace indri {
   namespace index {
     class DiskIndex : public Index {
     private:
-      Mutex _lock;
+      indri::thread::Mutex _lock;
 
       std::string _path;
 
-      BulkTreeReader _frequentStringToTerm;
-      BulkTreeReader  _infrequentStringToTerm;
+      indri::file::BulkTreeReader _frequentStringToTerm;
+      indri::file::BulkTreeReader  _infrequentStringToTerm;
 
-      BulkTreeReader _frequentIdToTerm;
-      BulkTreeReader _infrequentIdToTerm;
+      indri::file::BulkTreeReader _frequentIdToTerm;
+      indri::file::BulkTreeReader _infrequentIdToTerm;
 
-      File _frequentTermsData;
+      indri::file::File _frequentTermsData;
 
-      File _documentLengths;
-      File _documentStatistics;
+      indri::file::File _documentLengths;
+      indri::file::File _documentStatistics;
 
-      File _invertedFile;
-      File _directFile;
+      indri::file::File _invertedFile;
+      indri::file::File _directFile;
 
-      SequentialReadBuffer _lengthsBuffer;
+      indri::file::SequentialReadBuffer _lengthsBuffer;
 
       std::vector<FieldStatistics> _fieldData;
-      std::vector<File*> _fieldFiles;
+      std::vector<indri::file::File*> _fieldFiles;
       int _documentBase;
       int _infrequentTermBase;
 
@@ -104,8 +114,8 @@ namespace indri {
 
       DocumentDataIterator* documentDataIterator();
 
-      Lockable* iteratorLock();
-      Lockable* statisticsLock();
+      indri::thread::Lockable* iteratorLock();
+      indri::thread::Lockable* statisticsLock();
     };
   }
 }

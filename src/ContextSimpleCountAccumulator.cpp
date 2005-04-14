@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // ContextSimpleCountAccumulator
@@ -15,7 +25,7 @@
 #include "indri/ContextSimpleCountAccumulator.hpp"
 #include "indri/ScoredExtentResult.hpp"
 
-void ContextSimpleCountAccumulator::_computeCounts( indri::index::Index& index ) {
+void indri::infnet::ContextSimpleCountAccumulator::_computeCounts( indri::index::Index& index ) {
   assert( _terms.size() );
   assert( _context.size() == 0 || _field.size() == 0 );
 
@@ -38,7 +48,7 @@ void ContextSimpleCountAccumulator::_computeCounts( indri::index::Index& index )
   }
 }
 
-ContextSimpleCountAccumulator::ContextSimpleCountAccumulator( const std::string& nodeName,
+indri::infnet::ContextSimpleCountAccumulator::ContextSimpleCountAccumulator( const std::string& nodeName,
                                                               const std::vector<std::string>& terms,
                                                               const std::string& field,
                                                               const std::string& context ) :
@@ -51,28 +61,28 @@ ContextSimpleCountAccumulator::ContextSimpleCountAccumulator( const std::string&
 {
 }
 
-const std::string& ContextSimpleCountAccumulator::getName() const {
+const std::string& indri::infnet::ContextSimpleCountAccumulator::getName() const {
   return _name;
 }
 
-const EvaluatorNode::MResults& ContextSimpleCountAccumulator::getResults() {
+const indri::infnet::EvaluatorNode::MResults& indri::infnet::ContextSimpleCountAccumulator::getResults() {
   _results.clear();
 
-  _results[ "occurrences" ].push_back( ScoredExtentResult( _occurrences, 0 ) );
-  _results[ "contextSize" ].push_back( ScoredExtentResult( _size, 0 ) );
+  _results[ "occurrences" ].push_back( indri::api::ScoredExtentResult( _occurrences, 0 ) );
+  _results[ "contextSize" ].push_back( indri::api::ScoredExtentResult( _size, 0 ) );
 
   return _results;
 }
 
-void ContextSimpleCountAccumulator::indexChanged( indri::index::Index& index ) {
+void indri::infnet::ContextSimpleCountAccumulator::indexChanged( indri::index::Index& index ) {
   _computeCounts( index );
   _maximumDocument = index.documentCount() + index.documentBase();
 }
 
-void ContextSimpleCountAccumulator::evaluate( int documentID, int documentLength ) {
+void indri::infnet::ContextSimpleCountAccumulator::evaluate( int documentID, int documentLength ) {
   // do nothing
 }
 
-int ContextSimpleCountAccumulator::nextCandidateDocument() {
+int indri::infnet::ContextSimpleCountAccumulator::nextCandidateDocument() {
   return MAX_INT32;
 }

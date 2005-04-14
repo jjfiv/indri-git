@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DocExtentListMemoryBuilderIterator
@@ -42,7 +52,7 @@ void indri::index::DocExtentListMemoryBuilderIterator::reset( DocExtentListMemor
 // reset
 //
 
-void indri::index::DocExtentListMemoryBuilderIterator::reset( const greedy_vector< DocExtentListMemoryBuilderSegment, 4 >& lists, bool numeric ) {
+void indri::index::DocExtentListMemoryBuilderIterator::reset( const indri::utility::greedy_vector< DocExtentListMemoryBuilderSegment, 4 >& lists, bool numeric ) {
   _lists = &lists;
   _numeric = numeric;
   

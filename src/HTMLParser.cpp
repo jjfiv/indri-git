@@ -20,8 +20,8 @@
 #include <ctype.h>
 #include "lemur/lemur-compat.hpp"
 
-void HTMLParser::initialize( UnparsedDocument* unparsed, ParsedDocument* parsed ) {
-  TaggedTextParser::initialize( unparsed, parsed );
+void indri::parse::HTMLParser::initialize( UnparsedDocument* unparsed, indri::api::ParsedDocument* parsed ) {
+  indri::parse::TaggedTextParser::initialize( unparsed, parsed );
 
   // clear URL
   url[0] = 0;
@@ -55,18 +55,18 @@ void HTMLParser::initialize( UnparsedDocument* unparsed, ParsedDocument* parsed 
   _anchorTag = _findTag("a");
 
   // add URL to metadata
-  MetadataPair pair;
+  indri::parse::MetadataPair pair;
   pair.key = "url";
   pair.value = url;
   pair.valueLength = strlen(url)+1;
   parsed->metadata.push_back( pair );
 }
 
-void HTMLParser::cleanup( UnparsedDocument* unparsed, ParsedDocument* parsed ) {
-  TaggedTextParser::cleanup( unparsed, parsed );
+void indri::parse::HTMLParser::cleanup( indri::parse::UnparsedDocument* unparsed, indri::api::ParsedDocument* parsed ) {
+  indri::parse::TaggedTextParser::cleanup( unparsed, parsed );
 }
 
-void HTMLParser::handleTag(char* token, long pos) {
+void indri::parse::HTMLParser::handleTag(char* token, long pos) {
   // <A HREF ...> tag
   int length = strlen(token);
 
@@ -111,7 +111,7 @@ void HTMLParser::handleTag(char* token, long pos) {
           addTag(tagProps->name, tagProps->conflation, pos+1);
       }
     else
-      TaggedTextParser::handleTag(token, pos);
+      indri::parse::TaggedTextParser::handleTag(token, pos);
   }
   // <BASE HREF ...> tag
   else if (length > 5 &&
@@ -147,7 +147,7 @@ void HTMLParser::handleTag(char* token, long pos) {
 // extracts a URL (in place) from a tag of the form
 // <\w+[ ]*=[ ]*"{0,1\}URL"{0,1}.*>
 // returns true on success, false otherwise
-bool HTMLParser::extractURL(char *token) {
+bool indri::parse::HTMLParser::extractURL(char *token) {
   int i,j;
   for(i = 0; token[i] != '='; i++) {
     if(token[i] == '\0') {
@@ -170,7 +170,7 @@ bool HTMLParser::extractURL(char *token) {
 // largely based on information contained in RFC 1808
 // Note: returns true if the URL was a relative one, false if it was absolute
 //       the return value is not an error code here; the function should always succeed
-bool HTMLParser:: normalizeURL(char *s) {
+bool indri::parse::HTMLParser:: normalizeURL(char *s) {
   char *normurl = s;
 
   // remove the fragment identifier, query information and parameter information
@@ -292,8 +292,8 @@ bool HTMLParser:: normalizeURL(char *s) {
       dotCleanStart = slash - normurl;
   }
 
-  greedy_vector<int,32> slashes;
-  greedy_vector<bool,32> usable;
+  indri::utility::greedy_vector<int,32> slashes;
+  indri::utility::greedy_vector<bool,32> usable;
   int normLength = strlen(normurl);
 
   // get rid of ".." directories

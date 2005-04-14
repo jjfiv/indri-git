@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -26,8 +26,8 @@ namespace indri {
 
     struct FieldExtentInfo {
       int documentID;
-      greedy_vector<Extent> extents;
-      greedy_vector<INT64> numbers;
+      indri::utility::greedy_vector<indri::index::Extent> extents;
+      indri::utility::greedy_vector<INT64> numbers;
     };
 
     class FieldListIterator {

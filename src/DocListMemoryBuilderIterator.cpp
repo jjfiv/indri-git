@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DocListMemoryBuilderIterator
@@ -41,7 +51,7 @@ void indri::index::DocListMemoryBuilderIterator::reset( DocListMemoryBuilder& bu
 // reset
 //
 
-void indri::index::DocListMemoryBuilderIterator::reset( const greedy_vector< DocListMemoryBuilderSegment, 4 >& lists, TermData* termData ) {
+void indri::index::DocListMemoryBuilderIterator::reset( const indri::utility::greedy_vector< DocListMemoryBuilderSegment, 4 >& lists, TermData* termData ) {
   _lists = &lists;
   _current = _lists->begin();
   
@@ -158,7 +168,7 @@ bool indri::index::DocListMemoryBuilderIterator::finished() {
 // topDocuments
 //
 
-greedy_vector<indri::index::DocListIterator::TopDocument>& indri::index::DocListMemoryBuilderIterator::topDocuments() {
+indri::utility::greedy_vector<indri::index::DocListIterator::TopDocument>& indri::index::DocListMemoryBuilderIterator::topDocuments() {
   return _emptyTopDocuments;
 }
 

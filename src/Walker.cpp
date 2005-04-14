@@ -18,6 +18,8 @@ namespace indri {
    void Walker::after( class Field* n ) { defaultAfter( n ); }
    void Walker::before( class ExtentInside* n ) { defaultBefore( n ); }
    void Walker::after( class ExtentInside* n ) { defaultAfter( n ); }
+   void Walker::before( class WeightedExtentOr* n ) { defaultBefore( n ); }
+   void Walker::after( class WeightedExtentOr* n ) { defaultAfter( n ); }
    void Walker::before( class ExtentOr* n ) { defaultBefore( n ); }
    void Walker::after( class ExtentOr* n ) { defaultAfter( n ); }
    void Walker::before( class ExtentAnd* n ) { defaultBefore( n ); }

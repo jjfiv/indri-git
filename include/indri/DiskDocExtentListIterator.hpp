@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // DiskDocExtentListIterator
@@ -19,7 +29,7 @@ namespace indri {
       const char* _listEnd;
       int _skipDocument;
 
-      SequentialReadBuffer* _file;
+      indri::file::SequentialReadBuffer* _file;
       UINT64 _startOffset;
       bool _numeric;
 
@@ -30,7 +40,7 @@ namespace indri {
       void _readSkip();
 
     public:
-      DiskDocExtentListIterator( SequentialReadBuffer* buffer, UINT64 startOffset );
+      DiskDocExtentListIterator( indri::file::SequentialReadBuffer* buffer, UINT64 startOffset );
       ~DiskDocExtentListIterator();
       
       void setStartOffset( UINT64 startOffset );

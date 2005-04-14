@@ -33,12 +33,12 @@ struct conflation_pair {
 void indri_kstem_load_table();
 int indri_kstem_static_entry_count();
 
-KrovetzStemmerTransformation::KrovetzStemmerTransformation( Parameters& parameters ) {
+indri::parse::KrovetzStemmerTransformation::KrovetzStemmerTransformation( indri::api::Parameters& parameters ) {
   _stemBuffer = 0;
   _stemBufferSize = 0;
 
-  Parameters pheadwords;
-  Parameters pconflations;
+  indri::api::Parameters pheadwords;
+  indri::api::Parameters pconflations;
 
   // figure out how many words we're dealing with here
   if( parameters.exists( "h" ) ) {
@@ -67,11 +67,11 @@ KrovetzStemmerTransformation::KrovetzStemmerTransformation( Parameters& paramete
   indri_kstem_load_table();
 }
 
-KrovetzStemmerTransformation::~KrovetzStemmerTransformation() {
+indri::parse::KrovetzStemmerTransformation::~KrovetzStemmerTransformation() {
   delete _stemBuffer;
 }
 
-char* KrovetzStemmerTransformation::_growBuffer( size_t length, char* oldEnd ) {
+char* indri::parse::KrovetzStemmerTransformation::_growBuffer( size_t length, char* oldEnd ) {
   char* newBuffer = new char[length];
   memcpy( newBuffer, _stemBuffer, oldEnd - _stemBuffer );
   char* startPoint = (oldEnd - _stemBuffer) + newBuffer;
@@ -83,7 +83,7 @@ char* KrovetzStemmerTransformation::_growBuffer( size_t length, char* oldEnd ) {
   return startPoint;
 }
 
-char* KrovetzStemmerTransformation::_getBuffer( size_t length ) {
+char* indri::parse::KrovetzStemmerTransformation::_getBuffer( size_t length ) {
   if( _stemBufferSize < length ) {
     delete _stemBuffer;
     _stemBuffer = new char[length];
@@ -93,11 +93,11 @@ char* KrovetzStemmerTransformation::_getBuffer( size_t length ) {
   return _stemBuffer;
 }
 
-const char* KrovetzStemmerTransformation::_getBufferEnd() const {
+const char* indri::parse::KrovetzStemmerTransformation::_getBufferEnd() const {
   return _stemBuffer + _stemBufferSize;
 }
 
-ParsedDocument* KrovetzStemmerTransformation::_restart( ParsedDocument* document, size_t lastIndex, char* endOfStemming ) {
+indri::api::ParsedDocument* indri::parse::KrovetzStemmerTransformation::_restart( indri::api::ParsedDocument* document, size_t lastIndex, char* endOfStemming ) {
   int stemmedRegion = endOfStemming - _stemBuffer;
   float proportion = (float(document->terms.size()) / float(lastIndex+1)) * 1.5;
   int expectedLength = int(proportion * stemmedRegion) + KSTEM_MAX_WORD_LENGTH;
@@ -121,8 +121,8 @@ ParsedDocument* KrovetzStemmerTransformation::_restart( ParsedDocument* document
   return _processTerms( document, lastIndex+1, newStart, newEnd );
 }
 
-ParsedDocument* KrovetzStemmerTransformation::_processTerms( ParsedDocument* document, size_t start, char* stem, const char* end ) {
-  greedy_vector<char*>& terms = document->terms;
+indri::api::ParsedDocument* indri::parse::KrovetzStemmerTransformation::_processTerms( indri::api::ParsedDocument* document, size_t start, char* stem, const char* end ) {
+  indri::utility::greedy_vector<char*>& terms = document->terms;
 
   for( size_t i=0; i<terms.size(); i++ ) {
     char* term = terms[i];
@@ -147,8 +147,8 @@ ParsedDocument* KrovetzStemmerTransformation::_processTerms( ParsedDocument* doc
   return document;
 }
 
-ParsedDocument* KrovetzStemmerTransformation::transform( ParsedDocument* document ) {
-  greedy_vector<char*>& terms = document->terms;
+indri::api::ParsedDocument* indri::parse::KrovetzStemmerTransformation::transform( indri::api::ParsedDocument* document ) {
+  indri::utility::greedy_vector<char*>& terms = document->terms;
 
   // this is the minimum amount of space we're willing to start with, but we may get more
   int bufferLength = document->textLength * 2 + KSTEM_MAX_WORD_LENGTH + KSTEM_EXTRA_SPACE;
@@ -158,11 +158,11 @@ ParsedDocument* KrovetzStemmerTransformation::transform( ParsedDocument* documen
   return _processTerms( document, 0, stem, end );
 }
 
-void KrovetzStemmerTransformation::setHandler( ObjectHandler<ParsedDocument>& handler ) {
+void indri::parse::KrovetzStemmerTransformation::setHandler( ObjectHandler<indri::api::ParsedDocument>& handler ) {
   _handler = &handler;
 }
 
-void KrovetzStemmerTransformation::handle( ParsedDocument* document ) {
+void indri::parse::KrovetzStemmerTransformation::handle( indri::api::ParsedDocument* document ) {
   _handler->handle( transform( document ) );
 }
 
@@ -21971,12 +21971,12 @@ static const char* const headwords[] =
 //
 // Functions for loading the KStem table
 //
-bool KrovetzStemmerTransformation::_indri_kstem_loaded = false;
+bool indri::parse::KrovetzStemmerTransformation::_indri_kstem_loaded = false;
 
 void indri_kstem_load_table() {
   // only initialize once, no matter how many instances get made.
-  if (KrovetzStemmerTransformation::_indri_kstem_loaded) return;
-  KrovetzStemmerTransformation::_indri_kstem_loaded = true;
+  if (indri::parse::KrovetzStemmerTransformation::_indri_kstem_loaded) return;
+  indri::parse::KrovetzStemmerTransformation::_indri_kstem_loaded = true;
   for( unsigned int i=0; headwords[i]; i++ ) {
     kstem_add_table_entry( headwords[i], "" );
   }

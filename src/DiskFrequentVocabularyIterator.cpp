@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskFrequentVocabularyIterator
@@ -12,7 +22,7 @@
 // DiskFrequentVocabularyIterator constructor
 //
 
-indri::index::DiskFrequentVocabularyIterator::DiskFrequentVocabularyIterator( File& frequentTermsData, int fieldCount ) :
+indri::index::DiskFrequentVocabularyIterator::DiskFrequentVocabularyIterator( indri::file::File& frequentTermsData, int fieldCount ) :
   _file(frequentTermsData),
   _fieldCount(fieldCount),
   _stream(0, 0)

@@ -21,14 +21,14 @@
 #include "indri/Annotator.hpp"
 #include "indri/InferenceNetwork.hpp"
 
-DocListIteratorNode::DocListIteratorNode( const std::string& name, class InferenceNetwork& network, int listID ) :
+indri::infnet::DocListIteratorNode::DocListIteratorNode( const std::string& name, class InferenceNetwork& network, int listID ) :
   _name(name),
   _network(network),
   _listID(listID)
 {
 }
 
-int DocListIteratorNode::nextCandidateDocument() {
+int indri::infnet::DocListIteratorNode::nextCandidateDocument() {
   if( _list ) {
     indri::index::DocListIterator::DocumentData* info = _list->currentEntry();
     if( info ) { 
@@ -39,7 +39,7 @@ int DocListIteratorNode::nextCandidateDocument() {
   return MAX_INT32;
 }
 
-void DocListIteratorNode::prepare( int documentID ) {
+void indri::infnet::DocListIteratorNode::prepare( int documentID ) {
   _extents.clear();
 
   if( !_list )
@@ -50,26 +50,26 @@ void DocListIteratorNode::prepare( int documentID ) {
   if( !info || info->document != documentID )
     return;
   
-  greedy_vector<int>& positions = info->positions;
+  indri::utility::greedy_vector<int>& positions = info->positions;
 
   for( int i = 0; i < positions.size(); i++ ) {
-    _extents.push_back( Extent( positions[i], positions[i]+1 ) );
+    _extents.push_back( indri::index::Extent( positions[i], positions[i]+1 ) );
   }
 }
 
-const greedy_vector<Extent>& DocListIteratorNode::extents() {
+const indri::utility::greedy_vector<indri::index::Extent>& indri::infnet::DocListIteratorNode::extents() {
   return _extents;
 }
 
-const std::string& DocListIteratorNode::getName() const {
+const std::string& indri::infnet::DocListIteratorNode::getName() const {
   return _name;
 }
 
-void DocListIteratorNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
+void indri::infnet::DocListIteratorNode::annotate( Annotator& annotator, int documentID, int begin, int end ) {
   annotator.addMatches( _extents, this, documentID, begin, end );
 }
 
-void DocListIteratorNode::indexChanged( indri::index::Index& index ) {
+void indri::infnet::DocListIteratorNode::indexChanged( indri::index::Index& index ) {
   _list = _network.getDocIterator( _listID );
 }
 

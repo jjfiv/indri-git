@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskKeyfileVocabularyIterator
@@ -12,7 +22,7 @@
 // DiskKeyfileVocabularyIterator constructor
 //
 
-indri::index::DiskKeyfileVocabularyIterator::DiskKeyfileVocabularyIterator( int baseID, BulkTreeReader& keyfile, Mutex& lock, int fieldCount ) :
+indri::index::DiskKeyfileVocabularyIterator::DiskKeyfileVocabularyIterator( int baseID, indri::file::BulkTreeReader& keyfile, indri::thread::Mutex& lock, int fieldCount ) :
   _baseID(baseID),
   _keyfile(keyfile),
   _mutex(lock),
@@ -58,7 +68,7 @@ void indri::index::DiskKeyfileVocabularyIterator::startIteration() {
 
   int actual;
   // fix me _finished = !_keyfile.get( 0, _compressedData.front(), actual, _compressedData.size() );
-  RVLDecompressStream stream( _compressedData.front(), actual );
+  indri::utility::RVLDecompressStream stream( _compressedData.front(), actual );
 
   if( _finished )
     return;
@@ -84,7 +94,7 @@ bool indri::index::DiskKeyfileVocabularyIterator::nextEntry() {
   int key;
   int actual;
   // fix me _finished = !_keyfile.next( key, _compressedData.front(),  actual );
-  RVLDecompressStream stream( _data, actual );
+  indri::utility::RVLDecompressStream stream( _data, actual );
 
   if( _finished ) {
     _release();

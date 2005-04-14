@@ -27,7 +27,6 @@
 #include "indri/Buffer.hpp"
 #include "indri/Path.hpp"
 #include "indri/Parameters.hpp"
-#include "indri/Buffer.hpp"
 #include "indri/File.hpp"
 #include "indri/ScopedLock.hpp"
 #include <algorithm>
@@ -57,7 +56,7 @@ static void zlib_free( void* opaque, void* address ) {
 // zlib_deflate
 //
 
-static void zlib_deflate( z_stream_s& stream, SequentialWriteBuffer* outfile ) {
+static void zlib_deflate( z_stream_s& stream, indri::file::SequentialWriteBuffer* outfile ) {
   if( stream.avail_in == 0 ) {
     // nothing to do...
     return;
@@ -89,7 +88,7 @@ static void zlib_deflate( z_stream_s& stream, SequentialWriteBuffer* outfile ) {
 // zlib_deflate_finish
 //
 
-static void zlib_deflate_finish( z_stream_s& stream, SequentialWriteBuffer* outfile ) {
+static void zlib_deflate_finish( z_stream_s& stream, indri::file::SequentialWriteBuffer* outfile ) {
   while(true) {
     if( stream.avail_out == 0 ) {
       stream.next_out = (Bytef*) outfile->write( OUTPUT_BUFFER_SIZE );
@@ -113,7 +112,7 @@ static void zlib_deflate_finish( z_stream_s& stream, SequentialWriteBuffer* outf
 // zlib_read_document
 //
 
-static void zlib_read_document( z_stream_s& stream, File& infile, UINT64 offset, Buffer& outputBuffer ) {
+static void zlib_read_document( z_stream_s& stream, indri::file::File& infile, UINT64 offset, indri::utility::Buffer& outputBuffer ) {
   // read in data from the file until the stream ends
   // split up the data as necessary
   // decompress positional info
@@ -121,7 +120,7 @@ static void zlib_read_document( z_stream_s& stream, File& infile, UINT64 offset,
   // read some data
   char inputBuffer[INPUT_BUFFER_SIZE];
   outputBuffer.grow( INPUT_BUFFER_SIZE );
-  outputBuffer.write( sizeof(ParsedDocument) );
+  outputBuffer.write( sizeof(indri::api::ParsedDocument) );
 
   stream.avail_in = 0;
   stream.avail_out = 0;
@@ -185,7 +184,7 @@ static int copy_quad( char* buffer ) {
 // _writeMetadataItem
 //
 
-void CompressedCollection::_writeMetadataItem( ParsedDocument* document, int i, int& keyLength, int& valueLength ) {
+void indri::collection::CompressedCollection::_writeMetadataItem( indri::api::ParsedDocument* document, int i, int& keyLength, int& valueLength ) {
   keyLength = strlen(document->metadata[i].key) + 1;
   _stream->next_in = (Bytef*) document->metadata[i].key;
   _stream->avail_in = strlen(document->metadata[i].key) + 1;
@@ -203,10 +202,10 @@ void CompressedCollection::_writeMetadataItem( ParsedDocument* document, int i, 
 // _writePositions
 //
 
-void CompressedCollection::_writePositions( ParsedDocument* document, int& keyLength, int& valueLength ) {
+void indri::collection::CompressedCollection::_writePositions( indri::api::ParsedDocument* document, int& keyLength, int& valueLength ) {
   _positionsBuffer.clear();
   _positionsBuffer.grow( document->positions.size() * 10 );
-  RVLCompressStream compress( _positionsBuffer );
+  indri::utility::RVLCompressStream compress( _positionsBuffer );
   int last = 0;
 
   if( !document->positions.size() )
@@ -218,7 +217,7 @@ void CompressedCollection::_writePositions( ParsedDocument* document, int& keyLe
   zlib_deflate( *_stream, _output );
 
   for( size_t i=0; i<document->positions.size(); i++ ) {
-    TermExtent extent = document->positions[i];
+    indri::parse::TermExtent extent = document->positions[i];
 
     compress << (extent.begin - last)
              << (extent.end - extent.begin);
@@ -236,7 +235,7 @@ void CompressedCollection::_writePositions( ParsedDocument* document, int& keyLe
 // _writeText
 //
 
-void CompressedCollection::_writeText( ParsedDocument* document, int& keyLength, int& valueLength ) {
+void indri::collection::CompressedCollection::_writeText( indri::api::ParsedDocument* document, int& keyLength, int& valueLength ) {
   keyLength = sizeof TEXT_KEY;
   _stream->next_in = (Bytef*) TEXT_KEY;
   _stream->avail_in = keyLength;
@@ -251,12 +250,12 @@ void CompressedCollection::_writeText( ParsedDocument* document, int& keyLength,
 // _readPositions
 //
 
-void CompressedCollection::_readPositions( ParsedDocument* document, const void* positionData, int positionDataLength ) {
-  RVLDecompressStream decompress( (const char*) positionData, positionDataLength );
+void indri::collection::CompressedCollection::_readPositions( indri::api::ParsedDocument* document, const void* positionData, int positionDataLength ) {
+  indri::utility::RVLDecompressStream decompress( (const char*) positionData, positionDataLength );
   int last = 0;
 
   while( !decompress.done() ) {
-    TermExtent extent;
+    indri::parse::TermExtent extent;
 
     decompress >> extent.begin
                >> extent.end;
@@ -273,8 +272,8 @@ void CompressedCollection::_readPositions( ParsedDocument* document, const void*
 // CompressedCollection
 //
 
-CompressedCollection::CompressedCollection() {
-  _output = new SequentialWriteBuffer( _storage, 1024*1024 );
+indri::collection::CompressedCollection::CompressedCollection() {
+  _output = new indri::file::SequentialWriteBuffer( _storage, 1024*1024 );
 
   _stream = new z_stream_s;
   _stream->zalloc = zlib_alloc;
@@ -291,7 +290,7 @@ CompressedCollection::CompressedCollection() {
 // ~CompressedCollection
 //
 
-CompressedCollection::~CompressedCollection() {
+indri::collection::CompressedCollection::~CompressedCollection() {
   close();
 
   delete _output;
@@ -304,7 +303,7 @@ CompressedCollection::~CompressedCollection() {
 // create
 //
 
-void CompressedCollection::create( const std::string& fileName ) {
+void indri::collection::CompressedCollection::create( const std::string& fileName ) {
   std::vector<std::string> empty;
   create( fileName, empty, empty );
 }
@@ -313,7 +312,7 @@ void CompressedCollection::create( const std::string& fileName ) {
 // create
 //
 
-void CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields ) {
+void indri::collection::CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields ) {
   std::vector<std::string> empty;
   create( fileName, forwardIndexedFields, empty );
 }
@@ -322,22 +321,22 @@ void CompressedCollection::create( const std::string& fileName, const std::vecto
 // create
 //
 
-void CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields ) {
-  std::string manifestName = Path::combine( fileName, "manifest" );
-  std::string lookupName = Path::combine( fileName, "lookup" );
-  std::string storageName = Path::combine( fileName, "storage" );
+void indri::collection::CompressedCollection::create( const std::string& fileName, const std::vector<std::string>& forwardIndexedFields, const std::vector<std::string>& reverseIndexedFields ) {
+  std::string manifestName = indri::file::Path::combine( fileName, "manifest" );
+  std::string lookupName = indri::file::Path::combine( fileName, "lookup" );
+  std::string storageName = indri::file::Path::combine( fileName, "storage" );
 
   _storage.create( storageName );
   _lookup.create( lookupName );
 
-  Parameters manifest;
-  Parameters forwardParameters = manifest.append( "forward" );
+  indri::api::Parameters manifest;
+  indri::api::Parameters forwardParameters = manifest.append( "forward" );
 
   for( size_t i=0; i<forwardIndexedFields.size(); i++ ) {
     std::stringstream metalookupName;
     metalookupName << "forwardLookup" << i;
 
-    std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+    std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
     Keyfile* metalookup = new Keyfile;
     metalookup->create( metalookupPath );
 
@@ -346,13 +345,13 @@ void CompressedCollection::create( const std::string& fileName, const std::vecto
     forwardParameters.append("field").set(forwardIndexedFields[i]);
   }
 
-  Parameters reverseParameters = manifest.append( "reverse" );
+  indri::api::Parameters reverseParameters = manifest.append( "reverse" );
 
   for( size_t i=0; i<reverseIndexedFields.size(); i++ ) {
     std::stringstream metalookupName;
     metalookupName << "reverseLookup" << i;
 
-    std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+    std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
     Keyfile* metalookup = new Keyfile;
     metalookup->create( metalookupPath );
 
@@ -368,25 +367,25 @@ void CompressedCollection::create( const std::string& fileName, const std::vecto
 // open
 //
 
-void CompressedCollection::open( const std::string& fileName ) {
-  std::string lookupName = Path::combine( fileName, "lookup" );
-  std::string storageName = Path::combine( fileName, "storage" );
-  std::string manifestName = Path::combine( fileName, "manifest" );
+void indri::collection::CompressedCollection::open( const std::string& fileName ) {
+  std::string lookupName = indri::file::Path::combine( fileName, "lookup" );
+  std::string storageName = indri::file::Path::combine( fileName, "storage" );
+  std::string manifestName = indri::file::Path::combine( fileName, "manifest" );
 
-  Parameters manifest;
+  indri::api::Parameters manifest;
   manifest.loadFile( manifestName );
 
   _storage.open( storageName );
   _lookup.open( lookupName );
 
   if( manifest.exists("forward.field") ) {
-    Parameters forward = manifest["forward.field"];
+    indri::api::Parameters forward = manifest["forward.field"];
 
     for( size_t i=0; i<forward.size(); i++ ) {
       std::stringstream metalookupName;
       metalookupName << "forwardLookup" << i;
 
-      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->open( metalookupPath );
 
@@ -396,16 +395,16 @@ void CompressedCollection::open( const std::string& fileName ) {
     }
   }
 
-  Parameters reverse = manifest["reverse"];
+  indri::api::Parameters reverse = manifest["reverse"];
 
   if( manifest.exists("reverse.field") ) {
-    Parameters reverse = manifest["reverse.field"];
+    indri::api::Parameters reverse = manifest["reverse.field"];
 
     for( size_t i=0; i<reverse.size(); i++ ) {
       std::stringstream metalookupName;
       metalookupName << "reverseLookup" << i;
 
-      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->open( metalookupPath );
 
@@ -421,25 +420,25 @@ void CompressedCollection::open( const std::string& fileName ) {
 // openRead
 //
 
-void CompressedCollection::openRead( const std::string& fileName ) {
-  std::string lookupName = Path::combine( fileName, "lookup" );
-  std::string storageName = Path::combine( fileName, "storage" );
-  std::string manifestName = Path::combine( fileName, "manifest" );
+void indri::collection::CompressedCollection::openRead( const std::string& fileName ) {
+  std::string lookupName = indri::file::Path::combine( fileName, "lookup" );
+  std::string storageName = indri::file::Path::combine( fileName, "storage" );
+  std::string manifestName = indri::file::Path::combine( fileName, "manifest" );
 
-  Parameters manifest;
+  indri::api::Parameters manifest;
   manifest.loadFile( manifestName );
 
   _storage.openRead( storageName );
   _lookup.openRead( lookupName );
 
   if( manifest.exists("forward.field") ) {
-    Parameters forward = manifest["forward.field"];
+    indri::api::Parameters forward = manifest["forward.field"];
 
     for( size_t i=0; i<forward.size(); i++ ) {
       std::stringstream metalookupName;
       metalookupName << "forwardLookup" << i;
 
-      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->openRead( metalookupPath );
 
@@ -450,13 +449,13 @@ void CompressedCollection::openRead( const std::string& fileName ) {
   }
 
   if( manifest.exists("reverse.field") ) {
-    Parameters reverse = manifest["reverse.field"];
+    indri::api::Parameters reverse = manifest["reverse.field"];
 
     for( size_t i=0; i<reverse.size(); i++ ) {
       std::stringstream metalookupName;
       metalookupName << "reverseLookup" << i;
 
-      std::string metalookupPath = Path::combine( fileName, metalookupName.str() );
+      std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
       Keyfile* metalookup = new Keyfile;
       metalookup->openRead( metalookupPath );
 
@@ -471,7 +470,7 @@ void CompressedCollection::openRead( const std::string& fileName ) {
 // close
 //
 
-void CompressedCollection::close() {
+void indri::collection::CompressedCollection::close() {
   _lookup.close();
   if( _output ) {
     _output->flush();
@@ -481,7 +480,7 @@ void CompressedCollection::close() {
 
   _storage.close();
 
-  HashTable<const char*, Keyfile*>::iterator iter;
+  indri::utility::HashTable<const char*, Keyfile*>::iterator iter;
 
   for( iter = _forwardLookups.begin(); iter != _forwardLookups.end(); iter++ ) {
     (*iter->second)->close();
@@ -508,15 +507,15 @@ void CompressedCollection::close() {
 // key0, value0, key1, value1 ... , numPairs
 //
 
-void CompressedCollection::addDocument( int documentID, ParsedDocument* document ) {
-  ScopedLock l( _lock );
+void indri::collection::CompressedCollection::addDocument( int documentID, indri::api::ParsedDocument* document ) {
+  indri::thread::ScopedLock l( _lock );
   
   _stream->zalloc = zlib_alloc;
   _stream->zfree = zlib_free;
   _stream->next_out = 0;
   _stream->avail_out = 0;
   UINT64 offset = _output->tell();
-  greedy_vector<UINT32> recordOffsets;
+  indri::utility::greedy_vector<UINT32> recordOffsets;
   int keyLength;
   int valueLength;
   int recordOffset = 0;
@@ -542,7 +541,7 @@ void CompressedCollection::addDocument( int documentID, ParsedDocument* document
 
     if( metalookup ) {
       // there may be more than one reverse lookup here, so we fetch any old ones:
-      greedy_vector<int> documentIDs;
+      indri::utility::greedy_vector<int> documentIDs;
       int dataSize = (*metalookup)->getSize( (const char*)document->metadata[i].value );
 
       if( dataSize >= 0 ) {
@@ -591,8 +590,8 @@ void CompressedCollection::addDocument( int documentID, ParsedDocument* document
 }
 
 
-ParsedDocument* CompressedCollection::retrieve( int documentID ) {
-  ScopedLock l( _lock );
+indri::api::ParsedDocument* indri::collection::CompressedCollection::retrieve( int documentID ) {
+  indri::thread::ScopedLock l( _lock );
 
   UINT64 offset;
   int actual;
@@ -602,7 +601,7 @@ ParsedDocument* CompressedCollection::retrieve( int documentID ) {
   }
 
   // decompress the data
-  Buffer output;
+  indri::utility::Buffer output;
   z_stream_s stream;
   stream.zalloc = zlib_alloc;
   stream.zfree = zlib_free;
@@ -613,14 +612,14 @@ ParsedDocument* CompressedCollection::retrieve( int documentID ) {
   int decompressedSize = stream.total_out;
 
   // initialize the buffer as a ParsedDocument
-  ParsedDocument* document = (ParsedDocument*) output.front();
-  new(document) ParsedDocument;
+  indri::api::ParsedDocument* document = (indri::api::ParsedDocument*) output.front();
+  new(document) indri::api::ParsedDocument;
 
   document->text = 0;
   document->textLength = 0;
 
   // get the number of fields (it's the last byte)
-  char* dataStart = output.front() + sizeof(ParsedDocument);
+  char* dataStart = output.front() + sizeof(indri::api::ParsedDocument);
   int fieldCount = copy_quad( dataStart + decompressedSize - 4 );
   int endOffset = decompressedSize - 4 - 2*fieldCount*sizeof(UINT32);
   char* arrayStart = dataStart + endOffset;
@@ -640,7 +639,7 @@ ParsedDocument* CompressedCollection::retrieve( int documentID ) {
       valueEnd = copy_quad( arrayStart + 2*(i+1)*sizeof(UINT32) );
     }
 
-    MetadataPair pair;
+    indri::parse::MetadataPair pair;
     pair.key = dataStart + keyStart;
     pair.value = dataStart + valueStart;
     pair.valueLength = valueEnd - valueStart;
@@ -670,8 +669,8 @@ ParsedDocument* CompressedCollection::retrieve( int documentID ) {
 // retrieveMetadatum
 //
 
-std::string CompressedCollection::retrieveMetadatum( int documentID, const std::string& attributeName ) {
-  ScopedLock l( _lock );
+std::string indri::collection::CompressedCollection::retrieveMetadatum( int documentID, const std::string& attributeName ) {
+  indri::thread::ScopedLock l( _lock );
 
   Keyfile** metalookup = _forwardLookups.find( attributeName.c_str() );
   std::string result;
@@ -689,11 +688,11 @@ std::string CompressedCollection::retrieveMetadatum( int documentID, const std::
     delete[] resultBuffer;
   } else {
     l.unlock();
-    ParsedDocument* document = retrieve( documentID );
+    indri::api::ParsedDocument* document = retrieve( documentID );
 
-    greedy_vector<MetadataPair>::iterator iter = std::find_if( document->metadata.begin(),
+    indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( document->metadata.begin(),
                                                               document->metadata.end(),
-                                                              MetadataPair::key_equal( attributeName.c_str() ) );
+                                                              indri::parse::MetadataPair::key_equal( attributeName.c_str() ) );
     
     if( iter != document->metadata.end() ) {
       result = (char*) iter->value;
@@ -709,8 +708,8 @@ std::string CompressedCollection::retrieveMetadatum( int documentID, const std::
 // retrieveIDByMetadatum 
 //
 
-std::vector<int> CompressedCollection::retrieveIDByMetadatum( const std::string& attributeName, const std::string& value ) {
-  ScopedLock l( _lock );
+std::vector<int> indri::collection::CompressedCollection::retrieveIDByMetadatum( const std::string& attributeName, const std::string& value ) {
+  indri::thread::ScopedLock l( _lock );
 
   // find the lookup associated with this field
   Keyfile** metalookup = _reverseLookups.find( attributeName.c_str() );
@@ -736,8 +735,8 @@ std::vector<int> CompressedCollection::retrieveIDByMetadatum( const std::string&
 // retrieveByMetadatum
 //
 
-std::vector<ParsedDocument*> CompressedCollection::retrieveByMetadatum( const std::string& attributeName, const std::string& value ) {
-  std::vector<ParsedDocument*> documents;
+std::vector<indri::api::ParsedDocument*> indri::collection::CompressedCollection::retrieveByMetadatum( const std::string& attributeName, const std::string& value ) {
+  std::vector<indri::api::ParsedDocument*> documents;
   std::vector<int> results = retrieveIDByMetadatum( attributeName, value );
 
   for( int i=0; i<results.size(); i++ ) {

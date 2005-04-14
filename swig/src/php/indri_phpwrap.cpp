@@ -370,11 +370,9 @@ SWIG_PropagateClientData(swig_type_info *type) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define HashTable ZEndHashTable
 #include "zend.h"
 #include "zend_API.h"
 #include "php.h"
-#undef HashTable
 
 /* These TSRMLS_ stuff should already be defined now, but with older php under
    redhat are not... */
@@ -607,14 +605,15 @@ type_error:
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_INT64 swig_types[0] 
-#define  SWIGTYPE_p_ScoredExtentResult swig_types[1] 
-#define  SWIGTYPE_p_TermExtent swig_types[2] 
-#define  SWIGTYPE_p_QueryEnvironment swig_types[3] 
+#define  SWIGTYPE_p_indri__api__ScoredExtentResult swig_types[1] 
+#define  SWIGTYPE_p_indri__parse__TermExtent swig_types[2] 
+#define  SWIGTYPE_p_indri__api__QueryEnvironment swig_types[3] 
 #define  SWIGTYPE_p_UINT64 swig_types[4] 
-#define  SWIGTYPE_p_ParsedDocument swig_types[5] 
-#define  SWIGTYPE_p_QueryAnnotationNode swig_types[6] 
-#define  SWIGTYPE_p_QueryAnnotation swig_types[7] 
-static swig_type_info *swig_types[9];
+#define  SWIGTYPE_p_indri__api__ParsedDocument swig_types[5] 
+#define  SWIGTYPE_p_indri__api__QueryAnnotationNode swig_types[6] 
+#define  SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults swig_types[7] 
+#define  SWIGTYPE_p_indri__api__QueryAnnotation swig_types[8] 
+static swig_type_info *swig_types[10];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -828,23 +827,25 @@ zend_module_entry* SWIG_module_entry = &indri_module_entry;
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_INT64[] = {{"_p_INT64", 0, "long long *|INT64 *", 0, 0, 0, 0},{"_p_INT64", 0, 0, 0, 0, 0, 0},{"_p_UINT64", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_ScoredExtentResult[] = {{"_p_ScoredExtentResult", 0, "ScoredExtentResult *", 0, 0, 0, 0},{"_p_ScoredExtentResult", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_TermExtent[] = {{"_p_TermExtent", 0, "TermExtent *", 0, 0, 0, 0},{"_p_TermExtent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_QueryEnvironment[] = {{"_p_QueryEnvironment", 0, "QueryEnvironment *", 0, 0, 0, 0},{"_p_QueryEnvironment", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__api__ScoredExtentResult[] = {{"_p_indri__api__ScoredExtentResult", 0, "indri::api::ScoredExtentResult *", 0, 0, 0, 0},{"_p_indri__api__ScoredExtentResult", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__parse__TermExtent[] = {{"_p_indri__parse__TermExtent", 0, "indri::parse::TermExtent *", 0, 0, 0, 0},{"_p_indri__parse__TermExtent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__api__QueryEnvironment[] = {{"_p_indri__api__QueryEnvironment", 0, "indri::api::QueryEnvironment *", 0, 0, 0, 0},{"_p_indri__api__QueryEnvironment", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_UINT64[] = {{"_p_UINT64", 0, "long long *|UINT64 *", 0, 0, 0, 0},{"_p_INT64", 0, 0, 0, 0, 0, 0},{"_p_UINT64", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_ParsedDocument[] = {{"_p_ParsedDocument", 0, "ParsedDocument *", 0, 0, 0, 0},{"_p_ParsedDocument", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_QueryAnnotationNode[] = {{"_p_QueryAnnotationNode", 0, "QueryAnnotationNode *", 0, 0, 0, 0},{"_p_QueryAnnotationNode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_QueryAnnotation[] = {{"_p_QueryAnnotation", 0, "QueryAnnotation *", 0, 0, 0, 0},{"_p_QueryAnnotation", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__api__ParsedDocument[] = {{"_p_indri__api__ParsedDocument", 0, "indri::api::ParsedDocument *", 0, 0, 0, 0},{"_p_indri__api__ParsedDocument", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__api__QueryAnnotationNode[] = {{"_p_indri__api__QueryAnnotationNode", 0, "indri::api::QueryAnnotationNode *", 0, 0, 0, 0},{"_p_indri__api__QueryAnnotationNode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__infnet__EvaluatorNode__MResults[] = {{"_p_indri__infnet__EvaluatorNode__MResults", 0, "indri::infnet::EvaluatorNode::MResults *", 0, 0, 0, 0},{"_p_indri__infnet__EvaluatorNode__MResults", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_indri__api__QueryAnnotation[] = {{"_p_indri__api__QueryAnnotation", 0, "indri::api::QueryAnnotation *", 0, 0, 0, 0},{"_p_indri__api__QueryAnnotation", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_INT64, 
-_swigt__p_ScoredExtentResult, 
-_swigt__p_TermExtent, 
-_swigt__p_QueryEnvironment, 
+_swigt__p_indri__api__ScoredExtentResult, 
+_swigt__p_indri__parse__TermExtent, 
+_swigt__p_indri__api__QueryEnvironment, 
 _swigt__p_UINT64, 
-_swigt__p_ParsedDocument, 
-_swigt__p_QueryAnnotationNode, 
-_swigt__p_QueryAnnotation, 
+_swigt__p_indri__api__ParsedDocument, 
+_swigt__p_indri__api__QueryAnnotationNode, 
+_swigt__p_indri__infnet__EvaluatorNode__MResults, 
+_swigt__p_indri__api__QueryAnnotation, 
 0
 };
 
@@ -865,22 +866,23 @@ static zend_class_entry* ptr_ce_swig_QueryAnnotation=NULL;
 static zend_class_entry ce_swig_QueryEnvironment;
 static zend_class_entry* ptr_ce_swig_QueryEnvironment=NULL;
 static int le_swig__p_INT64=0; /* handle for  */
-static int le_swig__p_ScoredExtentResult=0; /* handle for ScoredExtentResult */
-static int le_swig__p_TermExtent=0; /* handle for TermExtent */
-static int le_swig__p_QueryEnvironment=0; /* handle for QueryEnvironment */
+static int le_swig__p_indri__api__ScoredExtentResult=0; /* handle for ScoredExtentResult */
+static int le_swig__p_indri__parse__TermExtent=0; /* handle for TermExtent */
+static int le_swig__p_indri__api__QueryEnvironment=0; /* handle for QueryEnvironment */
 static int le_swig__p_UINT64=0; /* handle for QueryEnvironment */
-static int le_swig__p_ParsedDocument=0; /* handle for ParsedDocument */
-static int le_swig__p_QueryAnnotationNode=0; /* handle for QueryAnnotationNode */
-static int le_swig__p_QueryAnnotation=0; /* handle for QueryAnnotation */
+static int le_swig__p_indri__api__ParsedDocument=0; /* handle for ParsedDocument */
+static int le_swig__p_indri__api__QueryAnnotationNode=0; /* handle for QueryAnnotationNode */
+static int le_swig__p_indri__infnet__EvaluatorNode__MResults=0; /* handle for QueryAnnotationNode */
+static int le_swig__p_indri__api__QueryAnnotation=0; /* handle for QueryAnnotation */
 /* end vdecl subsection */
 /* wrapper section */
 
 
-zval *php_makeQueryAnnotationNode(QueryAnnotationNode *inNode) {
+zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
   zval *retval = 0, *_cPtr;
   MAKE_STD_ZVAL(_cPtr);
   MAKE_STD_ZVAL(retval);
-  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_QueryAnnotationNode, 1);
+  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 1);
   *_cPtr = *retval;
   INIT_ZVAL(*retval);
   object_init_ex(retval,ptr_ce_swig_QueryAnnotationNode);
@@ -909,7 +911,7 @@ zval *php_makeQueryAnnotationNode(QueryAnnotationNode *inNode) {
 }
 
 ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult) {
-    ScoredExtentResult *result;
+    indri::api::ScoredExtentResult *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -919,10 +921,10 @@ ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (ScoredExtentResult *)new ScoredExtentResult();
+    result = (indri::api::ScoredExtentResult *)new indri::api::ScoredExtentResult();
     
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_ScoredExtentResult, 1);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
     
     /* Wrap this return value */
     if (this_ptr) {
@@ -950,11 +952,11 @@ void __wrap_delete_ScoredExtentResult(zend_rsrc_list_entry *rsrc, const char *ty
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    ScoredExtentResult *arg1 = (ScoredExtentResult *) 0 ;
+    indri::api::ScoredExtentResult *arg1 = (indri::api::ScoredExtentResult *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_ScoredExtentResult TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__ScoredExtentResult TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "ScoredExtentResult resource already free'd");
     delete arg1;
     
@@ -962,7 +964,7 @@ void __wrap_delete_ScoredExtentResult(zend_rsrc_list_entry *rsrc, const char *ty
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_ScoredExtentResult) {
-    ScoredExtentResult *arg1 = (ScoredExtentResult *) 0 ;
+    indri::api::ScoredExtentResult *arg1 = (indri::api::ScoredExtentResult *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -975,8 +977,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_ScoredExtentResult) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_ScoredExtentResult) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_ScoredExtentResult. Expected %s", 1-argbase, SWIGTYPE_p_ScoredExtentResult->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_ScoredExtentResult. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__ScoredExtentResult->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -1038,14 +1040,14 @@ static int _propset_ScoredExtentResult(zend_property_reference *property_referen
 }
 
 static int _wrap_TermExtent_begin_set(zend_property_reference *property_reference, pval *value) {
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     int arg2 ;
     zval **args[3];
     int argbase=0 ;
     
     
-    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_TermExtent) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of TermExtent_begin_set. Expected %s", 1-argbase, SWIGTYPE_p_TermExtent->name);
+    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_indri__parse__TermExtent) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of TermExtent_begin_set. Expected %s", 1-argbase, SWIGTYPE_p_indri__parse__TermExtent->name);
     }
     
     
@@ -1060,7 +1062,7 @@ static int _wrap_TermExtent_begin_set(zend_property_reference *property_referenc
 
 
 static pval _wrap_TermExtent_begin_get(zend_property_reference *property_reference) {
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     int result;
     zval **args[2];
     int argbase=0 ;
@@ -1068,8 +1070,8 @@ static pval _wrap_TermExtent_begin_get(zend_property_reference *property_referen
     zval *return_value=&_return_value;
     
     
-    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_TermExtent) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of TermExtent_begin_get. Expected %s", 1-argbase, SWIGTYPE_p_TermExtent->name);
+    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_indri__parse__TermExtent) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of TermExtent_begin_get. Expected %s", 1-argbase, SWIGTYPE_p_indri__parse__TermExtent->name);
     }
     
     result = (int) ((arg1)->begin);
@@ -1082,14 +1084,14 @@ static pval _wrap_TermExtent_begin_get(zend_property_reference *property_referen
 
 
 static int _wrap_TermExtent_end_set(zend_property_reference *property_reference, pval *value) {
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     int arg2 ;
     zval **args[3];
     int argbase=0 ;
     
     
-    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_TermExtent) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of TermExtent_end_set. Expected %s", 1-argbase, SWIGTYPE_p_TermExtent->name);
+    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_indri__parse__TermExtent) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of TermExtent_end_set. Expected %s", 1-argbase, SWIGTYPE_p_indri__parse__TermExtent->name);
     }
     
     
@@ -1104,7 +1106,7 @@ static int _wrap_TermExtent_end_set(zend_property_reference *property_reference,
 
 
 static pval _wrap_TermExtent_end_get(zend_property_reference *property_reference) {
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     int result;
     zval **args[2];
     int argbase=0 ;
@@ -1112,8 +1114,8 @@ static pval _wrap_TermExtent_end_get(zend_property_reference *property_reference
     zval *return_value=&_return_value;
     
     
-    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_TermExtent) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of TermExtent_end_get. Expected %s", 1-argbase, SWIGTYPE_p_TermExtent->name);
+    if(SWIG_ConvertPtr(*&(property_reference->object), (void **) &arg1, SWIGTYPE_p_indri__parse__TermExtent) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of TermExtent_end_get. Expected %s", 1-argbase, SWIGTYPE_p_indri__parse__TermExtent->name);
     }
     
     result = (int) ((arg1)->end);
@@ -1126,7 +1128,7 @@ static pval _wrap_TermExtent_end_get(zend_property_reference *property_reference
 
 
 ZEND_NAMED_FUNCTION(_wrap_new_TermExtent) {
-    TermExtent *result;
+    indri::parse::TermExtent *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -1136,10 +1138,10 @@ ZEND_NAMED_FUNCTION(_wrap_new_TermExtent) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (TermExtent *)new TermExtent();
+    result = (indri::parse::TermExtent *)new indri::parse::TermExtent();
     
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_TermExtent, 1);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__parse__TermExtent, 1);
     
     /* Wrap this return value */
     if (this_ptr) {
@@ -1167,11 +1169,11 @@ void __wrap_delete_TermExtent(zend_rsrc_list_entry *rsrc, const char *type_name 
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_TermExtent TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__parse__TermExtent TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "TermExtent resource already free'd");
     delete arg1;
     
@@ -1179,7 +1181,7 @@ void __wrap_delete_TermExtent(zend_rsrc_list_entry *rsrc, const char *type_name 
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_TermExtent) {
-    TermExtent *arg1 = (TermExtent *) 0 ;
+    indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -1192,8 +1194,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_TermExtent) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_TermExtent) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_TermExtent. Expected %s", 1-argbase, SWIGTYPE_p_TermExtent->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__parse__TermExtent) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_TermExtent. Expected %s", 1-argbase, SWIGTYPE_p_indri__parse__TermExtent->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -1265,7 +1267,7 @@ static int _propset_TermExtent(zend_property_reference *property_reference, pval
 }
 
 ZEND_NAMED_FUNCTION(_wrap_new_ParsedDocument) {
-    ParsedDocument *result;
+    indri::api::ParsedDocument *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -1275,10 +1277,10 @@ ZEND_NAMED_FUNCTION(_wrap_new_ParsedDocument) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (ParsedDocument *)new ParsedDocument();
+    result = (indri::api::ParsedDocument *)new indri::api::ParsedDocument();
     
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_ParsedDocument, 1);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__ParsedDocument, 1);
     
     /* Wrap this return value */
     if (this_ptr) {
@@ -1306,11 +1308,11 @@ void __wrap_delete_ParsedDocument(zend_rsrc_list_entry *rsrc, const char *type_n
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    ParsedDocument *arg1 = (ParsedDocument *) 0 ;
+    indri::api::ParsedDocument *arg1 = (indri::api::ParsedDocument *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_ParsedDocument TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__ParsedDocument TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "ParsedDocument resource already free'd");
     delete arg1;
     
@@ -1318,7 +1320,7 @@ void __wrap_delete_ParsedDocument(zend_rsrc_list_entry *rsrc, const char *type_n
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_ParsedDocument) {
-    ParsedDocument *arg1 = (ParsedDocument *) 0 ;
+    indri::api::ParsedDocument *arg1 = (indri::api::ParsedDocument *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -1331,8 +1333,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_ParsedDocument) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_ParsedDocument) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_ParsedDocument. Expected %s", 1-argbase, SWIGTYPE_p_ParsedDocument->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__ParsedDocument) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_ParsedDocument. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__ParsedDocument->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -1394,7 +1396,7 @@ static int _propset_ParsedDocument(zend_property_reference *property_reference, 
 }
 
 ZEND_NAMED_FUNCTION(_wrap_new_QueryAnnotationNode) {
-    QueryAnnotationNode *result;
+    indri::api::QueryAnnotationNode *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -1404,7 +1406,7 @@ ZEND_NAMED_FUNCTION(_wrap_new_QueryAnnotationNode) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (QueryAnnotationNode *)new QueryAnnotationNode();
+    result = (indri::api::QueryAnnotationNode *)new indri::api::QueryAnnotationNode();
     
     {
         zval *tmp = php_makeQueryAnnotationNode(result);
@@ -1437,11 +1439,11 @@ void __wrap_delete_QueryAnnotationNode(zend_rsrc_list_entry *rsrc, const char *t
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    QueryAnnotationNode *arg1 = (QueryAnnotationNode *) 0 ;
+    indri::api::QueryAnnotationNode *arg1 = (indri::api::QueryAnnotationNode *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_QueryAnnotationNode TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__QueryAnnotationNode TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "QueryAnnotationNode resource already free'd");
     delete arg1;
     
@@ -1449,7 +1451,7 @@ void __wrap_delete_QueryAnnotationNode(zend_rsrc_list_entry *rsrc, const char *t
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_QueryAnnotationNode) {
-    QueryAnnotationNode *arg1 = (QueryAnnotationNode *) 0 ;
+    indri::api::QueryAnnotationNode *arg1 = (indri::api::QueryAnnotationNode *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -1462,8 +1464,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_QueryAnnotationNode) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryAnnotationNode) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_QueryAnnotationNode. Expected %s", 1-argbase, SWIGTYPE_p_QueryAnnotationNode->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryAnnotationNode) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_QueryAnnotationNode. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryAnnotationNode->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -1525,8 +1527,8 @@ static int _propset_QueryAnnotationNode(zend_property_reference *property_refere
 }
 
 ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getQueryTree) {
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    QueryAnnotationNode *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    indri::api::QueryAnnotationNode *result;
     zval **args[2];
     int argbase=0 ;
     
@@ -1539,11 +1541,11 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getQueryTree) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryAnnotation) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getQueryTree. Expected %s", 1-argbase, SWIGTYPE_p_QueryAnnotation->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryAnnotation) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getQueryTree. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryAnnotation->name);
     }
     
-    result = (QueryAnnotationNode *)((QueryAnnotation const *)arg1)->getQueryTree();
+    result = (indri::api::QueryAnnotationNode *)((indri::api::QueryAnnotation const *)arg1)->getQueryTree();
     
     {
         zval *tmp = php_makeQueryAnnotationNode(result);
@@ -1566,8 +1568,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getQueryTree) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getAnnotations) {
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    EvaluatorNode::MResults *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    indri::infnet::EvaluatorNode::MResults *result;
     zval **args[2];
     int argbase=0 ;
     
@@ -1580,51 +1582,24 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getAnnotations) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryAnnotation) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getAnnotations. Expected %s", 1-argbase, SWIGTYPE_p_QueryAnnotation->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryAnnotation) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getAnnotations. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryAnnotation->name);
     }
     
     {
-        EvaluatorNode::MResults const &_result_ref = ((QueryAnnotation const *)arg1)->getAnnotations();
-        result = (EvaluatorNode::MResults *) &_result_ref;
+        indri::infnet::EvaluatorNode::MResults const &_result_ref = ((indri::api::QueryAnnotation const *)arg1)->getAnnotations();
+        result = (indri::infnet::EvaluatorNode::MResults *) &_result_ref;
     }
     
-    {
-        array_init(return_value);
-        const EvaluatorNode::MResults & matches = *result; 
-        EvaluatorNode::MResults::iterator iter;
-        std::vector< ScoredExtentResult >::size_type iIndex;
-        for( iter = result->begin(); iter != result->end(); iter++ ) {
-            zval *seRes;
-            MAKE_STD_ZVAL(seRes);
-            array_init(seRes);
-            std::vector<ScoredExtentResult>& vec = iter->second;
-            char *key = (char *)iter->first.c_str();
-            for (iIndex=0;iIndex<vec.size();iIndex++)  {
-                zval *obj, *_cPtr;
-                MAKE_STD_ZVAL(obj);
-                MAKE_STD_ZVAL(_cPtr);
-                ScoredExtentResult *r = new ScoredExtentResult(vec[iIndex]);
-                SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
-                *_cPtr = *obj;
-                INIT_ZVAL(*obj);
-                object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
-                add_property_double(obj,"score",r->score);
-                add_property_long(obj,"document",r->document);
-                add_property_long(obj,"begin",r->begin);
-                add_property_long(obj,"end",r->end);
-                add_property_zval(obj,"_cPtr",_cPtr);
-                add_next_index_zval(seRes, obj);
-            }
-            add_assoc_zval(return_value, key, seRes);
-        }
-    }
+    
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults, 0);
+    
 }
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getResults) {
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
-    std::vector<ScoredExtentResult > *result;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *result;
     zval **args[2];
     int argbase=0 ;
     
@@ -1637,25 +1612,25 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getResults) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryAnnotation) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getResults. Expected %s", 1-argbase, SWIGTYPE_p_QueryAnnotation->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryAnnotation) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryAnnotation_getResults. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryAnnotation->name);
     }
     
     {
-        std::vector<ScoredExtentResult > const &_result_ref = ((QueryAnnotation const *)arg1)->getResults();
-        result = (std::vector<ScoredExtentResult > *) &_result_ref;
+        std::vector<indri::api::ScoredExtentResult > const &_result_ref = ((indri::api::QueryAnnotation const *)arg1)->getResults();
+        result = (std::vector<indri::api::ScoredExtentResult > *) &_result_ref;
     }
     
     {
-        std::vector< ScoredExtentResult >::size_type iIndex;
+        std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
         array_init(return_value);
-        std::vector< ScoredExtentResult > *resultobj = result; 
+        std::vector< indri::api::ScoredExtentResult > *resultobj = result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
             zval *obj, *_cPtr, *retval;
             MAKE_STD_ZVAL(obj);
             MAKE_STD_ZVAL(_cPtr);
-            ScoredExtentResult *r = new ScoredExtentResult((*resultobj)[iIndex]);
-            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+            indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult((*resultobj)[iIndex]);
+            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
             *_cPtr = *obj;
             INIT_ZVAL(*obj);
             object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -1671,7 +1646,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getResults) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_new_QueryAnnotation) {
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -1681,10 +1656,10 @@ ZEND_NAMED_FUNCTION(_wrap_new_QueryAnnotation) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (QueryAnnotation *)new QueryAnnotation();
+    result = (indri::api::QueryAnnotation *)new indri::api::QueryAnnotation();
     
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_QueryAnnotation, 1);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__QueryAnnotation, 1);
     
     /* Wrap this return value */
     if (this_ptr) {
@@ -1712,11 +1687,11 @@ void __wrap_delete_QueryAnnotation(zend_rsrc_list_entry *rsrc, const char *type_
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_QueryAnnotation TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__QueryAnnotation TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "QueryAnnotation resource already free'd");
     delete arg1;
     
@@ -1724,7 +1699,7 @@ void __wrap_delete_QueryAnnotation(zend_rsrc_list_entry *rsrc, const char *type_
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_QueryAnnotation) {
-    QueryAnnotation *arg1 = (QueryAnnotation *) 0 ;
+    indri::api::QueryAnnotation *arg1 = (indri::api::QueryAnnotation *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -1737,8 +1712,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_QueryAnnotation) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryAnnotation) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_QueryAnnotation. Expected %s", 1-argbase, SWIGTYPE_p_QueryAnnotation->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryAnnotation) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_QueryAnnotation. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryAnnotation->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -1800,7 +1775,7 @@ static int _propset_QueryAnnotation(zend_property_reference *property_reference,
 }
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addServer) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string temp2 ;
     zval **args[3];
@@ -1815,8 +1790,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addServer) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_addServer. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_addServer. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -1831,7 +1806,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addServer) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addIndex) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string temp2 ;
     zval **args[3];
@@ -1846,8 +1821,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addIndex) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_addIndex. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_addIndex. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -1862,7 +1837,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_addIndex) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_close) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -1875,8 +1850,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_close) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_close. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_close. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     (arg1)->close();
@@ -1886,7 +1861,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_close) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setMemory) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     UINT64 arg2 ;
     zval **args[3];
     int argbase=0 ;
@@ -1900,8 +1875,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setMemory) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setMemory. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setMemory. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     
@@ -1915,7 +1890,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setMemory) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setScoringRules) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     zval **args[3];
     int argbase=0 ;
@@ -1929,8 +1904,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setScoringRules) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setScoringRules. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setScoringRules. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -1960,7 +1935,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setScoringRules) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setStopwords) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
     zval **args[3];
     int argbase=0 ;
@@ -1974,8 +1949,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setStopwords) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setStopwords. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_setStopwords. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2005,10 +1980,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setStopwords) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuery) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     int arg3 ;
-    SwigValueWrapper< std::vector<ScoredExtentResult > > result;
+    SwigValueWrapper< std::vector<indri::api::ScoredExtentResult > > result;
     std::string temp2 ;
     zval **args[4];
     int argbase=0 ;
@@ -2022,8 +1997,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuery) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runQuery. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runQuery. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2047,15 +2022,15 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuery) {
         }
     }
     {
-        std::vector< ScoredExtentResult >::size_type iIndex;
+        std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
         array_init(return_value);
-        std::vector< ScoredExtentResult > *resultobj = &result; 
+        std::vector< indri::api::ScoredExtentResult > *resultobj = &result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
             zval *obj, *_cPtr;
             MAKE_STD_ZVAL(obj);
             MAKE_STD_ZVAL(_cPtr);
-            ScoredExtentResult *r = new ScoredExtentResult((*resultobj)[iIndex]);
-            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+            indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult((*resultobj)[iIndex]);
+            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
             *_cPtr = *obj;
             INIT_ZVAL(*obj);
             object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -2071,11 +2046,11 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuery) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::vector<DOCID_T > *arg3 = 0 ;
     int arg4 ;
-    SwigValueWrapper< std::vector<ScoredExtentResult > > result;
+    SwigValueWrapper< std::vector<indri::api::ScoredExtentResult > > result;
     std::string temp2 ;
     zval **args[5];
     int argbase=0 ;
@@ -2089,8 +2064,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runQuerydocset. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runQuerydocset. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2134,15 +2109,15 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
         }
     }
     {
-        std::vector< ScoredExtentResult >::size_type iIndex;
+        std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
         array_init(return_value);
-        std::vector< ScoredExtentResult > *resultobj = &result; 
+        std::vector< indri::api::ScoredExtentResult > *resultobj = &result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
             zval *obj, *_cPtr;
             MAKE_STD_ZVAL(obj);
             MAKE_STD_ZVAL(_cPtr);
-            ScoredExtentResult *r = new ScoredExtentResult((*resultobj)[iIndex]);
-            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+            indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult((*resultobj)[iIndex]);
+            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
             *_cPtr = *obj;
             INIT_ZVAL(*obj);
             object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -2162,10 +2137,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuery) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     int arg3 ;
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     std::string temp2 ;
     zval **args[4];
     int argbase=0 ;
@@ -2179,8 +2154,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuery) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runAnnotatedQuery. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runAnnotatedQuery. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2194,7 +2169,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuery) {
     
     {
         try {
-            result = (QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,arg3);
+            result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,arg3);
             
         } catch( Exception& e ) {
             //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2204,7 +2179,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuery) {
         }
     }
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_QueryAnnotation, 0);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__QueryAnnotation, 0);
     
     /* Wrap this return value */
     {
@@ -2222,11 +2197,11 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuery) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::vector<DOCID_T > *arg3 = 0 ;
     int arg4 ;
-    QueryAnnotation *result;
+    indri::api::QueryAnnotation *result;
     std::string temp2 ;
     zval **args[5];
     int argbase=0 ;
@@ -2240,8 +2215,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runAnnotatedQuerydocset. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runAnnotatedQuerydocset. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2275,7 +2250,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
     
     {
         try {
-            result = (QueryAnnotation *)(arg1)->runAnnotatedQuerydocset((std::string const &)*arg2,(std::vector<DOCID_T > const &)*arg3,arg4);
+            result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuerydocset((std::string const &)*arg2,(std::vector<DOCID_T > const &)*arg3,arg4);
             
         } catch( Exception& e ) {
             //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2285,7 +2260,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
         }
     }
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_QueryAnnotation, 0);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__QueryAnnotation, 0);
     
     /* Wrap this return value */
     {
@@ -2307,9 +2282,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<DOCID_T > *arg2 = 0 ;
-    SwigValueWrapper< std::vector<ParsedDocument * > > result;
+    SwigValueWrapper< std::vector<indri::api::ParsedDocument * > > result;
     zval **args[3];
     int argbase=0 ;
     
@@ -2322,8 +2297,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentsdocids. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentsdocids. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2358,15 +2333,15 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
         }
     }
     {
-        std::vector< ParsedDocument * >::size_type iIndex;
+        std::vector< indri::api::ParsedDocument * >::size_type iIndex;
         array_init(return_value);
-        std::vector< ParsedDocument * > *resultobj = &result; 
+        std::vector< indri::api::ParsedDocument * > *resultobj = &result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
             zval *obj, *_cPtr;
             MAKE_STD_ZVAL(obj);
             MAKE_STD_ZVAL(_cPtr);
-            ParsedDocument *r = (*resultobj)[iIndex];
-            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ParsedDocument, 1);
+            indri::api::ParsedDocument *r = (*resultobj)[iIndex];
+            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ParsedDocument, 1);
             *_cPtr = *obj;
             INIT_ZVAL(*obj);
             object_init_ex(obj,ptr_ce_swig_ParsedDocument);
@@ -2378,14 +2353,14 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
             zval *positions, *pos, *_ptr;
             MAKE_STD_ZVAL(positions);
             array_init(positions);    
-            for (greedy_vector<TermExtent>::iterator iter = r->positions.begin();
+            for (indri::utility::greedy_vector<indri::parse::TermExtent>::iterator iter = r->positions.begin();
             iter != r->positions.end(); iter++) {
                 MAKE_STD_ZVAL(pos);
                 MAKE_STD_ZVAL(_ptr);
-                TermExtent *t = new TermExtent;
+                indri::parse::TermExtent *t = new indri::parse::TermExtent;
                 t->begin = iter->begin;
                 t->end = iter->end;
-                SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_TermExtent, 1);
+                SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_indri__parse__TermExtent, 1);
                 *_ptr = *pos;
                 INIT_ZVAL(*pos);
                 object_init_ex(pos,ptr_ce_swig_TermExtent);
@@ -2401,7 +2376,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
             MAKE_STD_ZVAL(pairs);
             array_init(pairs);    
             // copy metadata information
-            for (greedy_vector<MetadataPair>::iterator iter = r->metadata.begin();
+            for (indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = r->metadata.begin();
             iter != r->metadata.end(); iter++) {
                 add_assoc_string(pairs, (char *)iter->key, (char *)iter->value, 1);
             }
@@ -2420,9 +2395,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
-    std::vector<ScoredExtentResult > *arg2 = 0 ;
-    SwigValueWrapper< std::vector<ParsedDocument * > > result;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *arg2 = 0 ;
+    SwigValueWrapper< std::vector<indri::api::ParsedDocument * > > result;
     zval **args[3];
     int argbase=0 ;
     
@@ -2435,8 +2410,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documents. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documents. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2444,13 +2419,13 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
         ulong iIndex;
         char *sIndex=NULL;
         zval **Data;
-        arg2=new std::vector< ScoredExtentResult >;
+        arg2=new std::vector< indri::api::ScoredExtentResult >;
         convert_to_array(*args[1-argbase]);
         zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
         while((iStatus=zend_hash_get_current_key((*args[1-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
             zend_hash_get_current_data((*args[1-argbase])->value.ht,(void **) &Data);
-            ScoredExtentResult * arg1 = 0;
-            SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_ScoredExtentResult);
+            indri::api::ScoredExtentResult * arg1 = 0;
+            SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult);
             arg2->push_back(*arg1);
             zend_hash_move_forward((*args[1-argbase])->value.ht);  
             if (sIndex) {
@@ -2462,7 +2437,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
     }
     {
         try {
-            result = (arg1)->documents((std::vector<ScoredExtentResult > const &)*arg2);
+            result = (arg1)->documents((std::vector<indri::api::ScoredExtentResult > const &)*arg2);
             
         } catch( Exception& e ) {
             //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2472,15 +2447,15 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
         }
     }
     {
-        std::vector< ParsedDocument * >::size_type iIndex;
+        std::vector< indri::api::ParsedDocument * >::size_type iIndex;
         array_init(return_value);
-        std::vector< ParsedDocument * > *resultobj = &result; 
+        std::vector< indri::api::ParsedDocument * > *resultobj = &result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
             zval *obj, *_cPtr;
             MAKE_STD_ZVAL(obj);
             MAKE_STD_ZVAL(_cPtr);
-            ParsedDocument *r = (*resultobj)[iIndex];
-            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ParsedDocument, 1);
+            indri::api::ParsedDocument *r = (*resultobj)[iIndex];
+            SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ParsedDocument, 1);
             *_cPtr = *obj;
             INIT_ZVAL(*obj);
             object_init_ex(obj,ptr_ce_swig_ParsedDocument);
@@ -2492,14 +2467,14 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
             zval *positions, *pos, *_ptr;
             MAKE_STD_ZVAL(positions);
             array_init(positions);    
-            for (greedy_vector<TermExtent>::iterator iter = r->positions.begin();
+            for (indri::utility::greedy_vector<indri::parse::TermExtent>::iterator iter = r->positions.begin();
             iter != r->positions.end(); iter++) {
                 MAKE_STD_ZVAL(pos);
                 MAKE_STD_ZVAL(_ptr);
-                TermExtent *t = new TermExtent;
+                indri::parse::TermExtent *t = new indri::parse::TermExtent;
                 t->begin = iter->begin;
                 t->end = iter->end;
-                SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_TermExtent, 1);
+                SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_indri__parse__TermExtent, 1);
                 *_ptr = *pos;
                 INIT_ZVAL(*pos);
                 object_init_ex(pos,ptr_ce_swig_TermExtent);
@@ -2515,7 +2490,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
             MAKE_STD_ZVAL(pairs);
             array_init(pairs);    
             // copy metadata information
-            for (greedy_vector<MetadataPair>::iterator iter = r->metadata.begin();
+            for (indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = r->metadata.begin();
             iter != r->metadata.end(); iter++) {
                 add_assoc_string(pairs, (char *)iter->key, (char *)iter->value, 1);
             }
@@ -2534,7 +2509,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadatadocids) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::vector<DOCID_T > *arg2 = 0 ;
     std::string *arg3 = 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
@@ -2551,8 +2526,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadatadocids) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadatadocids. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadatadocids. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2606,8 +2581,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadatadocids) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadata) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
-    std::vector<ScoredExtentResult > *arg2 = 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::vector<indri::api::ScoredExtentResult > *arg2 = 0 ;
     std::string *arg3 = 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
     std::string temp3 ;
@@ -2623,8 +2598,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadata) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadata. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadata. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2632,13 +2607,13 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadata) {
         ulong iIndex;
         char *sIndex=NULL;
         zval **Data;
-        arg2=new std::vector< ScoredExtentResult >;
+        arg2=new std::vector< indri::api::ScoredExtentResult >;
         convert_to_array(*args[1-argbase]);
         zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
         while((iStatus=zend_hash_get_current_key((*args[1-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
             zend_hash_get_current_data((*args[1-argbase])->value.ht,(void **) &Data);
-            ScoredExtentResult * arg1 = 0;
-            SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_ScoredExtentResult);
+            indri::api::ScoredExtentResult * arg1 = 0;
+            SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult);
             arg2->push_back(*arg1);
             zend_hash_move_forward((*args[1-argbase])->value.ht);  
             if (sIndex) {
@@ -2655,7 +2630,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadata) {
     }
     {
         try {
-            result = (arg1)->documentMetadata((std::vector<ScoredExtentResult > const &)*arg2,(std::string const &)*arg3);
+            result = (arg1)->documentMetadata((std::vector<indri::api::ScoredExtentResult > const &)*arg2,(std::string const &)*arg3);
             
         } catch( Exception& e ) {
             //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
@@ -2679,7 +2654,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadata) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     INT64 result;
     zval **args[2];
     int argbase=0 ;
@@ -2693,8 +2668,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_termCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_termCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     result = (INT64)(arg1)->termCount();
@@ -2707,7 +2682,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onetermCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     INT64 result;
     std::string temp2 ;
@@ -2723,8 +2698,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onetermCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_onetermCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_onetermCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2742,7 +2717,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onetermCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     INT64 result;
     std::string temp2 ;
@@ -2758,8 +2733,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_stemCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_stemCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2777,7 +2752,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termFieldCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     INT64 result;
@@ -2795,8 +2770,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termFieldCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_termFieldCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_termFieldCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2819,7 +2794,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_termFieldCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemFieldCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
     INT64 result;
@@ -2837,8 +2812,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemFieldCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_stemFieldCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_stemFieldCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2861,7 +2836,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_stemFieldCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_fieldList) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     SwigValueWrapper< std::vector<std::string > > result;
     zval **args[2];
     int argbase=0 ;
@@ -2875,8 +2850,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_fieldList) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_fieldList. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_fieldList. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     result = (arg1)->fieldList();
@@ -2892,7 +2867,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_fieldList) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     INT64 result;
     zval **args[2];
     int argbase=0 ;
@@ -2906,8 +2881,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     result = (INT64)(arg1)->documentCount();
@@ -2920,7 +2895,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onedocumentCount) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     INT64 result;
     std::string temp2 ;
@@ -2936,8 +2911,8 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onedocumentCount) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_onedocumentCount. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_onedocumentCount. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     {
@@ -2955,7 +2930,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onedocumentCount) {
 
 
 ZEND_NAMED_FUNCTION(_wrap_new_QueryEnvironment) {
-    QueryEnvironment *result;
+    indri::api::QueryEnvironment *result;
     zval **args[1];
     int argbase=0 ;
     
@@ -2965,10 +2940,10 @@ ZEND_NAMED_FUNCTION(_wrap_new_QueryEnvironment) {
         WRONG_PARAM_COUNT;
     }
     
-    result = (QueryEnvironment *)new QueryEnvironment();
+    result = (indri::api::QueryEnvironment *)new indri::api::QueryEnvironment();
     
     
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_QueryEnvironment, 1);
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__QueryEnvironment, 1);
     
     /* Wrap this return value */
     if (this_ptr) {
@@ -2996,11 +2971,11 @@ void __wrap_delete_QueryEnvironment(zend_rsrc_list_entry *rsrc, const char *type
     swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
     void *ptr=value->ptr ;
     int newobject=value->newobject ;
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     
     efree(value);
     if (! newobject) return; /* can't delete it! */
-    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_QueryEnvironment TSRMLS_CC);
+    SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__QueryEnvironment TSRMLS_CC);
     if (! arg1) zend_error(E_ERROR, "QueryEnvironment resource already free'd");
     delete arg1;
     
@@ -3008,7 +2983,7 @@ void __wrap_delete_QueryEnvironment(zend_rsrc_list_entry *rsrc, const char *type
 
 
 ZEND_NAMED_FUNCTION(_wrap_delete_QueryEnvironment) {
-    QueryEnvironment *arg1 = (QueryEnvironment *) 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
     zval **args[2];
     int argbase=0 ;
     
@@ -3021,8 +2996,8 @@ ZEND_NAMED_FUNCTION(_wrap_delete_QueryEnvironment) {
     }
     
     
-    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_QueryEnvironment) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of delete_QueryEnvironment. Expected %s", 1-argbase, SWIGTYPE_p_QueryEnvironment->name);
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of delete_QueryEnvironment. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
     /*if ((*args[0])->type==IS_RESOURCE) { */
@@ -3088,38 +3063,42 @@ static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_INT64) {
 /* bah! No destructor for this simple type!! */
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_ScoredExtentResult) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__ScoredExtentResult) {
 /* has destructor: __wrap_delete_ScoredExtentResult */
-__wrap_delete_ScoredExtentResult(rsrc, SWIGTYPE_p_ScoredExtentResult->name TSRMLS_CC);
+__wrap_delete_ScoredExtentResult(rsrc, SWIGTYPE_p_indri__api__ScoredExtentResult->name TSRMLS_CC);
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_TermExtent) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__parse__TermExtent) {
 /* has destructor: __wrap_delete_TermExtent */
-__wrap_delete_TermExtent(rsrc, SWIGTYPE_p_TermExtent->name TSRMLS_CC);
+__wrap_delete_TermExtent(rsrc, SWIGTYPE_p_indri__parse__TermExtent->name TSRMLS_CC);
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_QueryEnvironment) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryEnvironment) {
 /* has destructor: __wrap_delete_QueryEnvironment */
-__wrap_delete_QueryEnvironment(rsrc, SWIGTYPE_p_QueryEnvironment->name TSRMLS_CC);
+__wrap_delete_QueryEnvironment(rsrc, SWIGTYPE_p_indri__api__QueryEnvironment->name TSRMLS_CC);
 }
 /* NEW Destructor style */
 static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_UINT64) {
 /* bah! No destructor for this simple type!! */
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_ParsedDocument) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__ParsedDocument) {
 /* has destructor: __wrap_delete_ParsedDocument */
-__wrap_delete_ParsedDocument(rsrc, SWIGTYPE_p_ParsedDocument->name TSRMLS_CC);
+__wrap_delete_ParsedDocument(rsrc, SWIGTYPE_p_indri__api__ParsedDocument->name TSRMLS_CC);
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_QueryAnnotationNode) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryAnnotationNode) {
 /* has destructor: __wrap_delete_QueryAnnotationNode */
-__wrap_delete_QueryAnnotationNode(rsrc, SWIGTYPE_p_QueryAnnotationNode->name TSRMLS_CC);
+__wrap_delete_QueryAnnotationNode(rsrc, SWIGTYPE_p_indri__api__QueryAnnotationNode->name TSRMLS_CC);
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_QueryAnnotation) {
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__infnet__EvaluatorNode__MResults) {
+/* bah! No destructor for this simple type!! */
+}
+/* NEW Destructor style */
+static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryAnnotation) {
 /* has destructor: __wrap_delete_QueryAnnotation */
-__wrap_delete_QueryAnnotation(rsrc, SWIGTYPE_p_QueryAnnotation->name TSRMLS_CC);
+__wrap_delete_QueryAnnotation(rsrc, SWIGTYPE_p_indri__api__QueryAnnotation->name TSRMLS_CC);
 }
 
 
@@ -3174,20 +3153,22 @@ if (! (ptr_ce_swig_QueryEnvironment=zend_register_internal_class_ex(&ce_swig_Que
 /* Register resource destructors for pointer types */
 le_swig__p_INT64=zend_register_list_destructors_ex(_wrap_destroy_p_INT64,NULL,(char *)(SWIGTYPE_p_INT64->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_INT64,&le_swig__p_INT64);
-le_swig__p_ScoredExtentResult=zend_register_list_destructors_ex(_wrap_destroy_p_ScoredExtentResult,NULL,(char *)(SWIGTYPE_p_ScoredExtentResult->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_ScoredExtentResult,&le_swig__p_ScoredExtentResult);
-le_swig__p_TermExtent=zend_register_list_destructors_ex(_wrap_destroy_p_TermExtent,NULL,(char *)(SWIGTYPE_p_TermExtent->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_TermExtent,&le_swig__p_TermExtent);
-le_swig__p_QueryEnvironment=zend_register_list_destructors_ex(_wrap_destroy_p_QueryEnvironment,NULL,(char *)(SWIGTYPE_p_QueryEnvironment->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_QueryEnvironment,&le_swig__p_QueryEnvironment);
+le_swig__p_indri__api__ScoredExtentResult=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__ScoredExtentResult,NULL,(char *)(SWIGTYPE_p_indri__api__ScoredExtentResult->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__api__ScoredExtentResult,&le_swig__p_indri__api__ScoredExtentResult);
+le_swig__p_indri__parse__TermExtent=zend_register_list_destructors_ex(_wrap_destroy_p_indri__parse__TermExtent,NULL,(char *)(SWIGTYPE_p_indri__parse__TermExtent->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__parse__TermExtent,&le_swig__p_indri__parse__TermExtent);
+le_swig__p_indri__api__QueryEnvironment=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryEnvironment,NULL,(char *)(SWIGTYPE_p_indri__api__QueryEnvironment->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryEnvironment,&le_swig__p_indri__api__QueryEnvironment);
 le_swig__p_UINT64=zend_register_list_destructors_ex(_wrap_destroy_p_UINT64,NULL,(char *)(SWIGTYPE_p_UINT64->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_UINT64,&le_swig__p_UINT64);
-le_swig__p_ParsedDocument=zend_register_list_destructors_ex(_wrap_destroy_p_ParsedDocument,NULL,(char *)(SWIGTYPE_p_ParsedDocument->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_ParsedDocument,&le_swig__p_ParsedDocument);
-le_swig__p_QueryAnnotationNode=zend_register_list_destructors_ex(_wrap_destroy_p_QueryAnnotationNode,NULL,(char *)(SWIGTYPE_p_QueryAnnotationNode->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_QueryAnnotationNode,&le_swig__p_QueryAnnotationNode);
-le_swig__p_QueryAnnotation=zend_register_list_destructors_ex(_wrap_destroy_p_QueryAnnotation,NULL,(char *)(SWIGTYPE_p_QueryAnnotation->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_QueryAnnotation,&le_swig__p_QueryAnnotation);
+le_swig__p_indri__api__ParsedDocument=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__ParsedDocument,NULL,(char *)(SWIGTYPE_p_indri__api__ParsedDocument->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__api__ParsedDocument,&le_swig__p_indri__api__ParsedDocument);
+le_swig__p_indri__api__QueryAnnotationNode=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryAnnotationNode,NULL,(char *)(SWIGTYPE_p_indri__api__QueryAnnotationNode->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryAnnotationNode,&le_swig__p_indri__api__QueryAnnotationNode);
+le_swig__p_indri__infnet__EvaluatorNode__MResults=zend_register_list_destructors_ex(_wrap_destroy_p_indri__infnet__EvaluatorNode__MResults,NULL,(char *)(SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults,&le_swig__p_indri__infnet__EvaluatorNode__MResults);
+le_swig__p_indri__api__QueryAnnotation=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryAnnotation,NULL,(char *)(SWIGTYPE_p_indri__api__QueryAnnotation->name),module_number);
+SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryAnnotation,&le_swig__p_indri__api__QueryAnnotation);
 CG(active_class_entry) = NULL;
 /* end oinit subsection */
 

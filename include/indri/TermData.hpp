@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -42,8 +42,8 @@ namespace indri {
 
     public:
       TermData() :
-          maxDocumentLength(0),
-          minDocumentLength(MAX_INT32)
+	maxDocumentLength(0),
+	minDocumentLength(MAX_INT32)
       {
         term = 0;
       }
@@ -143,7 +143,7 @@ inline int termdata_size( int fieldCount ) {
   return sizeof(indri::index::TermData) + fieldCount * sizeof(indri::index::TermFieldStatistics);
 }
 
-inline void termdata_compress( RVLCompressStream& stream, indri::index::TermData* termData, int fieldCount ) {
+inline void termdata_compress( indri::utility::RVLCompressStream& stream, indri::index::TermData* termData, int fieldCount ) {
   // corpus statistics
   stream << termData->corpus.totalCount
          << termData->corpus.documentCount;
@@ -154,11 +154,11 @@ inline void termdata_compress( RVLCompressStream& stream, indri::index::TermData
   // field statistics
   for( int i=0; i<fieldCount; i++ ) {
     stream << termData->fields[i].totalCount
-          << termData->fields[i].documentCount;
+	   << termData->fields[i].documentCount;
   }
 }
 
-inline void termdata_decompress( RVLDecompressStream& stream, indri::index::TermData* termData, int fieldCount ) {
+inline void termdata_decompress( indri::utility::RVLDecompressStream& stream, indri::index::TermData* termData, int fieldCount ) {
   // corpus statistics
   stream >> termData->corpus.totalCount
          >> termData->corpus.documentCount;

@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // IndexWriter
@@ -29,67 +39,68 @@
 #include "indri/TermTranslator.hpp"
 #include "indri/BulkTree.hpp"
 
-struct WriterIndexContext {
-  struct less {
-  private:
-    indri::index::DocListFileIterator::iterator_greater _iterator_greater;
-  
-  public:
-    bool operator () ( const WriterIndexContext* const&  one, const WriterIndexContext* const& two ) const {
-      return _iterator_greater( one->iterator, two->iterator );
-    }
-  };
-
-  WriterIndexContext( indri::index::Index* _index ) {
-    bitmap = new indri::index::TermBitmap;
-    index = _index;
-    wasInfrequentCount = 0;
-    wasFrequentCount = 0;
-
-    if( index->iteratorLock() )
-      index->iteratorLock()->lock();
-    
-    iterator = index->docListFileIterator();
-    iterator->startIteration();
-
-    newlyFrequent = new indri::index::TermRecorder;
-    oldFrequent = new indri::index::TermRecorder;
-    oldInfrequent = new HashTable<int, int>;
-
-    // DEBUG
-    sequenceCount = 0;
-  }
-
-  ~WriterIndexContext() {
-    delete iterator;
-
-    if( index->iteratorLock() )
-      index->iteratorLock()->unlock();
-
-    delete oldFrequent;
-    delete newlyFrequent;
-    delete oldInfrequent;
-    delete bitmap;
-  }
-
-  indri::index::DocListFileIterator* iterator;
-  indri::index::TermBitmap* bitmap;
-  indri::index::Index* index;
-
-  int wasFrequentCount;
-  int wasInfrequentCount;
-  int sequenceCount;
-  indri::index::TermRecorder* newlyFrequent;
-  indri::index::TermRecorder* oldFrequent;
-  HashTable<int, int>* oldInfrequent;
-};
-
-typedef std::priority_queue<WriterIndexContext*,
-                            std::vector<WriterIndexContext*>,
-                            WriterIndexContext::less> invertedlist_pqueue;
-
 namespace indri {
   namespace index {
+
+    struct WriterIndexContext {
+      struct less {
+      private:
+	indri::index::DocListFileIterator::iterator_greater _iterator_greater;
+  
+      public:
+	bool operator () ( const WriterIndexContext* const&  one, const WriterIndexContext* const& two ) const {
+	  return _iterator_greater( one->iterator, two->iterator );
+	}
+      };
+
+      WriterIndexContext( indri::index::Index* _index ) {
+	bitmap = new indri::index::TermBitmap;
+	index = _index;
+	wasInfrequentCount = 0;
+	wasFrequentCount = 0;
+
+	if( index->iteratorLock() )
+	  index->iteratorLock()->lock();
+    
+	iterator = index->docListFileIterator();
+	iterator->startIteration();
+
+	newlyFrequent = new indri::index::TermRecorder;
+	oldFrequent = new indri::index::TermRecorder;
+	oldInfrequent = new indri::utility::HashTable<int, int>;
+
+	// DEBUG
+	sequenceCount = 0;
+      }
+
+      ~WriterIndexContext() {
+	delete iterator;
+
+	if( index->iteratorLock() )
+	  index->iteratorLock()->unlock();
+
+	delete oldFrequent;
+	delete newlyFrequent;
+	delete oldInfrequent;
+	delete bitmap;
+      }
+
+      indri::index::DocListFileIterator* iterator;
+      indri::index::TermBitmap* bitmap;
+      indri::index::Index* index;
+
+      int wasFrequentCount;
+      int wasInfrequentCount;
+      int sequenceCount;
+      indri::index::TermRecorder* newlyFrequent;
+      indri::index::TermRecorder* oldFrequent;
+      indri::utility::HashTable<int, int>* oldInfrequent;
+    };
+
+    typedef std::priority_queue<WriterIndexContext*,
+				std::vector<WriterIndexContext*>,
+				WriterIndexContext::less> invertedlist_pqueue;
+
     class IndexWriter {
     private:
       struct disktermdata_count_greater {
@@ -105,28 +116,28 @@ namespace indri {
       };
 
       struct keyfile_pair {
-        BulkTreeWriter* stringMap;
-        BulkTreeWriter* idMap;
+        indri::file::BulkTreeWriter* stringMap;
+        indri::file::BulkTreeWriter* idMap;
       };
 
       keyfile_pair _infrequentTerms;
       keyfile_pair _frequentTerms;
-      File _frequentTermsData;
+      indri::file::File _frequentTermsData;
 
-      BulkTreeReader _infrequentTermsReader;
-      BulkTreeReader _frequentTermsReader;
+      indri::file::BulkTreeReader _infrequentTermsReader;
+      indri::file::BulkTreeReader _frequentTermsReader;
 
-      File _documentStatistics;
-      File _documentLengths;
+      indri::file::File _documentStatistics;
+      indri::file::File _documentLengths;
 
-      File _invertedFile;
-      File _directFile;
+      indri::file::File _invertedFile;
+      indri::file::File _directFile;
 
-      SequentialWriteBuffer* _invertedOutput;
+      indri::file::SequentialWriteBuffer* _invertedOutput;
 
-      greedy_vector<indri::index::DiskTermData*> _topTerms;
+      indri::utility::greedy_vector<indri::index::DiskTermData*> _topTerms;
       int _topTermsCount;
-      Buffer _termDataBuffer;
+      indri::utility::Buffer _termDataBuffer;
 
       int _isFrequentCount;
       int _documentBase;
@@ -135,15 +146,15 @@ namespace indri {
       std::vector<indri::index::FieldStatistics> _fieldData;
 
       void _writeManifest( const std::string& path );
-      void _writeSkip( SequentialWriteBuffer* buffer, int document, int length );
-      void _writeBatch( SequentialWriteBuffer* buffer, int document, int length, Buffer& data );
+      void _writeSkip( indri::file::SequentialWriteBuffer* buffer, int document, int length );
+      void _writeBatch( indri::file::SequentialWriteBuffer* buffer, int document, int length, indri::utility::Buffer& data );
 
       void _writeFieldLists( std::vector<indri::index::Index*>& indexes, const std::string& path );
       void _writeFieldList( const std::string& fileName, int fieldIndex, std::vector<indri::index::DocExtentListIterator*> iterators );
 
-      void _pushInvertedLists( greedy_vector<WriterIndexContext*>& lists, invertedlist_pqueue& queue );
-      void _fetchMatchingInvertedLists( greedy_vector<WriterIndexContext*>& lists, invertedlist_pqueue& queue );
-      void _writeStatistics( greedy_vector<WriterIndexContext*>& lists, indri::index::TermData* termData, UINT64& startOffset );
+      void _pushInvertedLists( indri::utility::greedy_vector<WriterIndexContext*>& lists, invertedlist_pqueue& queue );
+      void _fetchMatchingInvertedLists( indri::utility::greedy_vector<WriterIndexContext*>& lists, invertedlist_pqueue& queue );
+      void _writeStatistics( indri::utility::greedy_vector<WriterIndexContext*>& lists, indri::index::TermData* termData, UINT64& startOffset );
       void _writeInvertedLists( std::vector<WriterIndexContext*>& contexts );
 
       void _storeIdEntry( IndexWriter::keyfile_pair& pair, indri::index::DiskTermData* diskTermData );
@@ -151,23 +162,23 @@ namespace indri {
 
       void _storeTermEntry( IndexWriter::keyfile_pair& pair, indri::index::DiskTermData* diskTermData );
       void _storeFrequentTerms();
-      void _addInvertedListData( greedy_vector<WriterIndexContext*>& lists, indri::index::TermData* termData, Buffer& listBuffer, UINT64& endOffset );
-      void _storeMatchInformation( greedy_vector<WriterIndexContext*>& lists, int sequence, indri::index::TermData* termData, UINT64 startOffset, UINT64 endOffset );
+      void _addInvertedListData( indri::utility::greedy_vector<WriterIndexContext*>& lists, indri::index::TermData* termData, indri::utility::Buffer& listBuffer, UINT64& endOffset );
+      void _storeMatchInformation( indri::utility::greedy_vector<WriterIndexContext*>& lists, int sequence, indri::index::TermData* termData, UINT64 startOffset, UINT64 endOffset );
 
-      int _lookupTermID( BulkTreeReader& keyfile, const char* term );
+      int _lookupTermID( indri::file::BulkTreeReader& keyfile, const char* term );
 
       void _buildIndexContexts( std::vector<WriterIndexContext*>& contexts, std::vector<indri::index::Index*>& indexes );
       
       void _writeDirectLists( std::vector<WriterIndexContext*>& contexts );
       void _writeDirectLists( WriterIndexContext* context,
-                              SequentialWriteBuffer* directOutput,
-                              SequentialWriteBuffer* lengthsOutput,
-                              SequentialWriteBuffer* dataOutput );
+                              indri::file::SequentialWriteBuffer* directOutput,
+                              indri::file::SequentialWriteBuffer* lengthsOutput,
+                              indri::file::SequentialWriteBuffer* dataOutput );
 
-      indri::index::TermTranslator* _buildTermTranslator( BulkTreeReader& newInfrequentTerms,
-                                                          BulkTreeReader& newFrequentTerms,
+      indri::index::TermTranslator* _buildTermTranslator( indri::file::BulkTreeReader& newInfrequentTerms,
+                                                          indri::file::BulkTreeReader& newFrequentTerms,
                                                           indri::index::TermRecorder& oldFrequentTermsRecorder,
-                                                          HashTable<int, int>* oldInfrequent,
+                                                          indri::utility::HashTable<int, int>* oldInfrequent,
                                                           indri::index::TermRecorder& newFrequentTermsRecorder,
                                                           indri::index::Index* index,
                                                           indri::index::TermBitmap* bitmap );
@@ -190,9 +201,3 @@ namespace indri {
 }
 
 #endif // INDRI_INDEXWRITER_HPP
-
-
-
-
- 
-

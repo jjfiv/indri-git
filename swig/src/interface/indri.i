@@ -48,14 +48,15 @@ typedef long long UINT64;
 %}
 
 %pragma(java) jniclassimports="import java.util.Map;";
-%typemap(javaimports) QueryEnvironment "import java.util.Map;"
-%typemap(javaimports) IndexEnvironment "import java.util.Map;"
-
+%typemap(javaimports) indri::api::QueryEnvironment "import java.util.Map;"
+%typemap(javaimports) indri::api::IndexEnvironment "import java.util.Map;"
+namespace indri {
+  namespace api {
 class QueryAnnotation {
 public:
-  const QueryAnnotationNode* getQueryTree() const;
-  const EvaluatorNode::MResults& getAnnotations() const;
-  const std::vector<ScoredExtentResult>& getResults() const;
+  const indri::api::QueryAnnotationNode* getQueryTree() const;
+  const indri::infnet::EvaluatorNode::MResults& getAnnotations() const;
+  const std::vector<indri::api::ScoredExtentResult>& getResults() const;
 };
 
 class QueryEnvironment {
@@ -70,16 +71,16 @@ public:
   void setScoringRules( const std::vector<std::string>& rules );
   void setStopwords( const std::vector<std::string>& stopwords );
 
-  std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
-  std::vector<ScoredExtentResult> runQuery( const std::string& query, const std::vector<int>& documentSet, int resultsRequested );
-  QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
-  QueryAnnotation* runAnnotatedQuery( const std::string& query, const std::vector<int>& documentSet, int resultsRequested );
+  std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
+  std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, const std::vector<int>& documentSet, int resultsRequested );
+  indri::api::QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
+  indri::api::QueryAnnotation* runAnnotatedQuery( const std::string& query, const std::vector<int>& documentSet, int resultsRequested );
   
-  std::vector<ParsedDocument*> documents( const std::vector<int>& documentIDs );
-  std::vector<ParsedDocument*> documents( const std::vector<ScoredExtentResult>& results );
+  std::vector<indri::api::ParsedDocument*> documents( const std::vector<int>& documentIDs );
+  std::vector<indri::api::ParsedDocument*> documents( const std::vector<indri::api::ScoredExtentResult>& results );
 
   std::vector<std::string> documentMetadata( const std::vector<int>& documentIDs, const std::string& attributeName );
-  std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
+  std::vector<std::string> documentMetadata( const std::vector<indri::api::ScoredExtentResult>& documentIDs, const std::string& attributeName );
 
   INT64 termCount();
   INT64 termCount( const std::string& term );
@@ -88,7 +89,7 @@ public:
   INT64 documentCount();
   INT64 documentCount( const std::string& term );
 
-  std::vector<DocumentVector*> documentVectors( const std::vector<int>& documentIDs );
+  std::vector<indri::api::DocumentVector*> documentVectors( const std::vector<int>& documentIDs );
 };
 
 %feature("director") IndexStatus;
@@ -121,8 +122,8 @@ public:
                      const std::vector<std::string>& index,
                      const std::vector<std::string>& metadata, 
                      const std::map<std::string,std::string>& conflations );
-  FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name);
-  void addFileClass( const FileClassEnvironmentFactory::Specification &spec);
+  indri::parse::FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name);
+  void addFileClass( const indri::parse::FileClassEnvironmentFactory::Specification &spec);
   
   void setIndexedFields( const std::vector<std::string>& fieldNames );
   void setNumericField( const std::string& fieldName, bool isNumeric );
@@ -132,16 +133,17 @@ public:
   void setMemory( UINT64 memory );
   void setNormalization( bool normalize );
 
-  void create( const std::string& repositoryPath, IndexStatus* callback = 0 );
-  void open( const std::string& repositoryPath, IndexStatus* callback = 0 );
+  void create( const std::string& repositoryPath, indri::api::IndexStatus* callback = 0 );
+  void open( const std::string& repositoryPath, indri::api::IndexStatus* callback = 0 );
   void close();
 
   void addFile( const std::string& fileName );
   void addFile( const std::string& fileName, const std::string& fileClass );
 
-  void addString( const std::string& fileName, const std::string& fileClass, const std::vector<MetadataPair>& metadata );
-  void addParsedDocument( ParsedDocument* document );
+  int addString( const std::string& fileName, const std::string& fileClass, const std::vector<indri::parse::MetadataPair>& metadata );
+  int addParsedDocument( indri::api::ParsedDocument* document );
   int documentsIndexed();
   int documentsSeen();
 };
-
+}
+}

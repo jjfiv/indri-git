@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // RepositoryLoadThread
@@ -15,7 +25,7 @@ const int HALF_SECOND = 500*1000;
 // constructor
 //
 
-RepositoryLoadThread::RepositoryLoadThread( Repository& repository, UINT64 memory ) :
+indri::collection::RepositoryLoadThread::RepositoryLoadThread( indri::collection::Repository& repository, UINT64 memory ) :
   UtilityThread(),
   _repository( repository ),
   _memory( memory )
@@ -26,7 +36,7 @@ RepositoryLoadThread::RepositoryLoadThread( Repository& repository, UINT64 memor
 // initialize
 //
 
-UINT64 RepositoryLoadThread::initialize() {
+UINT64 indri::collection::RepositoryLoadThread::initialize() {
   return FIVE_SECONDS;
 }
 
@@ -34,7 +44,7 @@ UINT64 RepositoryLoadThread::initialize() {
 // deinitialize
 //
 
-void RepositoryLoadThread::deinitialize() {
+void indri::collection::RepositoryLoadThread::deinitialize() {
   // do nothing
 }
 
@@ -42,11 +52,11 @@ void RepositoryLoadThread::deinitialize() {
 // work
 //
 
-UINT64 RepositoryLoadThread::work() {
+UINT64 indri::collection::RepositoryLoadThread::work() {
   _repository._incrementLoad();
 
-  Repository::index_state state = _repository.indexes();
-  greedy_vector<indri::index::MemoryIndex*> indexes;
+  indri::collection::Repository::index_state state = _repository.indexes();
+  indri::utility::greedy_vector<indri::index::MemoryIndex*> indexes;
   UINT64 memorySize = 0;
 
   for( int i=0; i<state->size(); i++ ) {
@@ -57,21 +67,25 @@ UINT64 RepositoryLoadThread::work() {
     }
   }
 
- if( memorySize > 1.5*_memory ) {
+ if( memorySize > 1.25*_memory ) {
     _repository._setThrashing( true );
     return HALF_SECOND;
   } else {
     _repository._setThrashing( false );
   }
   
+  if( memorySize > _memory ) {
+    return HALF_SECOND;
+  } else {
   return FIVE_SECONDS;
+  }
 }
 
 //
 // hasWork
 //
 
-bool RepositoryLoadThread::hasWork() {
+bool indri::collection::RepositoryLoadThread::hasWork() {
   return false;
 }
 

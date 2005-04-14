@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // DiskDocListIterator
@@ -49,7 +59,7 @@
 // DiskDocListIterator constructor
 //
 
-indri::index::DiskDocListIterator::DiskDocListIterator( SequentialReadBuffer* buffer, UINT64 startOffset, int fieldCount )
+indri::index::DiskDocListIterator::DiskDocListIterator( indri::file::SequentialReadBuffer* buffer, UINT64 startOffset, int fieldCount )
   :
   _file(buffer),
   _startOffset(startOffset),
@@ -85,7 +95,7 @@ void indri::index::DiskDocListIterator::setStartOffset( UINT64 startOffset, Term
 // topDocuments
 //
 
-const greedy_vector<indri::index::DocListIterator::TopDocument>& indri::index::DiskDocListIterator::topDocuments() {
+const indri::utility::greedy_vector<indri::index::DocListIterator::TopDocument>& indri::index::DiskDocListIterator::topDocuments() {
   return _topdocs;
 }
 
@@ -95,10 +105,10 @@ const greedy_vector<indri::index::DocListIterator::TopDocument>& indri::index::D
 
 void indri::index::DiskDocListIterator::_readTermData( int headerLength ) {
   if( !_termData ) {
-    Buffer header;
+    indri::utility::Buffer header;
 
     _file->read( header.write( headerLength ), headerLength );
-    RVLDecompressStream stream( header.front(), header.position() );
+    indri::utility::RVLDecompressStream stream( header.front(), header.position() );
 
     // header is RVLCompressed with the term first, followed by a termData structure
     stream >> _term;

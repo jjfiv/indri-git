@@ -30,7 +30,7 @@ const size_t LOCATION_SPACE = 5; // need enough in case we have to grow
 // DocListMemoryBuilder constructor
 //
 
-indri::index::DocListMemoryBuilder::DocListMemoryBuilder( RegionAllocator* allocator ) :
+indri::index::DocListMemoryBuilder::DocListMemoryBuilder( indri::utility::RegionAllocator* allocator ) :
   _list(0),
   _listBegin(0),
   _listEnd(0),

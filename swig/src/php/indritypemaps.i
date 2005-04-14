@@ -39,20 +39,20 @@ typedef long long UINT64;
 
 
 %typemap(in) 
-  std::vector< ScoredExtentResult > *,
-  std::vector< ScoredExtentResult > &
+  std::vector< indri::api::ScoredExtentResult > *,
+  std::vector< indri::api::ScoredExtentResult > &
 {
   int iStatus;
   ulong iIndex;
   char *sIndex=NULL;
   zval **Data;
-  $1=new std::vector< ScoredExtentResult >;
+  $1=new std::vector< indri::api::ScoredExtentResult >;
   convert_to_array(*$input);
   zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
   while((iStatus=zend_hash_get_current_key((*$input)->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
     zend_hash_get_current_data((*$input)->value.ht,(void **) &Data);
-    ScoredExtentResult * arg1 = 0;
-    SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_ScoredExtentResult);
+    indri::api::ScoredExtentResult * arg1 = 0;
+    SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult);
     $1->push_back(*arg1);
     zend_hash_move_forward((*$input)->value.ht);  
     if (sIndex) {
@@ -109,17 +109,17 @@ typedef long long UINT64;
 }
 
 %typemap(out) 
-  std::vector< ScoredExtentResult >
+  std::vector< indri::api::ScoredExtentResult >
 {
-  std::vector< ScoredExtentResult >::size_type iIndex;
+  std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
   array_init(return_value);
-  std::vector< ScoredExtentResult > *resultobj = &result; 
+  std::vector< indri::api::ScoredExtentResult > *resultobj = &result; 
   for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
     zval *obj, *_cPtr;
     MAKE_STD_ZVAL(obj);
     MAKE_STD_ZVAL(_cPtr);
-    ScoredExtentResult *r = new ScoredExtentResult((*resultobj)[iIndex]);
-    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+    indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult((*resultobj)[iIndex]);
+    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
     *_cPtr = *obj;
     INIT_ZVAL(*obj);
     object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -133,17 +133,17 @@ typedef long long UINT64;
 }
 
 %typemap(out) 
-   std::vector< ParsedDocument * >
+   std::vector< indri::api::ParsedDocument * >
 {
-  std::vector< ParsedDocument * >::size_type iIndex;
+  std::vector< indri::api::ParsedDocument * >::size_type iIndex;
   array_init(return_value);
-  std::vector< ParsedDocument * > *resultobj = &result; 
+  std::vector< indri::api::ParsedDocument * > *resultobj = &result; 
   for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
     zval *obj, *_cPtr;
     MAKE_STD_ZVAL(obj);
     MAKE_STD_ZVAL(_cPtr);
-    ParsedDocument *r = (*resultobj)[iIndex];
-    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ParsedDocument, 1);
+    indri::api::ParsedDocument *r = (*resultobj)[iIndex];
+    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ParsedDocument, 1);
     *_cPtr = *obj;
     INIT_ZVAL(*obj);
     object_init_ex(obj,ptr_ce_swig_ParsedDocument);
@@ -155,14 +155,14 @@ typedef long long UINT64;
     zval *positions, *pos, *_ptr;
     MAKE_STD_ZVAL(positions);
     array_init(positions);    
-    for (greedy_vector<TermExtent>::iterator iter = r->positions.begin();
+    for (indri::utility::greedy_vector<indri::parse::TermExtent>::iterator iter = r->positions.begin();
 	 iter != r->positions.end(); iter++) {
       MAKE_STD_ZVAL(pos);
       MAKE_STD_ZVAL(_ptr);
-      TermExtent *t = new TermExtent;
+      indri::parse::TermExtent *t = new indri::parse::TermExtent;
       t->begin = iter->begin;
       t->end = iter->end;
-      SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_TermExtent, 1);
+      SWIG_SetPointerZval(pos, (void *)t, SWIGTYPE_p_indri__parse__TermExtent, 1);
       *_ptr = *pos;
       INIT_ZVAL(*pos);
       object_init_ex(pos,ptr_ce_swig_TermExtent);
@@ -178,7 +178,7 @@ typedef long long UINT64;
     MAKE_STD_ZVAL(pairs);
     array_init(pairs);    
       // copy metadata information
-    for (greedy_vector<MetadataPair>::iterator iter = r->metadata.begin();
+    for (indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = r->metadata.begin();
 	 iter != r->metadata.end(); iter++) {
       add_assoc_string(pairs, (char *)iter->key, (char *)iter->value, 1);
     }
@@ -191,18 +191,18 @@ typedef long long UINT64;
 }
 
 %typemap(out) 
-     std::vector< ScoredExtentResult > &,
-     std::vector< ScoredExtentResult > *
+     std::vector< indri::api::ScoredExtentResult > &,
+     std::vector< indri::api::ScoredExtentResult > *
 {
-  std::vector< ScoredExtentResult >::size_type iIndex;
+  std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
   array_init(return_value);
-  std::vector< ScoredExtentResult > *resultobj = result; 
+  std::vector< indri::api::ScoredExtentResult > *resultobj = result; 
   for (iIndex=0;iIndex<resultobj->size();iIndex++)  {
     zval *obj, *_cPtr, *retval;
     MAKE_STD_ZVAL(obj);
     MAKE_STD_ZVAL(_cPtr);
-    ScoredExtentResult *r = new ScoredExtentResult((*resultobj)[iIndex]);
-    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+    indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult((*resultobj)[iIndex]);
+    SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
     *_cPtr = *obj;
     INIT_ZVAL(*obj);
     object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -230,21 +230,21 @@ typedef long long UINT64;
   EvaluatorNode::MResults &
 {
   array_init(return_value);
-  const EvaluatorNode::MResults & matches = *result; 
-  EvaluatorNode::MResults::iterator iter;
-  std::vector< ScoredExtentResult >::size_type iIndex;
+  const indri::infnet::EvaluatorNode::MResults & matches = *result; 
+  indri::infnet::EvaluatorNode::MResults::iterator iter;
+  std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
   for( iter = $1->begin(); iter != $1->end(); iter++ ) {
     zval *seRes;
     MAKE_STD_ZVAL(seRes);
     array_init(seRes);
-    std::vector<ScoredExtentResult>& vec = iter->second;
+    std::vector<indri::api::ScoredExtentResult>& vec = iter->second;
     char *key = (char *)iter->first.c_str();
     for (iIndex=0;iIndex<vec.size();iIndex++)  {
       zval *obj, *_cPtr;
       MAKE_STD_ZVAL(obj);
       MAKE_STD_ZVAL(_cPtr);
-      ScoredExtentResult *r = new ScoredExtentResult(vec[iIndex]);
-      SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_ScoredExtentResult, 1);
+      indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult(vec[iIndex]);
+      SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
       *_cPtr = *obj;
       INIT_ZVAL(*obj);
       object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
@@ -260,7 +260,7 @@ typedef long long UINT64;
 }
 
 
-%typemap(out) QueryAnnotationNode * {
+%typemap(out) indri::api::QueryAnnotationNode * {
   zval *tmp = php_makeQueryAnnotationNode($1);
   *($result) =  *tmp;
   return;
@@ -269,11 +269,11 @@ typedef long long UINT64;
 // need a method to make zvals for each child.
 %wrapper %{
 
-zval *php_makeQueryAnnotationNode(QueryAnnotationNode *inNode) {
+zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
   zval *retval = 0, *_cPtr;
   MAKE_STD_ZVAL(_cPtr);
   MAKE_STD_ZVAL(retval);
-  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_QueryAnnotationNode, 1);
+  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 1);
   *_cPtr = *retval;
   INIT_ZVAL(*retval);
   object_init_ex(retval,ptr_ce_swig_QueryAnnotationNode);
@@ -307,13 +307,13 @@ zval *php_makeQueryAnnotationNode(QueryAnnotationNode *inNode) {
 %typemap(freearg) 
  std::string*, 
  std::vector< std::string > *, 
- std::vector< ScoredExtentResult > *, 
- std::vector< ParsedDocument * > *, 
+ std::vector< indri::api::ScoredExtentResult > *, 
+ std::vector< indri::api::ParsedDocument * > *, 
  std::vector< DOCID_T > *, 
- std::vector< ScoredExtentResult > &, 
+ std::vector< indri::api::ScoredExtentResult > &, 
  std::vector< DOCID_T > &, 
- std::vector< ScoredExtentResult >, 
- std::vector< ParsedDocument * >, 
+ std::vector< indri::api::ScoredExtentResult >, 
+ std::vector< indri::api::ParsedDocument * >, 
  std::vector< DOCID_T >
 {
 // freearg typemap

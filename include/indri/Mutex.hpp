@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 //
 // Mutex
@@ -18,67 +28,73 @@
 #endif
 
 #include "indri/Lockable.hpp"
+namespace indri
+{
+  namespace thread
+  {
+    
+    class Mutex : public Lockable {
+      friend class ConditionVariable;
 
-class Mutex : public Lockable {
-  friend class ConditionVariable;
-
-private:
+    private:
 #ifdef WIN32
-  HANDLE _mutex;
+      HANDLE _mutex;
 #else // POSIX
-  pthread_mutex_t _mutex;
+      pthread_mutex_t _mutex;
 #endif
 
-  // make copy construction private
-  explicit Mutex( Mutex& m ) {}
+      // make copy construction private
+      explicit Mutex( Mutex& m ) {}
 
-public:
-  Mutex() {
+    public:
+      Mutex() {
 #ifdef WIN32
-    _mutex = ::CreateMutex( NULL, FALSE, NULL );
+	_mutex = ::CreateMutex( NULL, FALSE, NULL );
 #else
-    pthread_mutex_init( &_mutex, NULL );
+	pthread_mutex_init( &_mutex, NULL );
 #endif
-  }
+      }
 
-  ~Mutex() {
+      ~Mutex() {
 #ifdef WIN32
-    if( _mutex != INVALID_HANDLE_VALUE ) {
-      ::CloseHandle( _mutex );
-      _mutex = 0;
-    }
+	if( _mutex != INVALID_HANDLE_VALUE ) {
+	  ::CloseHandle( _mutex );
+	  _mutex = 0;
+	}
 #else
-    pthread_mutex_destroy( &_mutex );
+	pthread_mutex_destroy( &_mutex );
 #endif
-  }
+      }
 
-  void lock() {
+      void lock() {
 #ifdef WIN32
-    ::WaitForSingleObject( _mutex, INFINITE );
+	::WaitForSingleObject( _mutex, INFINITE );
 #else
-    int result = pthread_mutex_lock( &_mutex );
-    assert( result == 0 );
+	int result = pthread_mutex_lock( &_mutex );
+	assert( result == 0 );
 #endif
-  }
+      }
 
-  bool tryLock() {
+      bool tryLock() {
 #ifdef WIN32
-    HRESULT result = ::WaitForSingleObject( _mutex, 0 );
-    return (result == WAIT_OBJECT_0) || (result == WAIT_ABANDONED);
+	HRESULT result = ::WaitForSingleObject( _mutex, 0 );
+	return (result == WAIT_OBJECT_0) || (result == WAIT_ABANDONED);
 #else
-    return pthread_mutex_trylock( &_mutex ) == 0;
+	return pthread_mutex_trylock( &_mutex ) == 0;
 #endif
-  }
+      }
 
-  void unlock() {
+      void unlock() {
 #ifdef WIN32
-    ::ReleaseMutex( _mutex );
+	::ReleaseMutex( _mutex );
 #else
-    int result = pthread_mutex_unlock( &_mutex );
-    assert( result == 0 );
+	int result = pthread_mutex_unlock( &_mutex );
+	assert( result == 0 );
 #endif
+      }
+    };
   }
-};
+}
 
 #endif // INDRI_MUTEX_HPP
 

@@ -109,12 +109,12 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_addFile__SWIG_1(swigCPtr, fileName, fileClass);
   }
 
-  public void addString(String fileName, String fileClass, Map metadata) {
-    indriJNI.IndexEnvironment_addString(swigCPtr, fileName, fileClass, metadata);
+  public int addString(String fileName, String fileClass, Map metadata) {
+    return indriJNI.IndexEnvironment_addString(swigCPtr, fileName, fileClass, metadata);
   }
 
-  public void addParsedDocument(ParsedDocument document) {
-    indriJNI.IndexEnvironment_addParsedDocument(swigCPtr, document);
+  public int addParsedDocument(ParsedDocument document) {
+    return indriJNI.IndexEnvironment_addParsedDocument(swigCPtr, document);
   }
 
   public int documentsIndexed() {

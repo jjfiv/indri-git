@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2004 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // MemoryIndex
@@ -52,6 +62,7 @@ indri::index::MemoryIndex::MemoryIndex( int docBase, const std::vector<Index::Fi
 {
   _baseDocumentID = docBase;
   _termListsBaseOffset = 0;
+  _fieldData.reserve( fields.size() );
 
   for( size_t i=0; i<fields.size(); i++ ) {
     int fieldID = i+1;
@@ -68,13 +79,13 @@ indri::index::MemoryIndex::MemoryIndex( int docBase, const std::vector<Index::Fi
 
 indri::index::MemoryIndex::~MemoryIndex() {
   // delete term lists
-  std::list<Buffer*>::iterator bufferIter;
+  std::list<indri::utility::Buffer*>::iterator bufferIter;
   for( bufferIter = _termLists.begin(); bufferIter != _termLists.end(); bufferIter++ ) {
     delete *bufferIter; 
   }
 
   // delete field lists
-  delete_vector_contents<DocExtentListMemoryBuilder*>( _fieldLists );
+  indri::utility::delete_vector_contents<DocExtentListMemoryBuilder*>( _fieldLists );
 
   // delete term entries
   _destroyTerms();
@@ -299,7 +310,7 @@ int indri::index::MemoryIndex::_fieldID( const std::string& fieldName ) {
 // _writeFieldExtents
 //
 
-void indri::index::MemoryIndex::_writeFieldExtents( int documentID, greedy_vector<indri::index::FieldExtent>& indexedTags ) {
+void indri::index::MemoryIndex::_writeFieldExtents( int documentID, indri::utility::greedy_vector<indri::index::FieldExtent>& indexedTags ) {
   // write field data out
   for( unsigned int i=0; i<indexedTags.size(); i++ ) {
     indri::index::FieldExtent& extent = indexedTags[i];
@@ -313,7 +324,7 @@ void indri::index::MemoryIndex::_writeFieldExtents( int documentID, greedy_vecto
 //
 
 void indri::index::MemoryIndex::_writeDocumentTermList( UINT64& offset, int& byteLength, int documentID, int documentLength, indri::index::TermList& locatedTerms ) {
-  Buffer* addBuffer = 0;
+  indri::utility::Buffer* addBuffer = 0;
   int docDataLength = 10 + 5 * locatedTerms.terms().size() + 2 * sizeof(FieldExtent) * locatedTerms.fields().size();
   
   if( !_termLists.size() || _termLists.back()->size() - _termLists.back()->position() < docDataLength ) {
@@ -323,7 +334,7 @@ void indri::index::MemoryIndex::_writeDocumentTermList( UINT64& offset, int& byt
     else
       _termListsBaseOffset += _termLists.back()->position();
 
-    addBuffer = new Buffer(ONE_MEGABYTE);
+    addBuffer = new indri::utility::Buffer(ONE_MEGABYTE);
     _termLists.push_back( addBuffer );
   } else {
     addBuffer = _termLists.back();
@@ -353,13 +364,13 @@ void indri::index::MemoryIndex::_writeDocumentStatistics( UINT64 offset, int byt
 // _addOpenTags
 //
 
-void indri::index::MemoryIndex::_addOpenTags( greedy_vector<indri::index::FieldExtent>& indexedTags,
-                               greedy_vector<indri::index::FieldExtent>& openTags,
-                               const greedy_vector<TagExtent>& extents,
+void indri::index::MemoryIndex::_addOpenTags( indri::utility::greedy_vector<indri::index::FieldExtent>& indexedTags,
+                               indri::utility::greedy_vector<indri::index::FieldExtent>& openTags,
+                               const indri::utility::greedy_vector<indri::parse::TagExtent>& extents,
                                unsigned int& extentIndex, 
                                unsigned int position ) {
   for( ; extentIndex < extents.size(); extentIndex++ ) {
-    const TagExtent* extent = &extents[extentIndex];
+    const indri::parse::TagExtent* extent = &extents[extentIndex];
     
     if( extent->begin > position )
       break;
@@ -380,7 +391,7 @@ void indri::index::MemoryIndex::_addOpenTags( greedy_vector<indri::index::FieldE
 // _removeClosedTags
 //
 
-void indri::index::MemoryIndex::_removeClosedTags( greedy_vector<indri::index::FieldExtent>& tags, unsigned int position ) {
+void indri::index::MemoryIndex::_removeClosedTags( indri::utility::greedy_vector<indri::index::FieldExtent>& tags, unsigned int position ) {
   for( unsigned int i=0; i<tags.size(); ) {
     if( tags[i].end <= position ) {
       tags.erase( tags.begin() + i );
@@ -449,15 +460,15 @@ void indri::index::MemoryIndex::_destroyTerms() {
 // addDocument
 //
 
-int indri::index::MemoryIndex::addDocument( ParsedDocument& document ) {
-  ScopedLock sl( _writeLock );
+int indri::index::MemoryIndex::addDocument( indri::api::ParsedDocument& document ) {
+  indri::thread::ScopedLock sl( _writeLock );
   
   unsigned int position = 0;
   unsigned int extentIndex = 0;
-  greedy_vector<indri::index::FieldExtent> openTags;
-  greedy_vector<indri::index::FieldExtent> indexedTags;
+  indri::utility::greedy_vector<indri::index::FieldExtent> openTags;
+  indri::utility::greedy_vector<indri::index::FieldExtent> indexedTags;
   unsigned int indexedTerms = 0;
-  greedy_vector<char*>& words = document.terms;
+  indri::utility::greedy_vector<char*>& words = document.terms;
   term_entry* entries = 0;
 
   // assign a document ID
@@ -514,7 +525,7 @@ int indri::index::MemoryIndex::addDocument( ParsedDocument& document ) {
     _addOpenTags( indexedTags, openTags, document.tags, extentIndex, position );
 
     // for every open tag, we want to record that we've seen the 
-    for( greedy_vector<indri::index::FieldExtent>::iterator tag = openTags.begin(); tag != openTags.end(); tag++ ) {
+    for( indri::utility::greedy_vector<indri::index::FieldExtent>::iterator tag = openTags.begin(); tag != openTags.end(); tag++ ) {
       indri::index::TermFieldStatistics* termField = &entry->termData->fields[tag->id-1];
       termField->addOccurrence( documentID );
 
@@ -619,8 +630,8 @@ const indri::index::TermList* indri::index::MemoryIndex::termList( int documentI
 
   const DocumentData& data = _documentData[documentIndex];
   UINT64 documentOffset = data.offset;
-  Buffer* documentBuffer = 0;
-  std::list<Buffer*>::const_iterator iter;
+  indri::utility::Buffer* documentBuffer = 0;
+  std::list<indri::utility::Buffer*>::const_iterator iter;
 
   for( iter = _termLists.begin(); iter != _termLists.end(); ++iter ) {
     if( documentOffset < (*iter)->position() ) {
@@ -691,7 +702,7 @@ indri::index::DocumentDataIterator* indri::index::MemoryIndex::documentDataItera
 // statisticsLock
 //
 
-Lockable* indri::index::MemoryIndex::statisticsLock() {
+indri::thread::Lockable* indri::index::MemoryIndex::statisticsLock() {
   // technically, this should be _readLock, but statisticsLock is supposed to be
   // acquired after iteratorLock() has been acquired, so that one should cover it.
   return 0;
@@ -701,7 +712,7 @@ Lockable* indri::index::MemoryIndex::statisticsLock() {
 // iteratorLock
 //
 
-Lockable* indri::index::MemoryIndex::iteratorLock() {
+indri::thread::Lockable* indri::index::MemoryIndex::iteratorLock() {
   return &_readLock;
 }
 
@@ -710,9 +721,9 @@ Lockable* indri::index::MemoryIndex::iteratorLock() {
 //
 
 size_t indri::index::MemoryIndex::memorySize() {
-  ScopedLock l( _readLock );
+  indri::thread::ScopedLock l( _readLock );
 
-  HashTable<const char*, term_entry*>::iterator iter;
+  indri::utility::HashTable<const char*, term_entry*>::iterator iter;
 
   // inverted list data
   size_t listDataSize = _allocator.allocatedBytes();
@@ -722,7 +733,7 @@ size_t indri::index::MemoryIndex::memorySize() {
 
   // document direct list data
   size_t termListsSize = 0;
-  std::list<Buffer*>::iterator biter;
+  std::list<indri::utility::Buffer*>::iterator biter;
 
   for( biter = _termLists.begin(); biter != _termLists.end(); biter++ ) {
     termListsSize += (*biter)->size();
