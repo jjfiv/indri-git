@@ -2293,8 +2293,8 @@ namespace indri {
       RawExtentNode* _context;
       bool _hasCounts;
       bool _hasContextSize;
-      UINT64 _occurrences;
-      UINT64 _contextSize;
+      double _occurrences;
+      double _contextSize;
 
     public:
       ContextCounterNode( RawExtentNode* raw, RawExtentNode* context ) :
@@ -2310,8 +2310,8 @@ namespace indri {
       ContextCounterNode( Unpacker& unpacker ) {
         _raw = unpacker.getRawExtentNode( "raw" );
         _context = unpacker.getRawExtentNode( "context" );
-        _occurrences = unpacker.getInteger( "occurrences" );
-        _contextSize = unpacker.getInteger( "contextSize" );
+        _occurrences = unpacker.getDouble( "occurrences" );
+        _contextSize = unpacker.getDouble( "contextSize" );
 
         _hasCounts = unpacker.getBoolean( "hasCounts" );
         _hasContextSize = unpacker.getBoolean( "hasContextSize" );
@@ -2421,8 +2421,8 @@ namespace indri {
 
       bool _hasCounts;
       bool _hasContextSize;
-      UINT64 _occurrences;
-      UINT64 _contextSize;
+      double _occurrences;
+      double _contextSize;
 
     public:
       ContextSimpleCounterNode( const std::vector<std::string>& terms, const std::string& field, const std::string& context ) :
@@ -2437,8 +2437,8 @@ namespace indri {
       }
 
       ContextSimpleCounterNode( Unpacker& unpacker ) {
-        _occurrences = unpacker.getInteger( "occurrences" );
-        _contextSize = unpacker.getInteger( "contextSize" );
+        _occurrences = unpacker.getDouble( "occurrences" );
+        _contextSize = unpacker.getDouble( "contextSize" );
 
         _terms = unpacker.getStringVector( "terms" );
         _field = unpacker.getString( "field" );
