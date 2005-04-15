@@ -36,76 +36,76 @@ namespace indri
     public:
       /// Container for parameter values
       struct parameter_value {
-	typedef std::map<std::string, parameter_value*> MValue;
-	/// map of string to parameter_value pointers.
-	MValue table;
-	typedef std::vector<parameter_value*> VValue;
-	/// vector of parameter_value pointers
-	std::vector<parameter_value*> array;
-	/// string representation of parameter value.
-	std::string value;
+        typedef std::map<std::string, parameter_value*> MValue;
+        /// map of string to parameter_value pointers.
+        MValue table;
+        typedef std::vector<parameter_value*> VValue;
+        /// vector of parameter_value pointers
+        std::vector<parameter_value*> array;
+        /// string representation of parameter value.
+        std::string value;
 
       public:
-	/// create
-	parameter_value() {}
-	/// Make a deep copy.
-	/// @param other the parameter_value to copy.
-	parameter_value( const parameter_value& other ) {
-	  value = other.value;
+        /// create
+        parameter_value() {}
+        /// Make a deep copy.
+        /// @param other the parameter_value to copy.
+        parameter_value( const parameter_value& other ) {
+          value = other.value;
 
-	  for( size_t i=0; i<other.array.size(); i++ )
-	    array.push_back( new parameter_value( *other.array[i] ) );
+          for( size_t i=0; i<other.array.size(); i++ )
+            array.push_back( new parameter_value( *other.array[i] ) );
       
-	  for( MValue::const_iterator iter = other.table.begin();
-	       iter != other.table.end();
-	       iter++ )
-	    {
-	      table.insert( std::make_pair( iter->first,
-					    new parameter_value( *(iter->second) ) ) );
-	    }
-	}
-	/// clean up
-	~parameter_value() {
-	  clear();
-	}
+          for( MValue::const_iterator iter = other.table.begin();
+               iter != other.table.end();
+               iter++ )
+            {
+              table.insert( std::make_pair( iter->first,
+                                            new parameter_value( *(iter->second) ) ) );
+            }
+        }
+        /// clean up
+        ~parameter_value() {
+          clear();
+        }
 
-	/// remove any current value, and any subvalues of this parameter
-	void clear() {
-	  for( std::map<std::string, parameter_value*>::iterator iter = table.begin();
-	       iter != table.end();
-	       iter++ )
-	    {
-	      delete iter->second;
-	    }
-	  table.clear();
+        /// remove any current value, and any subvalues of this parameter
+        void clear() {
+          for( std::map<std::string, parameter_value*>::iterator iter = table.begin();
+               iter != table.end();
+               iter++ )
+            {
+              delete iter->second;
+            }
+          table.clear();
 
-	  indri::utility::delete_vector_contents<parameter_value*>(array);
-	  value = "";
-	}
+          indri::utility::delete_vector_contents<parameter_value*>(array);
+          value = "";
+        }
 
-	/// convert single value to an entry in the vector array.
-	void convertToArray() {
-	  if( !array.size() && ( table.size() || value.size() ) ) {
-	    parameter_value* child = new parameter_value;
+        /// convert single value to an entry in the vector array.
+        void convertToArray() {
+          if( !array.size() && ( table.size() || value.size() ) ) {
+            parameter_value* child = new parameter_value;
 
-	    child->table = table;
-	    child->value = value;
+            child->table = table;
+            child->value = value;
 
-	    table.clear();
-	    value = "";
+            table.clear();
+            value = "";
 
-	    array.push_back(child);
-	  }
-	}
-	/// Get the value.
-	/// @return the value of the contents of the first element of array
-	/// if present, otherwise the contents of value.
-	const std::string& getValue() {
-	  if( !array.size() )
-	    return value;
-	  else
-	    return array[0]->value;
-	}
+            array.push_back(child);
+          }
+        }
+        /// Get the value.
+        /// @return the value of the contents of the first element of array
+        /// if present, otherwise the contents of value.
+        const std::string& getValue() {
+          if( !array.size() )
+            return value;
+          else
+            return array[0]->value;
+        }
 
       };
 
@@ -123,69 +123,69 @@ namespace indri
       void _fillXML( class indri::xml::XMLNode* node );
   
       INT64 _multiplier( const std::string& value ) {
-	if( !value.length() )
-	  return 1;
+        if( !value.length() )
+          return 1;
 
-	char suffix = value[ value.length()-1 ];
+        char suffix = value[ value.length()-1 ];
     
-	switch( suffix ) {
-	case 'K':
-	case 'k':
-	  return 1000;
+        switch( suffix ) {
+        case 'K':
+        case 'k':
+          return 1000;
 
-	case 'M':
-	case 'm':
-	  return 1000000;
+        case 'M':
+        case 'm':
+          return 1000000;
 
-	case 'G':
-	case 'g':
-	  return 1000000000;
-	}
+        case 'G':
+        case 'g':
+          return 1000000000;
+        }
 
-	return 1;
+        return 1;
       }
 
       bool _isBoolean( const std::string& value ) {
-	if( !value.length() )
-	  return false;
+        if( !value.length() )
+          return false;
 
-	char first = value[0];
+        char first = value[0];
     
-	switch(first) {
-	case 'Y':
-	case 'y':
-	case 'N':
-	case 'n':
-	case 'T':
-	case 't':
-	case 'F':
-	case 'f':
-	  return true;
-	}
+        switch(first) {
+        case 'Y':
+        case 'y':
+        case 'N':
+        case 'n':
+        case 'T':
+        case 't':
+        case 'F':
+        case 'f':
+          return true;
+        }
 
-	return false;
+        return false;
       }
 
       bool _asBoolean( const std::string& value ) {
-	char first = value[0];
+        char first = value[0];
     
-	switch(first) {
-	case 'Y':
-	case 'y':
-	case 'T':
-	case 't':
-	case '1':
-	  return true;
+        switch(first) {
+        case 'Y':
+        case 'y':
+        case 'T':
+        case 't':
+        case '1':
+          return true;
    
-	case 'F':
-	case 'f':
-	case 'N':
-	case 'n':
-	case '0':
-	  return false;
-	}
+        case 'F':
+        case 'f':
+        case 'N':
+        case 'n':
+        case '0':
+          return false;
+        }
 
-	return false;
+        return false;
       }
 
     public:
@@ -205,13 +205,13 @@ namespace indri
       ~Parameters();
       /// @return the value of the parameter as a double
       operator double () {
-	const std::string& value = _getRoot()->getValue();
-	return atof( value.c_str() );
+        const std::string& value = _getRoot()->getValue();
+        return atof( value.c_str() );
       }
 
       operator bool () {
-	const std::string& value = _getRoot()->getValue();
-	return _asBoolean(value);
+        const std::string& value = _getRoot()->getValue();
+        return _asBoolean(value);
       }
 
       /// Converts the value to an int, scaling by the multiplier if supplied.
@@ -219,19 +219,19 @@ namespace indri
       /// G = 1000000000.
       /// @return the value of the parameter as an int
       operator int () {
-	const std::string& value = _getRoot()->getValue();
+        const std::string& value = _getRoot()->getValue();
 
-	if( _isBoolean(value) )
-	  return _asBoolean(value);
+        if( _isBoolean(value) )
+          return _asBoolean(value);
 
-	int multiplier = (int) _multiplier( value );
+        int multiplier = (int) _multiplier( value );
 
-	if( multiplier > 1 ) {
-	  std::string prefix = value.substr( 0, value.length() );
-	  return multiplier * atoi( prefix.c_str() );
-	}
+        if( multiplier > 1 ) {
+          std::string prefix = value.substr( 0, value.length() );
+          return multiplier * atoi( prefix.c_str() );
+        }
 
-	return atoi( value.c_str() );
+        return atoi( value.c_str() );
       }
 
       /// Converts the value to an INT64, scaling by the multiplier if supplied.
@@ -239,49 +239,49 @@ namespace indri
       /// G = 1000000000.
       /// @return the value of the parameter as an INT64
       operator INT64 () {
-	const std::string& value = _getRoot()->getValue();
-	INT64 multiplier = _multiplier( value );
+        const std::string& value = _getRoot()->getValue();
+        INT64 multiplier = _multiplier( value );
 
-	if( _isBoolean(value) )
-	  return _asBoolean(value);
+        if( _isBoolean(value) )
+          return _asBoolean(value);
 
-	if( multiplier > 1 ) {
-	  std::string prefix = value.substr( 0, value.length() );
-	  return multiplier * string_to_i64( prefix.c_str() );
-	}
+        if( multiplier > 1 ) {
+          std::string prefix = value.substr( 0, value.length() );
+          return multiplier * string_to_i64( prefix.c_str() );
+        }
 
-	return string_to_i64( value );
+        return string_to_i64( value );
       }
 
       /// @return the value of the parameter as a string
       operator std::string () {
-	std::string value = _getRoot()->getValue();
-	return value;
+        std::string value = _getRoot()->getValue();
+        return value;
       }
 
       /// assignment via deep copy.
       /// @param other the item to copy.
       /// @return this object
       const Parameters& operator= ( const Parameters& other ) {
-	_collection->value = other._collection->value;
+        _collection->value = other._collection->value;
     
-	indri::utility::delete_vector_contents( _collection->array );
-	indri::utility::delete_map_contents( _collection->table );
+        indri::utility::delete_vector_contents( _collection->array );
+        indri::utility::delete_map_contents( _collection->table );
 
-	for( size_t i=0; i<other._collection->array.size(); i++ ) {
-	  _collection->array.push_back( new parameter_value( *other._collection->array[i] ) );
-	}
+        for( size_t i=0; i<other._collection->array.size(); i++ ) {
+          _collection->array.push_back( new parameter_value( *other._collection->array[i] ) );
+        }
     
-	parameter_value::MValue::iterator iter;
+        parameter_value::MValue::iterator iter;
 
-	for( iter = other._collection->table.begin();
-	     iter != other._collection->table.end();
-	     iter++ ) {
-	  _collection->table.insert( std::make_pair( iter->first, 
-						     new parameter_value( *iter->second ) ) );
-	}
+        for( iter = other._collection->table.begin();
+             iter != other._collection->table.end();
+             iter++ ) {
+          _collection->table.insert( std::make_pair( iter->first, 
+                                                     new parameter_value( *iter->second ) ) );
+        }
    
-	return *this;
+        return *this;
       }
 
       /// Retrieve the n'th entry.

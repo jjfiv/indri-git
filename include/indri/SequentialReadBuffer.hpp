@@ -35,76 +35,76 @@ namespace indri
 
     public:
       SequentialReadBuffer( File& file ) :
-	_file(file),
-	_position(0),
-	_current( 1024*1024 )
+        _file(file),
+        _position(0),
+        _current( 1024*1024 )
       {
       }
 
       SequentialReadBuffer( File& file, size_t length ) :
-	_file(file),
-	_position(0),
-	_current( length )
+        _file(file),
+        _position(0),
+        _current( length )
       {
       }
 
       void cache( UINT64 position, size_t length ) {
-	_current.buffer.clear();
-	_current.filePosition = position;
-	_current.buffer.grow( length );
+        _current.buffer.clear();
+        _current.filePosition = position;
+        _current.buffer.grow( length );
 
-	size_t actual = _file.read( _current.buffer.write( length ), _position, length );
-	_current.buffer.unwrite( length - actual );
+        size_t actual = _file.read( _current.buffer.write( length ), _position, length );
+        _current.buffer.unwrite( length - actual );
       }
 
       size_t read( void* buffer, UINT64 position, size_t length ) {
-	if( position >= _current.filePosition && (position + length) <= _current.filePosition + _current.buffer.position() ) {
-	  memcpy( buffer, _current.buffer.front() + position - _current.filePosition, length );
-	  return length;
-	} else {
-	  return _file.read( buffer, position, length );
-	}
+        if( position >= _current.filePosition && (position + length) <= _current.filePosition + _current.buffer.position() ) {
+          memcpy( buffer, _current.buffer.front() + position - _current.filePosition, length );
+          return length;
+        } else {
+          return _file.read( buffer, position, length );
+        }
       }
 
       size_t read( void* buffer, size_t length ) {
-	memcpy( buffer, read( length ), length );
-	return length;
+        memcpy( buffer, read( length ), length );
+        return length;
       }
 
       const void* peek( size_t length ) {
-	const void* result = 0;
+        const void* result = 0;
       
-	if( _position < _current.filePosition || (_position + length) > _current.filePosition + _current.buffer.position() ) {
-	  // data isn't in the current buffer
-	  // this isn't necessarily the most efficient way to do this, but it should work
-	  cache( _position, _current.buffer.size() );
-	  assert( _current.buffer.position() + _current.filePosition >= _position + length );
-	}
+        if( _position < _current.filePosition || (_position + length) > _current.filePosition + _current.buffer.position() ) {
+          // data isn't in the current buffer
+          // this isn't necessarily the most efficient way to do this, but it should work
+          cache( _position, _current.buffer.size() );
+          assert( _current.buffer.position() + _current.filePosition >= _position + length );
+        }
 
-	result = _current.buffer.front() + ( _position - _current.filePosition );
-	assert( _current.filePosition <= _position );
-	assert( _current.buffer.position() + _current.filePosition >= _position + length );
-	return result;
+        result = _current.buffer.front() + ( _position - _current.filePosition );
+        assert( _current.filePosition <= _position );
+        assert( _current.buffer.position() + _current.filePosition >= _position + length );
+        return result;
       }
 
       const void* read( size_t length ) {
-	const void* result = peek( length );
-	_position += length;
-	return result;
+        const void* result = peek( length );
+        _position += length;
+        return result;
       }
 
       void seek( UINT64 position ) {
-	_position = position;
+        _position = position;
       }
 
       void clear() {
-	_position = 0;
-	_current.filePosition = 0;
-	_current.buffer.clear();
+        _position = 0;
+        _current.filePosition = 0;
+        _current.buffer.clear();
       }
 
       UINT64 position() {
-	return _position;
+        return _position;
       }
     };
   

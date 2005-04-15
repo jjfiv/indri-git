@@ -35,71 +35,71 @@ namespace indri
 
     public:
       QueryResponseUnpacker( NetworkMessageStream* stream ) :
-	_stream(stream),
-	_done(false)
+        _stream(stream),
+        _done(false)
       {
       }
 
       indri::infnet::InferenceNetwork::MAllResults& getResults() {
-	while( !_done && _stream->alive() && !_exception.length() )
-	  _stream->read(*this);
+        while( !_done && _stream->alive() && !_exception.length() )
+          _stream->read(*this);
 
-	if( _exception.length() )
-	  LEMUR_THROW( LEMUR_RUNTIME_ERROR, _exception );
+        if( _exception.length() )
+          LEMUR_THROW( LEMUR_RUNTIME_ERROR, _exception );
     
-	return _results;
+        return _results;
       }
 
       void reply( indri::xml::XMLNode* node ) {
-	assert( false && "Query responses are binary only for now" );
+        assert( false && "Query responses are binary only for now" );
       }
 
       void reply( const std::string& name, const void* buffer, unsigned int length ) {
-	std::string nodeName;
-	std::string listName;
+        std::string nodeName;
+        std::string listName;
     
-	nodeName = name.substr( 0, name.find(':') );
-	listName = name.substr( name.find(':')+1 );
+        nodeName = name.substr( 0, name.find(':') );
+        listName = name.substr( name.find(':')+1 );
     
-	indri::api::ScoredExtentResult aligned;
-	int count = length / (sizeof(INT32)*3 + sizeof(double));
-	std::vector<indri::api::ScoredExtentResult>& resultVector = _results[nodeName][listName];
+        indri::api::ScoredExtentResult aligned;
+        int count = length / (sizeof(INT32)*3 + sizeof(double));
+        std::vector<indri::api::ScoredExtentResult>& resultVector = _results[nodeName][listName];
     
-	const char* p = (const char*) buffer;
+        const char* p = (const char*) buffer;
 
-	for( int i=0; i<count; i++ ) {
-	  // copy for alignment
-	  memcpy( &aligned.score, p, sizeof(double) );
-	  p += sizeof(double);
+        for( int i=0; i<count; i++ ) {
+          // copy for alignment
+          memcpy( &aligned.score, p, sizeof(double) );
+          p += sizeof(double);
 
-	  memcpy( &aligned.document, p, sizeof(INT32) );
-	  p += sizeof(INT32);
+          memcpy( &aligned.document, p, sizeof(INT32) );
+          p += sizeof(INT32);
 
-	  memcpy( &aligned.begin, p, sizeof(INT32) );
-	  p += sizeof(INT32);
+          memcpy( &aligned.begin, p, sizeof(INT32) );
+          p += sizeof(INT32);
 
-	  memcpy( &aligned.end, p, sizeof(INT32) );
-	  p += sizeof(INT32);
+          memcpy( &aligned.end, p, sizeof(INT32) );
+          p += sizeof(INT32);
 
-	  aligned.begin = ntohl(aligned.begin);
-	  aligned.end = ntohl(aligned.end);
-	  aligned.document = ntohl(aligned.document);
-	  aligned.score = lemur_compat::ntohd(aligned.score);
+          aligned.begin = ntohl(aligned.begin);
+          aligned.end = ntohl(aligned.end);
+          aligned.document = ntohl(aligned.document);
+          aligned.score = lemur_compat::ntohd(aligned.score);
 
-	  resultVector.push_back(aligned);
-	}
+          resultVector.push_back(aligned);
+        }
       }
 
       void replyDone() {
-	_done = true;
+        _done = true;
       }
 
       void request( indri::xml::XMLNode* node ) {
-	assert( false && "No requests expected from the query server" );
+        assert( false && "No requests expected from the query server" );
       }
 
       void error( const std::string& err ) {
-	_exception = err;
+        _exception = err;
       }
 
     };

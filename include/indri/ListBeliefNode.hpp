@@ -50,12 +50,12 @@ namespace indri
 
     public:
       ListBeliefNode( const std::string& name,
-		      ListIteratorNode& child,
-		      ListIteratorNode* context,
-		      ListIteratorNode* raw,
-		      indri::query::TermScoreFunction& scoreFunction,
-		      double maximumBackgroundScore,
-		      double maximumScore );
+                      ListIteratorNode& child,
+                      ListIteratorNode* context,
+                      ListIteratorNode* raw,
+                      indri::query::TermScoreFunction& scoreFunction,
+                      double maximumBackgroundScore,
+                      double maximumScore );
 
       int nextCandidateDocument();
       void indexChanged( indri::index::Index& index );

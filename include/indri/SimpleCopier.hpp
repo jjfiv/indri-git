@@ -33,18 +33,18 @@ namespace indri
 
     public:
       ~SimpleCopier() {
-	indri::utility::delete_vector_contents( _nodes );
+        indri::utility::delete_vector_contents( _nodes );
       }
 
       indri::lang::Node* defaultAfter( indri::lang::Node* oldNode, indri::lang::Node* newNode ) {
-	_nodes.push_back(newNode);
-	return newNode;
+        _nodes.push_back(newNode);
+        return newNode;
       }
 
       indri::lang::Node* root() {
-	if( _nodes.size() )
-	  return _nodes.back();
-	return 0;
+        if( _nodes.size() )
+          return _nodes.back();
+        return 0;
       }
     };
   }

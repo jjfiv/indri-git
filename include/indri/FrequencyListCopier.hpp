@@ -40,41 +40,41 @@ namespace indri
       FrequencyListCopier( ListCache* listCache ) : _listCache(listCache), _lastTerm(0), _disqualifiedTree(false) {}
 
       indri::lang::Node* defaultAfter( indri::lang::Node* oldNode, indri::lang::Node* newNode ) {
-	if( _disqualifiers.size() && oldNode == _disqualifiers.top() )
-	  _disqualifiers.pop();
+        if( _disqualifiers.size() && oldNode == _disqualifiers.top() )
+          _disqualifiers.pop();
     
-	_nodes.push_back( newNode );
-	return newNode;
+        _nodes.push_back( newNode );
+        return newNode;
       }
 
       ~FrequencyListCopier() {
-	indri::utility::delete_vector_contents<indri::lang::Node*>( _nodes );
+        indri::utility::delete_vector_contents<indri::lang::Node*>( _nodes );
       }
 
       void before( indri::lang::ExtentAnd* exAnd ) {
-	_disqualifiers.push(exAnd);
+        _disqualifiers.push(exAnd);
       }
 
       void before( indri::lang::ExtentOr* exOr ) {
-	_disqualifiedTree = true;
+        _disqualifiedTree = true;
       }
 
       void before( indri::lang::ExtentInside* exInside ) {
-	_disqualifiedTree = true;
+        _disqualifiedTree = true;
       }
 
       void before( indri::lang::ExtentRestriction* exRestrict ) {
-	_disqualifiers.push(exRestrict);
+        _disqualifiers.push(exRestrict);
       }
 
       void before( indri::lang::FixedPassage* fixedPassage ) {
-	_disqualifiers.push(fixedPassage);
+        _disqualifiers.push(fixedPassage);
       }
 
       void before( indri::lang::ContextCounterNode* context ) {
-	if( context->getContext() != NULL ) {
-	  _disqualifiedTree = true;
-	}
+        if( context->getContext() != NULL ) {
+          _disqualifiedTree = true;
+        }
       }
 
   void before( indri::lang::WeightedExtentOr* wExOr ) {
@@ -82,66 +82,66 @@ namespace indri
   }
 
       void before( indri::lang::ODNode* odNode ) {
-	_disqualifiedTree = true;
+        _disqualifiedTree = true;
       }
 
       void before( indri::lang::UWNode* uwNode ) {
-	_disqualifiedTree = true;
+        _disqualifiedTree = true;
       }
 
       void before( indri::lang::BAndNode* bandNode ) {
-	_disqualifiedTree = true;
+        _disqualifiedTree = true;
       }
 
       indri::lang::Node* after( indri::lang::IndexTerm* oldNode, indri::lang::IndexTerm* newNode ) {
-	_lastTerm = newNode;
-	return defaultAfter( oldNode, newNode );
+        _lastTerm = newNode;
+        return defaultAfter( oldNode, newNode );
       }
 
       void before( indri::lang::RawScorerNode* oldNode, indri::lang::RawScorerNode* newNode ) {
-	_lastTerm = 0;
-	_disqualifiedTree = false;
+        _lastTerm = 0;
+        _disqualifiedTree = false;
       }
 
       indri::lang::Node* after( indri::lang::RawScorerNode* oldNode, indri::lang::RawScorerNode* newNode ) {
-	indri::lang::Node* result = 0;
+        indri::lang::Node* result = 0;
 
-	if( _lastTerm && !_disqualifiers.size() && !_disqualifiedTree && oldNode->getContext() == NULL ) {
-	  indri::lang::TermFrequencyScorerNode* scorerNode;
-	  // there's a term to score, and nothing to disqualify us from doing frequency scoring
-	  scorerNode = new indri::lang::TermFrequencyScorerNode( _lastTerm->getText(),
-								 _lastTerm->getStemmed() );
+        if( _lastTerm && !_disqualifiers.size() && !_disqualifiedTree && oldNode->getContext() == NULL ) {
+          indri::lang::TermFrequencyScorerNode* scorerNode;
+          // there's a term to score, and nothing to disqualify us from doing frequency scoring
+          scorerNode = new indri::lang::TermFrequencyScorerNode( _lastTerm->getText(),
+                                                                 _lastTerm->getStemmed() );
 
-	  scorerNode->setNodeName( oldNode->nodeName() );
-	  scorerNode->setSmoothing( oldNode->getSmoothing() );
+          scorerNode->setNodeName( oldNode->nodeName() );
+          scorerNode->setSmoothing( oldNode->getSmoothing() );
       scorerNode->setStatistics( oldNode->getOccurrences(), oldNode->getContextSize() );
 
-	  delete newNode;
-	  result = defaultAfter( oldNode, scorerNode );
-	} else if( !_disqualifiers.size() ) {
-	  ListCache::CachedList* list = 0; 
+          delete newNode;
+          result = defaultAfter( oldNode, scorerNode );
+        } else if( !_disqualifiers.size() ) {
+          ListCache::CachedList* list = 0; 
 
-	  if( _listCache )
-	    list = _listCache->find( newNode->getRawExtent(), newNode->getContext() );
+          if( _listCache )
+            list = _listCache->find( newNode->getRawExtent(), newNode->getContext() );
       
-	  if( list ) {
-	    indri::lang::CachedFrequencyScorerNode* cachedNode;
-	    cachedNode = new indri::lang::CachedFrequencyScorerNode( newNode->getRawExtent(), newNode->getContext() );
-	    cachedNode->setNodeName( newNode->nodeName() );
-	    cachedNode->setSmoothing( newNode->getSmoothing() );
-	    cachedNode->setList( list );
+          if( list ) {
+            indri::lang::CachedFrequencyScorerNode* cachedNode;
+            cachedNode = new indri::lang::CachedFrequencyScorerNode( newNode->getRawExtent(), newNode->getContext() );
+            cachedNode->setNodeName( newNode->nodeName() );
+            cachedNode->setSmoothing( newNode->getSmoothing() );
+            cachedNode->setList( list );
 
-	    delete newNode;
-	    result = defaultAfter( oldNode, cachedNode );
-	  } else {
-	    result = defaultAfter( oldNode, newNode );
-	  }
-	} else {
-	  result = defaultAfter( oldNode, newNode );
-	}
+            delete newNode;
+            result = defaultAfter( oldNode, cachedNode );
+          } else {
+            result = defaultAfter( oldNode, newNode );
+          }
+        } else {
+          result = defaultAfter( oldNode, newNode );
+        }
 
-	_disqualifiedTree = false;
-	return result; 
+        _disqualifiedTree = false;
+        return result; 
       }
     };
   }

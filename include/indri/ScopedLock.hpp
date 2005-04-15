@@ -27,26 +27,26 @@ namespace indri
 
     public:
       ScopedLock( Lockable& lockable ) {
-	_lockable = &lockable;
-	_lockable->lock();
+        _lockable = &lockable;
+        _lockable->lock();
       }
 
       ScopedLock( Lockable* lockable ) {
-	_lockable = lockable;
+        _lockable = lockable;
 
-	if( _lockable )
-	  _lockable->lock();
+        if( _lockable )
+          _lockable->lock();
       }
 
       ~ScopedLock() {
-	if( _lockable )
-	  _lockable->unlock();
+        if( _lockable )
+          _lockable->unlock();
       }
 
       void unlock() {
-	if( _lockable )
-	  _lockable->unlock();
-	_lockable = 0;
+        if( _lockable )
+          _lockable->unlock();
+        _lockable = 0;
       }
     };
   }

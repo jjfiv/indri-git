@@ -45,44 +45,44 @@ namespace indri {
     struct WriterIndexContext {
       struct less {
       private:
-	indri::index::DocListFileIterator::iterator_greater _iterator_greater;
+        indri::index::DocListFileIterator::iterator_greater _iterator_greater;
   
       public:
-	bool operator () ( const WriterIndexContext* const&  one, const WriterIndexContext* const& two ) const {
-	  return _iterator_greater( one->iterator, two->iterator );
-	}
+        bool operator () ( const WriterIndexContext* const&  one, const WriterIndexContext* const& two ) const {
+          return _iterator_greater( one->iterator, two->iterator );
+        }
       };
 
       WriterIndexContext( indri::index::Index* _index ) {
-	bitmap = new indri::index::TermBitmap;
-	index = _index;
-	wasInfrequentCount = 0;
-	wasFrequentCount = 0;
+        bitmap = new indri::index::TermBitmap;
+        index = _index;
+        wasInfrequentCount = 0;
+        wasFrequentCount = 0;
 
-	if( index->iteratorLock() )
-	  index->iteratorLock()->lock();
+        if( index->iteratorLock() )
+          index->iteratorLock()->lock();
     
-	iterator = index->docListFileIterator();
-	iterator->startIteration();
+        iterator = index->docListFileIterator();
+        iterator->startIteration();
 
-	newlyFrequent = new indri::index::TermRecorder;
-	oldFrequent = new indri::index::TermRecorder;
-	oldInfrequent = new indri::utility::HashTable<int, int>;
+        newlyFrequent = new indri::index::TermRecorder;
+        oldFrequent = new indri::index::TermRecorder;
+        oldInfrequent = new indri::utility::HashTable<int, int>;
 
-	// DEBUG
-	sequenceCount = 0;
+        // DEBUG
+        sequenceCount = 0;
       }
 
       ~WriterIndexContext() {
-	delete iterator;
+        delete iterator;
 
-	if( index->iteratorLock() )
-	  index->iteratorLock()->unlock();
+        if( index->iteratorLock() )
+          index->iteratorLock()->unlock();
 
-	delete oldFrequent;
-	delete newlyFrequent;
-	delete oldInfrequent;
-	delete bitmap;
+        delete oldFrequent;
+        delete newlyFrequent;
+        delete oldInfrequent;
+        delete bitmap;
       }
 
       indri::index::DocListFileIterator* iterator;
@@ -98,8 +98,8 @@ namespace indri {
     };
 
     typedef std::priority_queue<WriterIndexContext*,
-				std::vector<WriterIndexContext*>,
-				WriterIndexContext::less> invertedlist_pqueue;
+                                std::vector<WriterIndexContext*>,
+                                WriterIndexContext::less> invertedlist_pqueue;
 
     class IndexWriter {
     private:

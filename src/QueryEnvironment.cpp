@@ -80,14 +80,14 @@ namespace indri
       Printer() : tabs(0) {}
 
       void defaultBefore( indri::lang::Node* n ) {
-	for( int i=0; i<tabs; i++ )
-	  std::cout << "\t";
-	std::cout << n->typeName() << " " << n->queryText() << std::endl;
-	tabs++;
+        for( int i=0; i<tabs; i++ )
+          std::cout << "\t";
+        std::cout << n->typeName() << " " << n->queryText() << std::endl;
+        tabs++;
       }
 
       void defaultAfter( indri::lang::Node* n ) {
-	tabs--;
+        tabs--;
       }
 
     };

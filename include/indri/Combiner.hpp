@@ -40,55 +40,55 @@ namespace indri
 
       struct strhash {
       public:
-	int operator() ( const char* k ) const {
-	  int hash = 0;
-	  for( ; *k; k++ ){
-	    hash *= 7;
-	    hash += *k;
-	  }
-	  return hash;
-	}
+        int operator() ( const char* k ) const {
+          int hash = 0;
+          for( ; *k; k++ ){
+            hash *= 7;
+            hash += *k;
+          }
+          return hash;
+        }
       };
 
       struct strcompst {
       public:
-	int operator () ( const char* o, const char* t ) const {
-	  return strcmp( o, t );
-	}
+        int operator () ( const char* o, const char* t ) const {
+          return strcmp( o, t );
+        }
       };
 
       struct url_entry {
-	char* url;
-	char* corpusPath;
-	char* docNo;
-	int linkCount;
-	indri::utility::Buffer linkinfo;
+        char* url;
+        char* corpusPath;
+        char* docNo;
+        int linkCount;
+        indri::utility::Buffer linkinfo;
 
-	void addLink( const char* docno,
-		      const char* linkDocUrl,
-		      const char* linkText )
-	{
-	  if( linkinfo.position() ) {
-	    // remove trailing 0
-	    linkinfo.unwrite(1);
-	  }
+        void addLink( const char* docno,
+                      const char* linkDocUrl,
+                      const char* linkText )
+        {
+          if( linkinfo.position() ) {
+            // remove trailing 0
+            linkinfo.unwrite(1);
+          }
 
-	  int docnoLen = strlen(docno);
-	  int docUrlLen = strlen(linkDocUrl);
-	  int textLen = strlen(linkText);
+          int docnoLen = strlen(docno);
+          int docUrlLen = strlen(linkDocUrl);
+          int textLen = strlen(linkText);
 
-	  int total = docnoLen + sizeof "LINKDOCNO=" + 
-	    docUrlLen + sizeof "LINKFROM=" +
-	    textLen + sizeof "TEXT=" + 1;
+          int total = docnoLen + sizeof "LINKDOCNO=" + 
+            docUrlLen + sizeof "LINKFROM=" +
+            textLen + sizeof "TEXT=" + 1;
 
-	  sprintf( linkinfo.write(total),
-		   "LINKDOCNO=%s\nLINKFROM=%s\nTEXT=%s\n",
-		   docno,
-		   linkDocUrl,
-		   linkText );
+          sprintf( linkinfo.write(total),
+                   "LINKDOCNO=%s\nLINKFROM=%s\nTEXT=%s\n",
+                   docno,
+                   linkDocUrl,
+                   linkText );
 
-	  linkCount++;
-	}
+          linkCount++;
+        }
       };
 
       typedef indri::utility::HashTable<char*, url_entry*, strhash, strcompst> UrlEntryTable;

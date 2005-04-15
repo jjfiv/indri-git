@@ -26,8 +26,8 @@ namespace indri
     
     struct InternalFileBuffer {
       InternalFileBuffer( size_t length ) {
-	buffer.grow(length);
-	filePosition = 0;
+        buffer.grow(length);
+        filePosition = 0;
       }
 
       indri::utility::Buffer buffer;

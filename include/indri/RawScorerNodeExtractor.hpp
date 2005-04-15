@@ -36,27 +36,27 @@ namespace indri
       RawScorerNodeExtractor() : _insideCount(0) { }
   
       void defaultBefore( indri::lang::Node* n ) {
-	if( _insideCount ) {
-	  _reachableNodes.push_back(n);
-	}
+        if( _insideCount ) {
+          _reachableNodes.push_back(n);
+        }
       }
 
       void before( indri::lang::RawScorerNode* node ) {
-	_insideCount++;
-	_scorerNodes.push_back(node);
-	_reachableNodes.push_back(node);
+        _insideCount++;
+        _scorerNodes.push_back(node);
+        _reachableNodes.push_back(node);
       }
 
       void after( indri::lang::RawScorerNode* node ) {
-	_insideCount--;
+        _insideCount--;
       }
 
       std::vector<indri::lang::RawScorerNode*>& getScorerNodes() {
-	return _scorerNodes;
+        return _scorerNodes;
       }
 
       std::vector<indri::lang::Node*>& getReachableNodes() {
-	return _reachableNodes;
+        return _reachableNodes;
       }
     };
   }

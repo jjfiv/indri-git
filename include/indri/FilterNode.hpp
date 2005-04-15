@@ -36,45 +36,45 @@ namespace indri
 
     public:
       FilterNode( const std::string& name, BeliefNode* child, const std::vector<int>& documents )
-	:
-	_documents(documents)
+        :
+        _documents(documents)
       {
-	_name = name;
-	_belief = child;
-	_index = 0;
-	std::sort( _documents.begin(), _documents.end() );
+        _name = name;
+        _belief = child;
+        _index = 0;
+        std::sort( _documents.begin(), _documents.end() );
       }
 
       int nextCandidateDocument() {
-	int childNext = _belief->nextCandidateDocument();
+        int childNext = _belief->nextCandidateDocument();
 
-	while( _index < _documents.size() && _documents[_index] < childNext )
-	  _index++;
+        while( _index < _documents.size() && _documents[_index] < childNext )
+          _index++;
     
-	if( _index == _documents.size() )
-	  return MAX_INT32;
+        if( _index == _documents.size() )
+          return MAX_INT32;
 
-	return _documents[_index];
+        return _documents[_index];
       }
 
       void annotate( Annotator& annotator, int documentID, int begin, int end ) {
-	return _belief->annotate( annotator, documentID, begin, end );
+        return _belief->annotate( annotator, documentID, begin, end );
       }
 
   const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& score( int documentID, int begin, int end, int documentLength ) {
-	return _belief->score( documentID, begin, end, documentLength );
+        return _belief->score( documentID, begin, end, documentLength );
       }
 
       double maximumScore() {
-	return _belief->maximumScore();
+        return _belief->maximumScore();
       }
 
       double maximumBackgroundScore() {
-	return _belief->maximumBackgroundScore();
+        return _belief->maximumBackgroundScore();
       }
 
       bool hasMatch( int documentID ) {
-	return _belief->hasMatch( documentID );
+        return _belief->hasMatch( documentID );
       }
 
   const indri::utility::greedy_vector<bool>& hasMatch( int documentID, const indri::utility::greedy_vector<indri::index::Extent>& extents ) {
@@ -82,11 +82,11 @@ namespace indri
   }
 
       void indexChanged( indri::index::Index& index ) {
-	// do nothing
+        // do nothing
       }
 
       const std::string& getName() const {
-	return _name;
+        return _name;
       }
     };
   }

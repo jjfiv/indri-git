@@ -29,8 +29,8 @@ namespace indri
     class PriorFactory {
     private:
       struct prior_data {
-	std::string field;
-	std::map<int, indri::lang::PriorNode::tuple_type> tuples;
+        std::string field;
+        std::map<int, indri::lang::PriorNode::tuple_type> tuples;
       };
 
       indri::api::Parameters _parameters;

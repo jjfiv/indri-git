@@ -42,8 +42,8 @@ namespace indri {
 
     public:
       TermData() :
-	maxDocumentLength(0),
-	minDocumentLength(MAX_INT32)
+        maxDocumentLength(0),
+        minDocumentLength(MAX_INT32)
       {
         term = 0;
       }
@@ -154,7 +154,7 @@ inline void termdata_compress( indri::utility::RVLCompressStream& stream, indri:
   // field statistics
   for( int i=0; i<fieldCount; i++ ) {
     stream << termData->fields[i].totalCount
-	   << termData->fields[i].documentCount;
+           << termData->fields[i].documentCount;
   }
 }
 

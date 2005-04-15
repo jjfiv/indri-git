@@ -48,34 +48,34 @@ namespace indri
       ~XMLReplyReceiver();
 
       void request( indri::xml::XMLNode* node ) {
-	_exception = "XMLReplyReceiver: doesn't accept requests";
-	_done = true;
+        _exception = "XMLReplyReceiver: doesn't accept requests";
+        _done = true;
       }
 
       void reply( indri::xml::XMLNode* reply ) {
-	_reply = reply;
+        _reply = reply;
       }
 
       void reply( const std::string& name, const void* buffer, unsigned int length ) {
-	_exception = "XMLReplyReceiver: should only get xml replies";
-	_done = true;
+        _exception = "XMLReplyReceiver: should only get xml replies";
+        _done = true;
       }
 
       void replyDone() {
-	_done = true;
+        _done = true;
       }
 
       void error( const std::string& e ) {
-	_exception = e;
-	_done = true;
+        _exception = e;
+        _done = true;
       }
 
       indri::xml::XMLNode* getReply() {
-	return _reply;
+        return _reply;
       }
 
       bool done() {
-	return _done;
+        return _done;
       }
 
       void wait( class NetworkMessageStream* stream );

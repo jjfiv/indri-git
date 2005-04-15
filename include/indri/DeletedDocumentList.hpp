@@ -44,15 +44,15 @@ namespace indri
     public:
       class read_transaction {
       private:
-	indri::thread::ReadersWritersLock& _lock;
-	indri::utility::Buffer& _bitmap;
+        indri::thread::ReadersWritersLock& _lock;
+        indri::utility::Buffer& _bitmap;
 
       public:
-	read_transaction( DeletedDocumentList& list );
-	~read_transaction();
+        read_transaction( DeletedDocumentList& list );
+        ~read_transaction();
 
-	int nextCandidateDocument( int documentID );
-	bool isDeleted( int documentID );
+        int nextCandidateDocument( int documentID );
+        bool isDeleted( int documentID );
       };
 
       DeletedDocumentList();

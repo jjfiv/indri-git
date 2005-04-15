@@ -68,10 +68,10 @@ namespace indri
       void _annotateQuery( indri::infnet::InferenceNetwork::MAllResults& results, const std::vector<DOCID_T>& documentIDs, std::string& annotatorName, indri::lang::Node* queryRoot );
 
       std::vector<indri::api::ScoredExtentResult> _runQuery( indri::infnet::InferenceNetwork::MAllResults& results,
-							     const std::string& q,
-							     int resultsRequested,
-							     const std::vector<DOCID_T>* documentIDs,
-							     QueryAnnotation** annotation );
+                                                             const std::string& q,
+                                                             int resultsRequested,
+                                                             const std::vector<DOCID_T>* documentIDs,
+                                                             QueryAnnotation** annotation );
       void _scoredQuery( indri::infnet::InferenceNetwork::MAllResults& results, indri::lang::Node* queryRoot, std::string& accumulatorName, int resultsRequested, const std::vector<DOCID_T>* documentSet );
 
       QueryEnvironment( QueryEnvironment& other ) {}

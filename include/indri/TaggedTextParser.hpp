@@ -61,10 +61,10 @@ namespace indri
       ~TaggedTextParser();
   
       void setTags( const std::vector<std::string>& include,
-		    const std::vector<std::string>& exclude,
-		    const std::vector<std::string>& index,
-		    const std::vector<std::string>& metadata, 
-		    const std::map<std::string,std::string>& conflations );
+                    const std::vector<std::string>& exclude,
+                    const std::vector<std::string>& index,
+                    const std::vector<std::string>& metadata, 
+                    const std::map<std::string,std::string>& conflations );
 
       indri::api::ParsedDocument* parse( UnparsedDocument* document );
 
@@ -92,12 +92,12 @@ namespace indri
       void writeToken(char *token);
 
       struct tag_properties {
-	const char* name;
-	const char* conflation;
-	bool index;
-	bool exclude;
-	bool include;
-	bool metadata;
+        const char* name;
+        const char* conflation;
+        bool index;
+        bool exclude;
+        bool include;
+        bool metadata;
       };
       tag_properties* _findTag(const char* name);
       tag_properties* _buildTag( const std::string& name, const std::map<std::string,std::string>& conflations );

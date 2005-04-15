@@ -132,25 +132,16 @@
 				RelativePath=".\include\lemur\common_headers.hpp">
 			</File>
 			<File
-				RelativePath=".\include\lemur\DocInfoList.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\DocumentManager.hpp">
-			</File>
-			<File
 				RelativePath=".\include\lemur\Exception.hpp">
 			</File>
 			<File
-				RelativePath=".\include\lemur\File.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\ht.h">
-			</File>
-			<File
-				RelativePath=".\include\lemur\Index.hpp">
+				RelativePath=".\include\lemur\IndexTypes.hpp">
 			</File>
 			<File
 				RelativePath=".\include\lemur\InvFPTypes.hpp">
+			</File>
+			<File
+				RelativePath=".\include\lemur\keyconst.h">
 			</File>
 			<File
 				RelativePath=".\include\lemur\keydef.h">
@@ -159,28 +150,25 @@
 				RelativePath=".\include\lemur\keyerr.h">
 			</File>
 			<File
+				RelativePath=".\include\lemur\keyfile.h">
+			</File>
+			<File
 				RelativePath=".\include\lemur\Keyfile.hpp">
 			</File>
 			<File
+				RelativePath=".\include\lemur\keyprint.h">
+			</File>
+			<File
 				RelativePath=".\include\lemur\keyref.h">
+			</File>
+			<File
+				RelativePath=".\include\lemur\kfversion.h">
 			</File>
 			<File
 				RelativePath=".\include\lemur\lemur-compat.hpp">
 			</File>
 			<File
 				RelativePath=".\include\lemur\lemur-platform.h">
-			</File>
-			<File
-				RelativePath=".\include\lemur\Parser.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\Property.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\PropertyList.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\ReadBuffer.hpp">
 			</File>
 			<File
 				RelativePath=".\include\lemur\RVLCompress.hpp">
@@ -190,15 +178,6 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\TermInfoList.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\TextHandler.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\WordSet.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\WriteBuffer.hpp">
 			</File>
 		</Filter>
 		<Filter

@@ -32,16 +32,16 @@ namespace indri
 
     public:
       ReaderLockable( ReadersWritersLock& lock ) :
-	_lock( lock )
+        _lock( lock )
       {
       }
 
       void lock() {
-	_lock.lockRead();
+        _lock.lockRead();
       }
 
       void unlock() {
-	_lock.unlockRead();
+        _lock.unlockRead();
       }
     };
   }

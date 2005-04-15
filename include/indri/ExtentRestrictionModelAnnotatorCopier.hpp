@@ -41,30 +41,30 @@ namespace indri
 
     public:
       ~ExtentRestrictionModelAnnotatorCopier() {
-	indri::utility::delete_vector_contents( _nodes );
+        indri::utility::delete_vector_contents( _nodes );
       }
 
       indri::lang::Node* defaultAfter( indri::lang::Node* old, indri::lang::Node* newNode ) {
-	_nodes.push_back( newNode );
-	return newNode;
+        _nodes.push_back( newNode );
+        return newNode;
       }
 
       void before( indri::lang::ExtentRestriction* old ) {
-	_restrictions.push( old );
+        _restrictions.push( old );
       }
 
       indri::lang::Node* after( indri::lang::ExtentRestriction* oldNode, indri::lang::ExtentRestriction* newNode ) {
-	_restrictions.pop();
-	_nodes.push_back( newNode );
-	return newNode;
+        _restrictions.pop();
+        _nodes.push_back( newNode );
+        return newNode;
       }
   
       indri::lang::Node* after( indri::lang::RawScorerNode* oldNode, indri::lang::RawScorerNode* newNode ) {
-	if( newNode->getContext() == 0 && _restrictions.size() ) {
-	  newNode->setContext( _restrictions.top()->getField() );
-	}
-	_nodes.push_back( newNode ); // should track for free.
-	return newNode;
+        if( newNode->getContext() == 0 && _restrictions.size() ) {
+          newNode->setContext( _restrictions.top()->getField() );
+        }
+        _nodes.push_back( newNode ); // should track for free.
+        return newNode;
       }
     };
   }

@@ -37,7 +37,7 @@ namespace indri
 
     public:
       FilterRequireNode( const std::string& name, ListIteratorNode* filter, 
-			 BeliefNode* required );
+                         BeliefNode* required );
 
       double maximumBackgroundScore();
       double maximumScore();

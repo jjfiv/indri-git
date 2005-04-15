@@ -23,7 +23,7 @@
 #include "indri/Path.hpp"
 
 void indri::api::IndexEnvironment::_getParsingContext( indri::parse::Parser** parser,
-						       indri::parse::DocumentIterator** iterDoc,
+                                                       indri::parse::DocumentIterator** iterDoc,
                                            const std::string& className ) {
   std::string parserName;
   std::string iteratorName;

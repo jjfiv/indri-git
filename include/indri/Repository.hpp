@@ -38,15 +38,15 @@ namespace indri
     class Repository {
     public:
       struct Load {
-	float one;
-	float five;
-	float fifteen;
+        float one;
+        float five;
+        float fifteen;
       };
 
       struct Field {
-	std::string name;
-	std::string parserName;
-	bool numeric;
+        std::string name;
+        std::string parserName;
+        bool numeric;
       };
 
       typedef std::vector<indri::index::Index*> index_vector;
@@ -137,16 +137,16 @@ namespace indri
 
     public:
       Repository() {
-	_collection = 0;
-	_readOnly = false;
-	_lastThrashTime = 0;
-	_thrashing = false;
-	memset( (void*) _documentLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
-	memset( (void*) _queryLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
+        _collection = 0;
+        _readOnly = false;
+        _lastThrashTime = 0;
+        _thrashing = false;
+        memset( (void*) _documentLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
+        memset( (void*) _queryLoad, 0, sizeof(indri::atomic::value_type)*LOAD_MINUTES*LOAD_MINUTE_FRACTION );
       }
 
       ~Repository() {
-	close();
+        close();
       }
       /// add a parsed document to the repository.
       /// @param document the document to add.

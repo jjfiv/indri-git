@@ -33,21 +33,21 @@ namespace indri
       Extent( double w, int b, int e ) : weight(w), begin(b), end(e) {}
     
       bool contains( const Extent& other ) const {
-	return begin <= other.begin && end >= other.end;
+        return begin <= other.begin && end >= other.end;
       }
 
       bool before( const Extent& other ) const {
-	return end <= other.begin;
+        return end <= other.begin;
       }
 
       bool beginsBefore( const Extent& other ) const {
-	return begin < other.begin;
+        return begin < other.begin;
       }
 
       struct begins_before_less {
-	bool operator() ( const Extent& one, const Extent& two ) const {
-	  return one.beginsBefore( two );
-	}
+        bool operator() ( const Extent& one, const Extent& two ) const {
+          return one.beginsBefore( two );
+        }
       };
     };
   }

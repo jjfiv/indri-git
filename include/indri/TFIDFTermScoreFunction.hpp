@@ -47,57 +47,57 @@ namespace indri
       double _termWeightTimesIDFTimesK1;
 
       void _precomputeConstants() {
-	_idfTimesK1PlusOne = _inverseDocumentFrequency * ( _k1 + 1 );
-	_k1TimesOneMinusB = _k1 * (1-_b);
-	_bOverAvgDocLength = _b / _averageDocumentLength;
-	_k1TimesBOverAvgDocLength = _k1 * _bOverAvgDocLength;
-	_termWeightTimesIDFTimesK1 = _termWeight * _inverseDocumentFrequency * _k1;
+        _idfTimesK1PlusOne = _inverseDocumentFrequency * ( _k1 + 1 );
+        _k1TimesOneMinusB = _k1 * (1-_b);
+        _bOverAvgDocLength = _b / _averageDocumentLength;
+        _k1TimesBOverAvgDocLength = _k1 * _bOverAvgDocLength;
+        _termWeightTimesIDFTimesK1 = _termWeight * _inverseDocumentFrequency * _k1;
       }
 
     public:
       TFIDFTermScoreFunction( double idf, double averageDocumentLength, double k1 = 1.0, double b = 0.5 ) {
-	_inverseDocumentFrequency = idf;
-	_averageDocumentLength = averageDocumentLength;
+        _inverseDocumentFrequency = idf;
+        _averageDocumentLength = averageDocumentLength;
 
-	_k1 = k1;
-	_b = b;
+        _k1 = k1;
+        _b = b;
 
-	_termWeight = queryTermWeight( 1000, 0 );
-	_precomputeConstants();
+        _termWeight = queryTermWeight( 1000, 0 );
+        _precomputeConstants();
       }
 
       double scoreOccurrence( double occurrences, int documentLength ) {
-	//
-	// Score function is:
-	//                                                   K1 * occurrences
-	// score = termWeight * IDF * ------------------------------------------------------------------
-	//                             occurrences + K1 * ( (1-B) + B * ( documentLength / avgDocLength) )
-	//
-	// Factored for constants:
-	//                        (termWeight * IDF * K1) * occurrences
-	// score = ------------------------------------------------------------------------
-	//          occurrences + (K1 * (1-B)) + (K1 * B * 1/avgDocLength) * documentLength
-	//
+        //
+        // Score function is:
+        //                                                   K1 * occurrences
+        // score = termWeight * IDF * ------------------------------------------------------------------
+        //                             occurrences + K1 * ( (1-B) + B * ( documentLength / avgDocLength) )
+        //
+        // Factored for constants:
+        //                        (termWeight * IDF * K1) * occurrences
+        // score = ------------------------------------------------------------------------
+        //          occurrences + (K1 * (1-B)) + (K1 * B * 1/avgDocLength) * documentLength
+        //
 
-	double numerator = _termWeightTimesIDFTimesK1 * occurrences;
-	double denominator = occurrences + _k1TimesOneMinusB + _k1TimesBOverAvgDocLength * documentLength;
+        double numerator = _termWeightTimesIDFTimesK1 * occurrences;
+        double denominator = occurrences + _k1TimesOneMinusB + _k1TimesBOverAvgDocLength * documentLength;
 
-	return numerator / denominator;
+        return numerator / denominator;
       }
 
       double scoreOkapiOccurrence( int occurrences, int documentLength ) {
-	double numerator = _idfTimesK1PlusOne * occurrences;
-	double denominator = occurrences + _k1TimesOneMinusB + _bOverAvgDocLength * documentLength;
+        double numerator = _idfTimesK1PlusOne * occurrences;
+        double denominator = occurrences + _k1TimesOneMinusB + _bOverAvgDocLength * documentLength;
 
-	return numerator / denominator;
+        return numerator / denominator;
       }
 
       double maximumScore( int minimumDocumentLength, int maximumOccurrences ) {
-	return scoreOccurrence( maximumOccurrences, minimumDocumentLength );
+        return scoreOccurrence( maximumOccurrences, minimumDocumentLength );
       }
 
       double queryTermWeight( double queryK1, double queryB ) {
-	return ( _inverseDocumentFrequency * queryK1 ) / ( 1 + queryK1 * ( (1-queryB) + queryB * (1/_averageDocumentLength) ) );
+        return ( _inverseDocumentFrequency * queryK1 ) / ( 1 + queryK1 * ( (1-queryB) + queryB * (1/_averageDocumentLength) ) );
       }
     };
   }

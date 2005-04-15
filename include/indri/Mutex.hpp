@@ -49,47 +49,47 @@ namespace indri
     public:
       Mutex() {
 #ifdef WIN32
-	_mutex = ::CreateMutex( NULL, FALSE, NULL );
+        _mutex = ::CreateMutex( NULL, FALSE, NULL );
 #else
-	pthread_mutex_init( &_mutex, NULL );
+        pthread_mutex_init( &_mutex, NULL );
 #endif
       }
 
       ~Mutex() {
 #ifdef WIN32
-	if( _mutex != INVALID_HANDLE_VALUE ) {
-	  ::CloseHandle( _mutex );
-	  _mutex = 0;
-	}
+        if( _mutex != INVALID_HANDLE_VALUE ) {
+          ::CloseHandle( _mutex );
+          _mutex = 0;
+        }
 #else
-	pthread_mutex_destroy( &_mutex );
+        pthread_mutex_destroy( &_mutex );
 #endif
       }
 
       void lock() {
 #ifdef WIN32
-	::WaitForSingleObject( _mutex, INFINITE );
+        ::WaitForSingleObject( _mutex, INFINITE );
 #else
-	int result = pthread_mutex_lock( &_mutex );
-	assert( result == 0 );
+        int result = pthread_mutex_lock( &_mutex );
+        assert( result == 0 );
 #endif
       }
 
       bool tryLock() {
 #ifdef WIN32
-	HRESULT result = ::WaitForSingleObject( _mutex, 0 );
-	return (result == WAIT_OBJECT_0) || (result == WAIT_ABANDONED);
+        HRESULT result = ::WaitForSingleObject( _mutex, 0 );
+        return (result == WAIT_OBJECT_0) || (result == WAIT_ABANDONED);
 #else
-	return pthread_mutex_trylock( &_mutex ) == 0;
+        return pthread_mutex_trylock( &_mutex ) == 0;
 #endif
       }
 
       void unlock() {
 #ifdef WIN32
-	::ReleaseMutex( _mutex );
+        ::ReleaseMutex( _mutex );
 #else
-	int result = pthread_mutex_unlock( &_mutex );
-	assert( result == 0 );
+        int result = pthread_mutex_unlock( &_mutex );
+        assert( result == 0 );
 #endif
       }
     };

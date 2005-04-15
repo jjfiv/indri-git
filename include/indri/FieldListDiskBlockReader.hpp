@@ -37,78 +37,78 @@ namespace indri {
 
     public:
       void setBlock( const char* block ) {
-	_block = block;
-	_current = block;
-	_document = 0;
-	_extentCount = 0;
-	_extent.begin = 0;
-	_extent.end = 0;
-	_number = 0;
+        _block = block;
+        _current = block;
+        _document = 0;
+        _extentCount = 0;
+        _extent.begin = 0;
+        _extent.end = 0;
+        _number = 0;
 
-	int endAndNumeric = * (int*) ( _block + INDRI_FIELDLIST_BLOCKSIZE - 2*sizeof(int) );
-	_numeric = (endAndNumeric & 0x80000000) ? true : false;
-	_endByte = endAndNumeric & 0x7fffffff;
+        int endAndNumeric = * (int*) ( _block + INDRI_FIELDLIST_BLOCKSIZE - 2*sizeof(int) );
+        _numeric = (endAndNumeric & 0x80000000) ? true : false;
+        _endByte = endAndNumeric & 0x7fffffff;
       }
 
       int lastDocument() {
-	return * (int*) ( _block + INDRI_FIELDLIST_BLOCKSIZE - sizeof(int) );
+        return * (int*) ( _block + INDRI_FIELDLIST_BLOCKSIZE - sizeof(int) );
       }
 
       bool next() {
-	if( ! _extentCount ) {
-	  if( !hasMore() )
-	    return false;
+        if( ! _extentCount ) {
+          if( !hasMore() )
+            return false;
 
-	  int documentDelta;
+          int documentDelta;
 
-	  _current = RVLCompress::decompress_int( _current, documentDelta );
-	  _current = RVLCompress::decompress_int( _current, _extentCount );
-	  _document += documentDelta;
+          _current = RVLCompress::decompress_int( _current, documentDelta );
+          _current = RVLCompress::decompress_int( _current, _extentCount );
+          _document += documentDelta;
     
-	  _extent.begin = 0;
-	  _extent.end = 0;
-	}
+          _extent.begin = 0;
+          _extent.end = 0;
+        }
 
-	int beginDelta;
-	int endDelta;
+        int beginDelta;
+        int endDelta;
 
-	_current = RVLCompress::decompress_int( _current, beginDelta );
-	_current = RVLCompress::decompress_int( _current, endDelta );
+        _current = RVLCompress::decompress_int( _current, beginDelta );
+        _current = RVLCompress::decompress_int( _current, endDelta );
 
-	if( _numeric ) {
-	  _current = RVLCompress::decompress_longlong( _current, _number );
+        if( _numeric ) {
+          _current = RVLCompress::decompress_longlong( _current, _number );
 
-	  if( _number & 1 ) {
-	    // number is negative
-	    _number = -((_number + 1) / 2);
-	  } else {
-	    // number is positive
-	    _number = _number / 2;
-	  }
-	}
+          if( _number & 1 ) {
+            // number is negative
+            _number = -((_number + 1) / 2);
+          } else {
+            // number is positive
+            _number = _number / 2;
+          }
+        }
 
-	assert( _current < _block + INDRI_FIELDLIST_BLOCKSIZE );
+        assert( _current < _block + INDRI_FIELDLIST_BLOCKSIZE );
 
-	_extentCount--;
-	_extent.begin = _extent.end + beginDelta;
-	_extent.end = _extent.begin + endDelta;
-	return true;
+        _extentCount--;
+        _extent.begin = _extent.end + beginDelta;
+        _extent.end = _extent.begin + endDelta;
+        return true;
       }
 
       int document() const {
-	return _document;
+        return _document;
       }
 
       INT64 number() const {
-	return _number;
+        return _number;
       }
 
       const indri::index::Extent& extent() const {
-	return _extent;
+        return _extent;
       }
 
       bool hasMore() {
-	return _endByte > _current - _block;
+        return _endByte > _current - _block;
       }
     };
   }

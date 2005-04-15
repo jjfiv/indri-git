@@ -34,19 +34,19 @@ namespace indri
 
     public:
       DirichletTermScoreFunction( double mu, double collectionFrequency ) {
-	_collectionFrequency = collectionFrequency;
-	_mu = mu;
-	_muTimesCollectionFrequency = _mu * _collectionFrequency;
+        _collectionFrequency = collectionFrequency;
+        _mu = mu;
+        _muTimesCollectionFrequency = _mu * _collectionFrequency;
       }
 
       double scoreOccurrence( double occurrences, int contextSize ) {
-	double seen = ( double(occurrences) + _muTimesCollectionFrequency ) / ( double(contextSize) + _mu );
-	return log( seen );
+        double seen = ( double(occurrences) + _muTimesCollectionFrequency ) / ( double(contextSize) + _mu );
+        return log( seen );
       }
 
       double scoreOccurrence( double occurrences, int contextSize, double documentOccurrences, int documentLength ) {
-	// can't two-level smooth with dirichlet
-	return scoreOccurrence( occurrences, contextSize );
+        // can't two-level smooth with dirichlet
+        return scoreOccurrence( occurrences, contextSize );
       }
     };
   }

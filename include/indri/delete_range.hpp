@@ -35,7 +35,7 @@ namespace indri
       vec_iter iter;
 
       for( iter = begin; iter != end; iter++ ) {
-	delete *iter;
+        delete *iter;
       }
 
       vector.clear();
@@ -50,7 +50,7 @@ namespace indri
       map_iter iter;
 
       for( iter = begin; iter != end; iter++ )
-	delete iter->second;
+        delete iter->second;
 
       mp.clear();
     }
@@ -64,12 +64,12 @@ namespace indri
       VectorDeleter() : _vec(0) {}
       VectorDeleter( std::vector<VectorType>& vec ) : _vec(&vec) {}
       ~VectorDeleter() {
-	if( _vec )
-	  delete_vector_contents<VectorType>( *_vec );
+        if( _vec )
+          delete_vector_contents<VectorType>( *_vec );
       }
 
       void setVector( std::vector<VectorType>& vec ) {
-	_vec = &vec;
+        _vec = &vec;
       }
     };
 
@@ -82,16 +82,16 @@ namespace indri
       StackDeleter() : _stack(0) {}
       StackDeleter( std::stack<StackType*>& stack ) : _stack(&stack) {}
       ~StackDeleter() {
-	if( _stack ) {
-	  while( _stack->size() ) {
-	    delete _stack->top();
-	    _stack->pop();
-	  }
-	}
+        if( _stack ) {
+          while( _stack->size() ) {
+            delete _stack->top();
+            _stack->pop();
+          }
+        }
       }
 
       void setStack( std::stack<StackType*>& stack ) {
-	_stack = &stack;
+        _stack = &stack;
       }
     };
   }

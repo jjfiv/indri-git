@@ -37,90 +37,90 @@ namespace indri
     public:
       MaxNode( const std::string& name ) : _name(name) {}
       MaxNode( const std::string& name, const std::vector<BeliefNode*>& children ) :
-	_children( children ),
-	_name( name )
+        _children( children ),
+        _name( name )
       {
       }
 
       int nextCandidateDocument() {
-	int candidate = MAX_INT32;
+        int candidate = MAX_INT32;
 
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  candidate = lemur_compat::min<int>( candidate, _children[i]->nextCandidateDocument() );
-	}
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          candidate = lemur_compat::min<int>( candidate, _children[i]->nextCandidateDocument() );
+        }
 
-	return candidate;
+        return candidate;
       }
 
       indri::utility::greedy_vector<indri::api::ScoredExtentResult>& score( int documentID, int begin, int end, int documentLength ) {
-	double maxScore = INDRI_TINY_SCORE;
+        double maxScore = INDRI_TINY_SCORE;
 
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = _children[i]->score( documentID, begin, end, documentLength );
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = _children[i]->score( documentID, begin, end, documentLength );
 
-	  for( unsigned int j=0; j<childResults.size(); j++ ) {
-	    maxScore = lemur_compat::max<double>( maxScore, childResults[j].score );
-	  }
-	}
+          for( unsigned int j=0; j<childResults.size(); j++ ) {
+            maxScore = lemur_compat::max<double>( maxScore, childResults[j].score );
+          }
+        }
 
-	_scores.clear();
-	_scores.push_back( indri::api::ScoredExtentResult( maxScore, documentID, begin, end ) );
+        _scores.clear();
+        _scores.push_back( indri::api::ScoredExtentResult( maxScore, documentID, begin, end ) );
 
-	return _scores;
+        return _scores;
       }
 
       void annotate( class Annotator& annotator, int documentID, int begin, int end ) {
-	annotator.add( this, documentID, begin, end );
+        annotator.add( this, documentID, begin, end );
 
-	// find the maximum score here, then descend only into that one
-	double maxScore = INDRI_TINY_SCORE;
-	int maxI = -1;
-	int maxJ = -1;
-	int maxBegin = -1;
-	int maxEnd = -1;
+        // find the maximum score here, then descend only into that one
+        double maxScore = INDRI_TINY_SCORE;
+        int maxI = -1;
+        int maxJ = -1;
+        int maxBegin = -1;
+        int maxEnd = -1;
 
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = _children[i]->score( documentID, begin, end, end );
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = _children[i]->score( documentID, begin, end, end );
 
-	  for( unsigned int j=0; j<childResults.size(); j++ ) {
-	    maxScore = lemur_compat::max<double>( maxScore, childResults[j].score );
-	    maxI = i;
-	    maxJ = j;
-	    maxBegin = childResults[j].begin;
-	    maxEnd = childResults[j].end;
-	  }
-	}
+          for( unsigned int j=0; j<childResults.size(); j++ ) {
+            maxScore = lemur_compat::max<double>( maxScore, childResults[j].score );
+            maxI = i;
+            maxJ = j;
+            maxBegin = childResults[j].begin;
+            maxEnd = childResults[j].end;
+          }
+        }
 
-	_children[maxI]->annotate( annotator, documentID, maxBegin, maxEnd );
+        _children[maxI]->annotate( annotator, documentID, maxBegin, maxEnd );
       }
 
       double maximumScore() {
-	double maxScore = INDRI_TINY_SCORE;
+        double maxScore = INDRI_TINY_SCORE;
 
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  maxScore = lemur_compat::max<double>( maxScore, _children[i]->maximumScore() );  
-	}
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          maxScore = lemur_compat::max<double>( maxScore, _children[i]->maximumScore() );  
+        }
 
-	return maxScore;
+        return maxScore;
       }
 
       double maximumBackgroundScore() {
-	double maxScore = INDRI_TINY_SCORE;
+        double maxScore = INDRI_TINY_SCORE;
 
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  maxScore = lemur_compat::max<double>( maxScore, _children[i]->maximumBackgroundScore() );  
-	}
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          maxScore = lemur_compat::max<double>( maxScore, _children[i]->maximumBackgroundScore() );  
+        }
 
-	return maxScore;
+        return maxScore;
       }
 
       bool hasMatch( int documentID ) {
-	for( unsigned int i=0; i<_children.size(); i++ ) {
-	  if( _children[i]->hasMatch( documentID ) )
-	    return true;
-	}
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          if( _children[i]->hasMatch( documentID ) )
+            return true;
+        }
 
-	return false;
+        return false;
       }
 
   const indri::utility::greedy_vector<bool>& hasMatch( int documentID, const indri::utility::greedy_vector<indri::index::Extent>& extents ) {
@@ -141,11 +141,11 @@ namespace indri
   }
 
       void indexChanged( indri::index::Index& index ) {
-	// do nothing
+        // do nothing
       }
 
       const std::string& getName() const {
-	return _name;
+        return _name;
       }
     };
   }

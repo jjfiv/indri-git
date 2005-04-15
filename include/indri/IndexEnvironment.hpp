@@ -37,15 +37,15 @@ namespace indri
     
     struct IndexStatus {
       enum action_code {
-	FileOpen,
-	FileSkip,
-	FileError,
-	FileClose,
-	DocumentCount
+        FileOpen,
+        FileSkip,
+        FileError,
+        FileClose,
+        DocumentCount
       };
 
       virtual void operator () ( int code, const std::string& documentPath, const std::string& error, int documentsIndexed, int documentsSeen ) {
-	status( code, documentPath, error, documentsIndexed, documentsSeen );
+        status( code, documentPath, error, documentsIndexed, documentsSeen );
       }
 
       virtual void status( int code, const std::string& documentPath, const std::string& error, int documentsIndexed, int documentsSeen ) {};
@@ -79,8 +79,8 @@ namespace indri
       int _documentsSeen;
 
       void _getParsingContext( indri::parse::Parser** parser,
-			       indri::parse::DocumentIterator** iterator,
-			       const std::string& extension );
+                               indri::parse::DocumentIterator** iterator,
+                               const std::string& extension );
 
     public:
       friend class QueryEnvironment;
@@ -105,25 +105,25 @@ namespace indri
       /// @param metadata tags whose contents should be indexed as metadata
       /// @param conflations tags that should be conflated
       void addFileClass( const std::string& name, 
-			 const std::string& iterator,
-			 const std::string& parser,
-			 const std::string& startDocTag,
-			 const std::string& endDogTag,
-			 const std::string& endMetadataTag,
-			 const std::vector<std::string>& include,
-			 const std::vector<std::string>& exclude,
-			 const std::vector<std::string>& index,
-			 const std::vector<std::string>& metadata, 
-			 const std::map<std::string,std::string>& conflations );
+                         const std::string& iterator,
+                         const std::string& parser,
+                         const std::string& startDocTag,
+                         const std::string& endDogTag,
+                         const std::string& endMetadataTag,
+                         const std::vector<std::string>& include,
+                         const std::vector<std::string>& exclude,
+                         const std::vector<std::string>& index,
+                         const std::vector<std::string>& metadata, 
+                         const std::map<std::string,std::string>& conflations );
       /// Get a named file class.
       /// @param name The name of the file class to retrieve.
       indri::parse::FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name) {
-	return _fileClassFactory.getFileClassSpec(name);
+        return _fileClassFactory.getFileClassSpec(name);
       }
       /// Add a file class.
       /// @param spec The file class to add.
       void addFileClass( const indri::parse::FileClassEnvironmentFactory::Specification &spec ){
-	_fileClassFactory.addFileClass(spec);
+        _fileClassFactory.addFileClass(spec);
       }
   
       /// Set names of fields to be indexed.  This call indicates to the index that information about
@@ -182,8 +182,8 @@ namespace indri
       /// @param fileClass the file class to add (eg trecweb).
       /// @param metadata the metadata pairs associated with the string.
       int addString( const std::string& documentString, 
-		      const std::string& fileClass, 
-		      const std::vector<indri::parse::MetadataPair>& metadata );
+                      const std::string& fileClass, 
+                      const std::vector<indri::parse::MetadataPair>& metadata );
 
       /// add an already parsed document to the index and repository
       /// @param document the document to add

@@ -34,11 +34,11 @@ namespace indri
       static std::string preferredName( const std::string& name );
       static indri::parse::Parser* get( const std::string& name );
       static indri::parse::Parser* get( const std::string& name,
-					const std::vector<std::string>& includeTags,
-					const std::vector<std::string>& excludeTags,
-					const std::vector<std::string>& indexTags,
-					const std::vector<std::string>& metadataTags,
-					const std::map<std::string, std::string>& conflations );
+                                        const std::vector<std::string>& includeTags,
+                                        const std::vector<std::string>& excludeTags,
+                                        const std::vector<std::string>& indexTags,
+                                        const std::vector<std::string>& metadataTags,
+                                        const std::map<std::string, std::string>& conflations );
     };
   }
 }

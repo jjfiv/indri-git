@@ -40,13 +40,13 @@ namespace indri
   
       template<typename _To, typename _From>
       std::vector<_To*> _translate( const std::vector<_From*>& children ) {
-	std::vector<_To*> translation;
+        std::vector<_To*> translation;
 
-	for( unsigned int i=0; i<children.size(); i++ ) {
-	  translation.push_back( dynamic_cast<_To*>(_nodeMap[children[i]]) );  
-	}
+        for( unsigned int i=0; i<children.size(); i++ ) {
+          translation.push_back( dynamic_cast<_To*>(_nodeMap[children[i]]) );  
+        }
 
-	return translation;
+        return translation;
       }
 
       indri::query::TermScoreFunction* _buildTermScoreFunction( const std::string& smoothing, double occurrences, double contextSize ) const;

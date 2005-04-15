@@ -32,28 +32,28 @@ namespace indri
       int valueLength;
 
       class key_equal {
-	const char* k;
+        const char* k;
 
       public:
-	key_equal( const char* key ) {
-	  k = key;
-	}
+        key_equal( const char* key ) {
+          k = key;
+        }
 
-	bool operator() ( const MetadataPair& pair ) {
-	  return strcmp( k, pair.key ) == 0;
-	}
+        bool operator() ( const MetadataPair& pair ) {
+          return strcmp( k, pair.key ) == 0;
+        }
       };
 
       void stripValue() {
-	while( isspace( *(char*)value ) ) {
-	  value = (char*)value + 1;
-	  valueLength -= 1;
-	}
+        while( isspace( *(char*)value ) ) {
+          value = (char*)value + 1;
+          valueLength -= 1;
+        }
 
-	while( isspace( ((char*)value)[valueLength-2] ) ) {
-	  valueLength -= 1;
-	  ((char*)value)[valueLength-1] = 0;
-	}
+        while( isspace( ((char*)value)[valueLength-2] ) ) {
+          valueLength -= 1;
+          ((char*)value)[valueLength-1] = 0;
+        }
       }
     };
   }

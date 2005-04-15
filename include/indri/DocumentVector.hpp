@@ -34,10 +34,10 @@ namespace indri
     class DocumentVector {
     public:
       struct Field {
-	std::string name;
-	int begin;
-	int end;
-	INT64 number;
+        std::string name;
+        int begin;
+        int end;
+        INT64 number;
       };
 
     private:

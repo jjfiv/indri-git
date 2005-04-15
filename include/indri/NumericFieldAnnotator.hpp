@@ -30,31 +30,31 @@ namespace indri
 
     public:
       NumericFieldAnnotator( std::string& field ) :
-	_handler(0),
-	_field(field)
+        _handler(0),
+        _field(field)
       {
       }
 
       indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
-	for( size_t i=0; i<document->tags.size(); i++ ) {
-	  TagExtent& extent = document->tags[i];
+        for( size_t i=0; i<document->tags.size(); i++ ) {
+          TagExtent& extent = document->tags[i];
 
-	  if( _field == extent.name ) {
-	    char* numberText = document->terms[ extent.begin ]; 
-	    INT64 value = string_to_i64( numberText );
-	    extent.number = value;
-	  }
-	}
+          if( _field == extent.name ) {
+            char* numberText = document->terms[ extent.begin ]; 
+            INT64 value = string_to_i64( numberText );
+            extent.number = value;
+          }
+        }
 
-	return document;
+        return document;
       }
 
       void setHandler( ObjectHandler<indri::api::ParsedDocument>& handler ) {
-	_handler = &handler;
+        _handler = &handler;
       }
 
       void handle( indri::api::ParsedDocument* document ) {
-	_handler->handle( transform( document ) );
+        _handler->handle( transform( document ) );
       }
     };
  

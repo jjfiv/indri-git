@@ -42,10 +42,10 @@ namespace indri
 
     public:
       CachedFrequencyBeliefNode( const std::string& name,
-				 indri::lang::ListCache::CachedList* list,
-				 indri::query::TermScoreFunction& scoreFunction,
-				 double maximumBackgroundScore,
-				 double maximumScore );
+                                 indri::lang::ListCache::CachedList* list,
+                                 indri::query::TermScoreFunction& scoreFunction,
+                                 double maximumBackgroundScore,
+                                 double maximumScore );
 
       int nextCandidateDocument();
       void indexChanged( indri::index::Index& index );

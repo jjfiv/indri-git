@@ -29,105 +29,105 @@ namespace indri {
     private:
       template<class TT>
       struct object_ref {
-	TT* object;
-	value_type counter;
+        TT* object;
+        value_type counter;
       };
 
       typedef ref_ptr<T> my_type;
       mutable object_ref<T>* _ref;
 
       void _removeRef() {
-	if( _ref ) {
-	  decrement( _ref->counter );
-	  if( _ref->counter == 0 ) {
-	    delete _ref->object;
-	    delete _ref;
-	  }
-	}
+        if( _ref ) {
+          decrement( _ref->counter );
+          if( _ref->counter == 0 ) {
+            delete _ref->object;
+            delete _ref;
+          }
+        }
       }
 
       void _addRef() {
-	if( _ref )
-	  increment( _ref->counter );
+        if( _ref )
+          increment( _ref->counter );
       }
 
       my_type& _refAssign( const my_type& other ) {
-	_removeRef();
-	_ref = other._ref;
-	_addRef();
-	return *this;
+        _removeRef();
+        _ref = other._ref;
+        _addRef();
+        return *this;
       }
 
     public:
       ref_ptr() :
-	_ref(0)
+        _ref(0)
       {
       }
 
       ~ref_ptr() {
-	_removeRef();
+        _removeRef();
       }
 
       ref_ptr( const my_type& other ) :
-	_ref(0)
+        _ref(0)
       {
-	_refAssign( other );
+        _refAssign( other );
       }
 
       ref_ptr( T* object ) {
-	_ref = new object_ref<T>;
-	_ref->object = object;
-	_ref->counter = 1;
+        _ref = new object_ref<T>;
+        _ref->object = object;
+        _ref->counter = 1;
       }
 
       my_type& operator= ( T* object ) {
-	_removeRef();
+        _removeRef();
 
-	if( object != 0 ) {
-	  _ref = new object_ref<T>;
-	  _ref->object = object;
-	  _ref->counter = 1;
-	} else {
-	  _ref = 0;
-	}
+        if( object != 0 ) {
+          _ref = new object_ref<T>;
+          _ref->object = object;
+          _ref->counter = 1;
+        } else {
+          _ref = 0;
+        }
 
-	return *this;
+        return *this;
       }
 
       my_type& operator= ( const ref_ptr& other ) {
-	_refAssign( other );
-	return *this;
+        _refAssign( other );
+        return *this;
       }
 
       bool operator== ( T* other ) {
-	if( _ref == 0 )
-	  return other == 0;
+        if( _ref == 0 )
+          return other == 0;
       
-	return _ref->object == other;
+        return _ref->object == other;
       }
 
       bool operator== ( ref_ptr& other ) {
-	return _ref == other._ref;
+        return _ref == other._ref;
       }
 
       atomic::value_type references() {
-	if( _ref )
-	  return _ref->counter;
-	return 0;
+        if( _ref )
+          return _ref->counter;
+        return 0;
       }
 
       T& operator* () {
-	return *_ref->object;
+        return *_ref->object;
       }
 
       T* operator-> () {
-	return _ref->object;
+        return _ref->object;
       }
 
       T* get() {
-	if( _ref )
-	  return _ref->object;
-	return 0;
+        if( _ref )
+          return _ref->object;
+        return 0;
       }
     };
   }

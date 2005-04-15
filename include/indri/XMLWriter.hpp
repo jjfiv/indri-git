@@ -34,9 +34,9 @@ namespace indri
       void _writeChar( char ch, std::string& output ) const;
       void _writeTabs( int tabs, std::string& output ) const;
       void _writeTag( const std::string& tag,
-		      const std::map<std::string,std::string>& attributes,
-		      std::string& output,
-		      bool opening ) const;
+                      const std::map<std::string,std::string>& attributes,
+                      std::string& output,
+                      bool opening ) const;
       void _writeEndOfLine( std::string& output ) const;
       void _writeXML( int tabs, const XMLNode* node, std::string& output ) const;
 

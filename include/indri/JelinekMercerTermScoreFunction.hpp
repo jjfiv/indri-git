@@ -39,34 +39,34 @@ namespace indri
 
     public:
       JelinekMercerTermScoreFunction( double collectionFrequency, double collectionLambda, double documentLambda = 0.0 ) {
-	_contextLambda = (1 - collectionLambda - documentLambda);
-	_collectionFrequency = collectionFrequency;
-	_collectionLambda = collectionLambda;
-	_documentLambda = documentLambda;
-	_foregroundLambda = _collectionLambda + _documentLambda;
+        _contextLambda = (1 - collectionLambda - documentLambda);
+        _collectionFrequency = collectionFrequency;
+        _collectionLambda = collectionLambda;
+        _documentLambda = documentLambda;
+        _foregroundLambda = _collectionLambda + _documentLambda;
 
-	assert( _documentLambda >= 0.0 && _documentLambda <= 1.0 );
-	assert( _collectionLambda >= 0.0 && _collectionLambda <= 1.0 );
-	assert( _contextLambda >= 0.0 && _contextLambda <= 1.0 );
+        assert( _documentLambda >= 0.0 && _documentLambda <= 1.0 );
+        assert( _collectionLambda >= 0.0 && _collectionLambda <= 1.0 );
+        assert( _contextLambda >= 0.0 && _contextLambda <= 1.0 );
     
-	_collectionComponent = _collectionLambda * _collectionFrequency;
+        _collectionComponent = _collectionLambda * _collectionFrequency;
       }
 
       double scoreOccurrence( double occurrences, int contextSize ) {
-	//
-	//             [                      occurrences                                             ]
-	// score = log [ foregroundLambda * ---------------  + collectionLambda * collectionFrequency ]
-	//             [                      contextSize                                             ]
-	//
+        //
+        //             [                      occurrences                                             ]
+        // score = log [ foregroundLambda * ---------------  + collectionLambda * collectionFrequency ]
+        //             [                      contextSize                                             ]
+        //
 
-	double contextFrequency = contextSize ? occurrences / double(contextSize) : 0.0;
-	return log( _foregroundLambda * contextFrequency + _collectionComponent );
+        double contextFrequency = contextSize ? occurrences / double(contextSize) : 0.0;
+        return log( _foregroundLambda * contextFrequency + _collectionComponent );
       }
 
       double scoreOccurrence( double occurrences, int contextSize, double documentOccurrences, int documentLength ) {
-	double contextFrequency = contextSize ? occurrences / double(contextSize) : 0.0;
-	double documentFrequency = documentLength ? documentOccurrences / double(documentLength) : 0.0;
-	return log( _contextLambda * contextFrequency + _documentLambda * documentFrequency + _collectionComponent );
+        double contextFrequency = contextSize ? occurrences / double(contextSize) : 0.0;
+        double documentFrequency = documentLength ? documentOccurrences / double(documentLength) : 0.0;
+        return log( _contextLambda * contextFrequency + _documentLambda * documentFrequency + _collectionComponent );
       }
     };
   }

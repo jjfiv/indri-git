@@ -35,20 +35,20 @@ namespace indri
     class ListCache {
     public:
       struct CachedList {
-	// query structure
-	indri::lang::SimpleCopier raw;
-	indri::lang::SimpleCopier context;
+        // query structure
+        indri::lang::SimpleCopier raw;
+        indri::lang::SimpleCopier context;
 
-	// postings
-	indri::utility::greedy_vector<indri::index::DocumentContextCount> entries;
+        // postings
+        indri::utility::greedy_vector<indri::index::DocumentContextCount> entries;
 
-	// statistics about the entries
-	INT64 occurrences;
-	INT64 contextSize;
-	INT64 minimumContextSize;
-	INT64 maximumContextSize;
-	INT64 maximumOccurrences;
-	float maximumContextFraction;
+        // statistics about the entries
+        INT64 occurrences;
+        INT64 contextSize;
+        INT64 minimumContextSize;
+        INT64 maximumContextSize;
+        INT64 maximumOccurrences;
+        float maximumContextFraction;
       };
 
     private:
@@ -56,37 +56,37 @@ namespace indri
 
     public:
       ~ListCache() {
-	indri::utility::delete_vector_contents( _lists );
+        indri::utility::delete_vector_contents( _lists );
       }
 
       void add( CachedList* list ) {
-	if( _lists.size() > 100 ) {
-	  delete _lists[0];
-	  _lists.erase( _lists.begin() );
-	}
+        if( _lists.size() > 100 ) {
+          delete _lists[0];
+          _lists.erase( _lists.begin() );
+        }
 
-	_lists.push_back( list );
+        _lists.push_back( list );
       }
 
       CachedList* find( indri::lang::Node* raw, indri::lang::Node* context ) {
-	ListCache::CachedList* list = 0;
-	size_t i = 0;
+        ListCache::CachedList* list = 0;
+        size_t i = 0;
 
-	// TODO: use a hash function to make this faster
-	for( i=0; i<_lists.size(); i++ ) {
-	  indri::lang::Node* cachedRaw = _lists[i]->raw.root();
-	  indri::lang::Node* cachedContext = _lists[i]->context.root();
+        // TODO: use a hash function to make this faster
+        for( i=0; i<_lists.size(); i++ ) {
+          indri::lang::Node* cachedRaw = _lists[i]->raw.root();
+          indri::lang::Node* cachedContext = _lists[i]->context.root();
 
-	  if( *cachedRaw == *raw ) {
-	    if( ( !cachedContext && !context ) ||
-		( cachedContext && context && (*context == *cachedContext)) ) {
-	      list = _lists[i];
-	      break;
-	    } 
-	  }
-	}
+          if( *cachedRaw == *raw ) {
+            if( ( !cachedContext && !context ) ||
+                ( cachedContext && context && (*context == *cachedContext)) ) {
+              list = _lists[i];
+              break;
+            } 
+          }
+        }
 
-	return list;
+        return list;
       }
     };
   }

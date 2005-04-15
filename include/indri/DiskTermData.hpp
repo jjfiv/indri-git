@@ -123,7 +123,7 @@ inline indri::index::DiskTermData* disktermdata_create( int fieldCount ) {
   indri::index::DiskTermData* diskTermData = (indri::index::DiskTermData*) dataBlock;
 
   diskTermData->termData = (indri::index::TermData*) (dataBlock +
-						      sizeof (indri::index::DiskTermData));
+                                                      sizeof (indri::index::DiskTermData));
   termdata_construct( diskTermData->termData, fieldCount );
 
   diskTermData->termData->term = dataBlock +

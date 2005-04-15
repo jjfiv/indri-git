@@ -32,26 +32,26 @@ namespace indri
 
     public:
       ScopedMonitor( Mutex& mutex, ConditionVariable& condition ) :
-	_mutex(mutex),
-	_condition(condition)
+        _mutex(mutex),
+        _condition(condition)
       {
-	_mutex.lock();
+        _mutex.lock();
       }
 
       ~ScopedMonitor() {
-	_mutex.unlock();
+        _mutex.unlock();
       }
 
       void wait() {
-	_condition.wait( _mutex );
+        _condition.wait( _mutex );
       }
 
       void notifyOne() {
-	_condition.notifyOne();
+        _condition.notifyOne();
       }
 
       void notifyAll() {
-	_condition.notifyAll();
+        _condition.notifyAll();
       }
     };
   }

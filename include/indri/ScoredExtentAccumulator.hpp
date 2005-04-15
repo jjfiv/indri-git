@@ -38,63 +38,63 @@ namespace indri
 
     public:
       ScoredExtentAccumulator( std::string name, BeliefNode* belief, int resultsRequested = -1 ) :
-	_belief(belief),
-	_resultsRequested(resultsRequested),
-	_name(name),
-	_skipping(0)
+        _belief(belief),
+        _resultsRequested(resultsRequested),
+        _name(name),
+        _skipping(0)
       {
-	if( indri::api::Parameters::instance().get( "skipping", 1 ) )
-	  _skipping = dynamic_cast<SkippingCapableNode*>(belief);
+        if( indri::api::Parameters::instance().get( "skipping", 1 ) )
+          _skipping = dynamic_cast<SkippingCapableNode*>(belief);
       }
 
       void evaluate( int documentID, int documentLength ) {
-	if( _belief->hasMatch( documentID ) ) {
-	  const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& documentScores = _belief->score( documentID, 0, documentLength, documentLength );
+        if( _belief->hasMatch( documentID ) ) {
+          const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& documentScores = _belief->score( documentID, 0, documentLength, documentLength );
 
-	  for( unsigned int i=0; i<documentScores.size(); i++ ) {
-	    _scores.push( documentScores[i] );
-	  }
+          for( unsigned int i=0; i<documentScores.size(); i++ ) {
+            _scores.push( documentScores[i] );
+          }
 
-	  while( int(_scores.size()) > _resultsRequested && _resultsRequested > 0 ) {
-	    _scores.pop();
-	    if( _skipping ) {
-	      double worstScore = _scores.top().score;
-	      _skipping->setThreshold( worstScore - DBL_MIN );
-	    }
-	  }
-	}
+          while( int(_scores.size()) > _resultsRequested && _resultsRequested > 0 ) {
+            _scores.pop();
+            if( _skipping ) {
+              double worstScore = _scores.top().score;
+              _skipping->setThreshold( worstScore - DBL_MIN );
+            }
+          }
+        }
       }
   
       int nextCandidateDocument() {
-	return _belief->nextCandidateDocument();
+        return _belief->nextCandidateDocument();
       }
 
       const std::string& getName() const {
-	return _name;
+        return _name;
       }
 
       const EvaluatorNode::MResults& getResults() {
-	_results.clear();
+        _results.clear();
 
-	if( !_scores.size() )
-	  return _results;
+        if( !_scores.size() )
+          return _results;
     
-	// making a copy of the heap here so the method can be const
-	std::priority_queue<indri::api::ScoredExtentResult> heapCopy = _scores;
-	std::vector<indri::api::ScoredExtentResult>& scoreVec = _results["scores"];
+        // making a copy of the heap here so the method can be const
+        std::priority_queue<indri::api::ScoredExtentResult> heapCopy = _scores;
+        std::vector<indri::api::ScoredExtentResult>& scoreVec = _results["scores"];
 
-	// puts scores into the vector in descending order
-	scoreVec.reserve( heapCopy.size() );
-	for( int i=(int)heapCopy.size()-1; i>=0; i-- ) {
-	  scoreVec.push_back( heapCopy.top() );
-	  heapCopy.pop();
-	}
+        // puts scores into the vector in descending order
+        scoreVec.reserve( heapCopy.size() );
+        for( int i=(int)heapCopy.size()-1; i>=0; i-- ) {
+          scoreVec.push_back( heapCopy.top() );
+          heapCopy.pop();
+        }
 
-	return _results;
+        return _results;
       }
 
       void indexChanged( indri::index::Index& index ) {
-	// do nothing
+        // do nothing
       }
     };
   }

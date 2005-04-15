@@ -32,22 +32,22 @@ namespace indri
     class WeightedAndNode : public SkippingCapableNode {
     private:
       struct child_type {
-	struct maxscore_less {
-	public:
-	  bool operator () ( const child_type& one, const child_type& two ) const {
-	    // think of these two elements as the only two elements in the
-	    // #wand.  What is the threshold of each ordering?  Sort by
-	    // the lowest threshold.
+        struct maxscore_less {
+        public:
+          bool operator () ( const child_type& one, const child_type& two ) const {
+            // think of these two elements as the only two elements in the
+            // #wand.  What is the threshold of each ordering?  Sort by
+            // the lowest threshold.
 
         return (one.backgroundWeightedScore) > 
                (two.backgroundWeightedScore);
-	  }
-	};
+          }
+        };
 
-	BeliefNode* node;
-	double weight;
-	double maximumWeightedScore;
-	double backgroundWeightedScore;
+        BeliefNode* node;
+        double weight;
+        double maximumWeightedScore;
+        double backgroundWeightedScore;
       };
 
       std::vector<child_type> _children;

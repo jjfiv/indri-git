@@ -35,10 +35,10 @@ namespace indri {
 
       virtual indri::api::ParsedDocument* parse( UnparsedDocument* document ) = 0;
       virtual void setTags( const std::vector<std::string>& include,
-			    const std::vector<std::string>& exclude,
-			    const std::vector<std::string>& index,
-			    const std::vector<std::string>& metadata,
-			    const std::map<std::string, std::string>& conflations ) = 0;
+                            const std::vector<std::string>& exclude,
+                            const std::vector<std::string>& index,
+                            const std::vector<std::string>& metadata,
+                            const std::map<std::string, std::string>& conflations ) = 0;
 
       virtual void handle( UnparsedDocument* document ) = 0;
       virtual void setHandler( ObjectHandler<indri::api::ParsedDocument>& handler ) = 0;

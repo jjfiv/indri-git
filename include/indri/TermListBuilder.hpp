@@ -71,7 +71,7 @@ namespace indri {
         int fieldCount;
 
         stream >> termCount
-	       >> fieldCount;
+               >> fieldCount;
 
         for( int i=0; i<termCount; i++ ) {
           int termID;
@@ -83,9 +83,9 @@ namespace indri {
           FieldExtent extent;
 
           stream >> extent.id
-		 >> extent.begin
-		 >> extent.end
-		 >> extent.number;
+                 >> extent.begin
+                 >> extent.end
+                 >> extent.number;
 
           _fields.push_back( extent );
         }

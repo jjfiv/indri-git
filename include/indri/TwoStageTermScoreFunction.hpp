@@ -31,27 +31,27 @@ namespace indri
 
     public:
       TwoStageTermScoreFunction( double mu, double lambda, double collectionFrequency ) :
-	_mu(mu),
-	_lambda(lambda),
-	_collectionFrequency(collectionFrequency) {
+        _mu(mu),
+        _lambda(lambda),
+        _collectionFrequency(collectionFrequency) {
       }
 
       double scoreOccurrence( double occurrences, int contextSize ) {
 
-	//                    [  c(w;d) + \mu * p(w|C)   ]
-	//    ( 1 - \lambda ) [ ------------------------ ] + \lambda * p(w|C)
-	//                    [       |d| + \mu          ]
+        //                    [  c(w;d) + \mu * p(w|C)   ]
+        //    ( 1 - \lambda ) [ ------------------------ ] + \lambda * p(w|C)
+        //                    [       |d| + \mu          ]
 
-	double dirichlet = ((double(occurrences) + _mu*_collectionFrequency) / (double(contextSize) + _mu));
-	double p = ( 1-_lambda ) * dirichlet + _lambda * _collectionFrequency;
-	return log(p);
+        double dirichlet = ((double(occurrences) + _mu*_collectionFrequency) / (double(contextSize) + _mu));
+        double p = ( 1-_lambda ) * dirichlet + _lambda * _collectionFrequency;
+        return log(p);
       }
 
       double scoreOccurrence( double occurrences, int contextSize, double documentOccurrences, int documentLength ) {
-	double documentFrequency = double(documentOccurrences) / double(documentLength);
-	double dirichlet = ((double(occurrences) + _mu*documentFrequency) / (double(contextSize) + _mu));
-	double p = ( 1-_lambda ) * dirichlet + _lambda * _collectionFrequency;
-	return log(p);
+        double documentFrequency = double(documentOccurrences) / double(documentLength);
+        double dirichlet = ((double(occurrences) + _mu*documentFrequency) / (double(contextSize) + _mu));
+        double p = ( 1-_lambda ) * dirichlet + _lambda * _collectionFrequency;
+        return log(p);
       }
     };
   }

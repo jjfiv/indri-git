@@ -55,60 +55,60 @@ namespace indri
 
       ~ConditionVariable() {
 #ifdef WIN32
-	::CloseHandle( _event );
+        ::CloseHandle( _event );
 #else
-	pthread_cond_destroy( &_condition );
+        pthread_cond_destroy( &_condition );
 #endif
       }
 
       void wait( Mutex& mutex ) {
 #ifdef WIN32
-	HRESULT result = ::SignalObjectAndWait( mutex._mutex, _event, INFINITE, FALSE );
-	assert( SUCCEEDED(result) );
-	mutex.lock();
+        HRESULT result = ::SignalObjectAndWait( mutex._mutex, _event, INFINITE, FALSE );
+        assert( SUCCEEDED(result) );
+        mutex.lock();
 #else
-	pthread_cond_wait( &_condition, &mutex._mutex );
+        pthread_cond_wait( &_condition, &mutex._mutex );
 #endif
       }
 
       bool wait( Mutex& mutex, UINT64 microseconds ) {
 #ifdef WIN32
-	HRESULT result = ::SignalObjectAndWait( mutex._mutex, _event, DWORD(microseconds/1000), FALSE );
-	assert( SUCCEEDED(result) );
-	mutex.lock();
-	return result != WAIT_TIMEOUT;
+        HRESULT result = ::SignalObjectAndWait( mutex._mutex, _event, DWORD(microseconds/1000), FALSE );
+        assert( SUCCEEDED(result) );
+        mutex.lock();
+        return result != WAIT_TIMEOUT;
 #else
-	struct timeval tv;
-	gettimeofday( &tv, 0 );
+        struct timeval tv;
+        gettimeofday( &tv, 0 );
 
-	UINT64 seconds = tv.tv_sec;
-	seconds *= 1000 * 1000;
-	microseconds += seconds; 
-	microseconds += tv.tv_usec;
+        UINT64 seconds = tv.tv_sec;
+        seconds *= 1000 * 1000;
+        microseconds += seconds; 
+        microseconds += tv.tv_usec;
 
-	struct timespec ts;
-	ts.tv_sec = microseconds / 1000000;
-	ts.tv_nsec = (microseconds % 1000000) * 1000;
+        struct timespec ts;
+        ts.tv_sec = microseconds / 1000000;
+        ts.tv_nsec = (microseconds % 1000000) * 1000;
 
-	int result = pthread_cond_timedwait( &_condition, &mutex._mutex, &ts );
-	return result != ETIMEDOUT;
+        int result = pthread_cond_timedwait( &_condition, &mutex._mutex, &ts );
+        return result != ETIMEDOUT;
 #endif
       }
 
 
       void notifyOne( ) {
 #ifdef WIN32
-	::SetEvent( _event );
+        ::SetEvent( _event );
 #else
-	pthread_cond_signal( &_condition );
+        pthread_cond_signal( &_condition );
 #endif
       }
 
       void notifyAll( ) {
 #ifdef WIN32
-	::SetEvent( _event );
+        ::SetEvent( _event );
 #else
-	pthread_cond_broadcast( &_condition );
+        pthread_cond_broadcast( &_condition );
 #endif
       }
     };

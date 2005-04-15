@@ -28,55 +28,55 @@ namespace indri
     struct ScoredExtentResult {
       struct score_greater {
       public:
-	bool operator() ( const ScoredExtentResult& one, const ScoredExtentResult& two ) const {
-	  return one.score > two.score;
-	}
+        bool operator() ( const ScoredExtentResult& one, const ScoredExtentResult& two ) const {
+          return one.score > two.score;
+        }
       };
 
       ScoredExtentResult() :
-	score(0),
-	document(0),
-	begin(0),
-	end(0)
+        score(0),
+        document(0),
+        begin(0),
+        end(0)
       {
       }
 
       ScoredExtentResult( UINT64 s, int d )
-	:
-	score( double(s) ),
-	document(d),
-	begin(0),
-	end(0)
+        :
+        score( double(s) ),
+        document(d),
+        begin(0),
+        end(0)
       {
       }
 
       ScoredExtentResult( double s, int d )
-	:
-	score(s),
-	document(d),
-	begin(0),
-	end(0)
+        :
+        score(s),
+        document(d),
+        begin(0),
+        end(0)
       {
       }
 
       ScoredExtentResult( double s, int d, int b, int e )
-	:
-	score(s),
-	document(d),
-	begin(b),
-	end(e)
+        :
+        score(s),
+        document(d),
+        begin(b),
+        end(e)
       {
       }
 
       ScoredExtentResult( const ScoredExtentResult& other ) {
-	score = other.score;
-	document = other.document;
-	begin = other.begin;
-	end = other.end;
+        score = other.score;
+        document = other.document;
+        begin = other.begin;
+        end = other.end;
       }
 
       bool operator< ( const ScoredExtentResult& other ) const {
-	return score > other.score;
+        return score > other.score;
       }
 
       double score;

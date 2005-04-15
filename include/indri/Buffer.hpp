@@ -35,93 +35,93 @@ namespace indri
 
     public:
       Buffer( size_t length ) :
-	_buffer( (char*) malloc( length ) ),
-	_size( length ),
-	_position(0)
+        _buffer( (char*) malloc( length ) ),
+        _size( length ),
+        _position(0)
       {
       }
 
       Buffer() :
-	_buffer(0),
-	_size(0),
-	_position(0)
+        _buffer(0),
+        _size(0),
+        _position(0)
       {
       }
 
       ~Buffer() {
-	free( _buffer );
+        free( _buffer );
       }
 
       inline size_t size() const {
-	return _size;
+        return _size;
       }
 
       inline size_t position() const {
-	return _position;
+        return _position;
       }
 
       inline void clear() {
-	_position = 0;
+        _position = 0;
       }
 
       inline char* front() {
-	return _buffer;
+        return _buffer;
       }
 
       inline char* write( size_t length ) {
-	if( _position + length > _size )
-	  grow( _position + length );
-	char* spot = _buffer + _position;
-	_position += length;
-	return spot;
+        if( _position + length > _size )
+          grow( _position + length );
+        char* spot = _buffer + _position;
+        _position += length;
+        return spot;
       }
 
       inline void unwrite( size_t length ) {
-	assert( length >= 0 );
-	assert( length <= _position );
-	_position -= length;
+        assert( length >= 0 );
+        assert( length <= _position );
+        _position -= length;
       }
   
       void grow( size_t newSize ) {
-	if( newSize > _size ) {
-	  if( newSize < 1024*1024 ) {
-	    // find next larger power of two, up to one megabyte
-	    size_t powSize;
-	    for( powSize = 64; powSize < newSize; powSize *= 2 )
-	      ;
-	    newSize = powSize;
-	  } else {
-	    // round to nearest megabyte
-	    newSize = (newSize + 1024*1024) & ~(1024*1024-1);
-	  }
+        if( newSize > _size ) {
+          if( newSize < 1024*1024 ) {
+            // find next larger power of two, up to one megabyte
+            size_t powSize;
+            for( powSize = 64; powSize < newSize; powSize *= 2 )
+              ;
+            newSize = powSize;
+          } else {
+            // round to nearest megabyte
+            newSize = (newSize + 1024*1024) & ~(1024*1024-1);
+          }
 
-	  char* newBuffer = (char*) malloc( newSize );
-	  memcpy( newBuffer, _buffer, _position );
-	  free( _buffer );
-	  _buffer = newBuffer;
-	  _size = newSize;
-	}
+          char* newBuffer = (char*) malloc( newSize );
+          memcpy( newBuffer, _buffer, _position );
+          free( _buffer );
+          _buffer = newBuffer;
+          _size = newSize;
+        }
       }
 
       void grow() {
-	if( _size == 0 )
-	  grow(64);
-	else
-	  grow(_size*2);
+        if( _size == 0 )
+          grow(64);
+        else
+          grow(_size*2);
       }
 
       size_t remaining() {
-	return size() - position();
+        return size() - position();
       }
 
       void remove( size_t start ) {
-	memmove( _buffer, _buffer + start, _position - start );
-	_position -= start;
+        memmove( _buffer, _buffer + start, _position - start );
+        _position -= start;
       }
 
       void detach() {
-	_size = 0;
-	_buffer = 0;
+        _size = 0;
+        _buffer = 0;
       }
     };
   }

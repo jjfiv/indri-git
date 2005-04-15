@@ -32,7 +32,7 @@ namespace indri
     struct QueryExpanderSort {
     public:
       bool operator() ( const std::pair<std::string, double>& one, const std::pair<std::string, double>& two ) const {
-	return one.second > two.second;
+        return one.second > two.second;
       }
     };
 
@@ -48,8 +48,8 @@ namespace indri
       std::vector<std::string> * getVocabulary( std::vector<indri::api::ScoredExtentResult>& results, int rmDocs );
       std::vector<std::string> * getVocabulary( std::vector<indri::api::DocumentVector*>& docVectors );
       std::string buildQuery( const std::string& originalQuery, double originalWeight,
-			      const std::vector< std::pair<std::string, double> >& expansionTerms,
-			      int termCount );
+                              const std::vector< std::pair<std::string, double> >& expansionTerms,
+                              int termCount );
       UINT64 getCF( const std::string& term );
   
     public:

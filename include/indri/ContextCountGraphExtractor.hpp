@@ -31,7 +31,7 @@ namespace indri
 
     public:
       ~ContextCountGraphExtractor() {
-	delete_range( _nodes.begin(), _nodes.end() );
+        delete_range( _nodes.begin(), _nodes.end() );
       }
 
       Node* defaultAfter( indri::lang::Node* node ) {

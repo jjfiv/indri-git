@@ -35,8 +35,8 @@ namespace indri
 
       indri::xml::XMLNode* _encodeDocument( const struct indri::api::ParsedDocument* document );
       void _decodeMetadataRequest( const class indri::xml::XMLNode* request,
-				   std::string& attributeName,
-				   std::vector<std::string>& attributeValues );
+                                   std::string& attributeName,
+                                   std::vector<std::string>& attributeValues );
       void _sendDocumentsResponse( class indri::server::QueryServerDocumentsResponse* response );
       void _sendNumericResponse( const char* responseName, UINT64 number );
 

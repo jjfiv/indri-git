@@ -30,15 +30,15 @@ namespace indri
     class UnorderedWindowNode : public ListIteratorNode {
     private:
       struct term_position {
-	bool operator< ( const term_position& other ) const {
-	  return begin < other.begin;
-	}
+        bool operator< ( const term_position& other ) const {
+          return begin < other.begin;
+        }
 
-	double weight;
-	int type;
-	int begin;
-	int end;
-	int last; // index of previous entry of this type
+        double weight;
+        int type;
+        int begin;
+        int end;
+        int last; // index of previous entry of this type
       };
 
       int _windowSize;

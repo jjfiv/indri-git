@@ -28,18 +28,18 @@ namespace indri
 
     public:
       int store( int oldTermID, int newTermID ) {
-	if( _map.size() < oldTermID )
-	  _map.resize( oldTermID+1 );
+        if( _map.size() < oldTermID )
+          _map.resize( oldTermID+1 );
 
-	_map[oldTermID] = newTermID;
+        _map[oldTermID] = newTermID;
       }
 
       int operator[] ( int oldTermID ) {
-	return get( oldTermID );
+        return get( oldTermID );
       }
 
       int get( int oldTermID ) {
-	return _map[oldTermID];
+        return _map[oldTermID];
       }
     };
   }

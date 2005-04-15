@@ -24,18 +24,18 @@ namespace indri
     class Tag {
     public:
       Tag() {
-	next = NULL;
-	prev = NULL;
-	begin = -1;
-	end = -1;
+        next = NULL;
+        prev = NULL;
+        begin = -1;
+        end = -1;
       }
 
       Tag(char *n, int b) {
-	next = NULL;
-	prev = NULL;
-	strncpy(name, n, MAX_TAG_LENGTH);
-	begin = b;
-	end = -1;
+        next = NULL;
+        prev = NULL;
+        strncpy(name, n, MAX_TAG_LENGTH);
+        begin = b;
+        end = -1;
       }
 
       ~Tag() { }  

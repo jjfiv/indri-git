@@ -33,22 +33,22 @@ namespace indri
 
     public:
       ApplySingleCopier( std::vector<NodeType*>& previous, class indri::collection::Repository& repository ) {
-	_copier = new T;
+        _copier = new T;
 
-	for( size_t i=0; i<previous.size(); i++ ) {
-	  indri::lang::Node* root = previous[i];
-	  indri::lang::Node* newRoot = root->copy( *_copier );
+        for( size_t i=0; i<previous.size(); i++ ) {
+          indri::lang::Node* root = previous[i];
+          indri::lang::Node* newRoot = root->copy( *_copier );
 
-	  _roots.push_back(newRoot);
-	}
+          _roots.push_back(newRoot);
+        }
       }
 
       ~ApplySingleCopier() {
-	delete _copier;
+        delete _copier;
       }
 
       std::vector<indri::lang::Node*>& roots() {
-	return _roots;
+        return _roots;
       }
     };
 
@@ -60,55 +60,55 @@ namespace indri
 
     public:
       ApplyCopiers( std::vector<NodeType*>& previous ) {
-	for( size_t i=0; i<previous.size(); i++ ) {
-	  indri::lang::Node* root = previous[i];
-	  T* copier = new T;
-	  indri::lang::Node* newRoot = root->copy( *copier );
+        for( size_t i=0; i<previous.size(); i++ ) {
+          indri::lang::Node* root = previous[i];
+          T* copier = new T;
+          indri::lang::Node* newRoot = root->copy( *copier );
 
-	  _roots.push_back(newRoot);
-	  _copiers.push_back(copier);
-	}
+          _roots.push_back(newRoot);
+          _copiers.push_back(copier);
+        }
       }
 
       ApplyCopiers( std::vector<NodeType*>& previous, class indri::collection::Repository& repository ) {
-	for( size_t i=0; i<previous.size(); i++ ) {
-	  indri::lang::Node* root = previous[i];
-	  T* copier = new T( repository );
-	  indri::lang::Node* newRoot = root->copy( *copier );
+        for( size_t i=0; i<previous.size(); i++ ) {
+          indri::lang::Node* root = previous[i];
+          T* copier = new T( repository );
+          indri::lang::Node* newRoot = root->copy( *copier );
 
-	  _roots.push_back(newRoot);
-	  _copiers.push_back(copier);
-	}
+          _roots.push_back(newRoot);
+          _copiers.push_back(copier);
+        }
       }
 
       ApplyCopiers( std::vector<NodeType*>& previous, class ListCache& listCache ) {
-	for( size_t i=0; i<previous.size(); i++ ) {
-	  indri::lang::Node* root = previous[i];
-	  T* copier = new T( &listCache );
-	  indri::lang::Node* newRoot = root->copy( *copier );
+        for( size_t i=0; i<previous.size(); i++ ) {
+          indri::lang::Node* root = previous[i];
+          T* copier = new T( &listCache );
+          indri::lang::Node* newRoot = root->copy( *copier );
 
-	  _roots.push_back(newRoot);
-	  _copiers.push_back(copier);
-	}
+          _roots.push_back(newRoot);
+          _copiers.push_back(copier);
+        }
       }
 
       ApplyCopiers( std::vector<NodeType*>& previous, class indri::collection::Repository& repository, class ListCache& listCache ) {
-	for( size_t i=0; i<previous.size(); i++ ) {
-	  indri::lang::Node* root = previous[i];
-	  T* copier = new T( repository, listCache );
-	  indri::lang::Node* newRoot = root->copy( *copier );
+        for( size_t i=0; i<previous.size(); i++ ) {
+          indri::lang::Node* root = previous[i];
+          T* copier = new T( repository, listCache );
+          indri::lang::Node* newRoot = root->copy( *copier );
 
-	  _roots.push_back(newRoot);
-	  _copiers.push_back(copier);
-	}
+          _roots.push_back(newRoot);
+          _copiers.push_back(copier);
+        }
       }
 
       ~ApplyCopiers() {
-	indri::utility::delete_vector_contents( _copiers );
+        indri::utility::delete_vector_contents( _copiers );
       }
 
       std::vector<indri::lang::Node*>& roots() {
-	return _roots;
+        return _roots;
       }
     };
 
@@ -119,13 +119,13 @@ namespace indri
 
     public:
       ApplyWalker( std::vector<NodeType*>& roots, T* walker ) {
-	_walker = walker;
-	for( int i=0; i<roots.size(); i++ )
-	  roots[i]->walk(*_walker);
+        _walker = walker;
+        for( int i=0; i<roots.size(); i++ )
+          roots[i]->walk(*_walker);
       }
 
       T& get() {
-	return _walker;
+        return _walker;
       }
     };
   }

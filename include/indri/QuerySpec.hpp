@@ -261,8 +261,8 @@ namespace indri {
         ExtentInside* other = dynamic_cast<ExtentInside*>(&o);
   
         return other &&
-	  *_inner == *other->_inner &&
-	  *_outer == *other->_outer;
+          *_inner == *other->_inner &&
+          *_outer == *other->_outer;
       }
       
       std::string typeName() const {
@@ -876,7 +876,7 @@ namespace indri {
           return false;
 
         return (*_filter) == (*other->getFilter()) &&
-	  (*_required) == (*other->getRequired());
+          (*_required) == (*other->getRequired());
       }
 
       void pack( Packer& packer ) {
@@ -949,7 +949,7 @@ namespace indri {
           return false;
 
         return (*_filter) == (*other->getFilter()) &&
-	  (*_disallowed) == (*other->getDisallowed());
+          (*_disallowed) == (*other->getDisallowed());
       }
 
       void pack( Packer& packer ) {
@@ -1013,8 +1013,8 @@ namespace indri {
         FieldLessNode* other = dynamic_cast<FieldLessNode*>(&node);
 
         return other &&
-	  other->getConstant() == _constant &&
-	  *other->getField() == *_field;
+          other->getConstant() == _constant &&
+          *other->getField() == *_field;
       }
 
       Node* copy( Copier& copier ) {
@@ -1076,8 +1076,8 @@ namespace indri {
         FieldGreaterNode* other = dynamic_cast<FieldGreaterNode*>(&node);
 
         return other &&
-	  other->getConstant() == _constant &&
-	  *other->getField() == *_field;
+          other->getConstant() == _constant &&
+          *other->getField() == *_field;
       }
 
       Node* copy( Copier& copier ) {
@@ -1146,9 +1146,9 @@ namespace indri {
         FieldBetweenNode* other = dynamic_cast<FieldBetweenNode*>(&node);
 
         return other &&
-	  other->getLow() == _low &&
-	  other->getHigh() == _high &&
-	  *other->getField() == *_field;
+          other->getLow() == _low &&
+          other->getHigh() == _high &&
+          *other->getField() == *_field;
       }
 
       Node* copy( Copier& copier ) {
@@ -1211,8 +1211,8 @@ namespace indri {
         FieldEqualsNode* other = dynamic_cast<FieldEqualsNode*>(&node);
 
         return other &&
-	  other->getConstant() == _constant &&
-	  *other->getField() == *_field;
+          other->getConstant() == _constant &&
+          *other->getField() == *_field;
       }
 
       Node* copy( Copier& copier ) {
@@ -1655,11 +1655,11 @@ namespace indri {
         for( std::map<int,tuple_type>::iterator iter;
              iter != _table.end();
              iter++ )
-	  {
-	    beginList.push_back( (*iter).second.begin );
-	    endList.push_back( (*iter).second.end );
-	    scoreList.push_back( (*iter).second.score );
-	  }
+          {
+            beginList.push_back( (*iter).second.begin );
+            endList.push_back( (*iter).second.end );
+            scoreList.push_back( (*iter).second.score );
+          }
 
         packer.put( "begin", beginList );
         packer.put( "end", endList );
@@ -2298,10 +2298,10 @@ namespace indri {
 
     public:
       ContextCounterNode( RawExtentNode* raw, RawExtentNode* context ) :
-	_hasCounts(false),
-	_hasContextSize(false),
-	_occurrences(0),
-	_contextSize(0)
+        _hasCounts(false),
+        _hasContextSize(false),
+        _occurrences(0),
+        _contextSize(0)
       {
         _raw = raw;
         _context = context;
@@ -2426,13 +2426,13 @@ namespace indri {
 
     public:
       ContextSimpleCounterNode( const std::vector<std::string>& terms, const std::string& field, const std::string& context ) :
-	_hasCounts(false),
-	_hasContextSize(false),
-	_occurrences(0),
-	_contextSize(0),
-	_terms(terms),
-	_field(field),
-	_context(context)
+        _hasCounts(false),
+        _hasContextSize(false),
+        _occurrences(0),
+        _contextSize(0),
+        _terms(terms),
+        _field(field),
+        _context(context)
       {
       }
 
@@ -2577,44 +2577,44 @@ namespace indri {
 
     public:
       AnnotatorNode( ScoredExtentNode* scoredNode ) :
-	_scoredNode(scoredNode)
+        _scoredNode(scoredNode)
       {
       }
 
       AnnotatorNode( Unpacker& unpacker ) {
-	_scoredNode = unpacker.getScoredExtentNode( "scoredNode" );
+        _scoredNode = unpacker.getScoredExtentNode( "scoredNode" );
       }
 
       std::string typeName() const {
-	return "AnnotatorNode";
+        return "AnnotatorNode";
       }
 
       std::string queryText() const {
-	return _scoredNode->queryText();
+        return _scoredNode->queryText();
       }
 
       ScoredExtentNode* getChild() {
-	return _scoredNode;
+        return _scoredNode;
       }
 
       void pack( Packer& packer ) {
-	packer.before(this);
-	packer.put( "scoredNode", _scoredNode );
-	packer.after(this);
+        packer.before(this);
+        packer.put( "scoredNode", _scoredNode );
+        packer.after(this);
       }
 
       void walk( Walker& walker ) {
-	walker.before(this);
-	_scoredNode->walk(walker);
-	walker.after(this);
+        walker.before(this);
+        _scoredNode->walk(walker);
+        walker.after(this);
       }
 
       Node* copy( Copier& copier ) {
-	copier.before(this);
-	ScoredExtentNode* duplicateChild = dynamic_cast<ScoredExtentNode*>(_scoredNode->copy(copier));
-	AnnotatorNode* duplicate = new AnnotatorNode(duplicateChild);
-	duplicate->setNodeName( nodeName() );
-	return copier.after(this, duplicate);
+        copier.before(this);
+        ScoredExtentNode* duplicateChild = dynamic_cast<ScoredExtentNode*>(_scoredNode->copy(copier));
+        AnnotatorNode* duplicate = new AnnotatorNode(duplicateChild);
+        duplicate->setNodeName( nodeName() );
+        return copier.after(this, duplicate);
       }
     };
   }

@@ -34,33 +34,33 @@ namespace indri
       double _sigma;
 
       double _cdf( double x ) {
-	const double a_1 = 0.4361836;
-	const double a_2 = -0.1201676;
-	const double a_3 = 0.9372980;
-	const double p = 0.33267;
-	const double pi = 3.1415926535;
+        const double a_1 = 0.4361836;
+        const double a_2 = -0.1201676;
+        const double a_3 = 0.9372980;
+        const double p = 0.33267;
+        const double pi = 3.1415926535;
 
-	double t = 1./(1.+p*x);
-	double zx = ( 1. / sqrt(2*pi*_sigma) ) * exp( pow( -((x-_mu)/_sigma), 2 ) );
+        double t = 1./(1.+p*x);
+        double zx = ( 1. / sqrt(2*pi*_sigma) ) * exp( pow( -((x-_mu)/_sigma), 2 ) );
 
-	double cdf = 1 - zx * ( a_1*t + a_2*pow(t,2) + a_3*pow(t,3) );
-	return cdf;
+        double cdf = 1 - zx * ( a_1*t + a_2*pow(t,2) + a_3*pow(t,3) );
+        return cdf;
       }
 
     public:
       NormalDistribution( double mu, double sigma ) {
-	_mu = mu;
-	_sigma = sigma;
+        _mu = mu;
+        _sigma = sigma;
       }
 
       // The value returned here corresponds to the probability mass
       // on the Gaussian curve between value-0.5 and value+0.5
 
       double operator () ( INT64 value ) {
-	// compute lower bound cdf
-	double low = _cdf( value-0.5 );
-	double high = _cdf( value+0.5 );
-	return high - low;
+        // compute lower bound cdf
+        double low = _cdf( value-0.5 );
+        double high = _cdf( value+0.5 );
+        return high - low;
       }
     };
   }

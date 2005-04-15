@@ -26,8 +26,8 @@ namespace indri
       DocumentCount() {}
 
       DocumentCount( int document, int count ) {
-	this->document = document;
-	this->count = count;
+        this->document = document;
+        this->count = count;
       }
 
       int document;
@@ -36,9 +36,9 @@ namespace indri
 
     struct DocumentContextCount {
       DocumentContextCount( int document, int count, int contextSize ) {
-	this->document = document;
-	this->count = count;
-	this->contextSize = contextSize;
+        this->document = document;
+        this->count = count;
+        this->contextSize = contextSize;
       }
 
       int document;

@@ -35,40 +35,40 @@ namespace indri
 
     public:
       void addChild( BeliefNode* beliefNode ) {
-	_children.push_back( beliefNode );
+        _children.push_back( beliefNode );
       }
 
       int nextCandidateDocument() {
-	std::vector<BeliefNode*>::iterator iter;
-	int next = MAX_INT32;
+        std::vector<BeliefNode*>::iterator iter;
+        int next = MAX_INT32;
 
-	for( iter = _children.begin(); iter != _children.end(); iter++ ) {
-	  next = lemur_compat::min( next, (*iter)->nextCandidateDocument() );
-	}
+        for( iter = _children.begin(); iter != _children.end(); iter++ ) {
+          next = lemur_compat::min( next, (*iter)->nextCandidateDocument() );
+        }
 
-	return next;
+        return next;
       }
 
       double maximumScore() {
-	std::vector<BeliefNode*>::iterator iter;
-	double score = 0;
+        std::vector<BeliefNode*>::iterator iter;
+        double score = 0;
 
-	for( iter = _children.begin(); iter != _children.end(); iter++ ) {
-	  score += (*iter)->maximumScore();
-	}
+        for( iter = _children.begin(); iter != _children.end(); iter++ ) {
+          score += (*iter)->maximumScore();
+        }
 
-	return score;
+        return score;
       }
 
       double score( int documentID, int documentLength ) {
-	std::vector<BeliefNode*>::iterator iter;
-	double score = 0;
+        std::vector<BeliefNode*>::iterator iter;
+        double score = 0;
 
-	for( iter = _children.begin(); iter != _children.end(); iter++ ) {
-	  score += (*iter)->score( documentID, documentLength );
-	}
+        for( iter = _children.begin(); iter != _children.end(); iter++ ) {
+          score += (*iter)->score( documentID, documentLength );
+        }
 
-	return score;
+        return score;
       }
     };
   }

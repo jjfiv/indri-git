@@ -28,8 +28,8 @@ namespace indri
     struct FileClassEnvironment {
       FileClassEnvironment() : parser(0), iterator(0) {}
       ~FileClassEnvironment() {
-	delete parser;
-	delete iterator;
+        delete parser;
+        delete iterator;
       }
 
       Parser* parser;

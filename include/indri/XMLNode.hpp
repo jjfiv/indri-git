@@ -206,8 +206,8 @@ inline std::string base64_encode( const void* input, int length ) {
         third = in[mainLength+2];
 
       value = first << 16 |
-	second << 8 |
-	third;
+        second << 8 |
+        third;
     }
 
     {

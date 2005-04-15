@@ -47,8 +47,8 @@ namespace indri
     class OrderedWindowNode : public ListIteratorNode {
     private:
       struct extents_pointer {
-	indri::utility::greedy_vector<indri::index::Extent>::const_iterator iter;
-	indri::utility::greedy_vector<indri::index::Extent>::const_iterator end;
+        indri::utility::greedy_vector<indri::index::Extent>::const_iterator iter;
+        indri::utility::greedy_vector<indri::index::Extent>::const_iterator end;
       };
       int _windowSize;
       std::vector<ListIteratorNode*> _children;

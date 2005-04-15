@@ -45,9 +45,9 @@ namespace indri
 
     public:
       TermFrequencyBeliefNode( const std::string& name,
-			       class InferenceNetwork& network,
-			       int listID,
-			       indri::query::TermScoreFunction& scoreFunction );
+                               class InferenceNetwork& network,
+                               int listID,
+                               indri::query::TermScoreFunction& scoreFunction );
 
       ~TermFrequencyBeliefNode();
 

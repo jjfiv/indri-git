@@ -43,9 +43,9 @@ namespace indri
 
     public:
       ContextSimpleCountAccumulator( const std::string& nodeName,
-				     const std::vector<std::string>& terms,
-				     const std::string& field,
-				     const std::string& context );
+                                     const std::vector<std::string>& terms,
+                                     const std::string& field,
+                                     const std::string& context );
 
       const std::string& getName() const;
       const EvaluatorNode::MResults& getResults();

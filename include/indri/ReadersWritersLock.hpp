@@ -28,10 +28,10 @@ namespace indri
     class ReadersWritersLock {
     private:
       struct wait_queue_entry {
-	bool writing;
-	bool awakened;
-	wait_queue_entry* next;
-	ConditionVariable wakeup;
+        bool writing;
+        bool awakened;
+        wait_queue_entry* next;
+        ConditionVariable wakeup;
       };
 
       Mutex _mutex;
@@ -42,147 +42,147 @@ namespace indri
       int _writers;
 
       void _enqueue( wait_queue_entry& entry ) {
-	entry.awakened = false;
+        entry.awakened = false;
 
-	// called within the mutex
-	if( _tail == 0 ) {
-	  entry.next = 0;
-	  _tail = &entry;
-	  _head = &entry;
-	} else {
-	  entry.next = 0;
-	  _tail->next = &entry;
-	  _tail = &entry;
-	}
+        // called within the mutex
+        if( _tail == 0 ) {
+          entry.next = 0;
+          _tail = &entry;
+          _head = &entry;
+        } else {
+          entry.next = 0;
+          _tail->next = &entry;
+          _tail = &entry;
+        }
       }
 
       void _wakeOthers() {
-	bool reading = false;
+        bool reading = false;
 
-	if( _head ) {
-	  // wakeup the next thread, no matter what
-	  _head->awakened = true;
-	  _head->wakeup.notifyOne();
-	  reading = !_head->writing;
-	  _head = _head->next;
+        if( _head ) {
+          // wakeup the next thread, no matter what
+          _head->awakened = true;
+          _head->wakeup.notifyOne();
+          reading = !_head->writing;
+          _head = _head->next;
 
-	  // if the next waiter wants to read, then we should
-	  // continue to wake threads up until there are no readers left
-	  if( reading ) {
-	    while( _head && _head->writing == false ) {
-	      _head->awakened = true;
-	      _head->wakeup.notifyOne();
-	      _head = _head->next;
-	    }
-	  }
-	}
+          // if the next waiter wants to read, then we should
+          // continue to wake threads up until there are no readers left
+          if( reading ) {
+            while( _head && _head->writing == false ) {
+              _head->awakened = true;
+              _head->wakeup.notifyOne();
+              _head = _head->next;
+            }
+          }
+        }
 
-	// if we took the last thing off the queue, fix up the tail
-	if( _head == 0 ) {
-	  _tail = 0;
-	}
+        // if we took the last thing off the queue, fix up the tail
+        if( _head == 0 ) {
+          _tail = 0;
+        }
       }
 
     public:
       ReadersWritersLock() :
-	_tail(0),
-	_head(0),
-	_readers(0),
-	_writers(0)
+        _tail(0),
+        _head(0),
+        _readers(0),
+        _writers(0)
       {
       }
 
       void lockRead() {
-	_mutex.lock();
+        _mutex.lock();
 
-	if( _head != 0 || _writers ) {
-	  do {
-	    wait_queue_entry entry;
+        if( _head != 0 || _writers ) {
+          do {
+            wait_queue_entry entry;
 
-	    entry.writing = false;
-	    entry.next = 0;
+            entry.writing = false;
+            entry.next = 0;
 
-	    _enqueue( entry );
+            _enqueue( entry );
 
-	    // wait for our time to come
-	    entry.wakeup.wait( _mutex );
-	  }
-	  while( _writers );
-	}
-	_readers++;
-	assert( !_writers );
+            // wait for our time to come
+            entry.wakeup.wait( _mutex );
+          }
+          while( _writers );
+        }
+        _readers++;
+        assert( !_writers );
 
-	_mutex.unlock();
+        _mutex.unlock();
       }
     
       void lockWrite() {
-	_mutex.lock();
+        _mutex.lock();
 
-	if( _head != 0 || _readers || _writers ) {
-	  do {
-	    wait_queue_entry entry;
+        if( _head != 0 || _readers || _writers ) {
+          do {
+            wait_queue_entry entry;
 
-	    entry.writing = true;
-	    entry.next = 0;
+            entry.writing = true;
+            entry.next = 0;
 
-	    _enqueue( entry );
+            _enqueue( entry );
 
-	    // wait for our time to come
-	    entry.wakeup.wait( _mutex );
-	  } 
-	  while( _readers || _writers );
-	}
+            // wait for our time to come
+            entry.wakeup.wait( _mutex );
+          } 
+          while( _readers || _writers );
+        }
 
-	assert( _writers == 0 );
-	_writers++;
-	_mutex.unlock();
+        assert( _writers == 0 );
+        _writers++;
+        _mutex.unlock();
 
-	assert( !_readers && _writers == 1 );
+        assert( !_readers && _writers == 1 );
       }
 
       void unlockWrite() {
-	assert( _writers );
-	assert( !_readers );
+        assert( _writers );
+        assert( !_readers );
 
-	_mutex.lock();
-	_writers = 0;
-	_wakeOthers();
-	_mutex.unlock();
+        _mutex.lock();
+        _writers = 0;
+        _wakeOthers();
+        _mutex.unlock();
       }
 
       void unlockRead() {
-	assert( _readers );
-	assert( !_writers );
+        assert( _readers );
+        assert( !_writers );
 
-	_mutex.lock();
-	_readers--;
+        _mutex.lock();
+        _readers--;
 
-	if( _readers == 0 )
-	  _wakeOthers();
+        if( _readers == 0 )
+          _wakeOthers();
 
-	_mutex.unlock();
+        _mutex.unlock();
       }
 
       void yieldWrite() {
-	assert( !_readers && _writers == 1 );
+        assert( !_readers && _writers == 1 );
 
-	if( _head ) {
-	  unlockWrite();
-	  lockWrite();
-	}
+        if( _head ) {
+          unlockWrite();
+          lockWrite();
+        }
 
-	assert( !_readers && _writers == 1 );
+        assert( !_readers && _writers == 1 );
       }
 
       void yieldRead() {
-	assert( _readers && _writers == 0 );
+        assert( _readers && _writers == 0 );
 
-	if( _head ) {
-	  unlockRead();
-	  lockRead();
-	}
+        if( _head ) {
+          unlockRead();
+          lockRead();
+        }
 
-	assert( _readers && _writers == 0 );
+        assert( _readers && _writers == 0 );
       }
 
     };

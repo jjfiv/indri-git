@@ -38,7 +38,7 @@ namespace indri
 
     public:
       FilterRejectNode( const std::string& name, ListIteratorNode* filter, 
-			BeliefNode* disallowed );
+                        BeliefNode* disallowed );
 
       double maximumBackgroundScore();
       double maximumScore();

@@ -32,48 +32,48 @@ namespace indri
       TreePrinterWalker() : _tabs(0) {}
 
       void before( indri::lang::IndexTerm* node ) {
-	for( unsigned int i=0; i<_tabs; i++ )
-	  std::cout << "\t";
+        for( unsigned int i=0; i<_tabs; i++ )
+          std::cout << "\t";
 
-	std::cout << "IndexTerm "
-		  << node->getText().c_str()
-		  << " "
-		  << node->nodeName().c_str()
-		  << std::endl;
+        std::cout << "IndexTerm "
+                  << node->getText().c_str()
+                  << " "
+                  << node->nodeName().c_str()
+                  << std::endl;
 
-	_tabs++;
+        _tabs++;
       }
 
       void before( indri::lang::Field* node ) {
-	for( unsigned int i=0; i<_tabs; i++ )
-	  std::cout << "\t";
+        for( unsigned int i=0; i<_tabs; i++ )
+          std::cout << "\t";
 
-	std::cout << "Field "
-		  << node->getFieldName().c_str()
-		  << " "
-		  << node->nodeName().c_str()
-		  << std::endl;
+        std::cout << "Field "
+                  << node->getFieldName().c_str()
+                  << " "
+                  << node->nodeName().c_str()
+                  << std::endl;
 
-	_tabs++;
+        _tabs++;
       }
 
       void defaultBefore( indri::lang::Node* node ) {
-	for( unsigned int i=0; i<_tabs; i++ )
-	  std::cout << "\t";
+        for( unsigned int i=0; i<_tabs; i++ )
+          std::cout << "\t";
 
-	std::string type = node->typeName();
-	std::string query = node->queryText();
+        std::string type = node->typeName();
+        std::string query = node->queryText();
 
-	std::cout << type
-		  << " "
-		  << query
-		  << std::endl;
+        std::cout << type
+                  << " "
+                  << query
+                  << std::endl;
 
-	_tabs++;
+        _tabs++;
       }
 
       void defaultAfter( indri::lang::Node* node ) {
-	_tabs--;
+        _tabs--;
       }
     };
   }
