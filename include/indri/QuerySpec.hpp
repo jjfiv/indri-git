@@ -2400,13 +2400,13 @@ namespace indri {
         return _contextSize;
       }
 
-      void setContextSize( UINT64 contextSize ) {
+      void setContextSize( double contextSize ) {
         _contextSize = contextSize;
         _hasContextSize = true;
       }
 
-      void setCounts( UINT64 occurrences,
-                      UINT64 contextSize ) {
+      void setCounts( double occurrences,
+                      double contextSize ) {
         _hasCounts = true;
         _occurrences = occurrences;
         setContextSize( contextSize );
@@ -2490,11 +2490,11 @@ namespace indri {
         return _hasContextSize;
       }
 
-      UINT64 getOccurrences() const {
+      double getOccurrences() const {
         return _occurrences;
       }
 
-      UINT64 getContextSize() const {
+      double getContextSize() const {
         return _contextSize;
       }
 
@@ -2510,13 +2510,13 @@ namespace indri {
         return _context;
       }
 
-      void setContextSize( UINT64 contextSize ) {
+      void setContextSize( double contextSize ) {
         _contextSize = contextSize;
         _hasContextSize = true;
       }
 
-      void setCounts( UINT64 occurrences,
-                      UINT64 contextSize ) {
+      void setCounts( double occurrences,
+                      double contextSize ) {
         _hasCounts = true;
         _occurrences = occurrences;
         setContextSize( contextSize );
