@@ -482,8 +482,13 @@ void indri::collection::Repository::_addMemoryIndex() {
   indri::thread::ScopedLock slock( _stateLock );
 
   // build a new memory index
-  indri::index::Index* activeIndex = _active->back();
-  int documentBase = activeIndex->documentBase() + activeIndex->documentCount();
+  int documentBase = 1;
+
+  if( _active->size() > 0 ) {
+    indri::index::Index* activeIndex = _active->back();
+    documentBase = activeIndex->documentBase() + activeIndex->documentCount();
+  }
+
   indri::index::MemoryIndex* newMemoryIndex = new indri::index::MemoryIndex( documentBase, _indexFields );
 
   // build a new state vector
