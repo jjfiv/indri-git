@@ -881,8 +881,8 @@ void indri::collection::Repository::_merge( index_state& state ) {
     // release the previous state object
     state = 0;
 
-    _merge( first );
     _merge( second );
+    _merge( first );
 
     std::copy( first->begin(), first->end(), std::back_inserter( *result ) );
     std::copy( second->begin(), second->end(), std::back_inserter( *result ) );
