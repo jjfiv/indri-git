@@ -162,31 +162,24 @@ void indri::collection::Repository::_remove( const std::string& indexPath ) {
 //
 
 void indri::collection::Repository::_openIndexes( indri::api::Parameters& params, const std::string& parentPath ) {
-  indri::api::Parameters indexes = params["indexes"]["index"];
-
-  //
-  // <!ELEMENT name (#PCDATA)> -- name of index
-  // <!ELEMENT prune (#PCDATA)> -- this index is junk and should be pruned
-  // <!ELEMENT index (name,deleteable)>
-  //
+  indri::api::Parameters container = params["indexes"];
 
   _active = new index_vector;
   _states.push_back( _active );
+  _indexCount = params.get( "indexCount", 0 );
 
-  for( int i=0; i<indexes.size(); i++ ) {
-    indri::api::Parameters indexSpec = indexes[i];
-    indri::index::DiskIndex* diskIndex = new indri::index::DiskIndex();
-    std::string indexName = (std::string) indexSpec;
+  if( container.exists( "index" ) ) {
+    indri::api::Parameters indexes = container["index"];
 
-    if( indexSpec.get("prune", 0) ) {
-      _remove( indexName );
-    } else {
+    for( int i=0; i<indexes.size(); i++ ) {
+      indri::api::Parameters indexSpec = indexes[i];
+      indri::index::DiskIndex* diskIndex = new indri::index::DiskIndex();
+      std::string indexName = (std::string) indexSpec;
+
       diskIndex->open( parentPath, indexName );
       _active->push_back( diskIndex );
     }
   }
-
-  _indexCount = params.get( "indexCount", 0 );
 }
 
 //
