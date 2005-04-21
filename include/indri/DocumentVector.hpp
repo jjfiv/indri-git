@@ -23,7 +23,6 @@
 #include <string>
 #include <map>
 #include <vector>
-#include "indri/TermListBuilder.hpp"
 #include "indri/Index.hpp"
 namespace indri 
 {

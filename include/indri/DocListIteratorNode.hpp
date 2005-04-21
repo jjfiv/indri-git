@@ -22,7 +22,7 @@
 #include "indri/DocListIterator.hpp"
 #include "indri/ListIteratorNode.hpp"
 #include "indri/Extent.hpp"
-#include "greedy_vector"
+#include "indri/greedy_vector"
 #include <string>
 namespace indri
 {

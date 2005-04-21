@@ -18,13 +18,13 @@
 //
 
 
-#include "indri/TermListBuilder.hpp"
+#include "indri/TermList.hpp"
 #include "indri/IndriTermInfoList.hpp"
 #include <indri/count_iterator>
 
 namespace indri {
   namespace index {
-    BagList::BagList( TermListBuilder* list ) : _list(list)
+    BagList::BagList( const TermList* list ) : _list(list)
     {
       indri::utility::greedy_vector<TERMID_T> termIDs = _list->terms();
       indri::utility::count_iterator<TERMID_T> iter( termIDs.begin(), termIDs.end() );
@@ -73,7 +73,7 @@ namespace indri {
       return POS_T(int(position)+1);
     }
 
-    PositionList::PositionList( TermListBuilder* list ) : _list(list) {}
+    PositionList::PositionList( const TermList* list ) : _list(list) {}
     PositionList::~PositionList() { delete _list; }
       
     TermInfo* PositionList::newElement() {

@@ -19,7 +19,7 @@
 #define INDRI_DOCEXTENTLISTMEMORYBUILDER_HPP
 
 #include "indri/indri-platform.h"
-#include "greedy_vector"
+#include "indri/greedy_vector"
 #include "indri/DocExtentListIterator.hpp"
 #include <utility>
 #include "lemur/RVLCompress.hpp"

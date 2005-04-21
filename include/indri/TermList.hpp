@@ -19,8 +19,8 @@
 #ifndef INDRI_TERMLIST_HPP
 #define INDRI_TERMLIST_HPP
 
-#include "greedy_vector"
-#include "FieldExtent.hpp"
+#include "indri/greedy_vector"
+#include "indri/FieldExtent.hpp"
 #include "lemur/RVLCompress.hpp"
 #include "indri/Buffer.hpp"
 #include "indri/RVLCompressStream.hpp"

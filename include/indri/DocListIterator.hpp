@@ -19,7 +19,7 @@
 #ifndef INDRI_DOCLISTITERATOR_HPP
 #define INDRI_DOCLISTITERATOR_HPP
 
-#include "greedy_vector"
+#include "indri/greedy_vector"
 #include "indri/TermData.hpp"
 
 namespace indri {
