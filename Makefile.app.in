@@ -11,7 +11,7 @@ includedir = @includedir@
 INCPATH=-I$(includedir)
 LIBPATH=-L$(libdir)
 CXXFLAGS=@DEFS@ @CXXFLAGS@ $(INCPATH)
-CPPLDFLAGS  = @LDFLAGS@ -lindri @LIBS@ -lm
+CPPLDFLAGS  = @LDFLAGS@ -lindri @LIBS@
 
 all:
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(APP) $(OBJ) $(LIBPATH) $(CPPLDFLAGS)

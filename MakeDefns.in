@@ -84,12 +84,12 @@ SHARED = -shared -fPIC
 # C++ compiler and compiling/linking options
 CFLAGS = @DEFS@ @CFLAGS@ $(INCPATH) $(SHARED)
 CXXFLAGS    = @DEFS@ @CXXFLAGS@ $(INCPATH) $(SHARED)
-CPPLDFLAGS  = @LDFLAGS@ @LIBS@ -lm -lpthread
+CPPLDFLAGS  = @LDFLAGS@ @LIBS@
 
 ifeq ($(STYLE),release)
      CFLAGS = @DEFS@ -DNDEBUG @CFLAGS@ $(INCPATH) $(SHARED)
      CXXFLAGS    = @DEFS@ -DNDEBUG @CXXFLAGS@ $(INCPATH) $(SHARED)
-     CPPLDFLAGS  = @LDFLAGS@ @LIBS@ -lm -lpthread
+     CPPLDFLAGS  = @LDFLAGS@ @LIBS@
 endif
 
 ifeq ($(STYLE),profile)

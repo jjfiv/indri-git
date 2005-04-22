@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Indri, 1.0, indri-info@ciir.cs.umass.edu)
+AC_INIT(Indri, 2.0, indri-info@ciir.cs.umass.edu)
 AC_CONFIG_SRCDIR(indri.sln)
 AC_CONFIG_FILES(MakeDefns Makefile.app)
 dnl To use a header file instead of command line -D defs, use
@@ -14,9 +14,9 @@ AC_PROG_LEX
 AC_PROG_INSTALL
 AC_CHECK_PROGS(AR, ar gar)
 
-AC_SUBST(HOST_OS)
 dnl Checks for libraries.
-
+AC_CHECK_LIB(m, log)
+AC_CHECK_LIB(pthread, pthread_create)
 dnl If/when we add client server
 case $host in
    *-*-solaris*) 
@@ -31,7 +31,9 @@ case $host in
      ;;
    *);;
 esac
+AC_SUBST(HOST_OS)
 AC_CHECK_LIB(z, deflate)
+AC_CHECK_LIB(iberty, mkstemps)
 
 dnl Checks for header files.
 
@@ -40,6 +42,7 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_SYS_LARGEFILE
 
 dnl Checks for library functions.
+AC_CHECK_FUNCS(mkstemp)
 
 dnl Finish up and output.
 AC_SUBST(WITH_SWIG)
