@@ -84,7 +84,7 @@ indri::index::DocListMemoryBuilderIterator::DocListMemoryBuilderIterator() {
 
 indri::index::DocListMemoryBuilderIterator::DocListMemoryBuilderIterator( class DocListMemoryBuilder& builder, TermData* termData )
 {
-  reset( builder, _termData );
+  reset( builder, termData );
 }
 
 //
