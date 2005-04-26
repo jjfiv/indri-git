@@ -600,6 +600,10 @@ indri::api::ParsedDocument* indri::collection::CompressedCollection::retrieve( i
     LEMUR_THROW( LEMUR_IO_ERROR, "Unable to find document " + i64_to_string(documentID) + " in the collection." );
   }
 
+  // flush output buffer; make sure all data is on disk
+  if( _output )
+    _output->flush();
+
   // decompress the data
   indri::utility::Buffer output;
   z_stream_s stream;
