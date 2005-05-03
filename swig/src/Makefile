@@ -8,7 +8,12 @@ LIBS=$(wildcard ../../obj/*.o) $(wildcard $(patsubst %, ../../contrib/%/obj/*.o,
 LDFLAGS = $(LIBPATH) $(LIBS) $(CPPLDFLAGS)
 SRC=interface/indri.i
 PHPSRC=php/indri.i
-LFLAGS=-shared
+ifeq ($(HOST_OS), solaris)
+  LFLAGS=-G
+else
+  LFLAGS=-shared
+endif
+
 OBJ=../obj
 OUTDIR=$(OBJ)/java/edu/umass/cs/indri
 OUTDIRUI=$(OBJ)/java/edu/umass/cs/indri/ui

@@ -43,6 +43,7 @@ AC_SYS_LARGEFILE
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(mkstemp)
+AC_CHECK_FUNCS(mkstemps)
 
 dnl Finish up and output.
 AC_SUBST(WITH_SWIG)

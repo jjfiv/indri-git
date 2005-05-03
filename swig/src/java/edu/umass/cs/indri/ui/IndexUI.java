@@ -682,6 +682,7 @@ public class IndexUI extends JPanel implements ActionListener,
 	String [] metafields = colFields.getText().split(",");;
 	String [] stopwords = new String[0];
 	env.setIndexedFields(fields);
+        // this needs to address the forward/backward/metadata distinction.
 	env.setMetadataIndexedFields(metafields, metafields);	
 	String stops = stopwordlist.getText();
 	if (! stops.equals("")) {
@@ -731,7 +732,10 @@ public class IndexUI extends JPanel implements ActionListener,
 	    spec.index = new String[vec.size()];
 	    vec.copyInto(spec.index);
 	}
-	
+	/* FIXME: forward/backward and plain metadata have to address the
+           issue of inserting entries for all names that conflate to a given
+           name.
+         */
 	// metadata fields.
 	vec.clear();
 	for (int i = 0; i < spec.metadata.length; i++)
