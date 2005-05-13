@@ -341,7 +341,7 @@ void indri::file::BulkTreeWriter::_flush( int blockIndex ) {
     _blocks.back()->insertFirstKey( flusher, _blockID );
   }
 
-  _write->write( flusher.data(), indri::file::BulkBlock::dataSize() );
+  _write.write( flusher.data(), indri::file::BulkBlock::dataSize() );
   flusher.clear();
   _blockID++;
   _flushLevel = lemur_compat::max( blockIndex, _flushLevel );
@@ -363,9 +363,9 @@ void indri::file::BulkTreeWriter::_flushAll() {
   }
 }
 
-indri::file::BulkTreeWriter::BulkTreeWriter() 
+indri::file::BulkTreeWriter::BulkTreeWriter() :
+  _write( _file, 1024*1024 )
 {
-  _write = new SequentialWriteBuffer( _file, 1024*1024 );
   _blockID = 0;
   _blocks.push_back( new BulkBlock(true) );
   _flushLevel = 0;
@@ -373,7 +373,6 @@ indri::file::BulkTreeWriter::BulkTreeWriter()
 
 indri::file::BulkTreeWriter::~BulkTreeWriter() {
   indri::utility::delete_vector_contents( _blocks );
-  delete(_write);
 }
 
 void indri::file::BulkTreeWriter::create( const std::string& filename ) {
@@ -415,13 +414,13 @@ bool indri::file::BulkTreeWriter::get( UINT32 key, char* value, int& actual, int
 
 void indri::file::BulkTreeWriter::close() { 
   _flushAll();
-  _write->flush();
+  _write.flush();
   _file.close();
 }
 
 void indri::file::BulkTreeWriter::flush() {
   _flushAll();
-  _write->flush();
+  _write.flush();
 }
 
 // ==============
