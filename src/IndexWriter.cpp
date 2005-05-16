@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 //
 // IndexWriter
@@ -405,7 +405,7 @@ void IndexWriter::_addInvertedListData( indri::utility::greedy_vector<WriterInde
   const float topdocsFraction = 0.01f;
   bool hasTopdocs = termData->corpus.documentCount > TOPDOCS_DOCUMENT_COUNT;
   bool isFrequent = termData->corpus.totalCount > FREQUENT_TERM_COUNT;
-  int topdocsCount = hasTopdocs ? int(termData->corpus.totalCount * 0.01) : 0;
+  int topdocsCount = hasTopdocs ? int(termData->corpus.documentCount * 0.01) : 0;
   int topdocsSpace = hasTopdocs ? ((topdocsCount*3*sizeof(UINT32)) + sizeof(int)) : 0;
 
   // write a control byte
@@ -421,8 +421,8 @@ void IndexWriter::_addInvertedListData( indri::utility::greedy_vector<WriterInde
 
   // maintain a list of top documents
   std::priority_queue<DocListIterator::TopDocument,
-                      std::vector<DocListIterator::TopDocument>,
-                      DocListIterator::TopDocument::less> topdocs;
+    std::vector<DocListIterator::TopDocument>,
+    DocListIterator::TopDocument::less> topdocs;
   DocListIterator::TopDocument::less docLess;
   double threshold = 0;
 
@@ -540,7 +540,7 @@ void IndexWriter::_storeStringEntry( IndexWriter::keyfile_pair& pair, indri::ind
   indri::utility::RVLCompressStream stringStream( _termDataBuffer );
 
   disktermdata_compress( stringStream, diskTermData, _fields.size(), indri::index::DiskTermData::WithTermID |
-                                                                        indri::index::DiskTermData::WithOffsets );
+                         indri::index::DiskTermData::WithOffsets );
 
   pair.stringMap->put( diskTermData->termData->term, stringStream.data(), stringStream.dataSize() );
 }
@@ -555,7 +555,7 @@ void IndexWriter::_storeIdEntry( IndexWriter::keyfile_pair& pair, indri::index::
   indri::utility::RVLCompressStream idStream( _termDataBuffer );
 
   disktermdata_compress( idStream, diskTermData, _fields.size(), indri::index::DiskTermData::WithString |
-                                                                    indri::index::DiskTermData::WithOffsets );
+                         indri::index::DiskTermData::WithOffsets );
 
   pair.idMap->put( diskTermData->termID, idStream.data(), idStream.dataSize() );
 }
@@ -683,15 +683,15 @@ void IndexWriter::_writeInvertedLists( std::vector<WriterIndexContext*>& context
   // in the process, create a new list of termIDs from the old list
   
   std::priority_queue<WriterIndexContext*,
-                      std::vector<WriterIndexContext*>,
-                      WriterIndexContext::less> invertedLists;
+    std::vector<WriterIndexContext*>,
+    WriterIndexContext::less> invertedLists;
   indri::utility::Buffer invertedListBuffer;
 
   UINT64 startOffset;
   UINT64 endOffset;
 
   // clear out the term buffer
-  char term[Keyfile::MAX_KEY_LENGTH+1];
+  char term[lemur::file::Keyfile::MAX_KEY_LENGTH+1];
   term[0] = 0;
 
   _documentBase = contexts[0]->index->documentBase();
@@ -704,7 +704,7 @@ void IndexWriter::_writeInvertedLists( std::vector<WriterIndexContext*>& context
 
   indri::utility::greedy_vector<WriterIndexContext*> current;
   indri::index::TermData* termData = ::termdata_create( _fields.size() );
-  char termBuffer[Keyfile::MAX_KEY_LENGTH+1] = {0};
+  char termBuffer[lemur::file::Keyfile::MAX_KEY_LENGTH+1] = {0};
   termData->term = termBuffer;
   _isFrequentCount = 0;
 
@@ -771,12 +771,12 @@ int IndexWriter::_lookupTermID( indri::file::BulkTreeReader& keyfile, const char
 //
 
 indri::index::TermTranslator* IndexWriter::_buildTermTranslator( indri::file::BulkTreeReader& newInfrequentTerms,
-                                            indri::file::BulkTreeReader& newFrequentTerms,
-                                            TermRecorder& oldFrequentTermsRecorder,
-                                            indri::utility::HashTable<int, int>* oldInfrequentHashTable,
-                                            TermRecorder& newFrequentTermsRecorder,
-                                            Index* index,
-                                            TermBitmap* bitmap )
+                                                                 indri::file::BulkTreeReader& newFrequentTerms,
+                                                                 TermRecorder& oldFrequentTermsRecorder,
+                                                                 indri::utility::HashTable<int, int>* oldInfrequentHashTable,
+                                                                 TermRecorder& newFrequentTermsRecorder,
+                                                                 Index* index,
+                                                                 TermBitmap* bitmap )
 {
   int newTermCount = _corpus.uniqueTerms;
   int oldTermCount = index->uniqueTermCount();
@@ -842,11 +842,11 @@ indri::index::TermTranslator* IndexWriter::_buildTermTranslator( indri::file::Bu
 
   TermTranslator* translator = new TermTranslator( oldFrequentCount,
                                                    newFrequentCount,
-                                                  oldTermCount,
-                                                  newTermCount,
-                                                  frequent,
-                                                  oldInfrequentHashTable,
-                                                  bitmap );
+                                                   oldTermCount,
+                                                   newTermCount,
+                                                   frequent,
+                                                   oldInfrequentHashTable,
+                                                   bitmap );
 
   return translator;
 }
@@ -856,9 +856,9 @@ indri::index::TermTranslator* IndexWriter::_buildTermTranslator( indri::file::Bu
 //
 
 void IndexWriter::_writeDirectLists( WriterIndexContext* context,
-                                    indri::file::SequentialWriteBuffer* directOutput,
-                                    indri::file::SequentialWriteBuffer* lengthsOutput,
-                                    indri::file::SequentialWriteBuffer* dataOutput ) {
+                                     indri::file::SequentialWriteBuffer* directOutput,
+                                     indri::file::SequentialWriteBuffer* lengthsOutput,
+                                     indri::file::SequentialWriteBuffer* dataOutput ) {
 
   VocabularyIterator* vocabulary = context->index->frequentVocabularyIterator();
   indri::index::Index* index = context->index;
