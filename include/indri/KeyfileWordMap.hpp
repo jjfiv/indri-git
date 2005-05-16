@@ -26,13 +26,14 @@
 #include "lemur/Keyfile.hpp"
 namespace indri
 {
+  /// filesystem interaction components
   namespace file
   {
     
     class KeyfileWordMap {
     private:
-      Keyfile _wordToInt;
-      Keyfile _intToWord;
+      lemur::file::Keyfile _wordToInt;
+      lemur::file::Keyfile _intToWord;
       char _wordBuffer[ 1024 ];
 
     public:

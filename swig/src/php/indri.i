@@ -78,7 +78,7 @@ public:
 %exception method {
   try {
     $action
-  } catch( Exception& e ) {
+  } catch( lemur::api::Exception& e ) {
 //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
       // get a warning message rather than abort the script.
       zend_error(E_WARNING, e.what().c_str());
@@ -106,14 +106,14 @@ public:
   void setStopwords( const std::vector<std::string>& stopwords );
 
   std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
-  std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested );
+  std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
   QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
-  QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested );
+  QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
 
-  std::vector<ParsedDocument*> documentsdocids( const std::vector<DOCID_T>& documentIDs );
+  std::vector<ParsedDocument*> documentsdocids( const std::vector<lemur::api::DOCID_T>& documentIDs );
   std::vector<ParsedDocument*> documents( const std::vector<ScoredExtentResult>& results );
 
-  std::vector<std::string> documentMetadatadocids( const std::vector<DOCID_T>& documentIDs, const std::string& attributeName );
+  std::vector<std::string> documentMetadatadocids( const std::vector<lemur::api::DOCID_T>& documentIDs, const std::string& attributeName );
   std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
 
   INT64 termCount();

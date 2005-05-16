@@ -63,7 +63,7 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
 
       try {
         harvest_anchor_text_file( *files, anchorText, parser );
-      } catch( Exception& e ) {
+      } catch( lemur::api::Exception& e ) {
         std::cout << e.what() << std::endl;
       }
     }
@@ -133,7 +133,7 @@ int main(int argc, char * argv[]) {
     // step 6: sort resulting corpus files
     if( parameters.get( "sort", 1 ) )
       combiner.sortCorpusFiles( sortedPath, preSortPath, harvestPath );
-  } catch( Exception& e ) {
+  } catch( lemur::api::Exception& e ) {
     LEMUR_ABORT(e);
   }
 

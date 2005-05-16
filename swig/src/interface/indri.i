@@ -34,7 +34,7 @@ typedef long long UINT64;
 %exception {
   try {
     $action
-  } catch( Exception& e ) {
+  } catch( lemur::api::Exception& e ) {
     SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
     // control does not leave method when thrown.
     return $null;

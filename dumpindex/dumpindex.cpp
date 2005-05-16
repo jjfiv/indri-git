@@ -225,9 +225,9 @@ void print_document_data( indri::collection::Repository& r, const char* number )
 
 void print_document_vector( indri::collection::Repository& r, const char* number ) {
   indri::server::LocalQueryServer local(r);
-  DOCID_T documentID = atoi( number );
+  lemur::api::DOCID_T documentID = atoi( number );
 
-  std::vector<DOCID_T> documentIDs;
+  std::vector<lemur::api::DOCID_T> documentIDs;
   documentIDs.push_back(documentID);
 
   indri::server::QueryServerVectorsResponse* response = local.documentVectors( documentIDs );
@@ -261,7 +261,7 @@ void print_document_id( indri::collection::Repository& r, const char* an, const 
   indri::collection::CompressedCollection* collection = r.collection();
   std::string attributeName = an;
   std::string attributeValue = av;
-  std::vector<DOCID_T> documentIDs;
+  std::vector<lemur::api::DOCID_T> documentIDs;
 
   documentIDs = collection->retrieveIDByMetadatum( attributeName, attributeValue );
 
@@ -335,7 +335,7 @@ int main( int argc, char** argv ) {
 
     r.close();
     return 0;
-  } catch( Exception& e ) {
+  } catch( lemur::api::Exception& e ) {
     LEMUR_ABORT(e);
   }
 }

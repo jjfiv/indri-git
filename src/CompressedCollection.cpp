@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -337,7 +337,7 @@ void indri::collection::CompressedCollection::create( const std::string& fileNam
     metalookupName << "forwardLookup" << i;
 
     std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-    Keyfile* metalookup = new Keyfile;
+    lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
     metalookup->create( metalookupPath );
 
     const char* key = string_set_add( forwardIndexedFields[i].c_str(), _strings );
@@ -352,7 +352,7 @@ void indri::collection::CompressedCollection::create( const std::string& fileNam
     metalookupName << "reverseLookup" << i;
 
     std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-    Keyfile* metalookup = new Keyfile;
+    lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
     metalookup->create( metalookupPath );
 
     const char* key = string_set_add( reverseIndexedFields[i].c_str(), _strings );
@@ -387,7 +387,7 @@ void indri::collection::CompressedCollection::open( const std::string& fileName 
       metalookupName << "forwardLookup" << i;
 
       std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-      Keyfile* metalookup = new Keyfile;
+      lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
       metalookup->open( metalookupPath );
 
       std::string fieldName = forward[i];
@@ -406,7 +406,7 @@ void indri::collection::CompressedCollection::open( const std::string& fileName 
       metalookupName << "reverseLookup" << i;
 
       std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-      Keyfile* metalookup = new Keyfile;
+      lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
       metalookup->open( metalookupPath );
 
       std::string fieldName = reverse[i];
@@ -440,7 +440,7 @@ void indri::collection::CompressedCollection::openRead( const std::string& fileN
       metalookupName << "forwardLookup" << i;
 
       std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-      Keyfile* metalookup = new Keyfile;
+      lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
       metalookup->openRead( metalookupPath );
 
       std::string fieldName = forward[i];
@@ -457,7 +457,7 @@ void indri::collection::CompressedCollection::openRead( const std::string& fileN
       metalookupName << "reverseLookup" << i;
 
       std::string metalookupPath = indri::file::Path::combine( fileName, metalookupName.str() );
-      Keyfile* metalookup = new Keyfile;
+      lemur::file::Keyfile* metalookup = new lemur::file::Keyfile;
       metalookup->openRead( metalookupPath );
 
       std::string fieldName = reverse[i];
@@ -481,7 +481,7 @@ void indri::collection::CompressedCollection::close() {
 
   _storage.close();
 
-  indri::utility::HashTable<const char*, Keyfile*>::iterator iter;
+  indri::utility::HashTable<const char*, lemur::file::Keyfile*>::iterator iter;
 
   for( iter = _forwardLookups.begin(); iter != _forwardLookups.end(); iter++ ) {
     (*iter->second)->close();
@@ -529,7 +529,7 @@ void indri::collection::CompressedCollection::addDocument( int documentID, indri
   for( size_t i=0; i<document->metadata.size(); i++ ) {
     _writeMetadataItem( document, i, keyLength, valueLength );
 
-    Keyfile** metalookup;
+    lemur::file::Keyfile** metalookup;
     metalookup = _forwardLookups.find( document->metadata[i].key );
 
     if( metalookup ) {
@@ -541,7 +541,7 @@ void indri::collection::CompressedCollection::addDocument( int documentID, indri
     metalookup = _reverseLookups.find( document->metadata[i].key );
 
     // silently discard any value that is too long to be a key.
-    if( metalookup && document->metadata[i].valueLength < Keyfile::MAX_KEY_LENGTH ) {
+    if( metalookup && document->metadata[i].valueLength < lemur::file::Keyfile::MAX_KEY_LENGTH ) {
       // there may be more than one reverse lookup here, so we fetch any old ones:
       indri::utility::greedy_vector<int> documentIDs;
       int dataSize = (*metalookup)->getSize( (const char*)document->metadata[i].value );
@@ -678,7 +678,7 @@ indri::api::ParsedDocument* indri::collection::CompressedCollection::retrieve( i
 std::string indri::collection::CompressedCollection::retrieveMetadatum( int documentID, const std::string& attributeName ) {
   indri::thread::ScopedLock l( _lock );
 
-  Keyfile** metalookup = _forwardLookups.find( attributeName.c_str() );
+  lemur::file::Keyfile** metalookup = _forwardLookups.find( attributeName.c_str() );
   std::string result;
 
   if( metalookup ) {
@@ -698,20 +698,19 @@ std::string indri::collection::CompressedCollection::retrieveMetadatum( int docu
     //This returns the first occurence, rather than the last
     // one gets if a forward lookup table is used.
     /*
-    indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( document->metadata.begin(),
-                                                              document->metadata.end(),
-                                                              indri::parse::MetadataPair::key_equal( attributeName.c_str() ) );
+      indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( document->metadata.begin(),
+      document->metadata.end(),
+      indri::parse::MetadataPair::key_equal( attributeName.c_str() ) );
     
-    if( iter != document->metadata.end() ) {
+      if( iter != document->metadata.end() ) {
       result = (char*) iter->value;
-    }
+      }
     */
     indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter;
     for( iter=document->metadata.begin(); iter !=  document->metadata.end();
          iter++ ) 
       if(!strcmp((*iter).key, attributeName.c_str() ) )
         result = (char*) iter->value;
-
     delete document;
   }
 
@@ -726,7 +725,7 @@ std::vector<int> indri::collection::CompressedCollection::retrieveIDByMetadatum(
   indri::thread::ScopedLock l( _lock );
 
   // find the lookup associated with this field
-  Keyfile** metalookup = _reverseLookups.find( attributeName.c_str() );
+  lemur::file::Keyfile** metalookup = _reverseLookups.find( attributeName.c_str() );
   std::vector<int> results;
 
   // if we have a lookup, find the associated documentIDs for this value

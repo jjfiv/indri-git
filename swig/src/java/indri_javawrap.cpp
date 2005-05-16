@@ -821,7 +821,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getQ
         try {
             result = (indri::api::QueryAnnotationNode *)((indri::api::QueryAnnotation const *)arg1)->getQueryTree();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -856,7 +856,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_1getA
                 result = (indri::infnet::EvaluatorNode::MResults *) &_result_ref;
             }
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -925,7 +925,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryAnnotation_
                 result = (std::vector<indri::api::ScoredExtentResult > *) &_result_ref;
             }
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -948,7 +948,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryAnnotation(JN
         try {
             result = (indri::api::QueryAnnotation *)new indri::api::QueryAnnotation();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -969,7 +969,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryAnnotation(
         try {
             delete arg1;
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -998,7 +998,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addSer
         try {
             (arg1)->addServer((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1027,7 +1027,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1addInd
         try {
             (arg1)->addIndex((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1056,7 +1056,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1remove
         try {
             (arg1)->removeServer((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1085,7 +1085,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1remove
         try {
             (arg1)->removeIndex((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1104,7 +1104,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1close(
         try {
             (arg1)->close();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1125,7 +1125,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setMem
         try {
             (arg1)->setMemory(arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1160,7 +1160,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSco
         try {
             (arg1)->setScoringRules((std::vector<std::string > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1195,7 +1195,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1setSto
         try {
             (arg1)->setStopwords((std::vector<std::string > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1228,7 +1228,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->runQuery((std::string const &)*arg2,arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1278,7 +1278,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->runQuery((std::string const &)*arg2,(std::vector<int > const &)*arg3,arg4);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1315,7 +1315,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
         try {
             result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1363,7 +1363,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1runAn
         try {
             result = (indri::api::QueryAnnotation *)(arg1)->runAnnotatedQuery((std::string const &)*arg2,(std::vector<int > const &)*arg3,arg4);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1399,7 +1399,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->documents((std::vector<int > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1457,7 +1457,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->documents((std::vector<indri::api::ScoredExtentResult > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1514,7 +1514,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->documentMetadata((std::vector<int > const &)*arg2,(std::string const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1580,7 +1580,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->documentMetadata((std::vector<indri::api::ScoredExtentResult > const &)*arg2,(std::string const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1612,7 +1612,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
         try {
             result = (INT64)(arg1)->termCount();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1645,7 +1645,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termC
         try {
             result = (INT64)(arg1)->termCount((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1688,7 +1688,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termF
         try {
             result = (INT64)(arg1)->termFieldCount((std::string const &)*arg2,(std::string const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1711,7 +1711,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->fieldList();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1743,7 +1743,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
         try {
             result = (INT64)(arg1)->documentCount();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1776,7 +1776,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1docum
         try {
             result = (INT64)(arg1)->documentCount((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1812,7 +1812,7 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
         try {
             result = (arg1)->documentVectors((std::vector<int > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1842,7 +1842,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1QueryEnvironment(J
         try {
             result = (indri::api::QueryEnvironment *)new indri::api::QueryEnvironment();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1863,7 +1863,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1QueryEnvironment
         try {
             delete arg1;
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1908,7 +1908,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexStatus_1status(JNIE
         try {
             (arg1)->status(arg2,(std::string const &)*arg3,(std::string const &)*arg4,arg5,arg6);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1927,7 +1927,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexStatus(JNIEnv
         try {
             result = (indri::api::IndexStatus *)new SwigDirector_IndexStatus(jenv);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1958,7 +1958,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexStatus(JNIE
         try {
             delete arg1;
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -1977,7 +1977,7 @@ JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_new_1IndexEnvironment(J
         try {
             result = (indri::api::IndexEnvironment *)new indri::api::IndexEnvironment();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -1998,7 +1998,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexEnvironment
         try {
             delete arg1;
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2037,7 +2037,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnc
         try {
             (arg1)->setAnchorTextPath((std::string const &)*arg2,(std::string const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2217,7 +2217,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         try {
             (arg1)->addFileClass((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,(std::vector<std::string > const &)*arg8,(std::vector<std::string > const &)*arg9,(std::vector<std::string > const &)*arg10,(std::vector<std::string > const &)*arg11,(std::map<std::string,std::string > const &)*arg12);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2248,7 +2248,7 @@ JNIEXPORT jobject JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1get
         try {
             result = (indri::parse::FileClassEnvironmentFactory::Specification *)(arg1)->getFileClassSpec((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -2323,7 +2323,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         try {
             (arg1)->addFileClass((indri::parse::FileClassEnvironmentFactory::Specification const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2358,7 +2358,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setInd
         try {
             (arg1)->setIndexedFields((std::vector<std::string > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2389,7 +2389,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNum
         try {
             (arg1)->setNumericField((std::string const &)*arg2,arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2440,7 +2440,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMet
         try {
             (arg1)->setMetadataIndexedFields((std::vector<std::string > const &)*arg2,(std::vector<std::string > const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2475,7 +2475,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSto
         try {
             (arg1)->setStopwords((std::vector<std::string > const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2504,7 +2504,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setSte
         try {
             (arg1)->setStemmer((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2525,7 +2525,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setMem
         try {
             (arg1)->setMemory(arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2546,7 +2546,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNor
         try {
             (arg1)->setNormalization(arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2577,7 +2577,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
         try {
             (arg1)->create((std::string const &)*arg2,arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2606,7 +2606,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1create
         try {
             (arg1)->create((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2637,7 +2637,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1
         try {
             (arg1)->open((std::string const &)*arg2,arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2666,7 +2666,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1open_1
         try {
             (arg1)->open((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2685,7 +2685,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1close(
         try {
             (arg1)->close();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2714,7 +2714,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         try {
             (arg1)->addFile((std::string const &)*arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2753,7 +2753,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         try {
             (arg1)->addFile((std::string const &)*arg2,(std::string const &)*arg3);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return ;
@@ -2875,7 +2875,7 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addStr
         try {
             result = (int)(arg1)->addString((std::string const &)*arg2,(std::string const &)*arg3,(std::vector<indri::parse::MetadataPair > const &)*arg4);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -2900,7 +2900,7 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addPar
         try {
             result = (int)(arg1)->addParsedDocument(arg2);
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -2923,7 +2923,7 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1docume
         try {
             result = (int)(arg1)->documentsIndexed();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
@@ -2946,7 +2946,7 @@ JNIEXPORT jint JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1docume
         try {
             result = (int)(arg1)->documentsSeen();
             
-        } catch( Exception& e ) {
+        } catch( lemur::api::Exception& e ) {
             SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
             // control does not leave method when thrown.
             return 0;
