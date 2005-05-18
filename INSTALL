@@ -41,9 +41,7 @@ installed in <install-directory>/bin.
 
 <p> Documentation will be installed in
 <install-directory>/share/indri/doc. The file index.html points into the
-doxygen generated documentation. The file querylang.txt provides a
-synopsis of the indri query language and the file
-"Indri&nbsp;Query&nbsp;Language&nbsp;Reference&nbsp;092004.pdf" provides
+doxygen generated documentation. The file IndriQueryLanguage.html provides
 a more complete description of the indri query language. Documentation
 for the Indri JNI will be installed in
 <install-directory>/share/indri/JNIdoc. The file index.html points into the
