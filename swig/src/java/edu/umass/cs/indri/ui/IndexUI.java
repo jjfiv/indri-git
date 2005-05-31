@@ -929,7 +929,7 @@ public class IndexUI extends JPanel implements ActionListener,
 		messages.append("Error in " + documentFile + " : " + error + 
 				"\n");
 	    } else if (code == action_code.DocumentCount.swigValue()) {
-		if( (documentsIndexed % 50) == 0)
+		if( (documentsIndexed % 500) == 0)
 		    messages.append( "Documents: " + documentsIndexed + "\n" );
 	    }
 	    int len = messages.getText().length();
