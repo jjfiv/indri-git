@@ -196,6 +196,10 @@ int indri::index::MemoryIndex::field( const char* fieldName ) {
 
 UINT64 indri::index::MemoryIndex::documentCount( const std::string& term ) {
   term_entry** entry = _stringToTerm.find( term.c_str() );
+
+  if( !entry )
+    return 0;
+
   return (*entry)->termData->corpus.documentCount;
 }
 
@@ -266,7 +270,12 @@ UINT64 indri::index::MemoryIndex::termCount() {
 //
 
 UINT64 indri::index::MemoryIndex::termCount( const std::string& term ) {
-  return _corpusStatistics.totalTerms;
+  term_entry** entry = _stringToTerm.find( term.c_str() );
+
+  if( !entry )
+    return 0;
+
+  return (*entry)->termData->corpus.totalCount;
 }
 
 //
