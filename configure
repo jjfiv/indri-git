@@ -273,7 +273,7 @@ PACKAGE_STRING='Indri 2.0'
 PACKAGE_BUGREPORT='indri-info@ciir.cs.umass.edu'
 
 ac_unique_file="indri.sln"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR HOST_OS WITH_SWIG SWIG JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR SHARED HOST_OS WITH_SWIG SWIG JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2886,6 +2886,7 @@ done
 
 
 
+
 echo "$as_me:$LINENO: checking for log in -lm" >&5
 echo $ECHO_N "checking for log in -lm... $ECHO_C" >&6
 if test "${ac_cv_lib_m_log+set}" = set; then
@@ -3149,6 +3150,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HOST_OS solaris
 _ACEOF
 
+     SHARED=-shared -fPIC
      ;;
    *linux*)
      HOST_OS=linux
@@ -3157,6 +3159,16 @@ cat >>confdefs.h <<\_ACEOF
 #define HOST_OS linux
 _ACEOF
 
+     SHARED=-shared -fPIC
+     ;;
+   *-*-darwin*)
+     HOST_OS=darwin
+
+cat >>confdefs.h <<\_ACEOF
+#define HOST_OS darwin
+_ACEOF
+
+     SHARED=
      ;;
    *);;
 esac
@@ -3928,7 +3940,7 @@ done
    echo "$as_me:$LINENO: checking for java include file jni.h" >&5
 echo $ECHO_N "checking for java include file jni.h... $ECHO_C" >&6
    if test -z "$JAVAINCDIR"; then
-     JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include"
+     JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include /System/Library/Frameworks/JavaVM.framework/Headers/"
    fi
    JAVAINC=""
    for d in $JAVAINCDIR ; do
@@ -4734,6 +4746,7 @@ s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@AR@,$AR,;t t
+s,@SHARED@,$SHARED,;t t
 s,@HOST_OS@,$HOST_OS,;t t
 s,@WITH_SWIG@,$WITH_SWIG,;t t
 s,@SWIG@,$SWIG,;t t
