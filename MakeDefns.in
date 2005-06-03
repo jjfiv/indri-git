@@ -78,7 +78,7 @@ OBJ = $(CPPOBJ) $(COBJ)
 
 # application makefiles should set SHARED=
 # (see buildindex/Makefile
-SHARED = -shared -fPIC
+SHARED = @SHARED@
 
 # C compiler and compiling options
 # C++ compiler and compiling/linking options

@@ -13,6 +13,7 @@ AC_PROG_CXX
 AC_PROG_LEX
 AC_PROG_INSTALL
 AC_CHECK_PROGS(AR, ar gar)
+AC_SUBST(SHARED)
 
 dnl Checks for libraries.
 AC_CHECK_LIB(m, log)
@@ -24,10 +25,17 @@ case $host in
      AC_CHECK_LIB(socket, socket)
      HOST_OS=solaris
      AC_DEFINE(HOST_OS, solaris, [osname for jni build])
+     SHARED=-shared -fPIC
      ;;
    *linux*) 
      HOST_OS=linux
      AC_DEFINE(HOST_OS, linux, [osname for jni build])
+     SHARED=-shared -fPIC
+     ;;
+   *-*-darwin*)
+     HOST_OS=darwin
+     AC_DEFINE(HOST_OS, darwin, [osname for jni build])
+     SHARED=
      ;;
    *);;
 esac
@@ -90,7 +98,7 @@ if test "$enable_swig" = "yes" ; then
    fi
    AC_MSG_CHECKING(for java include file jni.h)
    if test -z "$JAVAINCDIR"; then
-     JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include"
+     JAVAINCDIR="/usr/j2sdk*/include /usr/local/j2sdk*/include /usr/jdk*/include /usr/local/jdk*/include /opt/j2sdk*/include /opt/jdk*/include /usr/java/include /usr/java/j2sdk*/include /usr/java/jdk*/include /usr/local/java/include /opt/java/include /usr/include/java /usr/local/include/java /usr/lib/java/include /System/Library/Frameworks/JavaVM.framework/Headers/"
    fi
    JAVAINC=""
    for d in $JAVAINCDIR ; do
