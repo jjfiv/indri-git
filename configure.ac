@@ -25,12 +25,12 @@ case $host in
      AC_CHECK_LIB(socket, socket)
      HOST_OS=solaris
      AC_DEFINE(HOST_OS, solaris, [osname for jni build])
-     SHARED=-shared -fPIC
+     SHARED="-shared -fPIC"
      ;;
    *linux*) 
      HOST_OS=linux
      AC_DEFINE(HOST_OS, linux, [osname for jni build])
-     SHARED=-shared -fPIC
+     SHARED="-shared -fPIC"
      ;;
    *-*-darwin*)
      HOST_OS=darwin

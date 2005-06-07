@@ -3150,7 +3150,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HOST_OS solaris
 _ACEOF
 
-     SHARED=-shared -fPIC
+     SHARED="-shared -fPIC"
      ;;
    *linux*)
      HOST_OS=linux
@@ -3159,7 +3159,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HOST_OS linux
 _ACEOF
 
-     SHARED=-shared -fPIC
+     SHARED="-shared -fPIC"
      ;;
    *-*-darwin*)
      HOST_OS=darwin
