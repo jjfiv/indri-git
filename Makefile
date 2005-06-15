@@ -50,5 +50,5 @@ endif
 	$(MAKE) install -C indrid
 	$(MAKE) install -C dumpindex
 	$(MAKE) install -C harvestlinks
-	$(MAKE) install -C doc
+#	$(MAKE) install -C doc
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)
