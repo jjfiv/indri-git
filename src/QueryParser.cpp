@@ -1878,7 +1878,7 @@ QueryParser::QueryParser(const ANTLR_USE_NAMESPACE(antlr)ParserSharedInputState&
 #line 728 "indrilang.g"
 			
 			std::string decodedString; 
-			base64_decode_string(decodedString, et->getText());
+			base64_decode_string(decodedString, qet->getText());
 			t = new indri::lang::IndexTerm( decodedString );
 			t->setStemmed(true);
 			_nodes.push_back(t);
