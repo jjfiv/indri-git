@@ -707,6 +707,10 @@ rawText returns [ indri::lang::IndexTerm* t ] {
     t = new indri::lang::IndexTerm(n->getText());
     _nodes.push_back(t);
   } |
+  nn:NEGATIVE_NUMBER {
+    t = new indri::lang::IndexTerm(nn->getText());
+    _nodes.push_back(t);
+  } |
   f:FLOAT {
     t = new indri::lang::IndexTerm(f->getText());
     _nodes.push_back(t);
