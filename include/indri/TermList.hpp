@@ -96,7 +96,7 @@ namespace indri {
           lastPosition = extent.end;
           
           assert( extent.id >= 0 );
-          assert( extent.begin > 0 );
+          assert( extent.begin >= 0 );
           assert( extent.end >= extent.begin );
 
           _fields.push_back( extent );
