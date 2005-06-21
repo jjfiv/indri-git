@@ -16,7 +16,7 @@ GENERATORS = ../src/generators
 
 # how to make a library from object files
 $(OBJLIB): $(SPECHEADERS) $(OBJ) $(SPECOBJS)
-	rm -f $@; $(AR) -rs $@ $(OBJ) $(SPECOBJS)
+	rm -f $@; $(AR) -rs $@ $(OBJ)
 
 #check this.
 $(SPECHEADERS): $(QUERYSPEC)
