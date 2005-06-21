@@ -508,9 +508,6 @@
 				RelativePath="..\include\indri\DeletedDocumentList.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\DenseVocabularyMap.hpp">
-			</File>
-			<File
 				RelativePath="..\include\indri\DirectoryIterator.hpp">
 			</File>
 			<File
@@ -913,9 +910,6 @@
 				RelativePath="..\include\indri\SmoothingAnnotatorWalker.hpp">
 			</File>
 			<File
-				RelativePath="..\include\indri\SparseVocabularyMap.hpp">
-			</File>
-			<File
 				RelativePath="..\include\indri\StemmerFactory.hpp">
 			</File>
 			<File
@@ -1013,9 +1007,6 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\VocabularyIterator.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\VocabularyMap.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Walker.hpp">
