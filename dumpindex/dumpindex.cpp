@@ -279,6 +279,28 @@ void print_document_id( indri::collection::Repository& r, const char* an, const 
   }
 }
 
+void print_repository_stats( indri::collection::Repository& r ) {
+  indri::server::LocalQueryServer local(r);
+  UINT64 termCount = local.termCount();
+  UINT64 docCount = local.documentCount();
+  std::vector<std::string> fields = local.fieldList();
+  indri::collection::Repository::index_state state = r.indexes();
+  UINT64 uniqueTermCount = 0;
+  for( size_t i=0; i<state->size(); i++ ) {
+    indri::index::Index* index = (*state)[i];
+    uniqueTermCount += index->uniqueTermCount();
+  }
+  std::cout << "Repository statistics:\n"
+            << "documents:\t" << docCount << "\n"
+            << "unique terms:\t" << uniqueTermCount    << "\n"
+            << "total terms:\t" << termCount    << "\n"
+            << "fields:\t\t";
+  for( size_t i=0; i<fields.size(); i++ ) {
+    std::cout << fields[i] << " ";
+  }
+  std::cout << std::endl;
+}
+
 void usage() {
   std::cout << "dumpindex <repository> <command> [ <argument> ]*" << std::endl;
   std::cout << "Valid commands are: " << std::endl;
@@ -286,12 +308,12 @@ void usage() {
   std::cout << "    term (t)             Term text      Print inverted list for a term" << std::endl;
   std::cout << "    termpositions (tp)   Term text      Print inverted list for a term, with positions" << std::endl;
   std::cout << "    fieldpositions (fp)  Field name     Print inverted list for a field, with positions" << std::endl;
-  std::cout << "    documentid (di)      Field, Value   Print the document IDs of documents having a metadata field"
-            << "                                              matching this value" << std::endl;
+  std::cout << "    documentid (di)      Field, Value   Print the document IDs of documents having a metadata field matching this value" << std::endl;
   std::cout << "    documentname (dn)    Document ID    Print the text representation of a document ID" << std::endl;
   std::cout << "    documenttext (dt)    Document ID    Print the text of a document" << std::endl;
   std::cout << "    documenttext (dd)    Document ID    Print the full representation of a document" << std::endl;
   std::cout << "    documentvector (dv)  Document ID    Print the document vector of a document" << std::endl;
+  std::cout << "    stats (s)                           Print statistics for the Repository" << std::endl;
 }
 
 #define REQUIRE_ARGS(n) { if( argc < n ) { usage(); return -1; } }
@@ -336,6 +358,9 @@ int main( int argc, char** argv ) {
     } else if( command == "il" || command == "invlist" ) {
       REQUIRE_ARGS(3);
       print_invfile( r );
+    } else if( command == "s" || command == "stats" ) {
+      REQUIRE_ARGS(3);
+      print_repository_stats( r );
     } else {
       r.close();
       usage();
