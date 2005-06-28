@@ -170,7 +170,8 @@ void print_term_counts( indri::collection::Repository& r, const std::string& ter
 
 void print_document_name( indri::collection::Repository& r, const char* number ) {
   indri::collection::CompressedCollection* collection = r.collection();
-  std::string documentName = collection->retrieveMetadatum( atoi( number ), "docid" );
+  //  std::string documentName = collection->retrieveMetadatum( atoi( number ), "docid" );
+  std::string documentName = collection->retrieveMetadatum( atoi( number ), "docno" );
   std::cout << documentName << std::endl;
 }
 
