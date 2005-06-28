@@ -28,6 +28,8 @@ void print_invfile( indri::collection::Repository& r ) {
 
   indri::index::Index* index = (*state)[0];
   indri::index::DocListFileIterator* iter = index->docListFileIterator();
+  if (iter == NULL) return;
+  
   iter->startIteration();
 
   while( !iter->finished() ) {
@@ -59,6 +61,8 @@ void print_field_positions( indri::collection::Repository& r, const std::string&
     indri::thread::ScopedLock( index->iteratorLock() );
 
     indri::index::DocExtentListIterator* iter = index->fieldListIterator( fieldString );
+    if (iter == NULL) continue;
+    
     iter->startIteration();
 
     int doc = 0;
@@ -107,6 +111,8 @@ void print_term_positions( indri::collection::Repository& r, const std::string& 
     indri::thread::ScopedLock( index->iteratorLock() );
 
     indri::index::DocListIterator* iter = index->docListIterator( stem );
+    if (iter == NULL) continue;
+    
     iter->startIteration();
 
     int doc = 0;
@@ -151,6 +157,8 @@ void print_term_counts( indri::collection::Repository& r, const std::string& ter
     indri::thread::ScopedLock( index->iteratorLock() );
 
     indri::index::DocListIterator* iter = index->docListIterator( stem );
+    if (iter == NULL) continue;
+
     iter->startIteration();
 
     int doc = 0;
