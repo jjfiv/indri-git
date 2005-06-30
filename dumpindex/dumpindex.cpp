@@ -21,26 +21,109 @@
 #include "indri/ScopedLock.hpp"
 #include <iostream>
 
-int count_term_in_documents( indri::collection::Repository& r, int termID, std::vector<int>& documents );
+//
+// Attempts to validate the index.  Right now it only checks
+// TermLists, but may do more in the future.
+//
+
+void validate( indri::collection::Repository& r ) {
+  indri::collection::Repository::index_state state = r.indexes();
+  indri::index::Index* index = (*state)[0];
+
+  indri::index::TermListFileIterator* iter = index->termListFileIterator();
+  int document = 1;
+  iter->startIteration();
+
+  while( !iter->finished() ) {
+    indri::index::TermList* list = iter->currentEntry();
+    
+    if( list->terms().size() != index->documentLength( document ) ) {
+      std::cout << "Document " << document << " length mismatch" << std::endl;
+    }
+
+    std::cout << document << std::endl;
+    const indri::index::TermList* flist = index->termList( document );
+
+    if( flist->terms().size() != list->terms().size() ) {
+      std::cout << "Fetched version of term list is different for " << document << std::endl;
+    }
+    delete flist;
+
+    document++;
+    iter->nextEntry();
+  }
+
+  if( (document-1) != index->documentCount() ) {
+    std::cout << "Document count (" << index->documentCount() << ") does not match term list count " << (document-1) << std::endl;
+  }
+
+  delete iter;
+}
+
+//
+// Print the whole inverted file.  Each term entry starts with 
+// a term statistics header (term, termCount, documentCount)
+// followed by indented rows (one per document) of the form:
+// (document, numPositions, pos1, pos2, ... posN ).
+//
 
 void print_invfile( indri::collection::Repository& r ) {
   indri::collection::Repository::index_state state = r.indexes();
 
   indri::index::Index* index = (*state)[0];
   indri::index::DocListFileIterator* iter = index->docListFileIterator();
-  if (iter == NULL) return;
-  
   iter->startIteration();
+  std::cout << index->termCount() << " " << index->documentCount() << std::endl;
 
   while( !iter->finished() ) {
     indri::index::DocListFileIterator::DocListData* entry = iter->currentEntry();
     indri::index::TermData* termData = entry->termData;
  
     entry->iterator->startIteration();
-    while( !entry->iterator->finished() )
-      entry->iterator->nextEntry();
 
-    std::cout << termData->term << std::endl;
+    std::cout << termData->term << " "
+              << termData->corpus.totalCount << " "
+              << termData->corpus.documentCount <<  std::endl;
+
+    while( !entry->iterator->finished() ) {
+      indri::index::DocListIterator::DocumentData* doc = entry->iterator->currentEntry();
+
+      std::cout << "\t" << doc->document << " " << doc->positions.size();
+      for( int i=0; i<doc->positions.size(); i++ ) {
+        std::cout << " " << doc->positions[i];
+      }
+      std::cout << std::endl;
+
+      entry->iterator->nextEntry();
+    }
+
+    iter->nextEntry();
+  }
+
+  delete iter;
+}
+
+// 
+// Prints the vocabulary of the index, including term statistics.
+//
+
+void print_vocabulary( indri::collection::Repository& r ) {
+  indri::collection::Repository::index_state state = r.indexes();
+
+  indri::index::Index* index = (*state)[0];
+  indri::index::VocabularyIterator* iter = index->vocabularyIterator();
+
+  iter->startIteration();
+  std::cout << "TOTAL" << " " << index->termCount() << " " << index->documentCount() << std::endl;
+
+  while( !iter->finished() ) {
+    indri::index::DiskTermData* entry = iter->currentEntry();
+    indri::index::TermData* termData = entry->termData;
+
+    std::cout << termData->term << " "
+              << termData->corpus.totalCount << " "
+              << termData->corpus.documentCount <<  std::endl;
+
     iter->nextEntry();
   }
 
@@ -313,6 +396,8 @@ void usage() {
   std::cout << "    documenttext (dt)    Document ID    Print the text of a document" << std::endl;
   std::cout << "    documenttext (dd)    Document ID    Print the full representation of a document" << std::endl;
   std::cout << "    documentvector (dv)  Document ID    Print the document vector of a document" << std::endl;
+  std::cout << "    invlist (il)         None           Print the contents of all inverted lists" << std::endl;
+  std::cout << "    vocabulary (v)       None           Print the vocabulary of the index" << std::endl;
   std::cout << "    stats (s)                           Print statistics for the Repository" << std::endl;
 }
 
@@ -358,6 +443,12 @@ int main( int argc, char** argv ) {
     } else if( command == "il" || command == "invlist" ) {
       REQUIRE_ARGS(3);
       print_invfile( r );
+    } else if( command == "v" || command == "vocabulary" ) {
+      REQUIRE_ARGS(3);
+      print_vocabulary( r );
+    } else if( command == "vtl" || command == "validate" ) {
+      REQUIRE_ARGS(3);
+      validate(r);
     } else if( command == "s" || command == "stats" ) {
       REQUIRE_ARGS(3);
       print_repository_stats( r );
