@@ -48,6 +48,7 @@ dnl Checks for header files.
 dnl Checks for typedefs, structures, and compiler characteristics.
 
 AC_SYS_LARGEFILE
+AC_FUNC_FSEEKO
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(mkstemp)
