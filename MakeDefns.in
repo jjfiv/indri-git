@@ -1,6 +1,5 @@
 SHELL = @SHELL@
 host_os = @host_os@
-HOST_OS = @HOST_OS@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
