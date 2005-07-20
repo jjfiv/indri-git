@@ -227,15 +227,15 @@ static int UINT32_lc_if_compressed(UINT32 i)
 
 static int UINT64_lc_if_compressed(UINT64 i)
 {
-  if      ( i<                128UL ) return(1);
-  else if ( i<              16384UL ) return(2);
-  else if ( i<            2097152UL ) return(3);
-  else if ( i<          268435456UL ) return(4);
-  else if ( i<        34359738368UL ) return(5);
-  else if ( i<      4398046511104UL ) return(6);
-  else if ( i<    562949953421312UL ) return(7);
-  else if ( i<  72057594037927936UL ) return(8);
-  else if ( i<9223372036854775808UL ) return(9);
+  if      ( i<                UINT64_C(128) ) return(1);
+  else if ( i<              UINT64_C(16384) ) return(2);
+  else if ( i<            UINT64_C(2097152) ) return(3);
+  else if ( i<          UINT64_C(268435456) ) return(4);
+  else if ( i<        UINT64_C(34359738368) ) return(5);
+  else if ( i<      UINT64_C(4398046511104) ) return(6);
+  else if ( i<    UINT64_C(562949953421312) ) return(7);
+  else if ( i<  UINT64_C(72057594037927936) ) return(8);
+  else if ( i<UINT64_C(9223372036854775808) ) return(9);
   else return(10);
 }
 
