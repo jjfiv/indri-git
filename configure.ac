@@ -24,12 +24,15 @@ case $host in
      AC_CHECK_LIB(nsl, gethostbyname)
      AC_CHECK_LIB(socket, socket)
      SHARED="-shared -fPIC"
+     SWIG_SHARED="-G"
      ;;
    *linux*) 
      SHARED="-shared -fPIC"
+     SWIG_SHARED="-shared"
      ;;
    *-*-darwin*)
      SHARED=
+     SWIG_SHARED=
      ;;
    *);;
 esac
@@ -54,6 +57,7 @@ AC_CHECK_FUNCS(mkstemps)
 
 dnl Finish up and output.
 AC_SUBST(WITH_SWIG)
+AC_SUBST(SWIG_SHARED)
 
 AC_ARG_ENABLE(swig,
 	    AC_HELP_STRING([--enable-swig],
