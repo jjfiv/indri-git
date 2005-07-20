@@ -607,14 +607,12 @@ type_error:
 #define  SWIGTYPE_p_INT64 swig_types[0] 
 #define  SWIGTYPE_p_indri__api__ScoredExtentResult swig_types[1] 
 #define  SWIGTYPE_p_indri__parse__TermExtent swig_types[2] 
-#define  SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t swig_types[3] 
-#define  SWIGTYPE_p_indri__api__QueryEnvironment swig_types[4] 
-#define  SWIGTYPE_p_UINT64 swig_types[5] 
-#define  SWIGTYPE_p_indri__api__ParsedDocument swig_types[6] 
-#define  SWIGTYPE_p_indri__api__QueryAnnotationNode swig_types[7] 
-#define  SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults swig_types[8] 
-#define  SWIGTYPE_p_indri__api__QueryAnnotation swig_types[9] 
-static swig_type_info *swig_types[11];
+#define  SWIGTYPE_p_indri__api__QueryEnvironment swig_types[3] 
+#define  SWIGTYPE_p_UINT64 swig_types[4] 
+#define  SWIGTYPE_p_indri__api__ParsedDocument swig_types[5] 
+#define  SWIGTYPE_p_indri__api__QueryAnnotationNode swig_types[6] 
+#define  SWIGTYPE_p_indri__api__QueryAnnotation swig_types[7] 
+static swig_type_info *swig_types[9];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -830,24 +828,20 @@ zend_module_entry* SWIG_module_entry = &indri_module_entry;
 static swig_type_info _swigt__p_INT64[] = {{"_p_INT64", 0, "long long *|INT64 *", 0, 0, 0, 0},{"_p_INT64", 0, 0, 0, 0, 0, 0},{"_p_UINT64", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__api__ScoredExtentResult[] = {{"_p_indri__api__ScoredExtentResult", 0, "indri::api::ScoredExtentResult *", 0, 0, 0, 0},{"_p_indri__api__ScoredExtentResult", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__parse__TermExtent[] = {{"_p_indri__parse__TermExtent", 0, "indri::parse::TermExtent *", 0, 0, 0, 0},{"_p_indri__parse__TermExtent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_std__vectorTlemur__api__DOCID_T_t[] = {{"_p_std__vectorTlemur__api__DOCID_T_t", 0, "std::vector<lemur::api::DOCID_T > *", 0, 0, 0, 0},{"_p_std__vectorTlemur__api__DOCID_T_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__api__QueryEnvironment[] = {{"_p_indri__api__QueryEnvironment", 0, "indri::api::QueryEnvironment *", 0, 0, 0, 0},{"_p_indri__api__QueryEnvironment", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_UINT64[] = {{"_p_UINT64", 0, "long long *|UINT64 *", 0, 0, 0, 0},{"_p_INT64", 0, 0, 0, 0, 0, 0},{"_p_UINT64", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__api__ParsedDocument[] = {{"_p_indri__api__ParsedDocument", 0, "indri::api::ParsedDocument *", 0, 0, 0, 0},{"_p_indri__api__ParsedDocument", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__api__QueryAnnotationNode[] = {{"_p_indri__api__QueryAnnotationNode", 0, "indri::api::QueryAnnotationNode *", 0, 0, 0, 0},{"_p_indri__api__QueryAnnotationNode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_indri__infnet__EvaluatorNode__MResults[] = {{"_p_indri__infnet__EvaluatorNode__MResults", 0, "indri::infnet::EvaluatorNode::MResults *", 0, 0, 0, 0},{"_p_indri__infnet__EvaluatorNode__MResults", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_indri__api__QueryAnnotation[] = {{"_p_indri__api__QueryAnnotation", 0, "indri::api::QueryAnnotation *", 0, 0, 0, 0},{"_p_indri__api__QueryAnnotation", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_INT64, 
 _swigt__p_indri__api__ScoredExtentResult, 
 _swigt__p_indri__parse__TermExtent, 
-_swigt__p_std__vectorTlemur__api__DOCID_T_t, 
 _swigt__p_indri__api__QueryEnvironment, 
 _swigt__p_UINT64, 
 _swigt__p_indri__api__ParsedDocument, 
 _swigt__p_indri__api__QueryAnnotationNode, 
-_swigt__p_indri__infnet__EvaluatorNode__MResults, 
 _swigt__p_indri__api__QueryAnnotation, 
 0
 };
@@ -871,12 +865,10 @@ static zend_class_entry* ptr_ce_swig_QueryEnvironment=NULL;
 static int le_swig__p_INT64=0; /* handle for  */
 static int le_swig__p_indri__api__ScoredExtentResult=0; /* handle for ScoredExtentResult */
 static int le_swig__p_indri__parse__TermExtent=0; /* handle for TermExtent */
-static int le_swig__p_std__vectorTlemur__api__DOCID_T_t=0; /* handle for TermExtent */
 static int le_swig__p_indri__api__QueryEnvironment=0; /* handle for QueryEnvironment */
 static int le_swig__p_UINT64=0; /* handle for QueryEnvironment */
 static int le_swig__p_indri__api__ParsedDocument=0; /* handle for ParsedDocument */
 static int le_swig__p_indri__api__QueryAnnotationNode=0; /* handle for QueryAnnotationNode */
-static int le_swig__p_indri__infnet__EvaluatorNode__MResults=0; /* handle for QueryAnnotationNode */
 static int le_swig__p_indri__api__QueryAnnotation=0; /* handle for QueryAnnotation */
 /* end vdecl subsection */
 /* wrapper section */
@@ -1595,9 +1587,36 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getAnnotations) {
         result = (indri::infnet::EvaluatorNode::MResults *) &_result_ref;
     }
     
-    
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults, 0);
-    
+    {
+        array_init(return_value);
+        const indri::infnet::EvaluatorNode::MResults & matches = *result; 
+        indri::infnet::EvaluatorNode::MResults::iterator iter;
+        std::vector< indri::api::ScoredExtentResult >::size_type iIndex;
+        for( iter = result->begin(); iter != result->end(); iter++ ) {
+            zval *seRes;
+            MAKE_STD_ZVAL(seRes);
+            array_init(seRes);
+            std::vector<indri::api::ScoredExtentResult>& vec = iter->second;
+            char *key = (char *)iter->first.c_str();
+            for (iIndex=0;iIndex<vec.size();iIndex++)  {
+                zval *obj, *_cPtr;
+                MAKE_STD_ZVAL(obj);
+                MAKE_STD_ZVAL(_cPtr);
+                indri::api::ScoredExtentResult *r = new indri::api::ScoredExtentResult(vec[iIndex]);
+                SWIG_SetPointerZval(obj, (void *)r, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
+                *_cPtr = *obj;
+                INIT_ZVAL(*obj);
+                object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
+                add_property_double(obj,"score",r->score);
+                add_property_long(obj,"document",r->document);
+                add_property_long(obj,"begin",r->begin);
+                add_property_long(obj,"end",r->end);
+                add_property_zval(obj,"_cPtr",_cPtr);
+                add_next_index_zval(seRes, obj);
+            }
+            add_assoc_zval(return_value, key, seRes);
+        }
+    }
 }
 
 
@@ -2077,11 +2096,26 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
         temp2 = std::string(Z_STRVAL_PP(args[1-argbase]));
         arg2 = &temp2;
     }
-    
-    if(SWIG_ConvertPtr(*args[2-argbase], (void **) &arg3, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runQuerydocset. Expected %s", 3-argbase, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t->name);
+    {
+        int iStatus;
+        ulong iIndex;
+        char *sIndex=NULL;
+        zval **Data;
+        arg3=new std::vector<lemur::api::DOCID_T>;
+        convert_to_array(*args[2-argbase]);
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+        while((iStatus=zend_hash_get_current_key((*args[2-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
+            zend_hash_get_current_data((*args[2-argbase])->value.ht,(void **) &Data);
+            convert_to_long(*Data);
+            arg3->push_back((*Data)->value.lval);
+            zend_hash_move_forward((*args[2-argbase])->value.ht);  
+            if (sIndex) {
+                efree(sIndex);
+                sIndex=NULL;
+            }
+        }
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
     }
-    
     
     convert_to_long_ex(args[3-argbase]);
     arg4 = (int) Z_LVAL_PP(args[3-argbase]);
@@ -2117,6 +2151,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
             add_property_zval(obj,"_cPtr",_cPtr);
             add_next_index_zval(return_value, obj);
         }
+    }
+    {
+        // freearg typemap
+        delete arg3;
     }
 }
 
@@ -2209,11 +2247,26 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
         temp2 = std::string(Z_STRVAL_PP(args[1-argbase]));
         arg2 = &temp2;
     }
-    
-    if(SWIG_ConvertPtr(*args[2-argbase], (void **) &arg3, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_runAnnotatedQuerydocset. Expected %s", 3-argbase, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t->name);
+    {
+        int iStatus;
+        ulong iIndex;
+        char *sIndex=NULL;
+        zval **Data;
+        arg3=new std::vector<lemur::api::DOCID_T>;
+        convert_to_array(*args[2-argbase]);
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+        while((iStatus=zend_hash_get_current_key((*args[2-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
+            zend_hash_get_current_data((*args[2-argbase])->value.ht,(void **) &Data);
+            convert_to_long(*Data);
+            arg3->push_back((*Data)->value.lval);
+            zend_hash_move_forward((*args[2-argbase])->value.ht);  
+            if (sIndex) {
+                efree(sIndex);
+                sIndex=NULL;
+            }
+        }
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
     }
-    
     
     convert_to_long_ex(args[3-argbase]);
     arg4 = (int) Z_LVAL_PP(args[3-argbase]);
@@ -2244,6 +2297,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runAnnotatedQuerydocset) {
         add_property_zval(obj,"_cPtr",_cPtr);
         *return_value=*obj;
     }
+    {
+        // freearg typemap
+        delete arg3;
+    }
 }
 
 
@@ -2267,11 +2324,26 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
         zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentsdocids. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
-    
-    if(SWIG_ConvertPtr(*args[1-argbase], (void **) &arg2, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentsdocids. Expected %s", 2-argbase, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t->name);
+    {
+        int iStatus;
+        ulong iIndex;
+        char *sIndex=NULL;
+        zval **Data;
+        arg2=new std::vector<lemur::api::DOCID_T>;
+        convert_to_array(*args[1-argbase]);
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+        while((iStatus=zend_hash_get_current_key((*args[1-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
+            zend_hash_get_current_data((*args[1-argbase])->value.ht,(void **) &Data);
+            convert_to_long(*Data);
+            arg2->push_back((*Data)->value.lval);
+            zend_hash_move_forward((*args[1-argbase])->value.ht);  
+            if (sIndex) {
+                efree(sIndex);
+                sIndex=NULL;
+            }
+        }
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
     }
-    
     {
         try {
             result = (arg1)->documentsdocids((std::vector<lemur::api::DOCID_T > const &)*arg2);
@@ -2337,6 +2409,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
             add_property_zval(obj,"_cPtr",_cPtr);
             add_next_index_zval(return_value, obj);
         }
+    }
+    {
+        // freearg typemap
+        delete arg2;
     }
 }
 
@@ -2477,11 +2553,26 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadatadocids) {
         zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadatadocids. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__QueryEnvironment->name);
     }
     
-    
-    if(SWIG_ConvertPtr(*args[1-argbase], (void **) &arg2, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t) < 0) {
-        zend_error(E_ERROR, "Type error in argument %d of QueryEnvironment_documentMetadatadocids. Expected %s", 2-argbase, SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t->name);
+    {
+        int iStatus;
+        ulong iIndex;
+        char *sIndex=NULL;
+        zval **Data;
+        arg2=new std::vector<lemur::api::DOCID_T>;
+        convert_to_array(*args[1-argbase]);
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+        while((iStatus=zend_hash_get_current_key((*args[1-argbase])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
+            zend_hash_get_current_data((*args[1-argbase])->value.ht,(void **) &Data);
+            convert_to_long(*Data);
+            arg2->push_back((*Data)->value.lval);
+            zend_hash_move_forward((*args[1-argbase])->value.ht);  
+            if (sIndex) {
+                efree(sIndex);
+                sIndex=NULL;
+            }
+        }
+        zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
     }
-    
     {
         convert_to_string_ex(args[2-argbase]);
         temp3 = std::string(Z_STRVAL_PP(args[2-argbase]));
@@ -2504,6 +2595,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentMetadatadocids) {
         std::vector< std::string > *resultobj = &result; 
         for (iIndex=0;iIndex<resultobj->size();iIndex++) 
         add_next_index_string(return_value,(char *) (*resultobj)[iIndex].c_str(),1);
+    }
+    {
+        // freearg typemap
+        delete arg2;
     }
 }
 
@@ -3001,10 +3096,6 @@ static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__parse__TermExtent) {
 __wrap_delete_TermExtent(rsrc, SWIGTYPE_p_indri__parse__TermExtent->name TSRMLS_CC);
 }
 /* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_std__vectorTlemur__api__DOCID_T_t) {
-/* bah! No destructor for this simple type!! */
-}
-/* NEW Destructor style */
 static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryEnvironment) {
 /* has destructor: __wrap_delete_QueryEnvironment */
 __wrap_delete_QueryEnvironment(rsrc, SWIGTYPE_p_indri__api__QueryEnvironment->name TSRMLS_CC);
@@ -3022,10 +3113,6 @@ __wrap_delete_ParsedDocument(rsrc, SWIGTYPE_p_indri__api__ParsedDocument->name T
 static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryAnnotationNode) {
 /* has destructor: __wrap_delete_QueryAnnotationNode */
 __wrap_delete_QueryAnnotationNode(rsrc, SWIGTYPE_p_indri__api__QueryAnnotationNode->name TSRMLS_CC);
-}
-/* NEW Destructor style */
-static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__infnet__EvaluatorNode__MResults) {
-/* bah! No destructor for this simple type!! */
 }
 /* NEW Destructor style */
 static ZEND_RSRC_DTOR_FUNC(_wrap_destroy_p_indri__api__QueryAnnotation) {
@@ -3089,8 +3176,6 @@ le_swig__p_indri__api__ScoredExtentResult=zend_register_list_destructors_ex(_wra
 SWIG_TypeClientData(SWIGTYPE_p_indri__api__ScoredExtentResult,&le_swig__p_indri__api__ScoredExtentResult);
 le_swig__p_indri__parse__TermExtent=zend_register_list_destructors_ex(_wrap_destroy_p_indri__parse__TermExtent,NULL,(char *)(SWIGTYPE_p_indri__parse__TermExtent->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_indri__parse__TermExtent,&le_swig__p_indri__parse__TermExtent);
-le_swig__p_std__vectorTlemur__api__DOCID_T_t=zend_register_list_destructors_ex(_wrap_destroy_p_std__vectorTlemur__api__DOCID_T_t,NULL,(char *)(SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_std__vectorTlemur__api__DOCID_T_t,&le_swig__p_std__vectorTlemur__api__DOCID_T_t);
 le_swig__p_indri__api__QueryEnvironment=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryEnvironment,NULL,(char *)(SWIGTYPE_p_indri__api__QueryEnvironment->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryEnvironment,&le_swig__p_indri__api__QueryEnvironment);
 le_swig__p_UINT64=zend_register_list_destructors_ex(_wrap_destroy_p_UINT64,NULL,(char *)(SWIGTYPE_p_UINT64->name),module_number);
@@ -3099,8 +3184,6 @@ le_swig__p_indri__api__ParsedDocument=zend_register_list_destructors_ex(_wrap_de
 SWIG_TypeClientData(SWIGTYPE_p_indri__api__ParsedDocument,&le_swig__p_indri__api__ParsedDocument);
 le_swig__p_indri__api__QueryAnnotationNode=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryAnnotationNode,NULL,(char *)(SWIGTYPE_p_indri__api__QueryAnnotationNode->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryAnnotationNode,&le_swig__p_indri__api__QueryAnnotationNode);
-le_swig__p_indri__infnet__EvaluatorNode__MResults=zend_register_list_destructors_ex(_wrap_destroy_p_indri__infnet__EvaluatorNode__MResults,NULL,(char *)(SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults->name),module_number);
-SWIG_TypeClientData(SWIGTYPE_p_indri__infnet__EvaluatorNode__MResults,&le_swig__p_indri__infnet__EvaluatorNode__MResults);
 le_swig__p_indri__api__QueryAnnotation=zend_register_list_destructors_ex(_wrap_destroy_p_indri__api__QueryAnnotation,NULL,(char *)(SWIGTYPE_p_indri__api__QueryAnnotation->name),module_number);
 SWIG_TypeClientData(SWIGTYPE_p_indri__api__QueryAnnotation,&le_swig__p_indri__api__QueryAnnotation);
 CG(active_class_entry) = NULL;

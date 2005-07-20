@@ -65,14 +65,14 @@ typedef long long UINT64;
 
 // need std::vector<int> in and out
 %typemap(in) 
-  std::vector< DOCID_T > &,
-  std::vector< DOCID_T > *
+  std::vector< lemur::api::DOCID_T > &,
+  std::vector< lemur::api::DOCID_T > *
 {
   int iStatus;
   ulong iIndex;
   char *sIndex=NULL;
   zval **Data;
-  $1=new std::vector<DOCID_T>;
+  $1=new std::vector<lemur::api::DOCID_T>;
   convert_to_array(*$input);
   zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
   while((iStatus=zend_hash_get_current_key((*$input)->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
@@ -227,7 +227,7 @@ typedef long long UINT64;
 }
 
 %typemap(out) 
-  EvaluatorNode::MResults &
+  indri::infnet::EvaluatorNode::MResults &
 {
   array_init(return_value);
   const indri::infnet::EvaluatorNode::MResults & matches = *result; 
@@ -309,12 +309,12 @@ zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
  std::vector< std::string > *, 
  std::vector< indri::api::ScoredExtentResult > *, 
  std::vector< indri::api::ParsedDocument * > *, 
- std::vector< DOCID_T > *, 
+ std::vector< lemur::api::DOCID_T > *, 
  std::vector< indri::api::ScoredExtentResult > &, 
- std::vector< DOCID_T > &, 
+ std::vector< lemur::api::DOCID_T > &, 
  std::vector< indri::api::ScoredExtentResult >, 
  std::vector< indri::api::ParsedDocument * >, 
- std::vector< DOCID_T >
+ std::vector< lemur::api::DOCID_T >
 {
 // freearg typemap
   delete $1;
