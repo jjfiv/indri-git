@@ -72,7 +72,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="C:\j2sdk1.4.2_05\include;C:\j2sdk1.4.2_05\include\win32;S:\Development\indri\include;S:\Development\indri\contrib\lemur\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SWIG_EXPORTS"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

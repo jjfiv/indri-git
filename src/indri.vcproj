@@ -66,7 +66,7 @@
 				AdditionalIncludeDirectories="../include;../contrib/antlr/include;../contrib/xpdf/include;../contrib/lemur/include;../contrib/zlib/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				MinimalRebuild="TRUE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
@@ -249,9 +249,6 @@
 			</File>
 			<File
 				RelativePath=".\InferenceNetworkBuilder.cpp">
-			</File>
-			<File
-				RelativePath=".\KeyfileWordMap.cpp">
 			</File>
 			<File
 				RelativePath=".\KrovetzStemmerTransformation.cpp">
@@ -692,9 +689,6 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\JelinekMercerTermScoreFunction.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\KeyfileWordMap.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\KrovetzStemmerTransformation.hpp">

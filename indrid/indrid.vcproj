@@ -74,7 +74,7 @@
 				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories="..\include;..\contrib\lemur\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableEnhancedInstructionSet="2"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
