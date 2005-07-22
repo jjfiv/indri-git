@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 //
 // runquery
@@ -21,129 +21,129 @@
 // Indri local machine query application
 //
 /*! \page runquery Indri Query Retrieval
-<H3>QueryEnvironment Parameters</H3>
-<H4>Retrieval Parameters</H4>
-<dl>
-<dt>memory</dt>
-<dd> an integer value specifying the number of bytes to use for the
-query retrieval process. The value can include a scaling factor by
-adding a suffix. Valid values are (case insensitive) K = 1000, M =
-1000000, G = 1000000000. So 100M would be equivalent to 100000000. The
-value should contain only decimal digits and the optional
-suffix. Specified as &lt;memory&gt;100M&lt;/memory&gt; in the parameter
-file and as <tt>-memory=100M</tt> on the command line. </dd> 
-<dt>index</dt>
-<dd> path to an Indri Repository. Specified as
-&lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
-as <tt>-index=/path/to/repository</tt> on the command line. This element
-can be specified multiple times to combine Repositories.
-</dd>
-<dt>server</dt>
-<dd> hostname of a host running an Indri server (Indrid). Specified as
-&lt;server&gt;hostname&lt;/server&gt; in the parameter file and
-as <tt>-server=hostname</tt> on the command line. The hostname can
-include an optional port number to connect to, using the form
-<tt>hostname:portnum</tt>. This element
-can be specified multiple times to combine servers.
-</dd>
-<dt>count</dt>
-<dd>an integer value specifying the maximum number of results to
-return for a given query. Specified as
-&lt;count&gt;number&lt;/count&gt; in the parameter file and
-as <tt>-count=number</tt> on the command line. </dd>
-<dt>query</dt>
-<dd>An indri query language query to run. This element can be specified
-multiple times.
-</dd>
-<dt>rule</dt>
-<dd>specifies the smoothing rule (TermScoreFunction) to apply. Format of
-the rule is:<br> 
+  <H3>QueryEnvironment Parameters</H3>
+  <H4>Retrieval Parameters</H4>
+  <dl>
+  <dt>memory</dt>
+  <dd> an integer value specifying the number of bytes to use for the
+  query retrieval process. The value can include a scaling factor by
+  adding a suffix. Valid values are (case insensitive) K = 1000, M =
+  1000000, G = 1000000000. So 100M would be equivalent to 100000000. The
+  value should contain only decimal digits and the optional
+  suffix. Specified as &lt;memory&gt;100M&lt;/memory&gt; in the parameter
+  file and as <tt>-memory=100M</tt> on the command line. </dd> 
+  <dt>index</dt>
+  <dd> path to an Indri Repository. Specified as
+  &lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
+  as <tt>-index=/path/to/repository</tt> on the command line. This element
+  can be specified multiple times to combine Repositories.
+  </dd>
+  <dt>server</dt>
+  <dd> hostname of a host running an Indri server (Indrid). Specified as
+  &lt;server&gt;hostname&lt;/server&gt; in the parameter file and
+  as <tt>-server=hostname</tt> on the command line. The hostname can
+  include an optional port number to connect to, using the form
+  <tt>hostname:portnum</tt>. This element
+  can be specified multiple times to combine servers.
+  </dd>
+  <dt>count</dt>
+  <dd>an integer value specifying the maximum number of results to
+  return for a given query. Specified as
+  &lt;count&gt;number&lt;/count&gt; in the parameter file and
+  as <tt>-count=number</tt> on the command line. </dd>
+  <dt>query</dt>
+  <dd>An indri query language query to run. This element can be specified
+  multiple times.
+  </dd>
+  <dt>rule</dt>
+  <dd>specifies the smoothing rule (TermScoreFunction) to apply. Format of
+  the rule is:<br> 
 
-<tt>   ( key ":" value ) [ "," key ":" value ]* </tt>
-<p>
-Here's an example rule in command line format:<br>
+  <tt>   ( key ":" value ) [ "," key ":" value ]* </tt>
+  <p>
+  Here's an example rule in command line format:<br>
 
-   <tt>-rule=method:linear,collectionLambda:0.2,field:title</tt>
-<p> and in parameter file format:<br>
-<tt>
-&lt;rule&gt;method:linear,collectionLambda:0.2,field:title&lt;/rule&gt;
-</tt>
+  <tt>-rule=method:linear,collectionLambda:0.2,field:title</tt>
+  <p> and in parameter file format:<br>
+  <tt>
+  &lt;rule&gt;method:linear,collectionLambda:0.2,field:title&lt;/rule&gt;
+  </tt>
 
-<p>This corresponds to Jelinek-Mercer smoothing with background lambda
-equal to 0.2, only for items in a title field. 
+  <p>This corresponds to Jelinek-Mercer smoothing with background lambda
+  equal to 0.2, only for items in a title field. 
 
-<p>If nothing is listed for a key, all values are assumed.
-So, a rule that does not specify a field matches all fields.  This makes
-<tt>-rule=method:linear,collectionLambda:0.2</tt> a valid rule. 
+  <p>If nothing is listed for a key, all values are assumed.
+  So, a rule that does not specify a field matches all fields.  This makes
+  <tt>-rule=method:linear,collectionLambda:0.2</tt> a valid rule. 
 
-<p>Valid keys:
-<dl>
-<dt>   method</dt><dd> smoothing method (text)</dd>
-<dt>   field</dt><dd> field to apply this rule to</dd>
-<dt>   operator
-<dd> type of item in query to apply to { term, window }</dd>
-</dl>
+  <p>Valid keys:
+  <dl>
+  <dt>   method</dt><dd> smoothing method (text)</dd>
+  <dt>   field</dt><dd> field to apply this rule to</dd>
+  <dt>   operator
+  <dd> type of item in query to apply to { term, window }</dd>
+  </dl>
 
-<p>Valid methods:
-<dl>
-<dt>   dirichlet</dt><dd> (also 'd', 'dir') (default mu=2500)</dd>
-<dt>   jelinek-mercer</dt><dd> (also 'jm', 'linear') (default
-collectionLambda=0.4, documentLambda=0.0),  collectionLambda is also
-known as just "lambda", either will work </dt>
-<dt>   twostage</dt><dd> (also 'two-stage', 'two') (default mu=2500,
-lambda=0.4)</dd> 
-</dl>
-If the rule doesn't parse correctly, the default is Dirichlet, mu=2500.
-</dd>
-<dt>stopper</dt>
-<dd>a complex element containing one or more subelements named word,
-specifying the stopword list to use. Specified as
-&lt;stopper&gt;&lt;word&gt;stopword&lt;/word&gt;&lt;/stopper&gt; and
-as <tt>-stopper.word=stopword</tt> on the command line. This is an
-optional parameter with the default of no stopping.</dd>
-</dl>
-<H4>Formatting Parameters</H4>
-<dl>
-<dt>queryOffset</dt>
-<dd>an integer value specifying one less than the starting query number, eg 150 for
-TREC formatted output. Specified as
-&lt;queryOffset&gt;number&lt;/queryOffset&gt; in the parameter file and
-as <tt>-queryOffset=number</tt> on the command line.</dd>
-<dt>runID</dt>
-<dd>a string specifying the id for a query run, used in TREC scorable
-output. Specified as
-&lt;runID&gt;someID&lt;/runID&gt; in the parameter file and
-as <tt>-runID=someID</tt> on the command line.</dd>
-<dt>trecFormat</dt>
-<dd>the symbol <tt>true</tt> to produce TREC scorable output, otherwise
-the symbol <tt>false</tt>. Specified as
-&lt;trecFormat&gt;true&lt;/trecFormat&gt; in the parameter file and
-as <tt>-trecFormat=true</tt> on the command line.  Note that <tt>0</tt>
-can be used for false, and <tt>1</tt> can be used for true.</dd>
-</dl>
-<H4>Pseudo-Relevance Feedback Parameters</H4>
-<dl>
-<dt>fbDocs</dt>
-<dd>an integer specifying the number of documents to use for
-feedback. Specified as 
-&lt;fbDocs&gt;number&lt;/fbDocs&gt; in the parameter file and
-as <tt>-fbDocs=number</tt> on the command line.</dd>
-<dt>fbTerms</dt>
-<dd>an integer specifying the number of terms to use for
-feedback. Specified as 
-&lt;fbTerms&gt;number&lt;/fbTerms&gt; in the parameter file and
-as <tt>-fbTerms=number</tt> on the command line.</dd>
-<dt>fbMu</dt>
-<dd>a floating point value specifying the value of mu to use for
-feedback. Specified as
-&lt;fbMu&gt;number&lt;/fbMu&gt; in the parameter file and
-as <tt>-fbMu=number</tt> on the command line.</dd>
-<dt>fbOrigWeight</dt>
-<dd>a floating point value in the range [0.0..1.0] specifying the weight
-for the original query in the expanded query. Specified as
-&lt;fbOrigWeight&gt;number&lt;/fbOrigWeight&gt; in the parameter file and
-as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
-</dl>
+  <p>Valid methods:
+  <dl>
+  <dt>   dirichlet</dt><dd> (also 'd', 'dir') (default mu=2500)</dd>
+  <dt>   jelinek-mercer</dt><dd> (also 'jm', 'linear') (default
+  collectionLambda=0.4, documentLambda=0.0),  collectionLambda is also
+  known as just "lambda", either will work </dt>
+  <dt>   twostage</dt><dd> (also 'two-stage', 'two') (default mu=2500,
+  lambda=0.4)</dd> 
+  </dl>
+  If the rule doesn't parse correctly, the default is Dirichlet, mu=2500.
+  </dd>
+  <dt>stopper</dt>
+  <dd>a complex element containing one or more subelements named word,
+  specifying the stopword list to use. Specified as
+  &lt;stopper&gt;&lt;word&gt;stopword&lt;/word&gt;&lt;/stopper&gt; and
+  as <tt>-stopper.word=stopword</tt> on the command line. This is an
+  optional parameter with the default of no stopping.</dd>
+  </dl>
+  <H4>Formatting Parameters</H4>
+  <dl>
+  <dt>queryOffset</dt>
+  <dd>an integer value specifying one less than the starting query number, eg 150 for
+  TREC formatted output. Specified as
+  &lt;queryOffset&gt;number&lt;/queryOffset&gt; in the parameter file and
+  as <tt>-queryOffset=number</tt> on the command line.</dd>
+  <dt>runID</dt>
+  <dd>a string specifying the id for a query run, used in TREC scorable
+  output. Specified as
+  &lt;runID&gt;someID&lt;/runID&gt; in the parameter file and
+  as <tt>-runID=someID</tt> on the command line.</dd>
+  <dt>trecFormat</dt>
+  <dd>the symbol <tt>true</tt> to produce TREC scorable output, otherwise
+  the symbol <tt>false</tt>. Specified as
+  &lt;trecFormat&gt;true&lt;/trecFormat&gt; in the parameter file and
+  as <tt>-trecFormat=true</tt> on the command line.  Note that <tt>0</tt>
+  can be used for false, and <tt>1</tt> can be used for true.</dd>
+  </dl>
+  <H4>Pseudo-Relevance Feedback Parameters</H4>
+  <dl>
+  <dt>fbDocs</dt>
+  <dd>an integer specifying the number of documents to use for
+  feedback. Specified as 
+  &lt;fbDocs&gt;number&lt;/fbDocs&gt; in the parameter file and
+  as <tt>-fbDocs=number</tt> on the command line.</dd>
+  <dt>fbTerms</dt>
+  <dd>an integer specifying the number of terms to use for
+  feedback. Specified as 
+  &lt;fbTerms&gt;number&lt;/fbTerms&gt; in the parameter file and
+  as <tt>-fbTerms=number</tt> on the command line.</dd>
+  <dt>fbMu</dt>
+  <dd>a floating point value specifying the value of mu to use for
+  feedback. Specified as
+  &lt;fbMu&gt;number&lt;/fbMu&gt; in the parameter file and
+  as <tt>-fbMu=number</tt> on the command line.</dd>
+  <dt>fbOrigWeight</dt>
+  <dd>a floating point value in the range [0.0..1.0] specifying the weight
+  for the original query in the expanded query. Specified as
+  &lt;fbOrigWeight&gt;number&lt;/fbOrigWeight&gt; in the parameter file and
+  as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
+  </dl>
 */
 #include <time.h>
 #include "indri/QueryEnvironment.hpp"
@@ -241,7 +241,7 @@ private:
       if( _printQuery ) output << "# expanded: " << expandedQuery << std::endl;
       _results = _environment.runQuery( expandedQuery, _requested );
     }
-    }
+  }
 
   void _printResults( std::stringstream& output, int queryIndex ) {
     std::vector<std::string> documentNames;
@@ -251,26 +251,26 @@ private:
     if( _printDocuments || _printPassages ) {
       // Need document text, so we'll fetch the whole document
       documents = _environment.documents( _results );
-        documentNames.clear();
+      documentNames.clear();
 
       for( unsigned int i=0; i<_results.size(); i++ ) {
-          indri::api::ParsedDocument* doc = documents[i];
-          std::string documentName;
+        indri::api::ParsedDocument* doc = documents[i];
+        std::string documentName;
 
-          indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( documents[i]->metadata.begin(),
-            documents[i]->metadata.end(),
-            indri::parse::MetadataPair::key_equal( "docno" ) );
+        indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( documents[i]->metadata.begin(),
+                                                                                                 documents[i]->metadata.end(),
+                                                                                                 indri::parse::MetadataPair::key_equal( "docno" ) );
 
-          if( iter != documents[i]->metadata.end() )
-            documentName = (char*) iter->value;
+        if( iter != documents[i]->metadata.end() )
+          documentName = (char*) iter->value;
 
         // store the document name in a separate vector so later code can find it
-          documentNames.push_back( documentName );
-        }
-      } else {
+        documentNames.push_back( documentName );
+      }
+    } else {
       // We only want document names, so the documentMetadata call may be faster
       documentNames = _environment.documentMetadata( _results, "docno" );
-      }
+    }
 
     // Print results
     for( unsigned int i=0; i < _results.size(); i++ ) {
@@ -280,36 +280,36 @@ private:
       if( _trecFormat ) {
         // TREC formatted output: queryNumber, Q0, documentName, rank, score, runID
         output << queryNumber << " "
-            << "Q0 "
-            << documentNames[i] << " "
-                << rank << " "
-                << _results[ i ].score << " "
-                << _runID << std::endl;
-        }
-        else {
+               << "Q0 "
+               << documentNames[i] << " "
+               << rank << " "
+               << _results[ i ].score << " "
+               << _runID << std::endl;
+      }
+      else {
         // score, documentName, firstWord, lastWord
         output << _results[i].score << "\t"
-            << documentNames[i] << "\t"
-                << _results[i].begin << "\t"
-                << _results[i].end << std::endl;
-        }
+               << documentNames[i] << "\t"
+               << _results[i].begin << "\t"
+               << _results[i].end << std::endl;
+      }
 
       if( _printDocuments ) {
         output << documents[i]->text << std::endl;
-        }
+      }
 
       if( _printPassages ) {
-          // we'll print the text from the beginning of the first word
+        // we'll print the text from the beginning of the first word
         int byteBegin = documents[i]->positions[ _results[i].begin ].begin;
         int byteEnd = documents[i]->positions[ _results[i].end-1 ].end;
         output.write( documents[i]->text + byteBegin, byteEnd - byteBegin );
         output << std::endl;
-        }
-
-        if( documents.size() )
-          delete documents[i];
       }
+
+      if( documents.size() )
+        delete documents[i];
     }
+  }
 
 public:
   QueryThread( std::queue< query_t* >& queries,
