@@ -91,7 +91,7 @@ bool indri::file::File::open( const std::string& filename ) {
   
   return true;
 #else 
-#ifdef __APPLE__
+#ifndef O_LARGEFILE
   _handle = ::open( filename.c_str(), O_RDWR );
 #else
   _handle = ::open( filename.c_str(), O_LARGEFILE | O_RDWR );
@@ -119,7 +119,7 @@ bool indri::file::File::openRead( const std::string& filename ) {
 
   return true;
 #else 
-#ifdef __APPLE__
+#ifndef O_LARGEFILE
   _handle = ::open( filename.c_str(), O_RDONLY );
 #else
   _handle = ::open( filename.c_str(), O_LARGEFILE | O_RDONLY );

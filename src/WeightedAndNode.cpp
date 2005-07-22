@@ -23,8 +23,10 @@
 #include <iostream>
 #include "indri/Annotator.hpp"
 #include "indri/TermFrequencyBeliefNode.hpp"
+#include "indri/CachedFrequencyBeliefNode.hpp"
 #include "indri/greedy_vector"
 #include "indri/delete_range.hpp"
+#include "indri/Parameters.hpp"
 
 double indri::infnet::WeightedAndNode::_computeMaxScore( unsigned int start ) {
   // first, find the maximum score of the first few columns
@@ -96,7 +98,7 @@ void indri::infnet::WeightedAndNode::indexChanged( indri::index::Index& index ) 
   for( unsigned int i=0; i<_children.size(); i++ ) {
     indri::infnet::TermFrequencyBeliefNode* node = dynamic_cast<indri::infnet::TermFrequencyBeliefNode*>(_children[i].node);
 
-    if( node ) {
+    if( node && indri::api::Parameters::instance().get( "topdocs", true ) ) {
       indri::utility::greedy_vector<indri::index::DocListIterator::TopDocument>* copy = new indri::utility::greedy_vector<indri::index::DocListIterator::TopDocument>( node->topdocs() );
       lists.push_back( copy );
       std::sort( copy->begin(), copy->end(), indri::index::DocListIterator::TopDocument::docid_less() );
@@ -159,6 +161,7 @@ void indri::infnet::WeightedAndNode::setThreshold( double threshold ) {
   _threshold = threshold;
 
   if( _threshold >= _recomputeThreshold ) {
+   // std::cout << "threshold hit recompute " << _recomputeThreshold << std::endl;
     _computeQuorum();
   }
 }
