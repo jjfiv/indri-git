@@ -66,7 +66,7 @@
 				AdditionalIncludeDirectories="../include;../contrib/antlr/include;../contrib/xpdf/include;../contrib/lemur/include;../contrib/zlib/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				MinimalRebuild="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
@@ -260,6 +260,9 @@
 				RelativePath=".\LocalQueryServer.cpp">
 			</File>
 			<File
+				RelativePath=".\MboxDocumentIterator.cpp">
+			</File>
+			<File
 				RelativePath=".\MemoryDocumentDataIterator.cpp">
 			</File>
 			<File
@@ -339,6 +342,9 @@
 			</File>
 			<File
 				RelativePath=".\QueryParser.cpp">
+			</File>
+			<File
+				RelativePath=".\RelevanceModel.cpp">
 			</File>
 			<File
 				RelativePath=".\Repository.cpp">
@@ -712,6 +718,9 @@
 				RelativePath="..\include\indri\MaxNode.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\MboxDocumentIterator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\MemoryDocumentDataIterator.hpp">
 			</File>
 			<File
@@ -857,6 +866,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\RegionAllocator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\RelevanceModel.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Repository.hpp">

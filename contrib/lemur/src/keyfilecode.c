@@ -18,18 +18,10 @@
 #include "keydef.h"
 #include "keyprint.h"
 #include "keyfile.h"
-
-#ifdef WIN32
-#define FILE_OFFSET __int64
-extern int _fseeki64(FILE *, __int64, int);
-extern __int64 _ftelli64(FILE *);
-#define fseeko _fseeki64
-#define ftello _ftelli64
+#include "fileio.h"
+#ifdef min
 #undef min
-#else
-#define FILE_OFFSET off_t
 #endif
-
 /* #define maxint 32767*/
 #define show_errors true
 #define trace_io false

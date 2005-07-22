@@ -11,12 +11,14 @@ typedef unsigned int       UINT32;
 typedef unsigned __int64   UINT64;
 #define UINT64_format "%llu"
 #define UINT64_C(c)   c ## ULL
+typedef struct F_HANDLE F_HANDLE;
 #else
 #include <inttypes.h>
 typedef uint16_t           UINT16;
 typedef uint32_t           UINT32;
 typedef uint64_t           UINT64;
 #define UINT64_format "%" PRIu64
+#define F_HANDLE FILE
 #endif
 
 /* #define max_long 2147483647UL*/
@@ -242,7 +244,7 @@ struct fcb {
     oldest_buffer,              /* first buffer in LRU buffer list */
     youngest_buffer,            /* last buffer in LRU buffer list */
     block_shift;                /* log2(block_lc) */
-  FILE
+  F_HANDLE
     *open_file[max_files];      /* pointers to open files */
 
   int
