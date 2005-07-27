@@ -108,7 +108,7 @@ void indri::infnet::TermFrequencyBeliefNode::indexChanged( indri::index::Index& 
     
     if( _list->topDocuments().size() ) {
       if( indri::api::Parameters::instance().get( "topdocs", true ) == false ) {
-        std::cout << "using no topdocs!" << std::endl;
+        //        std::cout << "using no topdocs!" << std::endl;
         const indri::index::DocListIterator::TopDocument& document = _list->topDocuments().front();
         maximumFraction = double(document.count) / double(document.length);
       } else {
