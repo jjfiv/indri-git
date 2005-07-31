@@ -114,13 +114,7 @@
 				RelativePath=".\src\keyprint.c">
 			</File>
 			<File
-				RelativePath=".\src\kstem.cpp">
-			</File>
-			<File
 				RelativePath=".\src\lemur-compat.cpp">
-			</File>
-			<File
-				RelativePath=".\src\porter_stemmer.cpp">
 			</File>
 			<File
 				RelativePath=".\src\RVLCompress.cpp">
@@ -147,9 +141,6 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\InvFPTypes.hpp">
-			</File>
-			<File
-				RelativePath=".\include\lemur\keyconst.h">
 			</File>
 			<File
 				RelativePath=".\include\lemur\keydef.h">
