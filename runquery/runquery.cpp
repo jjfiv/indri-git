@@ -477,27 +477,26 @@ int main(int argc, char * argv[]) {
     // process output as it appears on the queue
     while( query < queryCount ) {
       query_t* result = NULL;
+
+      // wait for something to happen
+      queueEvent.wait( queueLock );
       
-      {
-        // wait for something to happen
-        
-        queueEvent.wait( queueLock , 1000);
+      while ( output.size() && output.top()->index == query ) {
+        result = output.top();
+        output.pop();
 
-        if( output.size() && output.top()->index == query ) {
-          result = output.top();
-          output.pop();
-        }
-        
         queueLock.unlock();
-      }
 
-      if( result ) {
         std::cout << result->text;
         delete result;
         query++;
-      }
-    }
 
+        queueLock.lock();
+      }
+      
+      queueLock.unlock();
+    }
+    
     // join all the threads
     for( int i=0; i<threads.size(); i++ )
       threads[i]->join();
