@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 /****************************************************************************\
  *	            Copyright (c) 1990-1995 by the                           *
  *    Applied Computing Systems Institute of Massachusetts, Inc. (ACSIOM)     *
@@ -18,95 +28,6 @@
    
   Author: Bob Krovetz
    
-  Version 15 - This is the first distributable version.  The 
-  basic lexicon (using the Longman dictionary) was 
-  replaced by a modified  /usr/dict/words (a standard 
-  file on Unix systems), and hard-coded pathnames were 
-  replaced with environment variables.  The changes
-  made in version 14 were undone.
-   
-   
-  Version 14 - Even if variants are mentioned in the dictionary,
-  ignore them for certain endings (inflectional, 
-  -ion, -ment, and -ity).
-   
-  Note: this version was done as part of an effort
-  to conflated word forms that are in the dictionary.
-  This does make some correct conflations, but it
-  will also conflate state/station, depart/department.
-  It is not enough for a word to have the potential to
-  be a variant, there has to be evidence to relate them.
-   
-   
-  Version 13 - Includes a supplemental dictionary, and three direct
-  mapping tables (one for run-ons,  another for
-  proper nouns such as `British->Britain', and
-  a third for simple sense-links between words in
-  the dictionary).  The supplemental dictionary is
-  used to allow conflations (by specifying a root),
-  or to prevent them (by specifying a variant).
-  For example, if `factorial' is not in the lexicon,
-  it would be converted to `factory' (analogous to
-  `matrimonial'/`matrimony').
-   
-   
-  Previous versions involved the basic inflectional morphology
-  (plurals, tensed verbs, and aspect), and tests of specific 
-  derivational endings.
-   
-   
-  Modification history:
-  8/26/92   Revised to use hash tables for dictionary look-up instead 
-  of an indexed sequential file
-   
-  12/13/92   Revised to also do some simple derivational conflation.
-  Initially this will be conservative, and not conflate
-  forms that are in the dictionary (most of them).  If
-  the form isn't in the dictionary, and the stem isn't
-  in the dictionary, we will attempt a reasonable guess
-  at the stem (for some endings), otherwise we will leave
-  it alone.
-   
-  7/26/93   Modified the structure of a hashtable entry.  We can now
-  include more complex structures.  This allows us to make
-  direct mappings between lexical items, which is necessary
-  for reducing `periodically->periodic', `Britain->British',
-  and various irregular variations.  This also gives us
-  much greater flexibility, since any word form can be reduced
-  to any other word form.  A supplemental dictionary is also
-  provided for.  This allows words to be left unstemmed, and
-  lets some stemming go through (since the stemmer wants the
-  root form to appear in the dictionary).
-   
-   
-  8/2/93    Revised to bypass the dictionary for certain endings
-  (inflected forms, -ion, -ment, and -ity).  That is, 
-  even if the dictionary contains words with these endings,
-  we will check to if there is a possible root which is
-  also in the dictionary, and use that if it is found.
-  This results in further conflations, but also causes
-  a number of errors (e.g., `appointment/appoint', but
-  `department/depart').  Feh!  
-   
-  8/3/93    The file was changed so that the dictionary is no longer
-  bypassed.
-   
-  5/25/94    Modified to use environment variables, and generally
-  changed to be made available for distribution.
-
-  12/3/94 (MIK) Removed all integer to pointer casts (which caused
-  segmentation faults on 64-bit machines).  A dynamic table is created
-  in memory to hold dictentry's for each direct conflation, proper noun
-  and exception word, plus one default entry to cover all the "normal"
-  words in the dictionary.  The hash dictionary now stores the index into
-  this table for each word in the dictionary.  A new call, getdep, was
-  added to get the actuall dictentry for a word.  Also, some code was
-  cleanned up. (using fprintf(stderr, instead of exit(), etc.)
-
-  12/8/94 (MIK) Added the unit testing code
-
-  3/20/95 (RJK) Fixed bug with -ble, -nce, -ncy.
-
   6/16/04 (tds) Added kstem_allocate_memory, kstem_stem_to_buffer,
   and kstem_add_table_entry.  The kstem_allocate_memory/
   kstem_add_table_entry calls allow stemmer initialization
@@ -23041,9 +22962,6 @@ namespace indri
         kstem_add_table_entry( conflations[i].variant, conflations[i].word );
       }
     }
-
-
-
   }
 }
 

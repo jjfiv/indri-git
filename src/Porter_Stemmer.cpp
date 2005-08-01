@@ -1,30 +1,13 @@
-
-
-/* This is the Porter stemming algorithm, coded up in ANSI C by the
-   author. It may be be regarded as cononical, in that it follows the
-   algorithm presented in
-
-   Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
-   no. 3, pp 130-137,
-
-   only differing from it at the points maked --DEPARTURE-- below.
-
-   See also http://www.omsee.com/~martin/stem.html
-
-   The algorithm as described in the paper could be exactly replicated
-   by adjusting the points of DEPARTURE, but this is barely necessary,
-   because (a) the points of DEPARTURE are definitely improvements, and
-   (b) no encoding of the Porter stemmer I have seen is anything like
-   as exact as this version, even with the points of DEPARTURE!
-
-   You can compile it on Unix with 'gcc -O3 -o stem stem.c' after which
-   'stem' takes a list of inputs and sends the stemmed equivalent to
-   stdout.
-
-   The algorithm as encoded here is particularly fast.
-
-   Release 1
-*/
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 
 #include <cstring>  /* for memmove */
 #include "indri/Porter_Stemmer.hpp"
@@ -33,18 +16,6 @@ namespace indri
 {
   namespace parse
   {
-    
-    /* The main part of the stemming algorithm starts here. b is a buffer
-       holding a word to be stemmed. The letters are in b[k0], b[k0+1] ...
-       ending at b[k]. In fact k0 = 0 in this demo program. k is readjusted
-       downwards as the stemming progresses. Zero termination is not in fact
-       used in the algorithm.
-
-       Note that only lower case sequences are stemmed. Forcing to lower case
-       should be done before stem(...) is called.
-    */
-    /* cons(i) is TRUE <=> b[i] is a consonant. */
-
     bool Porter_Stemmer::cons(int i) {  
       switch (b[i]) {  
       case 'a': case 'e': case 'i': case 'o': case 'u': return false;
@@ -52,18 +23,6 @@ namespace indri
       default: return true;
       }
     }
-
-    /* m() measures the number of consonant sequences between k0 and j. if c is
-       a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
-       presence,
-
-       <c><v>       gives 0
-       <c>vc<v>     gives 1
-       <c>vcvc<v>   gives 2
-       <c>vcvcvc<v> gives 3
-       ....
-    */
-
     int Porter_Stemmer::m() {
       int n = 0;
       int i = k0;
@@ -89,15 +48,11 @@ namespace indri
       }
     }
 
-    /* vowelinstem() is TRUE <=> k0,...j contains a vowel */
-
     bool Porter_Stemmer::vowelinstem() {
       int i; 
       for (i = k0; i <= j; i++) if (! cons(i)) return true;
       return false;
     }
-
-    /* doublec(j) is TRUE <=> j,(j-1) contain a double consonant. */
 
     bool Porter_Stemmer::doublec(int j) {
       if (j < k0+1) return false;
@@ -105,23 +60,12 @@ namespace indri
       return cons(j);
     }
 
-    /* cvc(i) is TRUE <=> i-2,i-1,i has the form consonant - vowel - consonant
-       and also if the second c is not w,x or y. this is used when trying to
-       restore an e at the end of a short word. e.g.
-
-       cav(e), lov(e), hop(e), crim(e), but
-       snow, box, tray.
-
-    */
-
     bool Porter_Stemmer::cvc(int i) {
       if (i < k0+2 || !cons(i) || cons(i-1) || !cons(i-2)) return false;
       int ch = b[i];
       if (ch == 'w' || ch == 'x' || ch == 'y') return false;
       return true;
     }
-
-    /* ends(s) is TRUE <=> k0,...k ends with the string s. */
 
     bool Porter_Stemmer::ends(char * s) {
       int length = s[0];
@@ -132,40 +76,13 @@ namespace indri
       return true;
     }
 
-    /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
-       k. */
-
     void Porter_Stemmer::setto(char * s) {
       int length = s[0];
       memmove(b+j+1,s+1,length);
       k = j+length;
     }
 
-    /* r(s) is used further down. */
-
     void Porter_Stemmer::r(char * s) { if (m() > 0) setto(s); }
-
-    /* step1ab() gets rid of plurals and -ed or -ing. e.g.
-
-    caresses  ->  caress
-    ponies    ->  poni
-    ties      ->  ti
-    caress    ->  caress
-    cats      ->  cat
-
-    feed      ->  feed
-    agreed    ->  agree
-    disabled  ->  disable
-
-    matting   ->  mat
-    mating    ->  mate
-    meeting   ->  meet
-    milling   ->  mill
-    messing   ->  mess
-
-    meetings  ->  meet
-
-    */
 
     void Porter_Stemmer::step1ab() {
       if (b[k] == 's') {
@@ -188,16 +105,9 @@ namespace indri
       }
     }
 
-    /* step1c() turns terminal y to i when there is another vowel in the stem. */
-
     void Porter_Stemmer::step1c() { 
       if (ends("\01" "y") && vowelinstem()) b[k] = 'i'; 
     }
-
-
-    /* step2() maps double suffices to single ones. so -ization ( = -ize plus
-       -ation) maps to -ize etc. note that the string before the suffix must give
-       m() > 0. */
 
     void Porter_Stemmer::step2() { 
       switch (b[k-1]) {
@@ -237,8 +147,6 @@ namespace indri
       } 
     }
 
-    /* step3() deals with -ic-, -full, -ness etc. similar strategy to step2. */
-
     void Porter_Stemmer::step3() { 
       switch (b[k]) {
       case 'e': if (ends("\05" "icate")) { r("\02" "ic"); break; }
@@ -254,8 +162,6 @@ namespace indri
         break;
       } 
     }
-
-    /* step4() takes off -ant, -ence etc., in context <c>vcvc<v>. */
 
     void Porter_Stemmer::step4() {
       switch (b[k-1]) {
@@ -284,9 +190,6 @@ namespace indri
       if (m() > 1) k = j;
     }
 
-    /* step5() removes a final -e if m() > 1, and changes -ll to -l if
-       m() > 1. */
-
     void Porter_Stemmer::step5() {
       j = k;
       if (b[k] == 'e') {
@@ -295,15 +198,6 @@ namespace indri
       }
       if (b[k] == 'l' && doublec(k) && m() > 1) k--;
     }
-
-    /* In stem(p,i,j), p is a char pointer, and the string to be stemmed is from
-       p[i] to p[j] inclusive. Typically i is zero and j is the offset to the last
-       character of a string, (p[j+1] == '\0'). The stemmer adjusts the
-       characters p[i] ... p[j] and returns the new end-point of the string, k.
-       Stemming never increases word length, so i <= k <= j. To turn the stemmer
-       into a module, declare 'stem' as extern, and delete the remainder of this
-       file.
-    */
 
     int Porter_Stemmer::porter_stem(char * p, int i, int j) {
       indri::thread::ScopedLock lock( _stemLock );

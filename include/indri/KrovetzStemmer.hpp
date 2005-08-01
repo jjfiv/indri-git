@@ -1,3 +1,13 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+ */
 // dmf
 // C++ thread safe implementation of the Krovetz stemmer.
 // requires no external data files.
@@ -8,6 +18,7 @@
 #include <hash_map>
 #else
 #include <ext/hash_map>
+// 3.3 does not use __gnu_cxx, 3.4+ does.
 using namespace __gnu_cxx;
 #endif
 #include "indri/Mutex.hpp"
