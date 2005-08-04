@@ -536,7 +536,7 @@ int indri::index::MemoryIndex::addDocument( indri::api::ParsedDocument& document
 
     // update our open tag knowledge
     _addOpenTags( indexedTags, openTags, document.tags, extentIndex, position );
-
+    _removeClosedTags( openTags, position );
     // for every open tag, we want to record that we've seen the 
     for( indri::utility::greedy_vector<indri::index::FieldExtent>::iterator tag = openTags.begin(); tag != openTags.end(); tag++ ) {
       indri::index::TermFieldStatistics* termField = &entry->termData->fields[tag->id-1];
@@ -546,7 +546,6 @@ int indri::index::MemoryIndex::addDocument( indri::api::ParsedDocument& document
       field->addOccurrence( documentID );
     }
 
-    _removeClosedTags( openTags, position );
     indexedTerms++;
   }
 
