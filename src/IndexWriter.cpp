@@ -320,7 +320,7 @@ void IndexWriter::_writeFieldList( const std::string& fileName, int fieldIndex, 
   int lastDocument = 0;
 
   int documents = 0;
-  int terms = 0;
+  UINT64 terms = 0;
 
   for( int i=0; i<iterators.size(); i++ ) {
     DocExtentListIterator* iterator = iterators[i];
