@@ -68,11 +68,10 @@ namespace indri
         _buffer.clear();
 
         for( int i=0; i<_count; i++ ) {
-
-	  // LINKDOCNO 
+          // LINK
           _in.getline( line, sizeof line-1 );
 
-	  // LINKURL=
+	  // LINKDOCNO 
           _in.getline( line, sizeof line-1 );
 	  
           // TEXT=
@@ -80,7 +79,7 @@ namespace indri
           int textLen = strlen(line+6);
           strcpy( _buffer.write(textLen+1), line+6 );
           _buffer.unwrite(1);
-
+	  
           assert( *(_buffer.front()+_buffer.position()-1) == '\"' && "Last character should be a quote" );
         }
         *(_buffer.write(1)) = 0;
@@ -91,7 +90,7 @@ namespace indri
         char* beginWord = 0;
         int beginIndex = 0;
         char* buffer = _buffer.front();
-        
+
         for( unsigned int i=0; i<_buffer.position(); i++ ) {
           if( isalnum(buffer[i]) && !beginWord ) {
             beginWord = buffer+i;
@@ -114,15 +113,21 @@ namespace indri
             extent.begin = beginIndex;
             extent.end = terms.size();
             extent.number = 0;
-            
+
             assert( extent.begin <= extent.end );
 
-            if( beginIndex )
+            if( beginIndex ) {
               tags.push_back(extent);
+	      if( terms.size() > 125000 )
+		break;
+	    }
+
 
             beginIndex = 0;
           }
+
         }
+
       }
 
       bool _matchingDocno( indri::api::ParsedDocument* document ) {
@@ -162,7 +167,7 @@ namespace indri
 
       indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
 
-        // surround current text with a mainbody tag
+	// surround current text with a mainbody tag
         TagExtent mainbody;
         mainbody.begin = 0;
         mainbody.end = document->terms.size();
@@ -174,7 +179,7 @@ namespace indri
         document->tags.clear();
         document->tags.push_back( mainbody );
         document->tags.append( oldTags.begin(), oldTags.end() );
-
+	
         if( _matchingDocno( document ) ) {
           _fetchText( document->tags, document->terms );
           _readDocumentHeader();
