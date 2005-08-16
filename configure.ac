@@ -12,13 +12,16 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_LEX
 AC_PROG_INSTALL
-AC_CHECK_PROGS(AR, ar gar)
+AC_PATH_PROGS(AR, ar gar)
+if test -z "$AR" ; then
+   AC_MSG_ERROR([cannot find the program ar on your path. Add AR=/path/to/ar to your configure command line])
+fi
 AC_SUBST(SHARED)
 
 dnl Checks for libraries.
 AC_CHECK_LIB(m, log)
 AC_CHECK_LIB(pthread, pthread_create)
-dnl If/when we add client server
+
 case $host in
    *-*-solaris*) 
      AC_CHECK_LIB(nsl, gethostbyname)
@@ -41,7 +44,6 @@ AC_CHECK_LIB(z, deflate)
 AC_CHECK_LIB(iberty, mkstemps)
 
 dnl Checks for header files.
-
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl AC_CHECK_SIZEOF(int)
 dnl AC_CHECK_SIZEOF(void *)
@@ -55,19 +57,23 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(mkstemp)
 AC_CHECK_FUNCS(mkstemps)
 
-dnl Finish up and output.
-AC_SUBST(WITH_SWIG)
-AC_SUBST(SWIG_SHARED)
+dnl check for optional components.
 
-AC_ARG_ENABLE(swig,
-	    AC_HELP_STRING([--enable-swig],
-	                   [Enable swig wrapper generation]))
-if test "$enable_swig" = "yes" ; then
-  WITH_SWIG=1
-  AC_DEFINE(WITH_SWIG, 1, [Enable swig wrapper generation])
+AC_ARG_ENABLE(php,
+	    AC_HELP_STRING([--enable-php],
+	                   [Enable php shared library generation]))
+if test "$enable_php" = "yes" ; then
+  WITH_PHP=1
 else
-  WITH_SWIG=0
-  AC_DEFINE(WITH_SWIG, 0, [Enable swig wrapper generation])
+  WITH_PHP=0
+fi
+AC_ARG_ENABLE(java,
+	    AC_HELP_STRING([--enable-java],
+	                   [Enable java shared library generation]))
+if test "$enable_java" = "yes" ; then
+  WITH_JAVA=1
+else
+  WITH_JAVA=0
 fi
 
 AC_ARG_ENABLE(assert,
@@ -78,24 +84,13 @@ AC_ARG_ENABLE(assert,
 			   fi],
 			   AC_DEFINE(NDEBUG, 1, [Turn off assert statements]))
 
-if test "$enable_swig" = "yes" ; then
-# Look for swig
-  AC_ARG_WITH(swig, [  --with-swig=path       Set location of swig executable],[SWIG="$withval"], [SWIG=])
-
-  if test -z "$SWIG" ; then
-     AC_CHECK_PROGS(SWIG, swig)
-  fi
-fi
-AC_SUBST(SWIG)
-
-#----------------------------------------------------------------
-# Look for java
-#----------------------------------------------------------------
-if test "$enable_swig" = "yes" ; then
+dnl Look for java
+if test "$enable_java" = "yes" ; then
    AC_ARG_WITH(javahome, [  --with-javahome=path       Set location of JAVAHOME],[JAVAHOME="$withval"; JAVACBIN=$JAVAHOME/bin/javac; JAVAINCDIR=$JAVAHOME/include; JAR=$JAVAHOME/bin/jar], [JAVAHOME=])
    
    if test -z "$JAVACBIN" ; then
-     AC_CHECK_PROGS(JAVAC, javac)
+     AC_PATH_PROGS(JAVAC, javac)
+     AC_PATH_PROGS(JAR, jar)
    else
      JAVAC="$JAVACBIN"
    fi
@@ -112,25 +107,24 @@ if test "$enable_swig" = "yes" ; then
        break
      fi
    done
-## only disable if no java or php
-   if test "$JAVAINC" = "" ; then
+dnl only disable if no java includes or no javac
+   if test "$JAVAINC" = "" -o -z "$JAVAC" ; then
       AC_MSG_RESULT(not found disabling swig java wrappers)
       WITH_JAVA=0
-      AC_DEFINE(WITH_JAVA, 0, [Enable swig java wrapper generation])
+      enable_java=no
    else
-      # now look for <arch>/jni_md.h
+dnl now look for <arch>/jni_md.h
       AC_MSG_CHECKING(for java include file jni_md.h)
       JAVAMDDIR=`find $JAVAINCDIR -follow -name jni_md.h -print`
       if test "$JAVAMDDIR" = "" ; then
 	 AC_MSG_RESULT(not found)
 	 WITH_JAVA=0
-	 AC_DEFINE(WITH_JAVA, 0, [Enable swig java wrapper generation])
+         enable_java=no
       else
 	 JAVAMDDIR=`dirname $JAVAMDDIR`
 	 JAVAINC="${JAVAINC} -I$JAVAMDDIR"
 	 AC_MSG_RESULT($JAVAMDDIR)
 	 WITH_JAVA=1
-	 AC_DEFINE(WITH_JAVA, 1, [Enable swig java wrapper generation])
       fi
    fi
 else
@@ -146,25 +140,22 @@ AC_SUBST(JAVAINC)
 AC_SUBST(JAVAHOME)
 AC_SUBST(WITH_JAVA)
 
-#----------------------------------------------------------------
-# Look for php
-#----------------------------------------------------------------
-if test "$enable_swig" = "yes" ; then
+dnl Look for php
+if test "$enable_php" = "yes" ; then
    AC_ARG_WITH(php-config, [  --with-php-config=path       Set location of php-config],[PHPCONFIG="$withval"], [PHPCONFIG=])
    if test -z "$PHPCONFIG" ; then
-      AC_CHECK_PROGS(PHPCONFIG, php-config)
+      AC_PATH_PROG(PHPCONFIG, php-config)
    fi
-   AC_MSG_CHECKING(for php includes)
-   if test "$PHPCONFIG" = "" ; then
-      AC_MSG_RESULT(not found disabling swig php wrappers)
+   if test "$PHPCONFIG" = ""; then
+      AC_MSG_WARN($PHPCONFIG not found disabling swig php wrappers)
       WITH_PHP=0
-      PHPINCLUDE=""
-      AC_DEFINE(WITH_PHP, 0, [Enable swig php wrapper generation])
+      enable_php=no
+      PHPINCLUDE=
    else
+      AC_MSG_CHECKING(for php includes)
       PHPINCLUDE=`$PHPCONFIG --includes`
       AC_MSG_RESULT(found)
       WITH_PHP=1
-      AC_DEFINE(WITH_PHP, 1, [Enable swig php wrapper generation])
    fi
 else
    PHPINCLUDE=
@@ -172,5 +163,19 @@ else
 fi
 AC_SUBST(PHPINCLUDE)
 AC_SUBST(WITH_PHP)
-##
+
+dnl Look for swig
+SWIG=
+if test "$enable_java" = yes -o "$enable_php" = "yes" ; then
+  WITH_SWIG=1
+  AC_ARG_WITH(swig, [  --with-swig=path       Set location of swig executable],[SWIG="$withval"])
+  if test -z "$SWIG" ; then
+     AC_PATH_PROGS(SWIG, swig)
+  fi
+else
+  WITH_SWIG=0
+fi
+AC_SUBST(SWIG)
+AC_SUBST(WITH_SWIG)
+AC_SUBST(SWIG_SHARED)
 AC_OUTPUT

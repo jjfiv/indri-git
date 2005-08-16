@@ -8,12 +8,16 @@
          and Makefile.app. <tt>configure</tt> accepts following arguments:
 		- <tt>--enable-assert</tt> Enable assert statements in
                   the code. Default is disabled.
-		- <tt>--enable-swig</tt> compiles and installs the
+		- <tt>--enable-java</tt> compiles and installs the
 		  swig generated java wrappers. Default is disabled.
+		- <tt>--enable-php</tt> compiles and installs the
+		  swig generated php wrappers. Default is disabled.
 		- <tt>--with-javahome=<path></tt> Path to JAVAHOME for
 		  compiling the swig generated shared library. 
 		- <tt>--with-swig<path></tt> Path to swig binary. Only
 		  required if the wrapper interfaces are changed. 
+		- <tt>--with-php-config<path></tt> Path to php-config
+                  binary. Only required if php-config is not on the path. 
 		- <tt>--prefix=<install-directory></tt> Specifies the 
 		  base directory for installation. 
 		  Default is /usr/local.
@@ -47,9 +51,9 @@ for the Indri JNI will be installed in
 <install-directory>/share/indri/JNIdoc. The file index.html points into the
 javadoc generated documentation.
 
-<p>If configured with --enable-swig,
+<p>If configured with --enable-java,
 the shared library will be installed in
-<install-directory>/lib/libindri.so and the java class files will be
+<install-directory>/lib/libindri_jni.so and the java class files will be
 installed in <install-directory>/share/indri/indri.jar. You will need to
 add <install-directory>/lib to your LD_LIBRARY_PATH and add
 <install-directory>/share/indri/indri.jar to your CLASSPATH to use the
@@ -62,6 +66,12 @@ installed in <install-directory>/share/indri and can be run with
 <pre>
 java -jar <jarfilename>
 </pre>
+
+<p>If configured with --enable-php,
+the shared library will be installed in
+<install-directory>/lib/libindri_php.so. You will need to manually
+install it in the correct extensions directory for your php
+configuration. 
 
   \section program  Programming with the indri library
 
