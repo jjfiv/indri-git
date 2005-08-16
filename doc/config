@@ -477,7 +477,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = /usr/dan/users9/dfisher/ciir/indri/validate /usr/dan/users9/dfisher/ciir/indri/test /usr/dan/users9/dfisher/ciir/indri/test2
+EXCLUDE                = /usr/dan/users9/dfisher/ciir/indri/validate /usr/dan/users9/dfisher/ciir/indri/test /usr/dan/users9/dfisher/ciir/indri/test2 /usr/dan/users9/dfisher/ciir/indri/contrib
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
