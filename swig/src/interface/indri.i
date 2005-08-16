@@ -43,7 +43,7 @@ typedef long long UINT64;
 
 %pragma(java) jniclasscode=%{
   static {
-    System.loadLibrary("indri");
+    System.loadLibrary("indri_jni");
   }
 %}
 
