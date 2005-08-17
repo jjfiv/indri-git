@@ -110,6 +110,12 @@ clean:
 	rm -rf $(OBJ)/java $(OUTDIRPHP)
 ## need to add target for php solib (and fix naming conventions)
 install:
+ifeq ($(WITH_SWIG), 1)
+  ifeq ($(WITH_JAVA), 1)
 	$(INSTALL_DATA) $(JARFILES) $(pkgdatadir)
 	$(INSTALL_PROGRAM) $(SOLIB) $(libdir)
-
+  endif
+  ifeq ($(WITH_PHP), 1)
+	$(INSTALL_PROGRAM) $(PHPLIB) $(libdir)
+  endif
+endif
