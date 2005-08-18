@@ -65,7 +65,7 @@ END
   //          installation to see where this library needs to be stored.
   //
 
-  $indri_param['library'] = "libindri.so";
+  $indri_param['library'] = "libindri_php.so";
 
   //
   // snippet_length: Maximum length, in words, of the snippet that
