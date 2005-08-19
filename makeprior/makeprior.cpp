@@ -12,6 +12,7 @@
 #include "indri/SequentialWriteBuffer.hpp"
 #include "indri/Path.hpp"
 #include <queue>
+#include <fstream>
 
 void copy_region( indri::file::File& out, indri::file::File& in, UINT64 position, UINT64 length ) {
   char* buffer = new char[1024*1024];
