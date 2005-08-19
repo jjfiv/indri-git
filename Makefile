@@ -16,6 +16,7 @@ endif
 	$(MAKE) -C dumpindex
 	$(MAKE) -C harvestlinks
 	$(MAKE) -C rmodel
+	$(MAKE) -C makeprior
 
 $(INSTALLDIRS):
 	$(INSTALL_DIR) $@
@@ -32,6 +33,7 @@ endif
 	$(MAKE) clean -C dumpindex
 	$(MAKE) clean -C harvestlinks
 	$(MAKE) clean -C rmodel
+	$(MAKE) clean -C makeprior
 	rm -f depend/*
 
 distclean: clean
@@ -53,5 +55,6 @@ endif
 	$(MAKE) install -C dumpindex
 	$(MAKE) install -C harvestlinks
 	$(MAKE) install -C rmodel
+	$(MAKE) install -C makeprior
 #	$(MAKE) install -C doc
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)

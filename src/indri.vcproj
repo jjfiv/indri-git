@@ -332,6 +332,9 @@
 				RelativePath=".\PriorFactory.cpp">
 			</File>
 			<File
+				RelativePath=".\PriorListIterator.cpp">
+			</File>
+			<File
 				RelativePath=".\PriorNode.cpp">
 			</File>
 			<File
@@ -827,6 +830,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\PriorFactory.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\PriorListIterator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\PriorNode.hpp">
