@@ -17,7 +17,7 @@
 /*! \page makeprior Indri Named Prior Table Builder
 <P>
  This application builds a named prior table for a collection of documents 
-and installs it within an Indri Repostory.
+and installs it within an Indri Repository.
  Parameter formats for all Indri applications are also described in
 <a href="IndriParameters.html">IndriParameters.html</a>
 <H3> Prior table construction parameters</h3>
@@ -44,7 +44,7 @@ and installs it within an Indri Repostory.
   </dd>
   <dt>memory</dt>
   <dd> an integer value specifying the number of bytes to use for the
-  query retrieval process. The value can include a scaling factor by
+  table building process. The value can include a scaling factor by
   adding a suffix. Valid values are (case insensitive) K = 1000, M =
   1000000, G = 1000000000. So 100M would be equivalent to 100000000. The
   value should contain only decimal digits and the optional
