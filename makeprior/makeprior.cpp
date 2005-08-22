@@ -1,9 +1,58 @@
+/*==========================================================================
+ * Copyright (c) 2005 University of Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
 
 //
 // makeprior
 //
 // 22 July 2005 -- tds
 //
+/*! \page makeprior Indri Named Prior Table Builder
+<P>
+ This application builds a named prior table for a collection of documents 
+and installs it within an Indri Repostory.
+ Parameter formats for all Indri applications are also described in
+<a href="IndriParameters.html">IndriParameters.html</a>
+<H3> Prior table construction parameters</h3>
+<dl>
+  <dt>index</dt>
+  <dd> path to an Indri Repository. Specified as
+  &lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
+  as <tt>-index=/path/to/repository</tt> on the command line.
+  </dd>
+
+  <dt>name</dt>
+  <dd> The name for this prior. Specified as
+  &lt;name&gt;PriorName&lt;/name&gt; in the parameter file and
+  as <tt>-name=PriorName</tt> on the command line.
+  </dd>
+
+  <dt>input</dt>
+  <dd> path to the input file for this prior. The input file should contain
+  a list of entries containing first an external document id and second a 
+  log probability value. There should be one entry per line of the file.
+  Specified as
+  &lt;input&gt;/path/to/inputfile&lt;/input&gt; in the parameter file and
+  as <tt>-input=/path/to/inputfile</tt> on the command line.
+  </dd>
+  <dt>memory</dt>
+  <dd> an integer value specifying the number of bytes to use for the
+  query retrieval process. The value can include a scaling factor by
+  adding a suffix. Valid values are (case insensitive) K = 1000, M =
+  1000000, G = 1000000000. So 100M would be equivalent to 100000000. The
+  value should contain only decimal digits and the optional
+  suffix. Specified as &lt;memory&gt;100M&lt;/memory&gt; in the parameter
+  file and as <tt>-memory=100M</tt> on the command line. </dd> 
+
+</dl>
+*/
 
 #include "indri/QueryEnvironment.hpp"
 #include "indri/Parameters.hpp"
