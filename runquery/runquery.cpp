@@ -481,6 +481,9 @@ int main(int argc, char * argv[]) {
 
     int query = 0;
 
+    // acquire the lock.
+	queueLock.lock();
+
     // process output as it appears on the queue
     while( query < queryCount ) {
       query_t* result = NULL;
@@ -500,9 +503,8 @@ int main(int argc, char * argv[]) {
 
         queueLock.lock();
       }
- 
-      queueLock.unlock();
     }
+    queueLock.unlock();
 
     // join all the threads
     for( int i=0; i<threads.size(); i++ )
