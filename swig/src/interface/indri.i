@@ -82,6 +82,9 @@ public:
   std::vector<std::string> documentMetadata( const std::vector<int>& documentIDs, const std::string& attributeName );
   std::vector<std::string> documentMetadata( const std::vector<indri::api::ScoredExtentResult>& documentIDs, const std::string& attributeName );
 
+  std::vector<int> documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue );
+  std::vector<indri::api::ParsedDocument*> documentsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue );
+
   INT64 termCount();
   INT64 termCount( const std::string& term );
   INT64 termFieldCount( const std::string& term, const std::string& field );
