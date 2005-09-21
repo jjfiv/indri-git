@@ -35,6 +35,8 @@ class indriJNI {
   public final static native ParsedDocument[] QueryEnvironment_documents__SWIG_1(long jarg1, ScoredExtentResult[] jarg2);
   public final static native String[] QueryEnvironment_documentMetadata__SWIG_0(long jarg1, int[] jarg2, String jarg3);
   public final static native String[] QueryEnvironment_documentMetadata__SWIG_1(long jarg1, ScoredExtentResult[] jarg2, String jarg3);
+  public final static native int[] QueryEnvironment_documentIDsFromMetadata(long jarg1, String jarg2, String[] jarg3);
+  public final static native ParsedDocument[] QueryEnvironment_documentsFromMetadata(long jarg1, String jarg2, String[] jarg3);
   public final static native long QueryEnvironment_termCount__SWIG_0(long jarg1);
   public final static native long QueryEnvironment_termCount__SWIG_1(long jarg1, String jarg2);
   public final static native long QueryEnvironment_termFieldCount(long jarg1, String jarg2, String jarg3);

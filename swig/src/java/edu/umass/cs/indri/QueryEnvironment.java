@@ -99,6 +99,14 @@ public class QueryEnvironment {
   return indriJNI.QueryEnvironment_documentMetadata__SWIG_1(swigCPtr, documentIDs, attributeName);
 }
 
+  public int[] documentIDsFromMetadata(String attributeName, String[] attributeValue) {
+  return indriJNI.QueryEnvironment_documentIDsFromMetadata(swigCPtr, attributeName, attributeValue);
+}
+
+  public ParsedDocument[] documentsFromMetadata(String attributeName, String[] attributeValue) {
+  return indriJNI.QueryEnvironment_documentsFromMetadata(swigCPtr, attributeName, attributeValue);
+}
+
   public long termCount() {
     return indriJNI.QueryEnvironment_termCount__SWIG_0(swigCPtr);
   }

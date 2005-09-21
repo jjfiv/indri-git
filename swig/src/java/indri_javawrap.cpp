@@ -1778,6 +1778,123 @@ JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment
 }
 
 
+JNIEXPORT jintArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentIDsFromMetadata(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jobjectArray jarg3) {
+    jintArray jresult = 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    std::vector<std::string > *arg3 = 0 ;
+    std::vector<int > result;
+    std::vector<std::string > strin3 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::QueryEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return 0;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return 0;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        jclass stringClazz = jenv->FindClass("java/lang/String");
+        jsize arrayLength = jenv->GetArrayLength(jarg3);
+        arg3 = &strin3;
+        
+        for( unsigned int i=0; i<arrayLength; i++ ) {
+            jstring str = (jstring) jenv->GetObjectArrayElement(jarg3, i);
+            jsize stringLength = jenv->GetStringUTFLength(str);
+            const char* stringChars = jenv->GetStringUTFChars(str, 0);
+            std::string stringCopy;
+            stringCopy.assign( stringChars, stringChars + stringLength );
+            arg3->push_back(stringCopy);
+        }
+    }
+    {
+        try {
+            result = (arg1)->documentIDsFromMetadata((std::string const &)*arg2,(std::vector<std::string > const &)*arg3);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(0, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return 0;
+        }
+    }
+    {
+        std::vector<int> &input = result;
+        jresult = jenv->NewIntArray(input.size()); 
+        jint * body = jenv->GetIntArrayElements(jresult, 0);
+        for( jsize i=0; i<input.size(); i++ ) {
+            body[i] = input[i];
+        }
+        jenv->ReleaseIntArrayElements(jresult, body, 0);
+    }
+    return jresult;
+}
+
+
+JNIEXPORT jobjectArray JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1documentsFromMetadata(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jobjectArray jarg3) {
+    jobjectArray jresult = 0 ;
+    indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    std::vector<std::string > *arg3 = 0 ;
+    std::vector<indri::api::ParsedDocument * > result;
+    std::vector<std::string > strin3 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::QueryEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return 0;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return 0;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        jclass stringClazz = jenv->FindClass("java/lang/String");
+        jsize arrayLength = jenv->GetArrayLength(jarg3);
+        arg3 = &strin3;
+        
+        for( unsigned int i=0; i<arrayLength; i++ ) {
+            jstring str = (jstring) jenv->GetObjectArrayElement(jarg3, i);
+            jsize stringLength = jenv->GetStringUTFLength(str);
+            const char* stringChars = jenv->GetStringUTFChars(str, 0);
+            std::string stringCopy;
+            stringCopy.assign( stringChars, stringChars + stringLength );
+            arg3->push_back(stringCopy);
+        }
+    }
+    {
+        try {
+            result = (arg1)->documentsFromMetadata((std::string const &)*arg2,(std::vector<std::string > const &)*arg3);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(0, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return 0;
+        }
+    }
+    {
+        jni_parseddocument_info info;
+        parseddocument_init( jenv, info );
+        
+        jresult = jenv->NewObjectArray((&result)->size(), info.pdClazz, NULL);
+        
+        for( unsigned int i=0; i<(&result)->size(); i++ ) {
+            jobject document = parseddocument_copy( jenv, info, result[i] );
+            jenv->SetObjectArrayElement(jresult, i, document);
+            delete result[i];
+        }
+    }
+    return jresult;
+}
+
+
 JNIEXPORT jlong JNICALL Java_edu_umass_cs_indri_indriJNI_QueryEnvironment_1termCount_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jlong jresult = 0 ;
     indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
