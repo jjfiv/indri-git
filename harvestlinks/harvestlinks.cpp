@@ -15,6 +15,7 @@
 #include "indri/TaggedDocumentIterator.hpp"
 #include "indri/TaggedTextParser.hpp"
 #include "indri/HTMLParser.hpp"
+#include "indri/ConflationPattern.hpp"
 #include "indri/AnchorTextWriter.hpp"
 #include "indri/FileTreeIterator.hpp"
 #include "indri/Path.hpp"
@@ -47,7 +48,7 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
   include.push_back( "absolute-url" );
   include.push_back( "a" );
   std::vector<std::string> empty;
-  std::map<std::string,std::string> mempty;
+  std::map<indri::parse::ConflationPattern*,std::string> mempty;
 
   indri::parse::HTMLParser parser;
   parser.setTags( empty, empty, include, empty, mempty );

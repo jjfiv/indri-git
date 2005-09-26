@@ -403,6 +403,7 @@ optional parameter with the default of no stopping.</dd>
 #include "indri/IndexEnvironment.hpp"
 #include <time.h>
 #include "indri/Path.hpp"
+#include "indri/ConflationPattern.hpp"
 #include "lemur/Exception.hpp"
 #include "indri/FileTreeIterator.hpp"
 #include <vector>
@@ -504,11 +505,11 @@ static std::vector<std::string> findConflations(indri::parse::FileClassEnvironme
   std::vector<std::string> retval;
   // have to walk the map and add an entry for each
   // conflation to a given name
-  std::map<std::string, std::string>::const_iterator iter;
+  std::map<indri::parse::ConflationPattern*, std::string>::const_iterator iter;
   for (iter = spec->conflations.begin(); 
        iter != spec->conflations.end(); iter++) {
     if( iter->second == name )
-      retval.push_back(iter->first);
+      retval.push_back(iter->first->tag_name);
   }
   // put the original into the list
   retval.push_back(name);
@@ -691,6 +692,10 @@ int main(int argc, char * argv[]) {
       
       std::string anchorText = thisCorpus.get("inlink", "");
       env.setAnchorTextPath( corpusPath, anchorText );
+
+      // Support for an offset annotations file
+      std::string offsetAnnotationsFile = thisCorpus.get( "annotations", "" );
+      env.setOffsetAnnotationsFile( offsetAnnotationsFile );
 
       if( isDirectory ) {
         indri::file::FileTreeIterator files( corpusPath );

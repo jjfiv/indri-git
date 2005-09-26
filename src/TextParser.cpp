@@ -40,6 +40,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
+#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -1619,7 +1620,7 @@ void indri::parse::TextParser::setTags( const std::vector<std::string>& include,
                           const std::vector<std::string>& exclude,
                           const std::vector<std::string>& index,
                           const std::vector<std::string>& metadata, 
-                          const std::map<std::string,std::string>& conflations ) {
+                          const std::map<ConflationPattern*,std::string>& conflations ) {
   // do nothing
 }
 
