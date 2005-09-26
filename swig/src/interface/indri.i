@@ -9,12 +9,14 @@
 #include "indri/ParsedDocument.hpp"
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
+#include "indri/ConflationPattern.hpp"
 #include "lemur/Exception.hpp"
 %}
 
 %include "std_string.i"
 %include "exception.i"
 
+%include "ConflationPattern.i"
 %include "MResults.i"
 %include "ParsedDocument.i"
 %include "QueryAnnotationNode.i"
@@ -124,7 +126,7 @@ public:
                      const std::vector<std::string>& exclude,
                      const std::vector<std::string>& index,
                      const std::vector<std::string>& metadata, 
-                     const std::map<std::string,std::string>& conflations );
+                     const std::map<indri::parse::ConflationPattern *,std::string>& conflations );
   indri::parse::FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name);
   void addFileClass( const indri::parse::FileClassEnvironmentFactory::Specification &spec);
   

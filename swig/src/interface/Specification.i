@@ -109,14 +109,32 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
    stringField = jenv->NewStringUTF(thisSpec->endMetadataTag.c_str());
    jenv->SetObjectField(result, info.endMetadataTagField, stringField);
    // make a conflations map to go in it
+
+  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jmethodID conflationConstructor = jenv->GetMethodID(conflationClazz, "<init>", "()V" ); 
+  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+
    jobject mapObject = jenv->NewObject(info.mapClazz, info.mapConstructor);
-   for( std::map<std::string, std::string>::iterator iter = thisSpec->conflations.begin(); 
+   for( std::map<indri::parse::ConflationPattern *, std::string>::iterator iter = thisSpec->conflations.begin(); 
 	iter != thisSpec->conflations.end(); iter++ ) {
-     const std::string &thisKey = iter->first;
+     const indri::parse::ConflationPattern *thisKey = iter->first;
      const std::string &thisVal = iter->second;
-     jstring key = jenv->NewStringUTF(thisKey.c_str());
+     jobject patternObject = jenv->NewObject(conflationClazz, conflationConstructor);
+     jstring patVal;
+     const char *c_str = thisKey->tag_name;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, tag_nameField, patVal);
+     c_str = thisKey->attribute_name;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, attribute_nameField, patVal);
+     c_str = thisKey->value;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, valueField, patVal);
+
      jstring val = jenv->NewStringUTF(thisVal.c_str());
-     jenv->CallObjectMethod(mapObject, info.putMethod, key, val);
+     jenv->CallObjectMethod(mapObject, info.putMethod, patternObject, val);
    }
    jenv->SetObjectField(result, info.conflationsField, mapObject);
    jobjectArray stringArray = string_vector_copy(jenv, thisSpec->include);
@@ -151,7 +169,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  
  // copy to map (stringmap.i)
  void copy_to_map(JNIEnv* jenv, jobject src,
-			    std::map<std::string, std::string> &map) {
+			    std::map<indri::parse::ConflationPattern*, std::string> &map) {
 
   // get map class and entrySet method pointer
   jclass mapClazz = jenv->GetObjectClass(src);
@@ -177,15 +195,30 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
 
     jobject key = jenv->CallObjectMethod( entryObject, mapEntryGetKey );
     jobject value = jenv->CallObjectMethod( entryObject, mapEntryGetValue );
-
-    const char* keyChars = jenv->GetStringUTFChars( (jstring) key, 0 );
-    std::string keyString = keyChars;
-    jenv->ReleaseStringUTFChars( (jstring) key, keyChars );
+    
+    indri::parse::ConflationPattern * pattern = new indri::parse::ConflationPattern();
 
     const char* valueChars = jenv->GetStringUTFChars( (jstring) value, 0 );
     std::string valueString = valueChars;
     jenv->ReleaseStringUTFChars( (jstring) value, valueChars );
-    map[keyString] = valueString ;
+
+  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+
+  jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->tag_name = valueChars;
+  
+  fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->attribute_name = valueChars;
+
+  fieldValue = (jstring) jenv->GetObjectField(key, valueField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->value = valueChars;
+  map[pattern] = valueString ;
   }
  }
  

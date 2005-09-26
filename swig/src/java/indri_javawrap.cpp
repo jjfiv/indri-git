@@ -338,6 +338,7 @@ namespace Swig {
 #include "indri/ParsedDocument.hpp"
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
+#include "indri/ConflationPattern.hpp"
 #include "lemur/Exception.hpp"
 
 
@@ -821,14 +822,32 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
    stringField = jenv->NewStringUTF(thisSpec->endMetadataTag.c_str());
    jenv->SetObjectField(result, info.endMetadataTagField, stringField);
    // make a conflations map to go in it
+
+  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jmethodID conflationConstructor = jenv->GetMethodID(conflationClazz, "<init>", "()V" ); 
+  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+
    jobject mapObject = jenv->NewObject(info.mapClazz, info.mapConstructor);
-   for( std::map<std::string, std::string>::iterator iter = thisSpec->conflations.begin(); 
+   for( std::map<indri::parse::ConflationPattern *, std::string>::iterator iter = thisSpec->conflations.begin(); 
 	iter != thisSpec->conflations.end(); iter++ ) {
-     const std::string &thisKey = iter->first;
+     const indri::parse::ConflationPattern *thisKey = iter->first;
      const std::string &thisVal = iter->second;
-     jstring key = jenv->NewStringUTF(thisKey.c_str());
+     jobject patternObject = jenv->NewObject(conflationClazz, conflationConstructor);
+     jstring patVal;
+     const char *c_str = thisKey->tag_name;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, tag_nameField, patVal);
+     c_str = thisKey->attribute_name;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, attribute_nameField, patVal);
+     c_str = thisKey->value;
+     patVal = jenv->NewStringUTF(c_str);
+     jenv->SetObjectField(patternObject, valueField, patVal);
+
      jstring val = jenv->NewStringUTF(thisVal.c_str());
-     jenv->CallObjectMethod(mapObject, info.putMethod, key, val);
+     jenv->CallObjectMethod(mapObject, info.putMethod, patternObject, val);
    }
    jenv->SetObjectField(result, info.conflationsField, mapObject);
    jobjectArray stringArray = string_vector_copy(jenv, thisSpec->include);
@@ -863,7 +882,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  
  // copy to map (stringmap.i)
  void copy_to_map(JNIEnv* jenv, jobject src,
-			    std::map<std::string, std::string> &map) {
+			    std::map<indri::parse::ConflationPattern*, std::string> &map) {
 
   // get map class and entrySet method pointer
   jclass mapClazz = jenv->GetObjectClass(src);
@@ -889,15 +908,30 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
 
     jobject key = jenv->CallObjectMethod( entryObject, mapEntryGetKey );
     jobject value = jenv->CallObjectMethod( entryObject, mapEntryGetValue );
-
-    const char* keyChars = jenv->GetStringUTFChars( (jstring) key, 0 );
-    std::string keyString = keyChars;
-    jenv->ReleaseStringUTFChars( (jstring) key, keyChars );
+    
+    indri::parse::ConflationPattern * pattern = new indri::parse::ConflationPattern();
 
     const char* valueChars = jenv->GetStringUTFChars( (jstring) value, 0 );
     std::string valueString = valueChars;
     jenv->ReleaseStringUTFChars( (jstring) value, valueChars );
-    map[keyString] = valueString ;
+
+  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+
+  jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->tag_name = valueChars;
+  
+  fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->attribute_name = valueChars;
+
+  fieldValue = (jstring) jenv->GetObjectField(key, valueField);
+  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+  pattern->value = valueChars;
+  map[pattern] = valueString ;
   }
  }
  
@@ -2363,12 +2397,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
     std::vector<std::string > *arg9 = 0 ;
     std::vector<std::string > *arg10 = 0 ;
     std::vector<std::string > *arg11 = 0 ;
-    std::map<std::string,std::string > *arg12 = 0 ;
+    std::map<indri::parse::ConflationPattern *,std::string > *arg12 = 0 ;
     std::vector<std::string > strin8 ;
     std::vector<std::string > strin9 ;
     std::vector<std::string > strin10 ;
     std::vector<std::string > strin11 ;
-    std::map<std::string,std::string > mapin12 ;
+    std::map<indri::parse::ConflationPattern *,std::string > map12 ;
     
     (void)jenv;
     (void)jcls;
@@ -2484,43 +2518,62 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         }
     }
     {
-        // call map.entrySet()
-        jclass mapClazz = jenv->GetObjectClass( jarg12 );
-        jmethodID mapEntrySetMethod = jenv->GetMethodID( mapClazz, "entrySet", "()Ljava/util/Set;" );
-        jobject mapEntrySet = jenv->CallObjectMethod( jarg12, mapEntrySetMethod );
+        // make a conflations map12 to go in it
+        // get map12 class and entrySet method pointer
+        jobject src = jarg12;
+        jclass mapClazz = jenv->GetObjectClass(src);
+        jmethodID mapEntrySet = jenv->GetMethodID(mapClazz, "entrySet", "()Ljava/util/Set;" );
         
-        // call entrySet.toArray()
-        jclass entrySetClazz = jenv->GetObjectClass( mapEntrySet );
-        jmethodID entrySetToArrayMethod = jenv->GetMethodID( entrySetClazz, "toArray", "()[Ljava/lang/Object;" );
-        jobjectArray entryArray = (jobjectArray) jenv->CallObjectMethod( mapEntrySet, entrySetToArrayMethod );
+        // call entry set function to set a Set of entries
+        jobject entrySet = jenv->CallObjectMethod(src, mapEntrySet);
+        jclass setClazz = jenv->GetObjectClass(entrySet);
+        jmethodID setToArray = jenv->GetMethodID(setClazz, "toArray", "()[Ljava/lang/Object;" );
         
-        // get array length
-        jsize arrayLength = jenv->GetArrayLength( entryArray );
-        arg12 = &mapin12;
+        // turn that set into an array of objects (entries)
+        jobjectArray entryArray = (jobjectArray) jenv->CallObjectMethod(entrySet, setToArray);
         
-        for( unsigned int i=0; i<arrayLength; i++ ) {
-            jobject mapEntry = jenv->GetObjectArrayElement( entryArray, i );
-            jclass mapEntryClazz = jenv->GetObjectClass( mapEntry );
-            jmethodID mapEntryGetKeyMethod = jenv->GetMethodID( mapEntryClazz, "getKey", "()Ljava/lang/Object;" );
-            jmethodID mapEntryGetValueMethod = jenv->GetMethodID( mapEntryClazz, "getValue", "()Ljava/lang/Object;" );
+        // get the array size
+        jsize entryArrayLength = jenv->GetArrayLength(entryArray);
+        
+        for( int i=0; i<entryArrayLength; i++ ) {
+            // get the key string
+            jobject entryObject = (jstring) jenv->GetObjectArrayElement( entryArray, i );
+            jclass mapEntryClazz = jenv->GetObjectClass(entryObject);
+            jmethodID mapEntryGetKey = jenv->GetMethodID(mapEntryClazz, "getKey", "()Ljava/lang/Object;" );
+            jmethodID mapEntryGetValue = jenv->GetMethodID(mapEntryClazz, "getValue", "()Ljava/lang/Object;" );
             
-            jobject key = jenv->CallObjectMethod( mapEntry, mapEntryGetKeyMethod );
-            jobject value = jenv->CallObjectMethod( mapEntry, mapEntryGetValueMethod );
+            jobject key = jenv->CallObjectMethod( entryObject, mapEntryGetKey );
+            jobject value = jenv->CallObjectMethod( entryObject, mapEntryGetValue );
             
-            const char* keyChars = jenv->GetStringUTFChars( (jstring) key, 0 );
-            std::string keyString = keyChars;
-            jenv->ReleaseStringUTFChars( (jstring) key, keyChars );
+            indri::parse::ConflationPattern * pattern = new indri::parse::ConflationPattern();
             
             const char* valueChars = jenv->GetStringUTFChars( (jstring) value, 0 );
             std::string valueString = valueChars;
             jenv->ReleaseStringUTFChars( (jstring) value, valueChars );
             
-            mapin12[keyString] = valueString;
+            jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+            jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+            jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+            jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+            
+            jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
+            valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            pattern->tag_name = valueChars;
+            
+            fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
+            valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            pattern->attribute_name = valueChars;
+            
+            fieldValue = (jstring) jenv->GetObjectField(key, valueField);
+            valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            pattern->value = valueChars;
+            map12[pattern] = valueString ;
         }
+        arg12 = &map12;
     }
     {
         try {
-            (arg1)->addFileClass((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,(std::vector<std::string > const &)*arg8,(std::vector<std::string > const &)*arg9,(std::vector<std::string > const &)*arg10,(std::vector<std::string > const &)*arg11,(std::map<std::string,std::string > const &)*arg12);
+            (arg1)->addFileClass((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,(std::vector<std::string > const &)*arg8,(std::vector<std::string > const &)*arg9,(std::vector<std::string > const &)*arg10,(std::vector<std::string > const &)*arg11,(std::map<indri::parse::ConflationPattern *,std::string > const &)*arg12);
             
         } catch( lemur::api::Exception& e ) {
             SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
