@@ -39,6 +39,7 @@
 #define INDRI_CONFLATIONPATTERN_HPP
 
 #include <string.h>
+#include <functional>
 
 namespace indri {
   namespace parse {
@@ -58,8 +59,8 @@ namespace indri {
 
 namespace std {
 
-  template<>
-  struct less<indri::parse::ConflationPattern*> {
+	template <>
+	struct less<indri::parse::ConflationPattern *> {
     
     bool operator() ( const indri::parse::ConflationPattern* one, 
 		      const indri::parse::ConflationPattern* two ) const {
