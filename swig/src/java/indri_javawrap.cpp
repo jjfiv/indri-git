@@ -837,12 +837,15 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
      jobject patternObject = jenv->NewObject(conflationClazz, conflationConstructor);
      jstring patVal;
      const char *c_str = thisKey->tag_name;
+     if (c_str == NULL) c_str = ""; // don't give NewStringUTF a NULL.
      patVal = jenv->NewStringUTF(c_str);
      jenv->SetObjectField(patternObject, tag_nameField, patVal);
      c_str = thisKey->attribute_name;
+     if (c_str == NULL) c_str = ""; // don't give NewStringUTF a NULL.
      patVal = jenv->NewStringUTF(c_str);
      jenv->SetObjectField(patternObject, attribute_nameField, patVal);
      c_str = thisKey->value;
+     if (c_str == NULL) c_str = ""; // don't give NewStringUTF a NULL.
      patVal = jenv->NewStringUTF(c_str);
      jenv->SetObjectField(patternObject, valueField, patVal);
 
@@ -899,6 +902,11 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
   // get the array size
   jsize entryArrayLength = jenv->GetArrayLength(entryArray);
 
+  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+
   for( int i=0; i<entryArrayLength; i++ ) {
     // get the key string
     jobject entryObject = (jstring) jenv->GetObjectArrayElement( entryArray, i );
@@ -915,26 +923,23 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
     std::string valueString = valueChars;
     jenv->ReleaseStringUTFChars( (jstring) value, valueChars );
 
-  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
-  jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
-  jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
-  jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
-
-  jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
-  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
-  pattern->tag_name = valueChars;
+    jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
+    valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+    if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
+    pattern->tag_name = valueChars;
   
-  fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
-  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
-  pattern->attribute_name = valueChars;
+    fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
+    valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+    if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
+    pattern->attribute_name = valueChars;
 
-  fieldValue = (jstring) jenv->GetObjectField(key, valueField);
-  valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
-  pattern->value = valueChars;
-  map[pattern] = valueString ;
+    fieldValue = (jstring) jenv->GetObjectField(key, valueField);
+    valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+    if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
+    pattern->value = valueChars;
+    map[pattern] = valueString ;
   }
  }
- 
  
 
 
@@ -2535,6 +2540,12 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         // get the array size
         jsize entryArrayLength = jenv->GetArrayLength(entryArray);
         
+        jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+        jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
+        jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
+        jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
+        
+        
         for( int i=0; i<entryArrayLength; i++ ) {
             // get the key string
             jobject entryObject = (jstring) jenv->GetObjectArrayElement( entryArray, i );
@@ -2551,21 +2562,19 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
             std::string valueString = valueChars;
             jenv->ReleaseStringUTFChars( (jstring) value, valueChars );
             
-            jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
-            jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
-            jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
-            jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
-            
             jstring fieldValue = (jstring) jenv->GetObjectField(key, tag_nameField);
             valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
             pattern->tag_name = valueChars;
             
             fieldValue = (jstring) jenv->GetObjectField(key, attribute_nameField);
             valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
             pattern->attribute_name = valueChars;
             
             fieldValue = (jstring) jenv->GetObjectField(key, valueField);
             valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
+            if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
             pattern->value = valueChars;
             map12[pattern] = valueString ;
         }
