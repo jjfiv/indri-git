@@ -57,7 +57,7 @@ namespace indri {
       // number of attributes, n, and in the number of matching
       // attribute-value pattern, m.
 
-      const char *_lookup( const char* name, indri::utility::greedy_vector<indri::parse::AttributeValuePair>& attributes ) {
+      const char *_lookup( const char* name, indri::utility::greedy_vector<indri::parse::AttributeValuePair, 2>& attributes ) {
 
 	tag_pattern** p = _pattern_table.find( name );
 	tag_pattern* p_tag_pattern;
@@ -72,7 +72,7 @@ namespace indri {
 	attribute_pattern** q;
 	attribute_pattern* p_attribute_pattern;
 
-	for ( indri::utility::greedy_vector<AttributeValuePair>::iterator i =
+	for ( indri::utility::greedy_vector<AttributeValuePair, 2>::iterator i =
 		attributes.begin(); i != attributes.end(); i++ ) {
 
 	  q = p_tag_pattern->attributes.find( (*i).attribute );
@@ -238,7 +238,7 @@ namespace indri {
       /// otherwise, return input argument.
       /// Does not handle the case of attribute dependent conflations
       const char * conflate( const char* tagname ) {
-        indri::utility::greedy_vector<AttributeValuePair> attributes;
+        indri::utility::greedy_vector<AttributeValuePair,2> attributes;
 	const char *new_name = _lookup( tagname, attributes );
 
 	if ( ! new_name ) {

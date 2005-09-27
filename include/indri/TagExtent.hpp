@@ -30,7 +30,8 @@ namespace indri
       unsigned int end;
       INT64 number;
       TagExtent *parent;
-      indri::utility::greedy_vector<AttributeValuePair> attributes;
+      // explicit initial count of two elements.
+      indri::utility::greedy_vector<AttributeValuePair, 2> attributes;
     };
   }
 }
