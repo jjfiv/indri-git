@@ -251,6 +251,9 @@
 				RelativePath=".\InferenceNetworkBuilder.cpp">
 			</File>
 			<File
+				RelativePath=".\IntervalTree.cpp">
+			</File>
+			<File
 				RelativePath=".\KrovetzStemmer.cpp">
 			</File>
 			<File
@@ -294,6 +297,9 @@
 			</File>
 			<File
 				RelativePath=".\NullScorerNode.cpp">
+			</File>
+			<File
+				RelativePath=".\OffsetAnnotationAnnotator.cpp">
 			</File>
 			<File
 				RelativePath=".\OrderedWindowNode.cpp">
@@ -454,6 +460,9 @@
 				RelativePath="..\include\indri\atomic.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\AttributeValuePair.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\BeliefNode.hpp">
 			</File>
 			<File
@@ -482,6 +491,12 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\ConditionVariable.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\Conflater.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ConflationPattern.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\ContextCountAccumulator.hpp">
@@ -703,6 +718,9 @@
 				RelativePath="..\include\indri\InternalFileBuffer.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\IntervalTree.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\JelinekMercerTermScoreFunction.hpp">
 			</File>
 			<File
@@ -788,6 +806,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\ObjectHandler.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\OffsetAnnotationAnnotator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\OkapiTermScoreFunction.hpp">
