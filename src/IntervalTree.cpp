@@ -60,6 +60,7 @@
 // the way up to the root of the tree.
 
 #include <iostream>
+#include <string>
 #include "indri/IntervalTree.hpp"
 
 namespace indri {
