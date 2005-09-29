@@ -46,6 +46,7 @@ static void harvest_anchor_text_file( const std::string& path, const std::string
 static void harvest_anchor_text( const std::string& corpusPath, const std::string& harvestPath ) {
   std::vector<std::string> include;
   include.push_back( "absolute-url" );
+  include.push_back( "relative-url" );
   include.push_back( "a" );
   std::vector<std::string> empty;
   std::map<indri::parse::ConflationPattern*,std::string> mempty;
