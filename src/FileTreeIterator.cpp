@@ -27,10 +27,15 @@ indri::file::FileTreeIterator::FileTreeIterator() {
 }
 
 indri::file::FileTreeIterator::FileTreeIterator( const std::string& path ) {
-  _stack.push( new DirectoryIterator( path ) );
-
-  while( indri::file::Path::isDirectory( *(*_stack.top()) ) ) {
-    _stack.push( new indri::file::DirectoryIterator( **_stack.top() ) );
+  indri::file::DirectoryIterator *top = new DirectoryIterator( path );
+  if( *top == indri::file::DirectoryIterator::end() ) {
+    // nothing to do, it's empty.
+    delete( top );
+  } else {
+    _stack.push( top );
+    while( indri::file::Path::isDirectory( *(*_stack.top()) ) ) {
+      _stack.push( new indri::file::DirectoryIterator( **_stack.top() ) );
+    }
   }
 }
 
