@@ -29,13 +29,26 @@ indri::file::FileTreeIterator::FileTreeIterator() {
 indri::file::FileTreeIterator::FileTreeIterator( const std::string& path ) {
   indri::file::DirectoryIterator *top = new DirectoryIterator( path );
   if( *top == indri::file::DirectoryIterator::end() ) {
-    // nothing to do, it's empty.
-    delete( top );
+    // either the path is an empty directory or 
+    // it is not a directory, so delete it.
+    delete top;
   } else {
     _stack.push( top );
-    while( indri::file::Path::isDirectory( *(*_stack.top()) ) ) {
-      _stack.push( new indri::file::DirectoryIterator( **_stack.top() ) );
+    // PRE: a non empty directory iterator is on the stack
+    while( _stack.size() && 
+           indri::file::Path::isDirectory( *(*_stack.top()) ) ) {
+      // the top iterator may be at end, returning an invalid value
+      top = _stack.top();
+      if( *top == indri::file::DirectoryIterator::end() ) {
+        // advance to the next non-empty iterator on the stack
+        _nextCandidate();
+      } else {
+        // add a new, possibly empty, iterator to the stack
+        _stack.push( new DirectoryIterator( *(*_stack.top()) ) );
+      }
     }
+    // POST: stack is empty OR top of stack is a non empty iterator
+    //       pointing to a file (non-directory) entry.
   }
 }
 
