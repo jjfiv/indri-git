@@ -109,9 +109,11 @@ doc: $(OBJ)/java/docs
 clean:
 	rm -rf $(OBJ)/java $(OUTDIRPHP)
 ## need to add target for php solib (and fix naming conventions)
-install:
+install: 
 ifeq ($(WITH_SWIG), 1)
   ifeq ($(WITH_JAVA), 1)
+	$(INSTALL_DIR) $(pkgdatadir)/JNIdoc
+	cp -pr $(OBJ)/java/docs $(pkgdatadir)/JNIdoc
 	$(INSTALL_DATA) $(JARFILES) $(pkgdatadir)
 	$(INSTALL_PROGRAM) $(SOLIB) $(libdir)
   endif
