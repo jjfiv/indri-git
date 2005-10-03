@@ -45,7 +45,7 @@ installed in <install-directory>/bin.
 
 <p> Documentation will be installed in
 <install-directory>/share/indri/doc. The file index.html points into the
-doxygen generated documentation. The file IndriQueryLanguage.html provides
+doxygen generated documentation. The file <install-directory>/share/indri/IndriQueryLanguage.html provides
 a more complete description of the indri query language.
 
 <p> If configured with --enable-java, documentation

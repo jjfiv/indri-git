@@ -3,7 +3,8 @@ auto:
 	/usr/bin/doxygen config
 
 install: $(pkgdatadir)/doc
-	$(INSTALL_DATA) IndriQueryLanguage.html main.css html/* $<
+	$(INSTALL_DATA) html/* $<
+	$(INSTALL_DATA) IndriQueryLanguage.html main.css $(pkgdatadir)
 
 $(pkgdatadir)/doc:
 	$(INSTALL_DIR) $(pkgdatadir)/doc

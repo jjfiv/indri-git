@@ -40,7 +40,7 @@ DOC=$(JAVAHOME)/bin/javadoc -classpath java  $(DOCARGS)
 TARGETS=
 ifeq ($(WITH_SWIG), 1)
   ifeq ($(WITH_JAVA), 1)
-    TARGETS += java-lib
+    TARGETS += java-lib doc
   endif
   ifeq ($(WITH_PHP), 1)
     TARGETS += php-lib
