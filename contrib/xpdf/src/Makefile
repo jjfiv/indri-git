@@ -29,6 +29,6 @@ clean:
 INCDIR = $(includedir)/$(MODULE)
 ALLHEADER = $(wildcard ../include/*.h*)
 install:
-# only need to install library, no externally visible headers.
-#	$(INSTALL_DATA) $(ALLHEADER) $(INCDIR)
+	$(INSTALL_DIR) $(INCDIR)
+	$(INSTALL_DATA) $(ALLHEADER) $(INCDIR)
 	$(AR) -qs $(libdir)/$(INDRILIB) $(OBJ)
