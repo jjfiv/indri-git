@@ -1,12 +1,12 @@
-SHELL = /bin/sh
-
-
+-include ../MakeDefns
 auto:
-	/usr/dan/users9/dfisher/ciir/doxygen-1.4.2/bin/doxygen config
+	/usr/bin/doxygen config
 
-manual: auto
-	cp /afs/cs/project/lemur/www/doxygen-index.html html/index.html
+install: $(pkgdatadir)/doc
+	$(INSTALL_DATA) IndriQueryLanguage.html main.css html/* $<
 
+$(pkgdatadir)/doc:
+	$(INSTALL_DIR) $(pkgdatadir)/doc
 
 clean:
 	rm -rf html latex rtf man

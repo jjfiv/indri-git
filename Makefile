@@ -1,6 +1,6 @@
 -include MakeDefns
 
-INSTALLDIRS = $(bindir) $(includedir) $(pkgincludedir) $(includedir)/lemur $(libdir) $(pkgdatadir)
+INSTALLDIRS = $(bindir) $(includedir) $(pkgincludedir) $(includedir)/lemur $(libdir) $(pkgdatadir) $(pkgdatadir)/doc
 
 .PHONY: all dist clean install $(INSTALLDIRS)
 
@@ -56,5 +56,5 @@ endif
 	$(MAKE) install -C harvestlinks
 	$(MAKE) install -C rmodel
 	$(MAKE) install -C makeprior
-#	$(MAKE) install -C doc
+	$(MAKE) install -C doc
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)
