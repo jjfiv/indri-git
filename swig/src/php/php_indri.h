@@ -50,6 +50,7 @@ ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult);
 ZEND_NAMED_FUNCTION(_wrap_delete_ScoredExtentResult);
 ZEND_NAMED_FUNCTION(_wrap_new_TermExtent);
 ZEND_NAMED_FUNCTION(_wrap_delete_TermExtent);
+ZEND_NAMED_FUNCTION(_wrap_ParsedDocument_getContent);
 ZEND_NAMED_FUNCTION(_wrap_new_ParsedDocument);
 ZEND_NAMED_FUNCTION(_wrap_delete_ParsedDocument);
 ZEND_NAMED_FUNCTION(_wrap_new_QueryAnnotationNode);

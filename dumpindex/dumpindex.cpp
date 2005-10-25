@@ -312,6 +312,10 @@ void print_document_data( indri::collection::Repository& r, const char* number )
 
   std::cout << std::endl << "--- Text ---" << std::endl << std::endl;
   std::cout << document->text << std::endl;
+
+  std::cout << std::endl << "--- Content ---" << std::endl << std::endl;
+  std::cout << document->getContent() << std::endl;
+
   delete document;
 }
 

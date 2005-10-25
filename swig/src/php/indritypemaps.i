@@ -150,6 +150,10 @@ typedef long long UINT64;
     // ignore other elements.
     add_property_string(obj,"text",(char *)(r->text), 1);
     add_property_long(obj,"textLength",r->textLength);
+    // content
+    add_property_string(obj,"content",(char *)(r->content), 1);
+    add_property_long(obj,"contentLength",r->contentLength);
+
     // positions
     // must wrap TermExtent
     zval *positions, *pos, *_ptr;

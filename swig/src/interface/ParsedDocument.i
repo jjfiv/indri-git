@@ -31,6 +31,7 @@ struct jni_parseddocument_info {
 
   jfieldID termsField;
   jfieldID textField;
+  jfieldID contentField;
   jfieldID positionsField;
   jfieldID metadataField;
 
@@ -53,6 +54,7 @@ void parseddocument_init( JNIEnv* jenv, jni_parseddocument_info& info ) {
   info.teConstructor = jenv->GetMethodID(info.teClazz, "<init>", "(II)V" );
 
   info.textField = jenv->GetFieldID(info.pdClazz, "text", "Ljava/lang/String;" );
+  info.contentField = jenv->GetFieldID(info.pdClazz, "content", "Ljava/lang/String;" );
   info.termsField = jenv->GetFieldID(info.pdClazz, "terms", "[Ljava/lang/String;" );
   info.positionsField = jenv->GetFieldID(info.pdClazz, "positions", "[Ledu/umass/cs/indri/ParsedDocument$TermExtent;" );
   info.metadataField = jenv->GetFieldID(info.pdClazz, "metadata", "Ljava/util/Map;" );
@@ -109,6 +111,12 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
   jstring text = jenv->NewStringUTF(doc->text);
 
   jenv->SetObjectField(result, info.textField, text);
+
+  // this makes a copy...
+  jstring content = jenv->NewStringUTF(doc->getContent().c_str());
+
+  jenv->SetObjectField(result, info.contentField, content);
+
   jenv->SetObjectField(result, info.termsField, termsArray);
   jenv->SetObjectField(result, info.positionsField, positionsArray);
   jenv->SetObjectField(result, info.metadataField, mapObject);
@@ -134,6 +142,17 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
   jsize textLength = jenv->GetStringUTFLength(text);
   strcpy( buf.write(textLength+1), textString );
   jenv->ReleaseStringUTFChars(text, textString, 0);
+
+  // content is a copy, have to convert it to an offset/length.
+  jstring content = (jstring) jenv->GetObjectField($input, info.contentField);
+  const char* contentString = jenv->GetStringUTFChars(content, 0);
+  jsize contentLength = jenv->GetStringUTFLength(content);
+  // find the start offset
+  char *cStart = strstr(textString, contentString);
+  // better not be null...
+  int contentDelta = cStart ? cStart - textString : 0;
+  
+  jenv->ReleaseStringUTFChars(content, contentString, 0);
 
   // store terms
   std::vector<int> termPositions;
@@ -222,6 +241,9 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
   // copy text
   pdoc.text = buf.front();
   pdoc.textLength = textLength;
+  // content
+  pdoc.content = pdoc.text + contentDelta;
+  pdoc.contentLength = contentLength;
 }
 
 %typemap(java,out) indri::api::ParsedDocument* {

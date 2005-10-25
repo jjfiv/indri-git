@@ -50,11 +50,15 @@ class ParsedDocument {
   const char* text;
   size_t textLength;
 
+  const char* content;
+  size_t contentLength;
+
   greedy_vector<char*> terms;
   greedy_vector<indri::parse::TagExtent> tags;
   greedy_vector<indri::parse::TermExtent> positions;
   greedy_vector<indri::parse::MetadataPair> metadata;
-
+public:
+  std::string getContent();
 };
 
 

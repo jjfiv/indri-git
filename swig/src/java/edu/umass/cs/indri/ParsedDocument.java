@@ -20,6 +20,7 @@ public class ParsedDocument {
   }
 
   public String text;
+  public String content;
 
   public String[] terms;
   public TermExtent[] positions;

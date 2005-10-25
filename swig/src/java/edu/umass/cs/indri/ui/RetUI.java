@@ -1014,7 +1014,8 @@ public class RetUI extends JPanel implements ActionListener {
 		    }
 
 		    currentParsedDoc = docs[0];
-		    String myDocText = currentParsedDoc.text;
+                    // use content here to skip trecweb format headers
+		    String myDocText = currentParsedDoc.content;
 		    // insert into doc text pane
 		    docHtmlPane.setContentType("text/html");
 		    docHtmlPane.setText(myDocText);

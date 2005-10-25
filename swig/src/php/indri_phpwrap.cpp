@@ -903,6 +903,8 @@ static zend_function_entry TermExtent_functions[] = {
 };
 /* Function entries for ParsedDocument */
 static zend_function_entry ParsedDocument_functions[] = {
+	ZEND_NAMED_FE(getcontent,
+		_wrap_ParsedDocument_getContent, NULL)
 	ZEND_NAMED_FE(parseddocument,
 		_wrap_new_ParsedDocument, NULL)
 	{ NULL, NULL, NULL}
@@ -1454,6 +1456,33 @@ static int _propset_TermExtent(zend_property_reference *property_reference, pval
     return _wrap_TermExtent_end_set(property_reference, value);
   } else  return FAILURE;
 }
+
+ZEND_NAMED_FUNCTION(_wrap_ParsedDocument_getContent) {
+    indri::api::ParsedDocument *arg1 = (indri::api::ParsedDocument *) 0 ;
+    std::string result;
+    zval **args[2];
+    int argbase=0 ;
+    
+    if (this_ptr && this_ptr->type==IS_OBJECT) {
+        /* fake this_ptr as first arg (till we can work out how to do it better */
+        argbase++;
+    }
+    if(((ZEND_NUM_ARGS() + argbase )!= 1) || (zend_get_parameters_array_ex(1-argbase, args)!= SUCCESS)) {
+        WRONG_PARAM_COUNT;
+    }
+    
+    
+    if(SWIG_ConvertPtr(*((0<argbase)?(&this_ptr):(args[0-argbase])), (void **) &arg1, SWIGTYPE_p_indri__api__ParsedDocument) < 0) {
+        zend_error(E_ERROR, "Type error in argument %d of ParsedDocument_getContent. Expected %s", 1-argbase, SWIGTYPE_p_indri__api__ParsedDocument->name);
+    }
+    
+    result = (arg1)->getContent();
+    
+    {
+        ZVAL_STRINGL(return_value,const_cast<char*>((&result)->c_str()),(&result)->length(),1);
+    }
+}
+
 
 ZEND_NAMED_FUNCTION(_wrap_new_ParsedDocument) {
     indri::api::ParsedDocument *result;
@@ -2564,6 +2593,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentsdocids) {
             // ignore other elements.
             add_property_string(obj,"text",(char *)(r->text), 1);
             add_property_long(obj,"textLength",r->textLength);
+            // content
+            add_property_string(obj,"content",(char *)(r->content), 1);
+            add_property_long(obj,"contentLength",r->contentLength);
+            
             // positions
             // must wrap TermExtent
             zval *positions, *pos, *_ptr;
@@ -2678,6 +2711,10 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documents) {
             // ignore other elements.
             add_property_string(obj,"text",(char *)(r->text), 1);
             add_property_long(obj,"textLength",r->textLength);
+            // content
+            add_property_string(obj,"content",(char *)(r->content), 1);
+            add_property_long(obj,"contentLength",r->contentLength);
+            
             // positions
             // must wrap TermExtent
             zval *positions, *pos, *_ptr;
