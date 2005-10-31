@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Java\jdk1.5.0_02\include&quot;;&quot;C:\Program Files\Java\jdk1.5.0_02\include\win32&quot;;..\include;..\contrib\lemur\include"
+				AdditionalIncludeDirectories="C:\j2sdk1.4.2_05\include;C:\j2sdk1.4.2_05\include\win32;S:\Development\indri\include;S:\Development\indri\contrib\lemur\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SWIG_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
