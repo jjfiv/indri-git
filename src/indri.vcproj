@@ -302,6 +302,9 @@
 				RelativePath=".\OffsetAnnotationAnnotator.cpp">
 			</File>
 			<File
+				RelativePath=".\OffsetMetadataAnnotator.cpp">
+			</File>
+			<File
 				RelativePath=".\OrderedWindowNode.cpp">
 			</File>
 			<File
@@ -809,6 +812,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\OffsetAnnotationAnnotator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\OffsetMetadataAnnotator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\OkapiTermScoreFunction.hpp">
