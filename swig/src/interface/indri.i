@@ -114,8 +114,12 @@ class IndexEnvironment {
 public:
   IndexEnvironment();
   ~IndexEnvironment();
-  
-  void setAnchorTextPath( const std::string& documentRoot, const std::string& anchorTextRoot );
+
+  void setDocumentRoot( const std::string& documentRoot );  
+  void setAnchorTextPath( const std::string& anchorTextRoot );
+  void setOffsetMetadataPath( const std::string& offsetMetadataRoot );
+  void setOffsetAnnotationsPath( const std::string& offsetAnnotationsRoot );
+
   void addFileClass( const std::string& name, 
                      const std::string& iterator,
                      const std::string& parser,

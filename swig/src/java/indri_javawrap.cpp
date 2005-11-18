@@ -2359,10 +2359,9 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_delete_1IndexEnvironment
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnchorTextPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3) {
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setDocumentRoot(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
     indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
-    std::string *arg3 = 0 ;
     
     (void)jenv;
     (void)jcls;
@@ -2376,18 +2375,96 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnc
     std::string arg2_str(arg2_pstr);
     arg2 = &arg2_str;
     jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-    if(!jarg3) {
+    {
+        try {
+            (arg1)->setDocumentRoot((std::string const &)*arg2);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return ;
+        }
+    }
+}
+
+
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setAnchorTextPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::IndexEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
         SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
         return ;
     }
-    const char *arg3_pstr = (const char *)jenv->GetStringUTFChars(jarg3, 0); 
-    if (!arg3_pstr) return ;
-    std::string arg3_str(arg3_pstr);
-    arg3 = &arg3_str;
-    jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
     {
         try {
-            (arg1)->setAnchorTextPath((std::string const &)*arg2,(std::string const &)*arg3);
+            (arg1)->setAnchorTextPath((std::string const &)*arg2);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return ;
+        }
+    }
+}
+
+
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setOffsetMetadataPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::IndexEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        try {
+            (arg1)->setOffsetMetadataPath((std::string const &)*arg2);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return ;
+        }
+    }
+}
+
+
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setOffsetAnnotationsPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2) {
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::IndexEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    {
+        try {
+            (arg1)->setOffsetAnnotationsPath((std::string const &)*arg2);
             
         } catch( lemur::api::Exception& e ) {
             SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );

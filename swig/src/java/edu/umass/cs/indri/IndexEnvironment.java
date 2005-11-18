@@ -37,8 +37,20 @@ public class IndexEnvironment {
     this(indriJNI.new_IndexEnvironment(), true);
   }
 
-  public void setAnchorTextPath(String documentRoot, String anchorTextRoot) {
-    indriJNI.IndexEnvironment_setAnchorTextPath(swigCPtr, documentRoot, anchorTextRoot);
+  public void setDocumentRoot(String documentRoot) {
+    indriJNI.IndexEnvironment_setDocumentRoot(swigCPtr, documentRoot);
+  }
+
+  public void setAnchorTextPath(String anchorTextRoot) {
+    indriJNI.IndexEnvironment_setAnchorTextPath(swigCPtr, anchorTextRoot);
+  }
+
+  public void setOffsetMetadataPath(String offsetMetadataRoot) {
+    indriJNI.IndexEnvironment_setOffsetMetadataPath(swigCPtr, offsetMetadataRoot);
+  }
+
+  public void setOffsetAnnotationsPath(String offsetAnnotationsRoot) {
+    indriJNI.IndexEnvironment_setOffsetAnnotationsPath(swigCPtr, offsetAnnotationsRoot);
   }
 
   public void addFileClass(String name, String iterator, String parser, String startDocTag, String endDocTag, String endMetadataTag, String[] include, String[] exclude, String[] index, String[] metadata, Map conflations) {
