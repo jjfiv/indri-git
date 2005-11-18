@@ -725,15 +725,19 @@ int main(int argc, char * argv[]) {
       }
       
       bool isDirectory = indri::file::Path::isDirectory( corpusPath );
-      
+ 
+      // First record the document root, and then the paths to any annotator inputs
+      env.setDocumentRoot( corpusPath );
+
+      // Support for anchor text
       std::string anchorText = thisCorpus.get("inlink", "");
-      env.setAnchorTextPath( corpusPath, anchorText );
+      env.setAnchorTextPath( anchorText );
 
-      // Support for an offset annotations file
-      std::string offsetAnnotationsFile = thisCorpus.get( "annotations", "" );
-      env.setOffsetAnnotationsFile( offsetAnnotationsFile );
+      // Support for offset annotations
+      std::string offsetAnnotationsPath = thisCorpus.get( "annotations", "" );
+      env.setOffsetAnnotationsPath( offsetAnnotationsPath );
 
-      // Support for an offset metadata file or directory
+      // Support for offset metadata file
       std::string offsetMetadataPath = thisCorpus.get( "metadata", "" );
       env.setOffsetMetadataPath( offsetMetadataPath );
 
@@ -754,7 +758,6 @@ int main(int argc, char * argv[]) {
       }
     }
 
-    //    buildindex_print_event( "" );
     buildindex_print_event( "Closing index" );
     env.close();
     buildindex_print_event( "Finished" );
