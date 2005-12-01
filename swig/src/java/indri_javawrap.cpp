@@ -2475,7 +2475,7 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setOff
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFileClass_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3, jstring jarg4, jstring jarg5, jstring jarg6, jstring jarg7, jobjectArray jarg8, jobjectArray jarg9, jobjectArray jarg10, jobjectArray jarg11, jobjectArray jarg12) {
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFileClass_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jstring jarg3, jstring jarg4, jstring jarg5, jstring jarg6, jstring jarg7, jstring jarg8, jobjectArray jarg9, jobjectArray jarg10, jobjectArray jarg11, jobjectArray jarg12, jobjectArray jarg13) {
     indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     std::string *arg3 = 0 ;
@@ -2483,16 +2483,17 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
     std::string *arg5 = 0 ;
     std::string *arg6 = 0 ;
     std::string *arg7 = 0 ;
-    std::vector<std::string > *arg8 = 0 ;
+    std::string *arg8 = 0 ;
     std::vector<std::string > *arg9 = 0 ;
     std::vector<std::string > *arg10 = 0 ;
     std::vector<std::string > *arg11 = 0 ;
-    std::map<indri::parse::ConflationPattern *,std::string > *arg12 = 0 ;
-    std::vector<std::string > strin8 ;
+    std::vector<std::string > *arg12 = 0 ;
+    std::map<indri::parse::ConflationPattern *,std::string > *arg13 = 0 ;
     std::vector<std::string > strin9 ;
     std::vector<std::string > strin10 ;
     std::vector<std::string > strin11 ;
-    std::map<indri::parse::ConflationPattern *,std::string > map12 ;
+    std::vector<std::string > strin12 ;
+    std::map<indri::parse::ConflationPattern *,std::string > map13 ;
     
     (void)jenv;
     (void)jcls;
@@ -2551,20 +2552,15 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
     std::string arg7_str(arg7_pstr);
     arg7 = &arg7_str;
     jenv->ReleaseStringUTFChars(jarg7, arg7_pstr); 
-    {
-        jclass stringClazz = jenv->FindClass("java/lang/String");
-        jsize arrayLength = jenv->GetArrayLength(jarg8);
-        arg8 = &strin8;
-        
-        for( unsigned int i=0; i<arrayLength; i++ ) {
-            jstring str = (jstring) jenv->GetObjectArrayElement(jarg8, i);
-            jsize stringLength = jenv->GetStringUTFLength(str);
-            const char* stringChars = jenv->GetStringUTFChars(str, 0);
-            std::string stringCopy;
-            stringCopy.assign( stringChars, stringChars + stringLength );
-            arg8->push_back(stringCopy);
-        }
+    if(!jarg8) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
     }
+    const char *arg8_pstr = (const char *)jenv->GetStringUTFChars(jarg8, 0); 
+    if (!arg8_pstr) return ;
+    std::string arg8_str(arg8_pstr);
+    arg8 = &arg8_str;
+    jenv->ReleaseStringUTFChars(jarg8, arg8_pstr); 
     {
         jclass stringClazz = jenv->FindClass("java/lang/String");
         jsize arrayLength = jenv->GetArrayLength(jarg9);
@@ -2608,9 +2604,23 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         }
     }
     {
-        // make a conflations map12 to go in it
-        // get map12 class and entrySet method pointer
-        jobject src = jarg12;
+        jclass stringClazz = jenv->FindClass("java/lang/String");
+        jsize arrayLength = jenv->GetArrayLength(jarg12);
+        arg12 = &strin12;
+        
+        for( unsigned int i=0; i<arrayLength; i++ ) {
+            jstring str = (jstring) jenv->GetObjectArrayElement(jarg12, i);
+            jsize stringLength = jenv->GetStringUTFLength(str);
+            const char* stringChars = jenv->GetStringUTFChars(str, 0);
+            std::string stringCopy;
+            stringCopy.assign( stringChars, stringChars + stringLength );
+            arg12->push_back(stringCopy);
+        }
+    }
+    {
+        // make a conflations map13 to go in it
+        // get map13 class and entrySet method pointer
+        jobject src = jarg13;
         jclass mapClazz = jenv->GetObjectClass(src);
         jmethodID mapEntrySet = jenv->GetMethodID(mapClazz, "entrySet", "()Ljava/util/Set;" );
         
@@ -2661,13 +2671,13 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
             valueChars = jenv->GetStringUTFChars( (jstring) fieldValue, 0 );
             if (valueChars[0] == '\0') valueChars = NULL; // empty strings are NULL
             pattern->value = valueChars;
-            map12[pattern] = valueString ;
+            map13[pattern] = valueString ;
         }
-        arg12 = &map12;
+        arg13 = &map13;
     }
     {
         try {
-            (arg1)->addFileClass((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,(std::vector<std::string > const &)*arg8,(std::vector<std::string > const &)*arg9,(std::vector<std::string > const &)*arg10,(std::vector<std::string > const &)*arg11,(std::map<indri::parse::ConflationPattern *,std::string > const &)*arg12);
+            (arg1)->addFileClass((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(std::string const &)*arg6,(std::string const &)*arg7,(std::string const &)*arg8,(std::vector<std::string > const &)*arg9,(std::vector<std::string > const &)*arg10,(std::vector<std::string > const &)*arg11,(std::vector<std::string > const &)*arg12,(std::map<indri::parse::ConflationPattern *,std::string > const &)*arg13);
             
         } catch( lemur::api::Exception& e ) {
             SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );

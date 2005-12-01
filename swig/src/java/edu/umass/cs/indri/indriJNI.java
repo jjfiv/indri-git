@@ -57,7 +57,7 @@ class indriJNI {
   public final static native void IndexEnvironment_setAnchorTextPath(long jarg1, String jarg2);
   public final static native void IndexEnvironment_setOffsetMetadataPath(long jarg1, String jarg2);
   public final static native void IndexEnvironment_setOffsetAnnotationsPath(long jarg1, String jarg2);
-  public final static native void IndexEnvironment_addFileClass__SWIG_0(long jarg1, String jarg2, String jarg3, String jarg4, String jarg5, String jarg6, String jarg7, String[] jarg8, String[] jarg9, String[] jarg10, String[] jarg11, Map jarg12);
+  public final static native void IndexEnvironment_addFileClass__SWIG_0(long jarg1, String jarg2, String jarg3, String jarg4, String jarg5, String jarg6, String jarg7, String jarg8, String[] jarg9, String[] jarg10, String[] jarg11, String[] jarg12, Map jarg13);
   public final static native Specification IndexEnvironment_getFileClassSpec(long jarg1, String jarg2);
   public final static native void IndexEnvironment_addFileClass__SWIG_1(long jarg1, Specification jarg2);
   public final static native void IndexEnvironment_setIndexedFields(long jarg1, String[] jarg2);

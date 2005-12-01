@@ -53,8 +53,8 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_setOffsetAnnotationsPath(swigCPtr, offsetAnnotationsRoot);
   }
 
-  public void addFileClass(String name, String iterator, String parser, String startDocTag, String endDocTag, String endMetadataTag, String[] include, String[] exclude, String[] index, String[] metadata, Map conflations) {
-    indriJNI.IndexEnvironment_addFileClass__SWIG_0(swigCPtr, name, iterator, parser, startDocTag, endDocTag, endMetadataTag, include, exclude, index, metadata, conflations);
+  public void addFileClass(String name, String iterator, String parser, String tokenizer, String startDocTag, String endDocTag, String endMetadataTag, String[] include, String[] exclude, String[] index, String[] metadata, Map conflations) {
+    indriJNI.IndexEnvironment_addFileClass__SWIG_0(swigCPtr, name, iterator, parser, tokenizer, startDocTag, endDocTag, endMetadataTag, include, exclude, index, metadata, conflations);
   }
 
   public Specification getFileClassSpec(String name) {

@@ -10,11 +10,12 @@
 #include <time.h>
 #include "indri/Parameters.hpp"
 
-#include "indri/UnparsedDocument.hpp"
+#include "indri/TokenizedDocument.hpp"
 #include "indri/ParsedDocument.hpp"
 #include "indri/TaggedDocumentIterator.hpp"
 #include "indri/TaggedTextParser.hpp"
 #include "indri/HTMLParser.hpp"
+#include "indri/TokenizerFactory.hpp"
 #include "indri/ConflationPattern.hpp"
 #include "indri/AnchorTextWriter.hpp"
 #include "indri/FileTreeIterator.hpp"
@@ -22,7 +23,7 @@
 #include "lemur/Exception.hpp"
 #include "indri/Combiner.hpp"
 
-static void harvest_anchor_text_file( const std::string& path, const std::string& harvestPath, indri::parse::HTMLParser& parser ) {
+static void harvest_anchor_text_file( const std::string& path, const std::string& harvestPath, indri::parse::HTMLParser& parser, indri::parse::Tokenizer *tokenizer) {
   indri::parse::TaggedDocumentIterator iterator;
   iterator.open( path );
   iterator.setTags( 
@@ -32,10 +33,12 @@ static void harvest_anchor_text_file( const std::string& path, const std::string
   );
 
   indri::parse::UnparsedDocument* unparsed;
+  indri::parse::TokenizedDocument* tokenized;
   indri::parse::AnchorTextWriter writer( harvestPath );
 
   while( (unparsed = iterator.nextDocument()) != 0 ) {
-    indri::api::ParsedDocument* parsed = parser.parse( unparsed );
+    tokenized = tokenizer->tokenize( unparsed );
+    indri::api::ParsedDocument* parsed = parser.parse( tokenized );
     writer.handle(parsed);
   }
   
@@ -52,6 +55,7 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
   std::map<indri::parse::ConflationPattern*,std::string> mempty;
 
   indri::parse::HTMLParser parser;
+  indri::parse::Tokenizer* tokenizer = indri::parse::TokenizerFactory::get( "word" );
   parser.setTags( empty, empty, include, empty, mempty );
 
   if( indri::file::Path::isDirectory( corpusPath ) ) {
@@ -64,14 +68,14 @@ static void harvest_anchor_text( const std::string& corpusPath, const std::strin
       std::cout << "harvesting " << filePath << std::endl;
 
       try {
-        harvest_anchor_text_file( *files, anchorText, parser );
+        harvest_anchor_text_file( *files, anchorText, parser, tokenizer );
       } catch( lemur::api::Exception& e ) {
         std::cout << e.what() << std::endl;
       }
     }
   } else {
     std::string anchorText = indri::file::Path::combine( harvestPath, "data" );
-    harvest_anchor_text_file( corpusPath, anchorText, parser );
+    harvest_anchor_text_file( corpusPath, anchorText, parser, tokenizer );
   }
 }
 

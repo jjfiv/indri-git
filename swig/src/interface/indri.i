@@ -123,6 +123,7 @@ public:
   void addFileClass( const std::string& name, 
                      const std::string& iterator,
                      const std::string& parser,
+                     const std::string& tokenizer,
                      const std::string& startDocTag,
                      const std::string& endDocTag,
                      const std::string& endMetadataTag,
