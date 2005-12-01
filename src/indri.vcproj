@@ -401,10 +401,16 @@
 				RelativePath=".\TextParser.cpp">
 			</File>
 			<File
+				RelativePath=".\TextTokenizer.cpp">
+			</File>
+			<File
 				RelativePath=".\TFIDFTermScoreFunction.cpp">
 			</File>
 			<File
 				RelativePath=".\Thread.cpp">
+			</File>
+			<File
+				RelativePath=".\TokenizerFactory.cpp">
 			</File>
 			<File
 				RelativePath=".\UnorderedWindowNode.cpp">
@@ -414,6 +420,9 @@
 			</File>
 			<File
 				RelativePath=".\UnpackerInternal.cpp">
+			</File>
+			<File
+				RelativePath=".\UTF8CaseNormalizationTransformation.cpp">
 			</File>
 			<File
 				RelativePath=".\UtilityThread.cpp">
@@ -709,6 +718,9 @@
 				RelativePath="..\include\indri\IndriTimer.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\IndriTokenizer.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\InferenceNetwork.hpp">
 			</File>
 			<File
@@ -976,6 +988,9 @@
 				RelativePath="..\include\indri\TagDocumentIterator.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\TagEvent.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\TagExtent.hpp">
 			</File>
 			<File
@@ -1027,10 +1042,19 @@
 				RelativePath="..\include\indri\TextParser.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\TextTokenizer.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\TFIDFTermScoreFunction.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Thread.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\TokenizedDocument.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\TokenizerFactory.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Transformation.hpp">
@@ -1052,6 +1076,12 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\UnparsedDocument.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\UTF8CaseNormalizationTransformation.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\UTF8Transcoder.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\UtilityThread.hpp">
