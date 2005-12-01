@@ -164,7 +164,7 @@ namespace indri {
 
 	UINT64 result = 0;
 	int i = 0;
-	for ( const char* c = str; i < n & c != '\0'; c++, i++ )
+	for ( const char* c = str; i < n && c != '\0'; c++, i++ )
 	  result = result * 10 + ( *c - '0' );
 
 	return result;
