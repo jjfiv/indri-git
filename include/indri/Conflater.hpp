@@ -155,7 +155,7 @@ namespace indri {
 	       ( ! p_cp->value ) ) {
 
 	    p_tag_pattern->match_tag_name = true;
-	    p_tag_pattern->conflation = conflation.c_str();
+	    p_tag_pattern->conflation = strdup(conflation.c_str());
 	    continue;
 	  }
 
@@ -184,13 +184,13 @@ namespace indri {
 	  if ( ! p_cp->value ) {
 
 	    p_attribute_pattern->match_attribute_name = true;
-	    p_attribute_pattern->conflation = conflation.c_str();
+	    p_attribute_pattern->conflation = strdup(conflation.c_str());
 	    continue;
 	  }
 	  
 	  // Otherwise, it is an attribute-value match:
 
-	  p_attribute_pattern->values.insert( p_cp->value, conflation.c_str() );
+	  p_attribute_pattern->values.insert( p_cp->value, strdup(conflation.c_str()) );
 
 	}	
       }
