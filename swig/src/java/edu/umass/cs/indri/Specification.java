@@ -1,6 +1,7 @@
 package edu.umass.cs.indri;
 public class Specification {
   public String name;
+  public String tokenizer;
   public String parser;
   public String iterator;
   public String startDocTag;

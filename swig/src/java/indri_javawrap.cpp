@@ -741,6 +741,7 @@ struct jni_specification_info {
   jclass specClazz;
   jmethodID specConstructor;
   jfieldID nameField;
+  jfieldID tokenizerField;
   jfieldID parserField;
   jfieldID iteratorField;
   jfieldID startDocTagField;
@@ -763,6 +764,7 @@ struct jni_specification_info {
      std::cerr << info.specConstructor << std::endl;
      // get all the fields
      std::cerr << info.nameField << std::endl;
+     std::cerr << info.tokenizerField << std::endl;
      std::cerr << info.parserField << std::endl;
      std::cerr << info.iteratorField << std::endl;
      std::cerr << info.startDocTagField << std::endl;
@@ -784,6 +786,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
   info.specConstructor = jenv->GetMethodID(info.specClazz, "<init>", "()V" );
   // get all the fields
   info.nameField = jenv->GetFieldID(info.specClazz, "name", "Ljava/lang/String;");
+  info.tokenizerField = jenv->GetFieldID(info.specClazz, "tokenizer", "Ljava/lang/String;");  
   info.parserField = jenv->GetFieldID(info.specClazz, "parser", "Ljava/lang/String;");
   info.iteratorField = jenv->GetFieldID(info.specClazz, "iterator", "Ljava/lang/String;");
   info.startDocTagField = jenv->GetFieldID(info.specClazz, "startDocTag", "Ljava/lang/String;");
@@ -819,6 +822,8 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
    jstring stringField;
    stringField = jenv->NewStringUTF(thisSpec->name.c_str());
    jenv->SetObjectField(result, info.nameField, stringField);
+   stringField = jenv->NewStringUTF(thisSpec->tokenizer.c_str());
+   jenv->SetObjectField(result, info.tokenizerField, stringField);
    stringField = jenv->NewStringUTF(thisSpec->parser.c_str());
    jenv->SetObjectField(result, info.parserField, stringField);
    stringField = jenv->NewStringUTF(thisSpec->iterator.c_str());
@@ -2748,6 +2753,9 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
         // string name
         tmpString = (jstring) jenv->GetObjectField(jarg2, info.nameField);
         copy_to_string(jenv, tmpString, spec2.name);
+        // string tokenizer
+        tmpString = (jstring) jenv->GetObjectField(jarg2, info.tokenizerField);
+        copy_to_string(jenv, tmpString, spec2.tokenizer);
         // string parser
         tmpString = (jstring) jenv->GetObjectField(jarg2, info.parserField);
         copy_to_string(jenv, tmpString, spec2.parser);
