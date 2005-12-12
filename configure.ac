@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Indri, 2.1, indri-info@ciir.cs.umass.edu)
+AC_INIT(Indri, 2.2, indri-info@ciir.cs.umass.edu)
 AC_CONFIG_SRCDIR(indri.sln)
 AC_CONFIG_FILES(MakeDefns Makefile.app)
 dnl To use a header file instead of command line -D defs, use
