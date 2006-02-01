@@ -60,8 +60,10 @@ class indriJNI {
   public final static native void IndexEnvironment_addFileClass__SWIG_0(long jarg1, String jarg2, String jarg3, String jarg4, String jarg5, String jarg6, String jarg7, String jarg8, String[] jarg9, String[] jarg10, String[] jarg11, String[] jarg12, Map jarg13);
   public final static native Specification IndexEnvironment_getFileClassSpec(long jarg1, String jarg2);
   public final static native void IndexEnvironment_addFileClass__SWIG_1(long jarg1, Specification jarg2);
+  public final static native void IndexEnvironment_deleteDocument(long jarg1, int jarg2);
   public final static native void IndexEnvironment_setIndexedFields(long jarg1, String[] jarg2);
-  public final static native void IndexEnvironment_setNumericField(long jarg1, String jarg2, boolean jarg3);
+  public final static native void IndexEnvironment_setNumericField__SWIG_0(long jarg1, String jarg2, boolean jarg3, String jarg4);
+  public final static native void IndexEnvironment_setNumericField__SWIG_1(long jarg1, String jarg2, boolean jarg3);
   public final static native void IndexEnvironment_setMetadataIndexedFields(long jarg1, String[] jarg2, String[] jarg3);
   public final static native void IndexEnvironment_setStopwords(long jarg1, String[] jarg2);
   public final static native void IndexEnvironment_setStemmer(long jarg1, String jarg2);

@@ -2802,6 +2802,27 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1addFil
 }
 
 
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1deleteDocument(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2) {
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    int arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::IndexEnvironment **)(void *)&jarg1; 
+    arg2 = (int)jarg2; 
+    {
+        try {
+            (arg1)->deleteDocument(arg2);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return ;
+        }
+    }
+}
+
+
 JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setIndexedFields(JNIEnv *jenv, jclass jcls, jlong jarg1, jobjectArray jarg2) {
     indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::vector<std::string > *arg2 = 0 ;
@@ -2837,7 +2858,48 @@ JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setInd
 }
 
 
-JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNumericField(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jboolean jarg3) {
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNumericField_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jboolean jarg3, jstring jarg4) {
+    indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
+    std::string *arg2 = 0 ;
+    bool arg3 ;
+    std::string *arg4 = 0 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(indri::api::IndexEnvironment **)(void *)&jarg1; 
+    if(!jarg2) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+    if (!arg2_pstr) return ;
+    std::string arg2_str(arg2_pstr);
+    arg2 = &arg2_str;
+    jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+    arg3 = jarg3 ? true : false; 
+    if(!jarg4) {
+        SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+        return ;
+    }
+    const char *arg4_pstr = (const char *)jenv->GetStringUTFChars(jarg4, 0); 
+    if (!arg4_pstr) return ;
+    std::string arg4_str(arg4_pstr);
+    arg4 = &arg4_str;
+    jenv->ReleaseStringUTFChars(jarg4, arg4_pstr); 
+    {
+        try {
+            (arg1)->setNumericField((std::string const &)*arg2,arg3,(std::string const &)*arg4);
+            
+        } catch( lemur::api::Exception& e ) {
+            SWIG_exception(, SWIG_RuntimeError, e.what().c_str() );
+            // control does not leave method when thrown. (fixed in 1.3.25
+            // return ;
+        }
+    }
+}
+
+
+JNIEXPORT void JNICALL Java_edu_umass_cs_indri_indriJNI_IndexEnvironment_1setNumericField_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jstring jarg2, jboolean jarg3) {
     indri::api::IndexEnvironment *arg1 = (indri::api::IndexEnvironment *) 0 ;
     std::string *arg2 = 0 ;
     bool arg3 ;

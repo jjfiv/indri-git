@@ -134,9 +134,9 @@ public:
                      const std::map<indri::parse::ConflationPattern *,std::string>& conflations );
   indri::parse::FileClassEnvironmentFactory::Specification *getFileClassSpec( const std::string& name);
   void addFileClass( const indri::parse::FileClassEnvironmentFactory::Specification &spec);
-  
+  void deleteDocument( int documentID );
   void setIndexedFields( const std::vector<std::string>& fieldNames );
-  void setNumericField( const std::string& fieldName, bool isNumeric );
+  void setNumericField( const std::string& fieldName, bool isNumeric, const std::string & parserName="" );
   void setMetadataIndexedFields( const std::vector<std::string>& forward, const std::vector<std::string>& backward );
   void setStopwords( const std::vector<std::string>& stopwords );
   void setStemmer( const std::string& stemmer );

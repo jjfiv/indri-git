@@ -65,12 +65,20 @@ public class IndexEnvironment {
     indriJNI.IndexEnvironment_addFileClass__SWIG_1(swigCPtr, spec);
   }
 
+  public void deleteDocument(int documentID) {
+    indriJNI.IndexEnvironment_deleteDocument(swigCPtr, documentID);
+  }
+
   public void setIndexedFields(String[] fieldNames) {
     indriJNI.IndexEnvironment_setIndexedFields(swigCPtr, fieldNames);
   }
 
+  public void setNumericField(String fieldName, boolean isNumeric, String parserName) {
+    indriJNI.IndexEnvironment_setNumericField__SWIG_0(swigCPtr, fieldName, isNumeric, parserName);
+  }
+
   public void setNumericField(String fieldName, boolean isNumeric) {
-    indriJNI.IndexEnvironment_setNumericField(swigCPtr, fieldName, isNumeric);
+    indriJNI.IndexEnvironment_setNumericField__SWIG_1(swigCPtr, fieldName, isNumeric);
   }
 
   public void setMetadataIndexedFields(String[] forward, String[] backward) {
