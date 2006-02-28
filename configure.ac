@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Indri, 2.2, indri-info@ciir.cs.umass.edu)
+AC_INIT([Indri],[2.2],[indri-info@ciir.cs.umass.edu])
 AC_CONFIG_SRCDIR(indri.sln)
 AC_CONFIG_FILES(MakeDefns Makefile.app)
 dnl To use a header file instead of command line -D defs, use
@@ -35,7 +35,9 @@ case $host in
      ;;
    *-*-darwin*)
      SHARED=
-     SWIG_SHARED=
+#SWIG_SHARED = -bundle -bundle_loader /var/tmp/indri-2.2/tmp/php-4.4.2/sapi/cli/php
+# have to fix this for php/java bits.
+     SWIG_SHARED="-bundle  -undefined suppress -flat_namespace"
      ;;
    *);;
 esac
@@ -53,6 +55,31 @@ AC_C_BIGENDIAN
 AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
 
+dnl ########################################################################
+    dnl see if using GNU glibc++, because then we have atomic integer operations
+
+    P_HAS_ATOMIC_INT=0
+    P_NEEDS_GNU_CXX_NAMESPACE=0
+    AC_MSG_CHECKING(if atomic integer available)
+    AC_LANG_PUSH([C++])
+
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <bits/atomicity.h>]], [[_Atomic_word val;]])],[P_HAS_ATOMIC_INT=1],[])
+		   if test ${P_HAS_ATOMIC_INT} = 1 ; then
+		     AC_MSG_RESULT(yes)
+		     AC_MSG_CHECKING(if __atomic_add is in __gnu_cxx namespace)
+		     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <bits/atomicity.h>]], [[_Atomic_word val; __gnu_cxx::__atomic_add(&val, 1)]])],[P_NEEDS_GNU_CXX_NAMESPACE=1],[])
+		     if test ${P_NEEDS_GNU_CXX_NAMESPACE} = 1 ; then
+			AC_MSG_RESULT(yes)
+		     else
+			AC_MSG_RESULT(no)
+		     fi
+		   else
+		     AC_MSG_RESULT(no)
+		   fi
+		   AC_LANG_POP
+		   AC_DEFINE_UNQUOTED(P_HAS_ATOMIC_INT, ${P_HAS_ATOMIC_INT})
+		   AC_DEFINE_UNQUOTED(P_NEEDS_GNU_CXX_NAMESPACE, ${P_NEEDS_GNU_CXX_NAMESPACE})
+	
 dnl Checks for library functions.
 AC_CHECK_FUNCS(mkstemp)
 AC_CHECK_FUNCS(mkstemps)
@@ -60,16 +87,14 @@ AC_CHECK_FUNCS(mkstemps)
 dnl check for optional components.
 
 AC_ARG_ENABLE(php,
-	    AC_HELP_STRING([--enable-php],
-	                   [Enable php shared library generation]))
+	    AS_HELP_STRING(--enable-php,Enable php shared library generation))
 if test "$enable_php" = "yes" ; then
   WITH_PHP=1
 else
   WITH_PHP=0
 fi
 AC_ARG_ENABLE(java,
-	    AC_HELP_STRING([--enable-java],
-	                   [Enable java shared library generation]))
+	    AS_HELP_STRING(--enable-java,Enable java shared library generation))
 if test "$enable_java" = "yes" ; then
   WITH_JAVA=1
 else
@@ -77,8 +102,7 @@ else
 fi
 
 AC_ARG_ENABLE(assert,
-	    AC_HELP_STRING([--enable-assert],
-	                   [Enable assert statements in code]),
+	    AS_HELP_STRING(--enable-assert,Enable assert statements in code),
 			   [if test "${enable_assert}" = "no" ; then
 			    AC_DEFINE(NDEBUG, 1, [Turn off assert statements])
 			   fi],
