@@ -25,12 +25,16 @@ class ScoredExtentResult {
   int document;
   int begin;
   int end;
+public:
+  ~ScoredExtentResult();
 };
 }
 namespace parse{
 struct TermExtent {
   int begin;
   int end;
+public:
+  ~TermExtent();
 };
 
 // omit key_equal class.
@@ -58,6 +62,7 @@ class ParsedDocument {
   greedy_vector<indri::parse::TermExtent> positions;
   greedy_vector<indri::parse::MetadataPair> metadata;
 public:
+  ~ParsedDocument();
   std::string getContent();
 };
 
@@ -75,6 +80,7 @@ public:
   const QueryAnnotationNode* getQueryTree() const;
   const indri::infnet::EvaluatorNode::MResults& getAnnotations() const;
   const std::vector<ScoredExtentResult>& getResults() const;
+  ~QueryAnnotation();
 };
 
 // need separate map for individual methods.
@@ -85,7 +91,7 @@ public:
   } catch( lemur::api::Exception& e ) {
 //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
       // get a warning message rather than abort the script.
-      zend_error(E_WARNING, e.what().c_str());
+//      zend_error(E_WARNING, e.what().c_str());
     RETURN_NULL() ;
   }
 }
@@ -101,6 +107,7 @@ setEx(QueryEnvironment::documentMetadatadocids);
 
 class QueryEnvironment {
 public:
+  ~QueryEnvironment();
   void addServer( const std::string& hostname );
   void addIndex( const std::string& pathname );
   void close();
@@ -111,6 +118,9 @@ public:
 
   std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
   std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
+
+  %newobject runAnnotatedQuery;
+  %newobject runAnnotatedQuerydocset;
   QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
   QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
 

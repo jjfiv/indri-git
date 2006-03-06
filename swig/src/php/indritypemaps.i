@@ -13,6 +13,8 @@ typedef long long UINT64;
 	$1 = ($1_ltype) Z_LVAL_PP($input);
 %}
 
+%include "std_vector.i"
+
 %typemap(in) 
   std::vector< std::string > * ,
   std::vector< std::string > &
@@ -23,7 +25,7 @@ typedef long long UINT64;
   zval **Data;
   $1=new std::vector< std::string >;
   convert_to_array(*$input);
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
   while((iStatus=zend_hash_get_current_key((*$input)->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
     zend_hash_get_current_data((*$input)->value.ht,(void **) &Data);
     convert_to_string(*Data);
@@ -34,7 +36,7 @@ typedef long long UINT64;
       sIndex=NULL;
     }
   }
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
 }
 
 
@@ -48,11 +50,11 @@ typedef long long UINT64;
   zval **Data;
   $1=new std::vector< indri::api::ScoredExtentResult >;
   convert_to_array(*$input);
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
   while((iStatus=zend_hash_get_current_key((*$input)->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
     zend_hash_get_current_data((*$input)->value.ht,(void **) &Data);
     indri::api::ScoredExtentResult * arg1 = 0;
-    SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult);
+    SWIG_ConvertPtr(*(Data), (void **) &arg1, SWIGTYPE_p_indri__api__ScoredExtentResult, 0);
     $1->push_back(*arg1);
     zend_hash_move_forward((*$input)->value.ht);  
     if (sIndex) {
@@ -60,7 +62,7 @@ typedef long long UINT64;
       sIndex=NULL;
     }
   }
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
 }
 
 // need std::vector<int> in and out
@@ -74,7 +76,7 @@ typedef long long UINT64;
   zval **Data;
   $1=new std::vector<lemur::api::DOCID_T>;
   convert_to_array(*$input);
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
   while((iStatus=zend_hash_get_current_key((*$input)->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
     zend_hash_get_current_data((*$input)->value.ht,(void **) &Data);
     convert_to_long(*Data);
@@ -85,7 +87,7 @@ typedef long long UINT64;
       sIndex=NULL;
     }
   }
-  zend_hash_internal_pointer_reset((*args[1-argbase])->value.ht);
+  zend_hash_internal_pointer_reset((*$input)->value.ht);
 }
 
 %typemap(in)
@@ -311,6 +313,8 @@ zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
 %typemap(freearg) 
  std::string*, 
  std::vector< std::string > *, 
+ std::vector< std::string > &, 
+ std::vector< std::string >, 
  std::vector< indri::api::ScoredExtentResult > *, 
  std::vector< indri::api::ParsedDocument * > *, 
  std::vector< lemur::api::DOCID_T > *, 
