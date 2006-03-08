@@ -142,8 +142,9 @@ void merge_sorted_runs( indri::file::File& out, std::vector<std::string>& inputs
       outb->write( &lowProbability, sizeof(double) );
       lastDocument++;
     }
-    
+
     outb->write( &file.score, sizeof(double) );
+    lastDocument++;
   
     if( file.finished() ) {
       delete file.buffer;
