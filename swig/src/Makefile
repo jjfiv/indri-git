@@ -19,7 +19,7 @@ JSRC=java/edu/umass/cs/indri
 JSRCUI=java/edu/umass/cs/indri/ui
 JAVASRC = $(notdir $(wildcard $(JSRC)/*.java))
 JAVASRCUI = $(notdir $(wildcard $(JSRCUI)/*.java))
-ALLSRC= $(JAVASRC) $(JAVASRCUI)
+ALLSRC= $(wildcard $(JSRC)/*.java) $(wildcard $(JSRCUI)/*.java)
 PROPS = $(patsubst %,$(OUTDIRPROP)/%, $(notdir $(wildcard $(JSRCUI)/properties/*)))
 INTERFACES = $(wildcard interface/*.i)
 PHPINTERFACES = $(wildcard php/*.i)
@@ -102,8 +102,12 @@ $(PHPLIB): $(OUTDIRPHP)/indri_phpwrap.o $(LIBDEPS)
 
 $(DOCS) $(DOCSUI): $(OBJ)/java/docs
 
-doc: $(OBJ)/java/docs
+$(OBJ)/java/docs.needed: $(ALLSRC)
+	touch $@
 	$(DOC) -d $(OBJ)/java/docs -doctitle "Indri" -windowtitle "Indri" $(PCK) $(PCKUI)
+
+doc: $(OBJ)/java/docs.needed
+
 
 
 clean:
