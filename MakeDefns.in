@@ -34,10 +34,14 @@ JAVAC = @JAVAC@
 JAR = @JAR@
 JAVAINC = @JAVAINC@
 JAVAHOME = @JAVAHOME@
+NEED_ANTLR = @NEED_ANTLR@
 SWIG = @SWIG@
 SWIG_SHARED = @SWIG_SHARED@
 PHPINCLUDE = @PHPINCLUDE@
-DEPENDENCIES = xpdf antlr lemur
+DEPENDENCIES = xpdf lemur
+ifeq ($(NEED_ANTLR), 1)
+  DEPENDENCIES += antlr
+endif
 
 PACKAGE = @PACKAGE_TARNAME@
 VERSION = @PACKAGE_VERSION@
@@ -66,7 +70,7 @@ CPPSRC = $(CPPSRC1) $(CPPSRC3) $(CPPSRC3) $(FCPP)
 ALLHEADER = $(wildcard ../include/indri/*.h*)
 # Include path
 INCPATH = -I../include $(patsubst %, -I../contrib/%/include, $(DEPENDENCIES))
-ALLINCPATH = INCPATH
+ALLINCPATH = $(INCPATH)
 
 # C++ objects
 CPPOBJ = $(CPPSRC:.cpp=.o) $(CPPSRC2:.cc=.o) $(CPPSRC3:.C=.o)
@@ -82,19 +86,19 @@ SHARED = @SHARED@
 
 # C compiler and compiling options
 # C++ compiler and compiling/linking options
-CFLAGS = @DEFS@ @CFLAGS@ $(INCPATH) $(SHARED)
-CXXFLAGS    = @DEFS@ @CXXFLAGS@ $(INCPATH) $(SHARED)
+CFLAGS = @DEFS@ @CPPFLAGS@ @CFLAGS@ $(INCPATH) $(SHARED)
+CXXFLAGS    = @DEFS@ @CPPFLAGS@ @CXXFLAGS@ $(INCPATH) $(SHARED)
 CPPLDFLAGS  = @LDFLAGS@ @LIBS@
 
 ifeq ($(STYLE),release)
-     CFLAGS = @DEFS@ -DNDEBUG @CFLAGS@ $(INCPATH) $(SHARED)
-     CXXFLAGS    = @DEFS@ -DNDEBUG @CXXFLAGS@ $(INCPATH) $(SHARED)
+     CFLAGS = @DEFS@ -DNDEBUG @CPPFLAGS@ @CFLAGS@ $(INCPATH) $(SHARED)
+     CXXFLAGS    = @DEFS@ -DNDEBUG @CPPFLAGS@ @CXXFLAGS@ $(INCPATH) $(SHARED)
      CPPLDFLAGS  = @LDFLAGS@ @LIBS@
 endif
 
 ifeq ($(STYLE),profile)
-	CFLAGS=-g -pg $(INCPATH)
-	CXXFLAGS=-g -pg $(INCPATH)
+	CFLAGS=-g -pg @CPPFLAGS@ $(INCPATH)
+	CXXFLAGS=-g -pg @CPPFLAGS@ $(INCPATH)
 endif
 
 

@@ -10,7 +10,7 @@ libdir = @libdir@
 includedir = @includedir@
 INCPATH=-I$(includedir)
 LIBPATH=-L$(libdir)
-CXXFLAGS=@DEFS@ @CXXFLAGS@ $(INCPATH)
+CXXFLAGS=@DEFS@ @CPPFLAGS@ @CXXFLAGS@ $(INCPATH)
 CPPLDFLAGS  = @LDFLAGS@ -lindri @LIBS@
 
 all:
