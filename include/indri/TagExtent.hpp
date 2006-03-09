@@ -32,14 +32,14 @@ namespace indri
       // A comparator that sorts by end value, lowest first
       struct lowest_end_first {
 
-	bool operator() ( const indri::parse::TagExtent* x,
-			  const indri::parse::TagExtent* y ) const {
+        bool operator() ( const indri::parse::TagExtent* x,
+                          const indri::parse::TagExtent* y ) const {
 
-	  // returns true if x < y; false otherwise
+          // returns true if x < y; false otherwise
 
-	  if ( x->end > y->end ) return true;
-	  else return false;
-	}
+          if ( x->end > y->end ) return true;
+          else return false;
+        }
       };
 
       const char* name;
@@ -61,7 +61,7 @@ namespace std {
   struct less<indri::parse::TagExtent*> {
 
     bool operator() ( const indri::parse::TagExtent* x,
-		      const indri::parse::TagExtent* y ) const {
+                      const indri::parse::TagExtent* y ) const {
 
       // returns true if x < y; false otherwise
 
@@ -69,16 +69,16 @@ namespace std {
       else if ( x->begin > y->begin ) return false;
       else {
 
-	if ( ( x->end - x->begin ) > ( y->end - y->begin ) ) return true;
-	else if ( ( x->end - x->begin ) < ( y->end - y->begin ) ) return false;
-	else {
+        if ( ( x->end - x->begin ) > ( y->end - y->begin ) ) return true;
+        else if ( ( x->end - x->begin ) < ( y->end - y->begin ) ) return false;
+        else {
 
-	  // Two TagExtents must have same begin and end and name to be
-	  // considered equal.
+          // Two TagExtents must have same begin and end and name to be
+          // considered equal.
 
-	  if ( strcmp( x->name, y->name ) < 0 ) return true;
-	  else return false;
-	}	
+          if ( strcmp( x->name, y->name ) < 0 ) return true;
+          else return false;
+        }       
       }
     }
   };

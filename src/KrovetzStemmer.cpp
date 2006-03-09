@@ -9,14 +9,14 @@
  *==========================================================================
  */
 /****************************************************************************\
- *	            Copyright (c) 1990-1995 by the                           *
+ *                  Copyright (c) 1990-1995 by the                           *
  *    Applied Computing Systems Institute of Massachusetts, Inc. (ACSIOM)     *
- *			 All rights reserved.                                *
- *	       The INQUERY Software was provided by the                      *
- *	 Center for Intelligent Information Retrieval (CIIR),                *
+ *                       All rights reserved.                                *
+ *             The INQUERY Software was provided by the                      *
+ *       Center for Intelligent Information Retrieval (CIIR),                *
  *       University of Massachusetts Computer Science Department,             *
- *		       Amherst, Massachusetts.                               *
- *	 For more information, contact ACSIOM at 413-545-6311                *
+ *                     Amherst, Massachusetts.                               *
+ *       For more information, contact ACSIOM at 413-545-6311                *
 \****************************************************************************/
 /*
   This is a stemmer that handles inflectional morphology and the
@@ -212,23 +212,23 @@ namespace indri
             /* try just removing the "s" */
             word[j+2] = '\0';
             k--;
-	
+        
             /* note: don't check for exceptions here.  So, `aides' -> `aide',
                but `aided' -> `aid'.  The exception for double s is used to prevent
                crosses -> crosse.  This is actually correct if crosses is a plural
                noun (a type of racket used in lacrosse), but the verb is much more
                common */
-	
+        
             if ((lookup(word))  && !((word[j] == 's') && (word[j-1] == 's')))
               return;
-	
+        
             /* try removing the "es" */
-	
+        
             word[j+1] = '\0';
             k--;
             if (lookup(word))
               return;
-	
+        
             /* the default is to retain the "e" */
             word[j+1] = 'e';
             word[j+2] = '\0';

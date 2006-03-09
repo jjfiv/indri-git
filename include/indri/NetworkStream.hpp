@@ -109,7 +109,7 @@ namespace indri
       }
 
       int read( void* buffer, size_t length ) {
-		return ::recv( _socket, (char*) buffer, int(length), 0 );
+        return ::recv( _socket, (char*) buffer, int(length), 0 );
       }
 
       int blockingRead( void* buffer, size_t length ) {
@@ -118,8 +118,8 @@ namespace indri
         int result;
     
         while( bytesRead < (int) length ) {
-		  // only try to read 100K at a time.
-		  chunkRead = std::min((size_t)1024*100, (length - bytesRead));
+          // only try to read 100K at a time.
+          chunkRead = std::min((size_t)1024*100, (length - bytesRead));
           result = read( (char*)buffer + bytesRead, chunkRead );
 
           if( result <= 0 ) {
@@ -137,8 +137,8 @@ namespace indri
         size_t bytesWritten = 0;
 
         while( bytesWritten < (int) length ) {
-		  // only try to write 100K at a time.
-		  size_t chunkWrite = std::min((size_t)1024*100, (length - bytesWritten));
+          // only try to write 100K at a time.
+          size_t chunkWrite = std::min((size_t)1024*100, (length - bytesWritten));
           int result = write( (const char*)buffer + bytesWritten, chunkWrite );
 
           if( result <= 0 ) {

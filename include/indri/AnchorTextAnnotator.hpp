@@ -71,15 +71,15 @@ namespace indri
           // LINK
           _in.getline( line, sizeof line-1 );
 
-	  // LINKDOCNO 
+          // LINKDOCNO 
           _in.getline( line, sizeof line-1 );
-	  
+          
           // TEXT=
           _in.getline( line, sizeof line-1 );
           int textLen = strlen(line+6);
           strcpy( _buffer.write(textLen+1), line+6 );
           _buffer.unwrite(1);
-	  
+          
           assert( *(_buffer.front()+_buffer.position()-1) == '\"' && "Last character should be a quote" );
         }
         *(_buffer.write(1)) = 0;
@@ -118,9 +118,9 @@ namespace indri
 
             if( beginIndex ) {
               tags.push_back(extent);
-	      if( terms.size() > 125000 )
-		break;
-	    }
+              if( terms.size() > 125000 )
+                break;
+            }
 
 
             beginIndex = 0;
@@ -167,7 +167,7 @@ namespace indri
 
       indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
 
-	// surround current text with a mainbody tag
+        // surround current text with a mainbody tag
         TagExtent mainbody;
         mainbody.begin = 0;
         mainbody.end = document->terms.size();
@@ -179,7 +179,7 @@ namespace indri
         document->tags.clear();
         document->tags.push_back( mainbody );
         document->tags.append( oldTags.begin(), oldTags.end() );
-	
+        
         if( _matchingDocno( document ) ) {
           _fetchText( document->tags, document->terms );
           _readDocumentHeader();

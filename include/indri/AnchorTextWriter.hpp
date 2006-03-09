@@ -80,7 +80,7 @@ namespace indri
 
           // we only extract absolute urls
           if( !strcmp( extent.name, "absolute-url" ) ||
-	      !strcmp( extent.name, "relative-url" ) ) {
+              !strcmp( extent.name, "relative-url" ) ) {
             url = document->terms[ extent.begin ];
             urlEnd = extent.end;
 
@@ -110,7 +110,7 @@ namespace indri
           TagExtent& extent = document->tags[i];
 
           if( !strcmp( extent.name, "absolute-url" ) ||
-	      !strcmp( extent.name, "relative-url" ) ) {  // this is an absolute url
+              !strcmp( extent.name, "relative-url" ) ) {  // this is an absolute url
             url = document->terms[ extent.begin ];
             urlEnd = extent.end;
 
