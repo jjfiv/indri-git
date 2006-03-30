@@ -99,7 +99,6 @@ typedef long long UINT64;
 
 // --- Return value processing -------------------------------------------
 
-
 %typemap(out) 
   std::vector< std::string > 
 {
@@ -311,7 +310,6 @@ zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
 // --- Argument clean up -------------------------------------------------
 
 %typemap(freearg) 
- std::string*, 
  std::vector< std::string > *, 
  std::vector< std::string > &, 
  std::vector< std::string >, 
