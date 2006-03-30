@@ -27,17 +27,26 @@ case $host in
      AC_CHECK_LIB(nsl, gethostbyname)
      AC_CHECK_LIB(socket, socket)
      SHARED="-shared -fPIC"
-     SWIG_SHARED="-G"
+     PHP_SHARED="-G"
+     PHP_SO=".so"
+     JAVA_SHARED="-G"
+     JAVA_SO=".so"
      ;;
    *linux*) 
      SHARED="-shared -fPIC"
-     SWIG_SHARED="-shared"
+     PHP_SHARED="-shared"
+     PHP_SO=".so"
+     JAVA_SHARED="-shared"
+     JAVA_SO=".so"
      ;;
    *-*-darwin*)
      SHARED=
 #SWIG_SHARED = -bundle -bundle_loader /var/tmp/indri-2.2/tmp/php-4.4.2/sapi/cli/php
 # have to fix this for php/java bits.
-     SWIG_SHARED="-bundle  -undefined suppress -flat_namespace"
+     PHP_SHARED="-bundle  -undefined suppress -flat_namespace"
+     PHP_SO=".so"
+     JAVA_SHARED="-dynamiclib -framework JavaVM"
+     JAVA_SO=".jnilib"
      ;;
    *);;
 esac
@@ -210,5 +219,8 @@ AC_LANG_POP()
 AC_SUBST(NEED_ANTLR)
 AC_SUBST(SWIG)
 AC_SUBST(WITH_SWIG)
-AC_SUBST(SWIG_SHARED)
+AC_SUBST(PHP_SHARED)
+AC_SUBST(JAVA_SHARED)
+AC_SUBST(PHP_SO)
+AC_SUBST(JAVA_SO)
 AC_OUTPUT

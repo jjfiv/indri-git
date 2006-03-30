@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR SHARED JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP SWIG CXXCPP EGREP NEED_ANTLR WITH_SWIG SWIG_SHARED LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR SHARED JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP SWIG CXXCPP EGREP NEED_ANTLR WITH_SWIG PHP_SHARED JAVA_SHARED PHP_SO JAVA_SO LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -3402,17 +3402,26 @@ _ACEOF
 fi
 
      SHARED="-shared -fPIC"
-     SWIG_SHARED="-G"
+     PHP_SHARED="-G"
+     PHP_SO=".so"
+     JAVA_SHARED="-G"
+     JAVA_SO=".so"
      ;;
    *linux*)
      SHARED="-shared -fPIC"
-     SWIG_SHARED="-shared"
+     PHP_SHARED="-shared"
+     PHP_SO=".so"
+     JAVA_SHARED="-shared"
+     JAVA_SO=".so"
      ;;
    *-*-darwin*)
      SHARED=
 #SWIG_SHARED = -bundle -bundle_loader /var/tmp/indri-2.2/tmp/php-4.4.2/sapi/cli/php
 # have to fix this for php/java bits.
-     SWIG_SHARED="-bundle  -undefined suppress -flat_namespace"
+     PHP_SHARED="-bundle  -undefined suppress -flat_namespace"
+     PHP_SO=".so"
+     JAVA_SHARED="-dynamiclib -framework JavaVM"
+     JAVA_SO=".jnilib"
      ;;
    *);;
 esac
@@ -5644,6 +5653,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+
+
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -6319,7 +6331,10 @@ s,@CXXCPP@,$CXXCPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@NEED_ANTLR@,$NEED_ANTLR,;t t
 s,@WITH_SWIG@,$WITH_SWIG,;t t
-s,@SWIG_SHARED@,$SWIG_SHARED,;t t
+s,@PHP_SHARED@,$PHP_SHARED,;t t
+s,@JAVA_SHARED@,$JAVA_SHARED,;t t
+s,@PHP_SO@,$PHP_SO,;t t
+s,@JAVA_SO@,$JAVA_SO,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

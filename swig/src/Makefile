@@ -1,14 +1,12 @@
 include ../../MakeDefns
-CONTRIBDEPENDS=lemur antlr xpdf
-INCPATH=-I../../include $(patsubst %, -I../../contrib/%/include, $(CONTRIBDEPENDS))
-LIBPATH=-L../../obj $(patsubst %,-L../../contrib/%/obj, $(CONTRIBDEPENDS))
-LIBS=-lindri $(patsubst %,-l%, $(CONTRIBDEPENDS))
-LIBDEPSS=$(wildcard ../../obj/*.o) $(wildcard $(patsubst %, ../../contrib/%/obj/*.o, $(CONTRIBDEPENDS)))
+INCPATH=-I../../include $(patsubst %, -I../../contrib/%/include, $(DEPENDENCIES))
+LIBPATH=-L../../obj $(patsubst %,-L../../contrib/%/obj, $(DEPENDENCIES))
+LIBS=-lindri $(patsubst %,-l%, $(DEPENDENCIES))
+LIBDEPS=$(wildcard ../../obj/*.o) $(wildcard $(patsubst %, ../../contrib/%/obj/*.o, $(DEPENDENCIES)))
 
 LDFLAGS = $(LIBPATH) $(LIBS) $(CPPLDFLAGS)
 SRC=interface/indri.i
 PHPSRC=php/indri.i
-LFLAGS=$(SWIG_SHARED)
 
 OBJ=../obj
 OUTDIR=$(OBJ)/java/edu/umass/cs/indri
@@ -24,8 +22,8 @@ PROPS = $(patsubst %,$(OUTDIRPROP)/%, $(notdir $(wildcard $(JSRCUI)/properties/*
 INTERFACES = $(wildcard interface/*.i)
 PHPINTERFACES = $(wildcard php/*.i)
 JAVAOBJ = $(patsubst %,$(OUTDIR)/%, $(JAVASRC:.java=.class)) $(patsubst %,$(OUTDIRUI)/%, $(JAVASRCUI:.java=.class))
-SOLIB=$(OBJ)/java/libindri_jni.so
-PHPLIB=$(OUTDIRPHP)/libindri_php.so
+SOLIB=$(OBJ)/java/libindri_jni$(JAVA_SO)
+PHPLIB=$(OUTDIRPHP)/libindri_php$(PHP_SO)
 JARFILES=$(OBJ)/java/indri.jar $(OBJ)/java/RetUI.jar $(OBJ)/java/IndexUI.jar
 MFST=java/manifest.indri
 MFSTRET=java/manifest.RetUI
@@ -58,7 +56,7 @@ java-lib: $(OUTDIR) $(OUTDIRUI) $(OUTDIRPROP) $(OBJ)/java/docs $(PROPS) $(SOLIB)
 php-lib: $(OUTDIRPHP) $(PHPLIB)
 
 $(SOLIB): $(OBJ)/java/indri_javawrap.o $(LIBDEPS)
-	$(CXX) $(LFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) $(JAVA_SHARED) $< -o $@ $(LDFLAGS)
 
 $(OBJ)/java/indri_javawrap.o: java/indri_javawrap.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) $(JAVAINC)
@@ -97,7 +95,7 @@ $(OUTDIRPHP)/indri_phpwrap.o: php/indri_phpwrap.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCPATH) $(PHPINCLUDE)
 
 $(PHPLIB): $(OUTDIRPHP)/indri_phpwrap.o $(LIBDEPS)
-	$(CXX) -g $(LFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) -g $(PHP_SHARED) $< -o $@ $(LDFLAGS)
 
 
 $(DOCS) $(DOCSUI): $(OBJ)/java/docs
