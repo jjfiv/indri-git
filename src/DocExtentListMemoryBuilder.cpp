@@ -87,7 +87,7 @@ void indri::index::DocExtentListMemoryBuilder::_grow() {
 
   // actually add the new list
   unsigned int iterations = std::min<unsigned int>( GROW_TIMES, int(_lists.size()) );
-  size_t newSize = (MIN_SIZE << iterations) - 8; // subtract 8 here to give the heap some room for accounting
+  size_t newSize = (MIN_SIZE << iterations);
 
   newSize = std::max<unsigned int>( newSize, _roundUp( documentCopyAmount ) );
 
