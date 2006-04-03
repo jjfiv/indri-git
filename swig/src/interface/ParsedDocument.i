@@ -126,7 +126,7 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
 
 %}
 
-%typemap(java,in) const indri::api::ParsedDocument& ( indri::api::ParsedDocument pdoc, indri::utility::Buffer buf ) {
+%typemap(in) const indri::api::ParsedDocument& ( indri::api::ParsedDocument pdoc, indri::utility::Buffer buf ) {
   jni_parseddocument_info info;
 
   parseddocument_init( jenv, info );
@@ -246,7 +246,7 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
   pdoc.contentLength = contentLength;
 }
 
-%typemap(java,out) indri::api::ParsedDocument* {
+%typemap(out) indri::api::ParsedDocument* {
   jni_parseddocument_info info;
 
   parseddocument_init( jenv, info );
@@ -254,7 +254,7 @@ jobject parseddocument_copy( JNIEnv* jenv, jni_parseddocument_info& info, indri:
   delete $1;
 }
 
-%typemap(java,out) std::vector<indri::api::ParsedDocument*> {
+%typemap(out) std::vector<indri::api::ParsedDocument*> {
   jni_parseddocument_info info;
   parseddocument_init( jenv, info );
   

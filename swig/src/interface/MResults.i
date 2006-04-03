@@ -11,7 +11,7 @@
 %typemap(jtype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
 %typemap(jstype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
 
-%typemap(java,out) const indri::infnet::EvaluatorNode::MResults&
+%typemap(out) const indri::infnet::EvaluatorNode::MResults&
 {
   indri::infnet::EvaluatorNode::MResults::iterator iter;
 

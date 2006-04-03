@@ -235,7 +235,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
  
 %}
 
-%typemap(java,in) const indri::parse::FileClassEnvironmentFactory::Specification& (indri::parse::FileClassEnvironmentFactory::Specification spec) {
+%typemap(in) const indri::parse::FileClassEnvironmentFactory::Specification& (indri::parse::FileClassEnvironmentFactory::Specification spec) {
   // look up information about Specification
   jni_specification_info info;
   specification_init(jenv, info);
@@ -287,7 +287,7 @@ void specification_init( JNIEnv* jenv, jni_specification_info& info ) {
 %typemap(javain) const indri::parse::FileClassEnvironmentFactory::Specification& "$javainput";
 
 
-%typemap(java,out) indri::parse::FileClassEnvironmentFactory::Specification*
+%typemap(out) indri::parse::FileClassEnvironmentFactory::Specification*
 {
   // look up information about Specification
   jni_specification_info info;

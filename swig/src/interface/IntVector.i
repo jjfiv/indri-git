@@ -14,7 +14,7 @@
 %typemap(jtype) std::vector<int> "int[]"
 %typemap(jstype) std::vector<int> "int[]"
 
-%typemap(java,in) const std::vector<int>& ( std::vector<int> typemapin ) {
+%typemap(in) const std::vector<int>& ( std::vector<int> typemapin ) {
   jsize arrayLength = jenv->GetArrayLength($input);
   jint* elements = jenv->GetIntArrayElements($input, 0);
   $1 = &typemapin;
@@ -31,7 +31,7 @@
 %typemap(javaout) std::vector<int> {
   return $jnicall;
 }
-%typemap(java,out) std::vector<int>
+%typemap(out) std::vector<int>
 {  
   std::vector<int> &input = $1;
   $result = jenv->NewIntArray(input.size()); 

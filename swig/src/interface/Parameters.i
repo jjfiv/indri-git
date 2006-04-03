@@ -106,21 +106,21 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::P
     } else if( jenv->IsInstanceOf( value, info.arrayOfString ) ) {
       java_parameters_array_of_strings( jenv, info, p, keyString, (jobjectArray) value );
     } else {
-      SWIG_exception(, SWIG_RuntimeError, "Found something in a Parameters parameter that wasn't a String, Map, String[] or Map[]." );
+      SWIG_JavaException(jenv, SWIG_RuntimeError, "Found something in a Parameters parameter that wasn't a String, Map, String[] or Map[]." );
     }
   }
 }
 
 %}
 
-%typemap(java,in) indri::api::Parameters {
+%typemap(in) indri::api::Parameters {
   jni_parameters_info info;
   java_parameters_init( jenv, info );
   
   java_parameters_map( jenv, info, $1, $input );
 }
 
-%typemap(java,in) indri::api::Parameters* ( indri::api::Parameters p ) {
+%typemap(in) indri::api::Parameters* ( indri::api::Parameters p ) {
   if( $input != 0 ) {
     jni_parameters_info info;
     java_parameters_init( jenv, info );

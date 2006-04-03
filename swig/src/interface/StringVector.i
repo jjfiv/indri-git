@@ -13,7 +13,7 @@
 %typemap(jtype) std::vector<std::string> "String[]"
 %typemap(jstype) std::vector<std::string> "String[]"
 
-%typemap(java,out) std::vector<std::string> {
+%typemap(out) std::vector<std::string> {
   std::vector<std::string>& vec = $1;
   jclass stringClazz = jenv->FindClass("java/lang/String");
   $result = jenv->NewObjectArray(vec.size(), stringClazz, NULL);
@@ -24,7 +24,7 @@
   }
 }
 
-%typemap(java,in) const std::vector<std::string>& ( std::vector<std::string> strin ) {
+%typemap(in) const std::vector<std::string>& ( std::vector<std::string> strin ) {
   jclass stringClazz = jenv->FindClass("java/lang/String");
   jsize arrayLength = jenv->GetArrayLength($input);
   $1 = &strin;

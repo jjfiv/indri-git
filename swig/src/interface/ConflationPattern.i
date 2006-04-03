@@ -11,7 +11,7 @@
 
 %typemap(javain) const std::map<indri::parse::ConflationPattern*,std::string>& "$javainput";
 
-%typemap(java,in) const std::map<indri::parse::ConflationPattern*,std::string>&  (std::map<indri::parse::ConflationPattern*,std::string> map){
+%typemap(in) const std::map<indri::parse::ConflationPattern*,std::string>&  (std::map<indri::parse::ConflationPattern*,std::string> map){
    // make a conflations map to go in it
   // get map class and entrySet method pointer
   jobject src = $input;

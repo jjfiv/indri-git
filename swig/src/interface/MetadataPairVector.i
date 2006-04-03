@@ -10,7 +10,7 @@
 %typemap(jtype) const std::vector<indri::parse::MetadataPair>& "Map"
 %typemap(jstype) const std::vector<indri::parse::MetadataPair>& "Map"
 
-%typemap(java,in) const std::vector<indri::parse::MetadataPair>& ( std::vector<indri::parse::MetadataPair> mdin, indri::utility::Buffer mdbuf ) {
+%typemap(in) const std::vector<indri::parse::MetadataPair>& ( std::vector<indri::parse::MetadataPair> mdin, indri::utility::Buffer mdbuf ) {
   // call map.entrySet()
   jclass mapClazz = jenv->GetObjectClass( $input );
   jmethodID mapEntrySetMethod = jenv->GetMethodID( mapClazz, "entrySet", "()Ljava/util/Set;" );

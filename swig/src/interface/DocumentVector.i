@@ -88,7 +88,7 @@ jobject documentvector_copy( JNIEnv* jenv, indri::api::DocumentVector* vec ) {
 
 %}
 
-%typemap(java,out) indri::api::DocumentVector* {
+%typemap(out) indri::api::DocumentVector* {
 // this typemap is currently unused, but should delete
 // the input to be consistent with the vector version
   jobject vec = documentvector_copy( jenv, $1 );
@@ -100,7 +100,7 @@ jobject documentvector_copy( JNIEnv* jenv, indri::api::DocumentVector* vec ) {
   return $jnicall;
 }
 
-%typemap(java,out) std::vector<indri::api::DocumentVector*> {
+%typemap(out) std::vector<indri::api::DocumentVector*> {
   jclass docVecClazz = jenv->FindClass( "edu/umass/cs/indri/DocumentVector" );
   $result = jenv->NewObjectArray($1.size(), docVecClazz, NULL);
 

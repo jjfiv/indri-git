@@ -33,7 +33,7 @@ jobject java_build_queryannotationnode( indri::api::QueryAnnotationNode* in,
 
 %}
 
-%typemap(java,out) indri::api::QueryAnnotationNode* {
+%typemap(out) indri::api::QueryAnnotationNode* {
   jclass qanClazz = jenv->FindClass("edu/umass/cs/indri/QueryAnnotationNode" );
   const char* signature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ledu/umass/cs/indri/QueryAnnotationNode;)V";
   jmethodID qanConst = jenv->GetMethodID(qanClazz, "<init>", signature );

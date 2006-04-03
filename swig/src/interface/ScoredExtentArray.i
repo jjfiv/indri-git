@@ -49,16 +49,16 @@ jobjectArray java_build_scoredextentresult( JNIEnv* jenv, const std::vector<indr
 }
 %}
 
-%typemap(java,out) std::vector<indri::api::ScoredExtentResult>
+%typemap(out) std::vector<indri::api::ScoredExtentResult>
 {
   $result = java_build_scoredextentresult( jenv, $1 );
 }
 
-%typemap(java,out) const std::vector<indri::api::ScoredExtentResult>& {
+%typemap(out) const std::vector<indri::api::ScoredExtentResult>& {
   $result = java_build_scoredextentresult( jenv, *($1) );
 }
 
-%typemap(java,in) const std::vector<indri::api::ScoredExtentResult>& ( std::vector<indri::api::ScoredExtentResult> resin )
+%typemap(in) const std::vector<indri::api::ScoredExtentResult>& ( std::vector<indri::api::ScoredExtentResult> resin )
 {
   jsize size = jenv->GetArrayLength($input);
 

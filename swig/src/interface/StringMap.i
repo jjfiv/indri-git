@@ -22,7 +22,7 @@
 %typemap(jtype) const std::vector<indri::parse::MetadataPair>& "Map"
 %typemap(jstype) const std::vector<indri::parse::MetadataPair>& "Map"
 
-%typemap(java,in) const std::map<std::string,std::string>& ( std::map<std::string,std::string> mapin ) {
+%typemap(in) const std::map<std::string,std::string>& ( std::map<std::string,std::string> mapin ) {
   // call map.entrySet()
   jclass mapClazz = jenv->GetObjectClass( $input );
   jmethodID mapEntrySetMethod = jenv->GetMethodID( mapClazz, "entrySet", "()Ljava/util/Set;" );
