@@ -1,6 +1,7 @@
 -include ../MakeDefns
+DOXYGEN = /usr/dan/users9/dfisher/ciir/doxygen-1.4.2/bin/doxygen
 auto:
-	/usr/bin/doxygen config
+	$(DOXYGEN) config
 
 install: $(pkgdatadir)/doc
 	-$(INSTALL_DATA) html/* $<

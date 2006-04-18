@@ -23,14 +23,14 @@ PROJECT_NAME           = Indri
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 2.1
+PROJECT_NUMBER         = 2.2
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /usr/ind1/tmp2/dfisher/src/indri/doc
+OUTPUT_DIRECTORY       = /usr/dan/users9/dfisher/ciir/indri/doc
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -450,10 +450,10 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = /usr/ind1/tmp2/dfisher/src/indri \
-                         /usr/ind1/tmp2/dfisher/src/indri/INSTALL \
-                         /usr/ind1/tmp2/dfisher/src/indri/include/indri/greedy_vector \
-                         /usr/ind1/tmp2/dfisher/src/indri/include/indri/count_iterator
+INPUT                  = /usr/dan/users9/dfisher/ciir/indri \
+                         /usr/dan/users9/dfisher/ciir/indri/INSTALL \
+                         /usr/dan/users9/dfisher/ciir/indri/include/indri/greedy_vector \
+                         /usr/dan/users9/dfisher/ciir/indri/include/indri/count_iterator
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -477,7 +477,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = /usr/ind1/tmp2/dfisher/src/indri/validate /usr/ind1/tmp2/dfisher/src/indri/test /usr/ind1/tmp2/dfisher/src/indri/test2 /usr/ind1/tmp2/dfisher/src/indri/contrib
+EXCLUDE                = /usr/dan/users9/dfisher/ciir/indri/validate /usr/dan/users9/dfisher/ciir/indri/test /usr/dan/users9/dfisher/ciir/indri/test2 /usr/dan/users9/dfisher/ciir/indri/contrib
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
