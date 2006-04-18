@@ -19,7 +19,33 @@
 #include "indri/CompressedCollection.hpp"
 #include "indri/LocalQueryServer.hpp"
 #include "indri/ScopedLock.hpp"
+#include "indri/QueryEnvironment.hpp"
 #include <iostream>
+
+void print_expression_list( const std::string& indexName, const std::string& expression ) {
+  indri::api::QueryEnvironment env;
+
+  // compute the expression list using the QueryEnvironment API
+  env.addIndex( indexName );
+  std::vector<indri::api::ScoredExtentResult> result = env.expressionList( expression );
+  env.close();
+
+  std::cout << expression << " " << expression 
+            << env.termCount() << " " << env.documentCount() << std::endl;
+
+  // now, print the results in the format:
+  // documentID weight begin end
+  for( int i=0; i<result.size(); i++ ) {
+    std::cout << result[i].document
+              << " " 
+              << result[i].score
+              << " " 
+              << result[i].begin
+              << " " 
+              << result[i].end
+              << std::endl;
+  }
+}
 
 //
 // Attempts to validate the index.  Right now it only checks
@@ -395,6 +421,7 @@ void usage() {
   std::cout << "    term (t)             Term text      Print inverted list for a term" << std::endl;
   std::cout << "    termpositions (tp)   Term text      Print inverted list for a term, with positions" << std::endl;
   std::cout << "    fieldpositions (fp)  Field name     Print inverted list for a field, with positions" << std::endl;
+  std::cout << "    expressionlist (e)   Expression     Print inverted list for an Indri expression, with positions" << std::endl;
   std::cout << "    documentid (di)      Field, Value   Print the document IDs of documents having a metadata field matching this value" << std::endl;
   std::cout << "    documentname (dn)    Document ID    Print the text representation of a document ID" << std::endl;
   std::cout << "    documenttext (dt)    Document ID    Print the text of a document" << std::endl;
@@ -429,6 +456,10 @@ int main( int argc, char** argv ) {
       REQUIRE_ARGS(4);
       std::string field = argv[3];
       print_field_positions( r, field );
+    } else if( command == "e" || command == "expression" ) {
+      REQUIRE_ARGS(4);
+      std::string expression = argv[3];
+      print_expression_list( repName, expression );
     } else if( command == "dn" || command == "documentname" ) {
       REQUIRE_ARGS(4);
       print_document_name( r, argv[3] );
