@@ -128,6 +128,9 @@
 				RelativePath=".\ContextCountAccumulator.cpp">
 			</File>
 			<File
+				RelativePath=".\ContextInclusionAndNode.cpp">
+			</File>
+			<File
 				RelativePath=".\ContextSimpleCountAccumulator.cpp">
 			</File>
 			<File
@@ -182,16 +185,34 @@
 				RelativePath=".\DocumentIteratorFactory.cpp">
 			</File>
 			<File
+				RelativePath=".\DocumentStructure.cpp">
+			</File>
+			<File
+				RelativePath=".\DocumentStructureHolderNode.cpp">
+			</File>
+			<File
 				RelativePath=".\DocumentVector.cpp">
 			</File>
 			<File
 				RelativePath=".\ExtentAndNode.cpp">
 			</File>
 			<File
+				RelativePath=".\ExtentChildNode.cpp">
+			</File>
+			<File
+				RelativePath=".\ExtentDescendantNode.cpp">
+			</File>
+			<File
+				RelativePath=".\ExtentEnforcementNode.cpp">
+			</File>
+			<File
 				RelativePath=".\ExtentInsideNode.cpp">
 			</File>
 			<File
 				RelativePath=".\ExtentOrNode.cpp">
+			</File>
+			<File
+				RelativePath=".\ExtentParentNode.cpp">
 			</File>
 			<File
 				RelativePath=".\ExtentRestrictionNode.cpp">
@@ -210,6 +231,9 @@
 			</File>
 			<File
 				RelativePath=".\FieldLessNode.cpp">
+			</File>
+			<File
+				RelativePath=".\FieldWildcardNode.cpp">
 			</File>
 			<File
 				RelativePath=".\File.cpp">
@@ -260,6 +284,9 @@
 				RelativePath=".\KrovetzStemmerTransformation.cpp">
 			</File>
 			<File
+				RelativePath=".\LengthPriorNode.cpp">
+			</File>
+			<File
 				RelativePath=".\ListBeliefNode.cpp">
 			</File>
 			<File
@@ -276,6 +303,12 @@
 			</File>
 			<File
 				RelativePath=".\MemoryIndexTermListFileIterator.cpp">
+			</File>
+			<File
+				RelativePath=".\NestedExtentInsideNode.cpp">
+			</File>
+			<File
+				RelativePath=".\NestedListBeliefNode.cpp">
 			</File>
 			<File
 				RelativePath=".\NetworkMessageStream.cpp">
@@ -362,6 +395,9 @@
 				RelativePath=".\QueryParser.cpp">
 			</File>
 			<File
+				RelativePath=".\QueryParserFactory.cpp">
+			</File>
+			<File
 				RelativePath=".\RelevanceModel.cpp">
 			</File>
 			<File
@@ -375,6 +411,9 @@
 			</File>
 			<File
 				RelativePath=".\RMExpander.cpp">
+			</File>
+			<File
+				RelativePath=".\ShrinkageBeliefNode.cpp">
 			</File>
 			<File
 				RelativePath=".\StemmerFactory.cpp">
@@ -520,6 +559,9 @@
 				RelativePath="..\include\indri\ContextCountGraphExtractor.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\ContextInclusionAndNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\ContextSimpleCountAccumulator.hpp">
 			</File>
 			<File
@@ -530,9 +572,6 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\CorpusStatistics.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\count_iterator">
 			</File>
 			<File
 				RelativePath="..\include\indri\DagCopier.hpp">
@@ -613,6 +652,12 @@
 				RelativePath="..\include\indri\DocumentIteratorFactory.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\DocumentStructure.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\DocumentStructureHolderNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\DocumentVector.hpp">
 			</File>
 			<File
@@ -625,16 +670,31 @@
 				RelativePath="..\include\indri\ExtentAndNode.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\ExtentChildNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ExtentDescendantNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ExtentEnforcementNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\ExtentInsideNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\ExtentOrNode.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\ExtentParentNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\ExtentRestrictionModelAnnotatorCopier.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\ExtentRestrictionNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\FieldBelowWalker.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\FieldBetweenNode.hpp">
@@ -659,6 +719,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\FieldStatistics.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\FieldWildcardNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\File.hpp">
@@ -686,9 +749,6 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\FrequencyListCopier.hpp">
-			</File>
-			<File
-				RelativePath="..\include\indri\greedy_vector">
 			</File>
 			<File
 				RelativePath="..\include\indri\HashTable.hpp">
@@ -745,6 +805,9 @@
 				RelativePath="..\include\indri\KrovetzStemmerTransformation.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\LengthPriorNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\ListBeliefNode.hpp">
 			</File>
 			<File
@@ -785,6 +848,12 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\Mutex.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\NestedExtentInsideNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\NestedListBeliefNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\NetworkListener.hpp">
@@ -895,6 +964,9 @@
 				RelativePath="..\include\indri\QueryParser.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\QueryParserFactory.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\QueryResponsePacker.hpp">
 			</File>
 			<File
@@ -962,6 +1034,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\SequentialWriteBuffer.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ShrinkageBeliefNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\SimpleCopier.hpp">
