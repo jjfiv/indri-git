@@ -259,7 +259,7 @@ namespace indri {
     };
 
     class ExtentInside : public RawExtentNode {
-    private:
+    protected:
       RawExtentNode* _inner;
       RawExtentNode* _outer;
 
@@ -275,7 +275,7 @@ namespace indri {
         _outer = unpacker.getRawExtentNode( "outer" );
       }
 
-      bool operator== ( Node& o ) {
+      virtual bool operator== ( Node& o ) {
         ExtentInside* other = dynamic_cast<ExtentInside*>(&o);
   
         return other &&
@@ -283,11 +283,11 @@ namespace indri {
           *_outer == *other->_outer;
       }
       
-      std::string typeName() const {
+      virtual std::string typeName() const {
         return "ExtentInside";
       }
 
-      UINT64 hashCode() const {
+      virtual UINT64 hashCode() const {
         return 7 + _inner->hashCode() + (_inner->hashCode() * 7);
       }
 
@@ -298,6 +298,14 @@ namespace indri {
               << _outer->queryText();
 
         return qtext.str();
+      }
+
+      void setInner( RawExtentNode * inner ) {
+        _inner = inner;
+      }
+
+      void setOuter( RawExtentNode * outer ) {
+        _outer = outer;
       }
 
       RawExtentNode* getInner() {
@@ -322,7 +330,7 @@ namespace indri {
         walker.after(this);
       }
 
-      Node* copy( Copier& copier ) {
+      virtual Node* copy( Copier& copier ) {
         copier.before(this);
         
         RawExtentNode* newInner = dynamic_cast<RawExtentNode*>(_inner->copy(copier));
@@ -1359,7 +1367,7 @@ namespace indri {
     };
 
     class RawScorerNode : public ScoredExtentNode {
-    private:
+    protected:
       double _occurrences; // number of occurrences within this context
       double _contextSize; // number of terms that occur within this context
       double _maximumContextFraction;
@@ -1387,7 +1395,7 @@ namespace indri {
         _smoothing = unpacker.getString( "smoothing" );
       }
 
-      std::string typeName() const {
+      virtual std::string typeName() const {
         return "RawScorerNode";
       }
 
@@ -1407,7 +1415,7 @@ namespace indri {
         return qtext.str();
       }
 
-      UINT64 hashCode() const {
+      virtual UINT64 hashCode() const {
         UINT64 hash = 0;
 
         hash += 43;
@@ -1480,7 +1488,7 @@ namespace indri {
         walker.after(this);
       }
 
-      Node* copy( Copier& copier ) {
+      virtual Node* copy( Copier& copier ) {
         copier.before(this);
 
         RawExtentNode* duplicateContext = _context ? dynamic_cast<RawExtentNode*>(_context->copy(copier)) : 0;
@@ -2174,7 +2182,7 @@ namespace indri {
     };
 
     class ExtentRestriction : public ScoredExtentNode {
-    private:
+    protected:
       ScoredExtentNode* _child;
       RawExtentNode* _field;
 
@@ -2190,7 +2198,7 @@ namespace indri {
       {
       }
 
-      std::string typeName() const {
+      virtual std::string typeName() const {
         return "ExtentRestriction";
       }
 
@@ -2220,7 +2228,7 @@ namespace indri {
         return qtext.str();
       }
 
-      UINT64 hashCode() const {
+      virtual UINT64 hashCode() const {
         return 79 + _child->hashCode() * 7 + _field->hashCode();
       }
 
@@ -2254,7 +2262,7 @@ namespace indri {
         walker.after(this);
       }
 
-      Node* copy( Copier& copier ) {
+      virtual Node* copy( Copier& copier ) {
         copier.before(this);
 
         ScoredExtentNode* duplicateChild = dynamic_cast<indri::lang::ScoredExtentNode*>(_child->copy(copier));
@@ -2794,6 +2802,719 @@ namespace indri {
         return copier.after(this, duplicate);
       }
     };
+
+    
+    class FieldWildcard : public RawExtentNode {
+    private:
+
+    public:
+      FieldWildcard(  )
+      {
+      }
+
+      FieldWildcard( Unpacker& unpacker ) {
+      }
+
+      bool operator== ( Node& o ) {
+        FieldWildcard* other = dynamic_cast<FieldWildcard*>(&o);
+        return other;
+      }
+
+      std::string typeName() const {
+        return "FieldWildcard";
+      }
+
+      std::string queryText() const {
+        std::stringstream qtext;
+        qtext << "*";
+
+        return qtext.str();
+      }
+
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        walker.after(this);
+      }
+
+      UINT64 hashCode() const {
+        return 103;//???????????????
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        FieldWildcard* fieldWildcardCopy = new FieldWildcard;
+        fieldWildcardCopy->setNodeName( nodeName() );
+
+        return copier.after(this, fieldWildcardCopy);
+      }
+    };
+
+    class NestedExtentInside : public ExtentInside {
+
+    public:
+      NestedExtentInside( RawExtentNode* inner, RawExtentNode* outer ) :
+        ExtentInside( inner, outer )
+      {
+      }
+
+      NestedExtentInside( Unpacker& unpacker ):
+        ExtentInside( unpacker ) 
+      { 
+      }
+
+      bool operator== ( Node& o ) {
+        NestedExtentInside* other = dynamic_cast<NestedExtentInside*>(&o);
+  
+        return other &&
+          *_inner == *other->_inner &&
+          *_outer == *other->_outer;
+      }
+      
+      std::string typeName() const {
+        return "NestedExtentInside";
+      }
+
+      UINT64 hashCode() const {
+        return 107 + _inner->hashCode() + (_inner->hashCode() * 7);//???????????????
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+        
+        RawExtentNode* newInner = dynamic_cast<RawExtentNode*>(_inner->copy(copier));
+        RawExtentNode* newOuter = dynamic_cast<RawExtentNode*>(_outer->copy(copier));
+        NestedExtentInside* extentInsideCopy = new NestedExtentInside( newInner, newOuter );
+        extentInsideCopy->setNodeName( nodeName() );
+
+        return copier.after(this, extentInsideCopy);
+      }
+    };
+
+    class NestedRawScorerNode : public RawScorerNode {
+
+    public:
+      NestedRawScorerNode( RawExtentNode* raw, RawExtentNode* context, std::string smoothing = "method:dirichlet,mu:2500" ) :
+        RawScorerNode( raw, context, smoothing )
+      {
+      }
+
+      NestedRawScorerNode( Unpacker& unpacker ) :
+        RawScorerNode( unpacker )
+      {
+      }
+
+      std::string typeName() const {
+        return "NestedRawScorerNode";
+      }
+
+      UINT64 hashCode() const {
+        UINT64 hash = 0;
+
+        hash += 105;
+        hash += _raw->hashCode();
+
+        if( _context ) {
+          hash += _context->hashCode();
+        }
+
+        indri::utility::GenericHash<const char*> gh;
+        hash += gh( _smoothing.c_str() );
+
+        return hash;
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        RawExtentNode* duplicateContext = _context ? dynamic_cast<RawExtentNode*>(_context->copy(copier)) : 0;
+        RawExtentNode* duplicateRaw = _raw ? dynamic_cast<RawExtentNode*>(_raw->copy(copier)) : 0;
+        NestedRawScorerNode* duplicate = new NestedRawScorerNode(*this);
+        duplicate->setRawExtent( duplicateRaw );
+        duplicate->setContext( duplicateContext );
+
+        return copier.after(this, duplicate);
+      }
+    };
+   
+
+    class ExtentEnforcement : public ExtentRestriction {
+
+    public:
+      ExtentEnforcement( Unpacker& unpacker ) :
+        ExtentRestriction( unpacker ) {
+      }
+
+      ExtentEnforcement( ScoredExtentNode* child, RawExtentNode* field ) :
+        ExtentRestriction( child, field )
+      {
+      }
+
+      std::string typeName() const {
+        return "ExtentEnforcement";
+      }
+
+      
+      UINT64 hashCode() const {
+        return 109 + _child->hashCode() * 7 + _field->hashCode();//??????????????
+      }
+
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        ScoredExtentNode* duplicateChild = dynamic_cast<indri::lang::ScoredExtentNode*>(_child->copy(copier));
+        RawExtentNode* duplicateField = dynamic_cast<indri::lang::RawExtentNode*>(_field->copy(copier));
+        ExtentEnforcement* duplicate = new ExtentEnforcement( duplicateChild, duplicateField );
+        duplicate->setNodeName( nodeName() );
+        
+        return copier.after(this, duplicate);
+      }
+    };
+
+    class ContextInclusionNode : public ScoredExtentNode {
+    protected:
+      std::vector<ScoredExtentNode*> _children;
+      ScoredExtentNode* _preserveExtentsChild;
+
+      void _unpack( Unpacker& unpacker ) {
+        _children = unpacker.getScoredExtentVector( "children" );
+        _preserveExtentsChild = unpacker.getScoredExtentNode( "preserveExtentsChild" );
+      }
+
+      UINT64 _hashCode() const {
+        UINT64 accumulator = 0;
+
+        for( int i=0; i<_children.size(); i++ ) {
+          accumulator += _children[i]->hashCode();
+        }
+
+        return accumulator;
+      }
+
+      template<class _ThisType>
+      void _walk( _ThisType* ptr, Walker& walker ) {
+        walker.before(ptr);
+
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          _children[i]->walk(walker);
+        }
+        
+        walker.after(ptr);
+      }
+
+      template<class _ThisType>
+      Node* _copy( _ThisType* ptr, Copier& copier ) {
+        copier.before(ptr);
+        
+        _ThisType* duplicate = new _ThisType();
+        duplicate->setNodeName( nodeName() );
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          bool preserveExtents = false;
+          if ( _preserveExtentsChild == _children[i] ) {
+            preserveExtents = true;
+          }
+          duplicate->addChild( dynamic_cast<ScoredExtentNode*>(_children[i]->copy(copier)), preserveExtents );
+        } 
+
+        return copier.after(ptr, duplicate);
+      }
+
+      void _childText( std::stringstream& qtext ) const {
+        if ( _preserveExtentsChild != 0 ) {
+          qtext << _preserveExtentsChild->queryText() << " ";
+        }
+        for( unsigned int i=0; i<_children.size(); i++ ) {
+          if ( _children[i] != _preserveExtentsChild ) {
+            if(i>0) qtext << " ";
+            qtext << _children[i]->queryText();
+          }
+        }
+      }
+
+    public:
+      ContextInclusionNode( ) { }
+      ContextInclusionNode( Unpacker & unpacker ) {
+        _unpack( unpacker );
+      }
+
+      const std::vector<ScoredExtentNode*>& getChildren() {
+        return _children;
+      }
+      
+      ScoredExtentNode * getPreserveExtentsChild() {
+        return _preserveExtentsChild;
+      }
+
+      void addChild( ScoredExtentNode* scoredNode, bool preserveExtents = false ) {
+        if (preserveExtents == true) {
+          _preserveExtentsChild = scoredNode;
+        }       
+        _children.push_back( scoredNode );
+      }
+
+      std::string typeName() const {
+        return "ContextInclusionNode";
+      }
+
+      std::string queryText() const {
+        std::stringstream qtext;
+        qtext << "#context(";
+        _childText(qtext);
+        qtext << ")";
+
+        return qtext.str();
+      } 
+
+      virtual UINT64 hashCode() const {
+        return 111 + _hashCode();//?????????????
+      }
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.put( "children", _children );
+        packer.put( "preserveExtentsChild", _preserveExtentsChild);
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        _walk( this, walker );
+      }
+      
+      Node* copy( Copier& copier ) {
+        return _copy( this, copier );
+      }
+    };
+
+    class LengthPrior : public ScoredExtentNode {
+    private:
+      double _exponent;
+      ScoredExtentNode * _child;
+
+    public:
+      LengthPrior(ScoredExtentNode * child, double exponent) :
+        _child(child), 
+        _exponent(exponent)
+      {
+        
+      }
+
+      LengthPrior( Unpacker& unpacker ) {
+        _exponent = unpacker.getDouble( "exponent" );
+        _child = unpacker.getScoredExtentNode( "child" );
+      }
+
+      std::string queryText() const {
+        std::stringstream qtext;
+        // with the definition of priors somewhat in flux, it's
+        // hard to know what would be good to put here.  It's also
+        // a little hard when there realy isn't a way to 
+        // specify this in either of the indri/nexi query languages.
+        qtext <<  "#lengthprior(" << _exponent << ")";
+        return qtext.str();
+      }
+
+      std::string nodeType() {
+        return "LengthPrior";
+      }
+
+      void setExponent( double exponent ) {
+        _exponent = exponent;
+      }
+
+      double getExponent() {
+        return _exponent;
+      }
+
+      ScoredExtentNode* getChild() {
+        return _child;
+      }
+      
+      virtual UINT64 hashCode() const {
+        return 115; //?????????
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        _child->walk(walker);
+        walker.after(this);
+      }
+
+      indri::lang::Node* copy( Copier& copier ) {
+        copier.before(this);
+        ScoredExtentNode * childCopy = dynamic_cast<ScoredExtentNode*> (_child->copy( copier ) );
+        LengthPrior* duplicate = new LengthPrior( childCopy, _exponent );
+        return copier.after(this, duplicate);
+      }
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.put( "exponent", _exponent );
+        packer.put( "child", _child );
+        packer.after(this);
+      }
+    };
+
+    class DocumentStructureNode : public Node {
+    public:
+      
+      DocumentStructureNode( ) {        
+      }
+
+      DocumentStructureNode( Unpacker& unpacker ) {     
+      }
+
+      UINT64 hashCode() const {
+        return 117; //?????????
+      }
+
+      bool operator== ( Node& o ) {
+        DocumentStructureNode* other = dynamic_cast<DocumentStructureNode*>(&o);
+        return other; 
+      }
+
+      std::string typeName() const {
+        return "DocumentStructure";
+      }
+      
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        walker.after(this);
+      }
+
+      std::string queryText() const {
+        return "";
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        DocumentStructureNode* documentStructureCopy = new DocumentStructureNode;
+        documentStructureCopy->setNodeName( nodeName() );
+
+        return copier.after(this, documentStructureCopy);
+      }
+    };
+
+    class ShrinkageScorerNode : public RawScorerNode {
+    private:
+      DocumentStructureNode* _documentStructure;
+      
+      std::vector<std::string> _shrinkageRules;
+
+    public:
+      ShrinkageScorerNode( RawExtentNode* raw, 
+                           DocumentStructureNode* documentStructure, 
+                           std::string smoothing = "method:dirichlet,mu:2500" )
+        : RawScorerNode( raw, 0, smoothing ),
+          _documentStructure( documentStructure ), 
+          _shrinkageRules( 0 )
+      {
+      }
+
+      ShrinkageScorerNode( Unpacker& unpacker ) : RawScorerNode( 0, 0, "" ) {
+        _raw = unpacker.getRawExtentNode( "raw" );
+        _documentStructure = unpacker.getDocumentStructureNode( "documentStructureNode" );
+        _occurrences = unpacker.getDouble( "occurrences" );
+        _contextSize = unpacker.getDouble( "contextSize" );
+        _smoothing = unpacker.getString( "smoothing" );
+        _shrinkageRules = unpacker.getStringVector( "shrinkageRules" );
+      }
+
+      std::string typeName() const {
+        return "ShrinkageScorerNode";
+      }
+
+      std::string queryText() const {
+        std::stringstream qtext;
+        
+        qtext << _raw->queryText();
+
+        return qtext.str();
+      }
+
+      void addShrinkageRule( std::string rule ) {
+        _shrinkageRules.push_back( rule );
+      }
+      
+      std::vector<std::string> getShrinkageRules() {
+        return _shrinkageRules;
+      }
+
+      void setDocumentStructure( DocumentStructureNode* docStruct ) {
+        _documentStructure = docStruct;
+      }
+
+      DocumentStructureNode* getDocumentStructure() {
+        return _documentStructure;
+      }
+
+
+      UINT64 hashCode() const {
+        UINT64 hash = 0;
+
+        hash += 119;/////////////////????
+        hash += _raw->hashCode();
+
+        if( _context ) {
+          hash += _context->hashCode();
+        }
+
+        indri::utility::GenericHash<const char*> gh;
+        hash += gh( _smoothing.c_str() );
+
+        return hash;
+      }
+
+      void pack( Packer& packer ) {
+        packer.before(this);
+        packer.put( "raw", _raw );
+        packer.put( "documentStructure", _documentStructure );
+        packer.put( "occurrences", _occurrences );
+        packer.put( "contextSize", _contextSize );
+        packer.put( "smoothing", _smoothing );
+        packer.put( "shrinkageRules", _shrinkageRules );
+        packer.after(this);
+      }
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        if( _raw )
+          _raw->walk(walker);
+        if( _documentStructure ) 
+          _documentStructure->walk(walker);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+
+        RawExtentNode* duplicateRaw = _raw ? dynamic_cast<RawExtentNode*>(_raw->copy(copier)) : 0;
+        DocumentStructureNode* duplicateDocStruct = _documentStructure ? dynamic_cast<DocumentStructureNode*>(_documentStructure->copy(copier)) : 0;
+        ShrinkageScorerNode* duplicate = new ShrinkageScorerNode(*this);
+        duplicate->setRawExtent( duplicateRaw );
+        duplicate->setDocumentStructure( duplicateDocStruct );
+
+        std::vector<std::string>::iterator ruleIter = _shrinkageRules.begin();
+        while( ruleIter != _shrinkageRules.end() ) {
+          duplicate->addShrinkageRule( *ruleIter );
+          ruleIter++;
+        }
+
+        return copier.after(this, duplicate);
+      }
+    };
+
+
+
+    class ExtentDescendant : public ExtentInside {
+    protected:
+
+      DocumentStructureNode* _documentStructure;
+      
+    public:
+      ExtentDescendant( RawExtentNode* inner, RawExtentNode* outer, DocumentStructureNode * docStruct ) :
+        ExtentInside( inner, outer ),
+        _documentStructure( docStruct)
+      {
+      }
+
+      ExtentDescendant( Unpacker& unpacker ):
+        ExtentInside( unpacker ) 
+      { 
+        _documentStructure = unpacker.getDocumentStructureNode( "documentStructureNode" );
+      }
+
+      bool operator== ( Node& o ) {
+        ExtentDescendant* other = dynamic_cast<ExtentDescendant*>(&o);
+  
+        return other &&
+          *_inner == *other->_inner &&
+          *_outer == *other->_outer &&
+          *_documentStructure == *other->_documentStructure;
+      }
+      
+      void setDocumentStructure( DocumentStructureNode* docStruct ) {
+        _documentStructure = docStruct;
+      }
+
+      DocumentStructureNode* getDocumentStructure() {
+        return _documentStructure;
+      }
+
+      std::string typeName() const {
+        return "ExtentDescendant";
+      }
+
+      UINT64 hashCode() const {
+        return 125 + _inner->hashCode() + (_inner->hashCode() * 7);//???????????????
+      }
+
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        _inner->walk(walker);
+        _outer->walk(walker);
+        _documentStructure->walk(walker);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+        
+        RawExtentNode* newInner = dynamic_cast<RawExtentNode*>(_inner->copy(copier));
+        RawExtentNode* newOuter = dynamic_cast<RawExtentNode*>(_outer->copy(copier));
+        DocumentStructureNode * newDocStruct = dynamic_cast<DocumentStructureNode*>(_documentStructure->copy(copier));
+        ExtentDescendant* extentInsideCopy = new ExtentDescendant( newInner, newOuter, newDocStruct );
+        extentInsideCopy->setNodeName( nodeName() );
+
+        return copier.after(this, extentInsideCopy);
+      }
+    };
+
+    class ExtentChild : public ExtentInside {
+    protected:
+
+      DocumentStructureNode* _documentStructure;
+      
+    public:
+      ExtentChild( RawExtentNode* inner, RawExtentNode* outer, DocumentStructureNode * docStruct ) :
+        ExtentInside( inner, outer ),
+        _documentStructure( docStruct)
+      {
+      }
+
+      ExtentChild( Unpacker& unpacker ):
+        ExtentInside( unpacker ) 
+      { 
+        _documentStructure = unpacker.getDocumentStructureNode( "documentStructureNode" );
+      }
+
+      bool operator== ( Node& o ) {
+        ExtentChild* other = dynamic_cast<ExtentChild*>(&o);
+  
+        return other &&
+          *_inner == *other->_inner &&
+          *_outer == *other->_outer &&
+          *_documentStructure == *other->_documentStructure;
+      }
+
+      void setDocumentStructure( DocumentStructureNode* docStruct ) {
+        _documentStructure = docStruct;
+      }
+
+      DocumentStructureNode* getDocumentStructure() {
+        return _documentStructure;
+      }
+     
+      std::string typeName() const {
+        return "ExtentChild";
+      }
+
+      UINT64 hashCode() const {
+        return 129 + _inner->hashCode() + (_inner->hashCode() * 7);//???????????????
+      }
+
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        _inner->walk(walker);
+        _outer->walk(walker);
+        _documentStructure->walk(walker);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+        
+        RawExtentNode* newInner = dynamic_cast<RawExtentNode*>(_inner->copy(copier));
+        RawExtentNode* newOuter = dynamic_cast<RawExtentNode*>(_outer->copy(copier));
+        DocumentStructureNode * newDocStruct = dynamic_cast<DocumentStructureNode*>(_documentStructure->copy(copier));
+        ExtentChild* extentInsideCopy = new ExtentChild( newInner, newOuter, newDocStruct );
+        extentInsideCopy->setNodeName( nodeName() );
+
+        return copier.after(this, extentInsideCopy);
+      }
+    };
+
+    class ExtentParent : public ExtentInside {
+    protected:
+
+      DocumentStructureNode* _documentStructure;
+      
+    public:
+      ExtentParent( RawExtentNode* inner, RawExtentNode* outer, DocumentStructureNode * docStruct ) :
+        ExtentInside( inner, outer ),
+        _documentStructure( docStruct)
+      {
+      }
+
+      ExtentParent( Unpacker& unpacker ):
+        ExtentInside( unpacker ) 
+      { 
+        _documentStructure = unpacker.getDocumentStructureNode( "documentStructureNode" );
+      }
+
+      bool operator== ( Node& o ) {
+        ExtentParent* other = dynamic_cast<ExtentParent*>(&o);
+  
+        return other &&
+          *_inner == *other->_inner &&
+          *_outer == *other->_outer &&
+          *_documentStructure == *other->_documentStructure;
+      }
+
+      void setDocumentStructure( DocumentStructureNode* docStruct ) {
+        _documentStructure = docStruct;
+      }
+
+      DocumentStructureNode* getDocumentStructure() {
+        return _documentStructure;
+      }
+     
+      std::string typeName() const {
+        return "ExtentParent";
+      }
+
+      UINT64 hashCode() const {
+        return 129 + _inner->hashCode() + (_inner->hashCode() * 7);//???????????????
+      }
+
+
+      void walk( Walker& walker ) {
+        walker.before(this);
+        _inner->walk(walker);
+        _outer->walk(walker);
+        _documentStructure->walk(walker);
+        walker.after(this);
+      }
+
+      Node* copy( Copier& copier ) {
+        copier.before(this);
+        
+        RawExtentNode* newInner = dynamic_cast<RawExtentNode*>(_inner->copy(copier));
+        RawExtentNode* newOuter = dynamic_cast<RawExtentNode*>(_outer->copy(copier));
+        DocumentStructureNode * newDocStruct = dynamic_cast<DocumentStructureNode*>(_documentStructure->copy(copier));
+        ExtentParent* extentInsideCopy = new ExtentParent( newInner, newOuter, newDocStruct );
+        extentInsideCopy->setNodeName( nodeName() );
+
+        return copier.after(this, extentInsideCopy);
+      }
+    };
+
+
+
   }
 }
 

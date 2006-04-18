@@ -67,6 +67,12 @@ void indri::infnet::InferenceNetwork::_moveToDocument( int candidate ) {
   // move all document iterators
   _moveDocListIterators( candidate );
 
+  // move the document structure first as there may be other nodes
+  // that depend on it.
+  if (_documentStructureHolderNode != 0) {
+    _documentStructureHolderNode->prepare( candidate );
+  }
+
   // move all field iterators
   std::vector<indri::index::DocExtentListIterator*>::iterator fiter;
   for( fiter = _fieldIterators.begin(); fiter != _fieldIterators.end(); fiter++ ) {
@@ -141,6 +147,7 @@ void indri::infnet::InferenceNetwork::_indexChanged( indri::index::Index& index 
       // if the named prior doesn't exist in the Repository, throw an Exception
       LEMUR_THROW( LEMUR_RUNTIME_ERROR, "named prior: " + _priorNames[i] + " not found in Repository. Unable to process query." );
     }
+
     _priorIterators.push_back( iterator );
   }
 
@@ -160,6 +167,11 @@ void indri::infnet::InferenceNetwork::_indexChanged( indri::index::Index& index 
   std::vector<indri::infnet::EvaluatorNode*>::iterator eiter;
   for( eiter = _evaluators.begin(); eiter != _evaluators.end(); eiter++ ) {
     (*eiter)->indexChanged( index );
+  }
+
+  // document structure
+  if (_documentStructureHolderNode != 0) {
+    _documentStructureHolderNode->indexChanged( index );
   }
 }
 
@@ -195,7 +207,8 @@ void indri::infnet::InferenceNetwork::_evaluateDocument( indri::index::Index& in
 
 indri::infnet::InferenceNetwork::InferenceNetwork( indri::collection::Repository& repository ) :
   _repository(repository),
-  _closeIteratorBound(-1)
+  _closeIteratorBound(-1),
+  _documentStructureHolderNode(0)
 {
 }
 
@@ -211,6 +224,7 @@ indri::infnet::InferenceNetwork::~InferenceNetwork() {
   indri::utility::delete_vector_contents<indri::infnet::BeliefNode*>( _beliefNodes );
   indri::utility::delete_vector_contents<indri::query::TermScoreFunction*>( _scoreFunctions );
   indri::utility::delete_vector_contents<indri::infnet::EvaluatorNode*>( _evaluators );
+  delete _documentStructureHolderNode;
 }
 
 indri::index::DocListIterator* indri::infnet::InferenceNetwork::getDocIterator( int index ) {
@@ -258,6 +272,10 @@ void indri::infnet::InferenceNetwork::addScoreFunction( indri::query::TermScoreF
 
 void indri::infnet::InferenceNetwork::addComplexEvaluatorNode( indri::infnet::EvaluatorNode* complexEvaluator ) {
   _complexEvaluators.push_back( complexEvaluator );
+}
+
+void indri::infnet::InferenceNetwork::addDocumentStructureHolderNode( indri::infnet::DocumentStructureHolderNode* docStruct ) {
+  _documentStructureHolderNode = docStruct;    
 }
 
 const std::vector<indri::infnet::EvaluatorNode*>& indri::infnet::InferenceNetwork::getEvaluators() const {

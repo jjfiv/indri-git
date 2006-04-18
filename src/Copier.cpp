@@ -78,6 +78,28 @@ namespace indri {
     Node* Copier::after( class ScoreAccumulatorNode* oldNode, class ScoreAccumulatorNode* newNode ) { return defaultAfter( oldNode, newNode ); }
     void Copier::before( class AnnotatorNode* oldNode ) { defaultBefore( oldNode ); }
     Node* Copier::after( class AnnotatorNode* oldNode, class AnnotatorNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class FieldWildcard* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class FieldWildcard* oldNode, class FieldWildcard* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class NestedExtentInside* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class NestedExtentInside* oldNode, class NestedExtentInside* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class NestedRawScorerNode* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class NestedRawScorerNode* oldNode, class NestedRawScorerNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ExtentEnforcement* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ExtentEnforcement* oldNode, class ExtentEnforcement* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ContextInclusionNode* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ContextInclusionNode* oldNode, class ContextInclusionNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class LengthPrior* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class LengthPrior* oldNode, class LengthPrior* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class DocumentStructureNode* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class DocumentStructureNode* oldNode, class DocumentStructureNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ShrinkageScorerNode* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ShrinkageScorerNode* oldNode, class ShrinkageScorerNode* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ExtentDescendant* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ExtentDescendant* oldNode, class ExtentDescendant* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ExtentChild* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ExtentChild* oldNode, class ExtentChild* newNode ) { return defaultAfter( oldNode, newNode ); }
+    void Copier::before( class ExtentParent* oldNode ) { defaultBefore( oldNode ); }
+    Node* Copier::after( class ExtentParent* oldNode, class ExtentParent* newNode ) { return defaultAfter( oldNode, newNode ); }
  };
 };
 

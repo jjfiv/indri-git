@@ -304,10 +304,10 @@ void print_document_data( indri::collection::Repository& r, const char* number )
 
   for( int i=0; i<document->tags.size(); i++ ) {
     std::cout << i << " "
-              << document->tags[i].name << " " 
-              << document->tags[i].begin << " "
-              << document->tags[i].end << " " 
-              << document->tags[i].number << std::endl;
+              << document->tags[i]->name << " " 
+              << document->tags[i]->begin << " "
+              << document->tags[i]->end << " " 
+              << document->tags[i]->number << std::endl;
   }
 
   std::cout << std::endl << "--- Text ---" << std::endl << std::endl;

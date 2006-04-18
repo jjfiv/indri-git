@@ -35,6 +35,8 @@ namespace indri
       std::vector<indri::lang::ExtentInside*> _extentInsides;
       std::vector<indri::lang::ODNode*> _odNodes;
       std::vector<indri::lang::UWNode*> _uwNodes;
+      std::vector<indri::lang::FieldWildcard*> _fieldWildcardNodes;
+      std::vector<indri::lang::DocumentStructureNode*> _documentStructureNodes;
 
       std::vector<indri::lang::Node*> _newNodes;
 
@@ -86,10 +88,14 @@ namespace indri
         return _findReplacement<indri::lang::ExtentAnd>( _extentAnds, newExtentAnd );
       }
 
-      indri::lang::Node* after( indri::lang::ExtentInside* oldExtentInside, indri::lang::ExtentInside* newExtentInside ) {
+      indri::lang::Node* after( indri::lang::ExtentInside* oldExtentInside, indri::lang::ExtentInside* newExtentInside ) {      
         return _findReplacement<indri::lang::ExtentInside>( _extentInsides, newExtentInside );
       }
 
+      indri::lang::Node* after( indri::lang::NestedExtentInside* oldExtentInside, indri::lang::NestedExtentInside* newExtentInside ) {  
+        return after((indri::lang::ExtentInside*) oldExtentInside, (indri::lang::ExtentInside*) newExtentInside );
+      }
+ 
       indri::lang::Node* after( indri::lang::ODNode* oldODNode, indri::lang::ODNode* newODNode ) {
         return _findReplacement<indri::lang::ODNode>( _odNodes, newODNode );
       }
@@ -97,6 +103,15 @@ namespace indri
       indri::lang::Node* after( indri::lang::UWNode* oldUWNode, indri::lang::UWNode* newUWNode ) {
         return _findReplacement<indri::lang::UWNode>( _uwNodes, newUWNode );
       }
+
+      indri::lang::Node* after( indri::lang::FieldWildcard* fieldWildcard, indri::lang::FieldWildcard* newFieldWildcard ) {
+        return _findReplacement<indri::lang::FieldWildcard>( _fieldWildcardNodes, newFieldWildcard );
+      }
+
+      indri::lang::Node* after( indri::lang::DocumentStructureNode* docStruct, indri::lang::DocumentStructureNode* newDocStruct ) {
+        return _findReplacement<indri::lang::DocumentStructureNode>( _documentStructureNodes, newDocStruct );
+      }
+      
     };
   }
 }

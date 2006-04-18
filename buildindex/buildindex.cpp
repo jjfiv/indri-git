@@ -688,6 +688,7 @@ int main(int argc, char * argv[]) {
       env.setIndexedFields(fields);
       // have to update any numeric fields.
       std::string numName = "numeric";
+      std::string ordName = "ordinal";
       indri::api::Parameters slice = parameters["field"];
       for( int i=0; i<slice.size(); i++ ) {
         bool isNumeric = slice[i].get(numName, false);
@@ -697,6 +698,10 @@ int main(int argc, char * argv[]) {
           std::string parserName = slice[i].get("parserName", "NumericFieldAnnotator");
           env.setNumericField(slice[i][subName], isNumeric, parserName);
         }
+	bool isOrdinal = slice[i].get(ordName, false);
+	if( isOrdinal ) {
+	  env.setOrdinalField(slice[i][subName], isOrdinal);
+	}
       }
     }
     

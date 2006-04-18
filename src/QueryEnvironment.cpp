@@ -32,8 +32,7 @@
 #include "indri/NetworkStream.hpp"
 #include "indri/NetworkMessageStream.hpp"
 
-#include "indri/QueryLexer.hpp"
-#include "indri/QueryParser.hpp"
+#include "indri/QueryParserFactory.hpp"
 
 #include "indri/DagCopier.hpp"
 #include "indri/InferenceNetworkBuilder.hpp"
@@ -58,6 +57,7 @@
 #include <map>
 
 #include "indri/Appliers.hpp"
+#include "indri/TreePrinterWalker.hpp"
 
 using namespace lemur::api;
 
@@ -147,6 +147,10 @@ indri::api::QueryEnvironment::~QueryEnvironment() {
 
 void indri::api::QueryEnvironment::setMemory( UINT64 memory ) {
   _parameters.set( "memory", memory );
+}
+
+void indri::api::QueryEnvironment::setSingleBackgroundModel( bool background ) {
+  _parameters.set( "singleBackgroundModel", background );
 }
 
 void indri::api::QueryEnvironment::setScoringRules( const std::vector<std::string>& rules ) {
@@ -458,6 +462,63 @@ std::vector<std::string> indri::api::QueryEnvironment::documentMetadata( const s
   return results;
 }
 
+std::vector<std::string> indri::api::QueryEnvironment::pathNames( const std::vector<indri::api::ScoredExtentResult>& results ) {
+  std::vector<DOCID_T> documentIDs;
+  documentIDs.reserve(results.size());
+  std::vector<int> pathBegins;
+  pathBegins.reserve(results.size());
+  std::vector<int> pathEnds;
+  pathEnds.reserve(results.size());
+
+  for( unsigned int i=0; i<results.size(); i++ ) {
+    documentIDs.push_back( results[i].document );
+    pathBegins.push_back( results[i].begin );
+    pathEnds.push_back( results[i].end );
+  }
+
+
+  std::vector< std::vector<DOCID_T> > docIDLists;
+  std::vector< std::vector<int> > beginLists;
+  std::vector< std::vector<int> > endLists;
+  docIDLists.resize( _servers.size() );
+  beginLists.resize( _servers.size() );
+  endLists.resize( _servers.size() );
+  std::vector< std::vector<DOCID_T> > docIDPositions;
+  docIDPositions.resize( _servers.size() );
+  std::vector< std::string > paths;
+  paths.resize( documentIDs.size() );
+  
+  // split document numbers into lists for each query server
+  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, _servers.size() );
+
+  // copy begins and ends over given the document scattering
+  for( unsigned int i=0; i<docIDLists.size(); i++ ) {
+    if( docIDLists[i].size() ) {      
+      for( unsigned int j=0; j<docIDLists[i].size(); j++ ) {
+        int resultIndex = docIDPositions[i][j];
+        beginLists[i].push_back( pathBegins[ resultIndex ] );
+        endLists[i].push_back( pathEnds[ resultIndex ] );
+      }
+    }
+  }
+
+  indri::utility::greedy_vector<indri::server::QueryServerMetadataResponse*> responses;
+  // send out requests for execution
+  for( unsigned int i=0; i<docIDLists.size(); i++ ) {
+    indri::server::QueryServerMetadataResponse* response = 0;
+    
+    if( docIDLists[i].size() )
+      response = _servers[i]->pathNames( docIDLists[i], beginLists[i], endLists[i] );
+    
+    responses.push_back(response);
+  }
+
+  // fold the results back into one master list (this method will delete the responses)
+  qenv_gather_document_results( docIDLists, docIDPositions, responses, paths );
+
+  return paths;
+}
+
 std::vector<std::string> indri::api::QueryEnvironment::documentMetadata( const std::vector<indri::api::ScoredExtentResult>& results, const std::string& attributeName ) {
   // copy into an int vector
   std::vector<DOCID_T> documentIDs;
@@ -700,21 +761,13 @@ void indri::api::QueryEnvironment::_annotateQuery( indri::infnet::InferenceNetwo
 // expressionCount
 //
 
-double indri::api::QueryEnvironment::expressionCount( const std::string& expression ) {
-  std::istringstream query(expression);
-  indri::lang::QueryLexer lexer( query );
-  indri::lang::QueryParser parser( lexer );
-  
-  // this step is required to initialize some internal
-  // parser variables, since ANTLR grammars can't add things
-  // to the constructor
-  parser.init( &lexer );
-  lexer.init();
+double indri::api::QueryEnvironment::expressionCount( const std::string& expression, const std::string &queryType ) {
+  QueryParserWrapper *parser = QueryParserFactory::get(expression, queryType);
 
   indri::lang::ScoredExtentNode* rootNode;
 
   try {
-    rootNode = parser.query();
+    rootNode = parser->query();
   } catch( antlr::ANTLRException e ) {
     LEMUR_THROW( LEMUR_PARSE_ERROR, "Couldn't understand this query: " + e.getMessage() );
   }
@@ -737,6 +790,8 @@ double indri::api::QueryEnvironment::expressionCount( const std::string& express
   _sumServerQuery( statisticsResults, roots, 1000 );
   
   std::vector<ScoredExtentResult>& occurrencesList = statisticsResults[ contextCounter->nodeName() ][ "occurrences" ];
+  delete(parser);
+  
   return occurrencesList[0].score;
 }
 
@@ -745,25 +800,17 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
                                                                                      const std::string& q,
                                                                                      int resultsRequested,
                                                                                      const std::vector<DOCID_T>* documentSet,
-                                                                                     indri::api::QueryAnnotation** annotation ) {
+                                                                                     indri::api::QueryAnnotation** annotation,
+                                                                                     const std::string &queryType ) {
   INIT_TIMER
-
-  std::istringstream query(q);
-  indri::lang::QueryLexer lexer( query );
-  indri::lang::QueryParser parser( lexer );
-  
-  // this step is required to initialize some internal
-  // parser variables, since ANTLR grammars can't add things
-  // to the constructor
-  parser.init( &lexer );
-  lexer.init();
+  QueryParserWrapper *parser = QueryParserFactory::get(q, queryType);
 
   PRINT_TIMER( "Initialization complete" );
 
   indri::lang::ScoredExtentNode* rootNode;
 
   try {
-    rootNode = parser.query();
+    rootNode = parser->query();
   } catch( antlr::ANTLRException e ) {
     LEMUR_THROW( LEMUR_PARSE_ERROR, "Couldn't understand this query: " + e.getMessage() );
   }
@@ -773,7 +820,7 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
   // push down language models from ExtentRestriction nodes
   indri::lang::ExtentRestrictionModelAnnotatorCopier restrictionCopier;
   rootNode = dynamic_cast<indri::lang::ScoredExtentNode*>(rootNode->copy(restrictionCopier));
-  
+
   // extract the raw scorer nodes from the query tree
   indri::lang::RawScorerNodeExtractor extractor;
   rootNode->walk(extractor);
@@ -782,10 +829,21 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
   // so that we can get counts for everything in the query.  We need those counts
   // so that we can score the query terms correctly.
   std::vector<indri::lang::RawScorerNode*>& scorerNodes = extractor.getScorerNodes();
-  indri::lang::ApplyCopiers<indri::lang::ContextCountGraphCopier, indri::lang::RawScorerNode> graph( scorerNodes );
+
+  bool noContext = false;
+  if (_parameters.exists("singleBackgroundModel")) {
+    noContext = (bool) _parameters.get("singleBackgroundModel");
+  }
 
   indri::infnet::InferenceNetwork::MAllResults statisticsResults;
-  _sumServerQuery( statisticsResults, graph.roots(), 1000 );
+
+  if ( noContext ) {
+    indri::lang::ApplyCopiers<indri::lang::NoContextCountGraphCopier, indri::lang::RawScorerNode> graph( scorerNodes );
+    _sumServerQuery( statisticsResults, graph.roots(), 1000 );
+  } else {
+    indri::lang::ApplyCopiers<indri::lang::ContextCountGraphCopier, indri::lang::RawScorerNode> graph( scorerNodes );
+    _sumServerQuery( statisticsResults, graph.roots(), 1000 );
+  }
 
   PRINT_TIMER( "Statistics complete" );
 
@@ -819,35 +877,35 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
   }
 
   PRINT_TIMER( "Annotation complete" );
-
+  delete(parser);
   return queryResults;
 }
 
-std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::runQuery( const std::string& query, int resultsRequested ) {
+std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::runQuery( const std::string& query, int resultsRequested, const std::string &queryType ) {
   indri::infnet::InferenceNetwork::MAllResults results;
-  std::vector<indri::api::ScoredExtentResult> queryResult = _runQuery( results, query, resultsRequested, 0, 0 );
+  std::vector<indri::api::ScoredExtentResult> queryResult = _runQuery( results, query, resultsRequested, 0, 0, queryType );
   return queryResult;
 }
 
-std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::runQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested ) {
+std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::runQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested, const std::string &queryType ) {
   indri::infnet::InferenceNetwork::MAllResults results;
-  std::vector<indri::api::ScoredExtentResult> queryResult = _runQuery( results, query, resultsRequested, &documentSet, 0 );
+  std::vector<indri::api::ScoredExtentResult> queryResult = _runQuery( results, query, resultsRequested, &documentSet, 0, queryType );
   return queryResult;
 }
 
-indri::api::QueryAnnotation* indri::api::QueryEnvironment::runAnnotatedQuery( const std::string& query, int resultsRequested ) {
+indri::api::QueryAnnotation* indri::api::QueryEnvironment::runAnnotatedQuery( const std::string& query, int resultsRequested, const std::string &queryType ) {
   indri::infnet::InferenceNetwork::MAllResults results;
   indri::api::QueryAnnotation* annotation = 0;
   
-  _runQuery( results, query, resultsRequested, 0, &annotation );
+  _runQuery( results, query, resultsRequested, 0, &annotation, queryType );
   return annotation;
 }
 
-indri::api::QueryAnnotation* indri::api::QueryEnvironment::runAnnotatedQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested ) {
+indri::api::QueryAnnotation* indri::api::QueryEnvironment::runAnnotatedQuery( const std::string& query, const std::vector<DOCID_T>& documentSet, int resultsRequested, const std::string &queryType ) {
   indri::infnet::InferenceNetwork::MAllResults results;
   indri::api::QueryAnnotation* annotation = 0;
   
-  _runQuery( results, query, resultsRequested, &documentSet, &annotation );
+  _runQuery( results, query, resultsRequested, &documentSet, &annotation, queryType );
   return annotation;
 }
 

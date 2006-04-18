@@ -51,6 +51,14 @@ namespace indri
 
       indri::query::TermScoreFunction* _buildTermScoreFunction( const std::string& smoothing, double occurrences, double contextSize ) const;
 
+      void _after( indri::lang::NestedExtentInside* extentInside );
+      void _after( indri::lang::NestedRawScorerNode* rawScorerNode );
+      void _after( indri::lang::ShrinkageScorerNode* shrinkageScorerNode );
+      void _after( indri::lang::ExtentEnforcement * eeNode );
+      void _after( indri::lang::ExtentDescendant* extentInside );
+      void _after( indri::lang::ExtentChild* extentInside );
+      void _after( indri::lang::ExtentParent* extentInside );
+
     public:
       InferenceNetworkBuilder( indri::collection::Repository& repository, indri::lang::ListCache& cache, int resultsRequested );
       ~InferenceNetworkBuilder();
@@ -62,7 +70,7 @@ namespace indri
       void after( indri::lang::Field* field );
       void after( indri::lang::ExtentAnd* extentAnd );
       void after( indri::lang::ExtentOr* extentOr );
-  void after( indri::lang::WeightedExtentOr* weightedExtentOr );
+      void after( indri::lang::WeightedExtentOr* weightedExtentOr );
       void after( indri::lang::ExtentInside* extentInside );
       void after( indri::lang::BAndNode* uwNode );
       void after( indri::lang::ODNode* odNode );
@@ -91,6 +99,14 @@ namespace indri
       void after( indri::lang::FieldBetweenNode* fbNode );
       void after( indri::lang::FieldEqualsNode* fbNode );
       void after( indri::lang::FilterNode* filterNode );
+      void after( indri::lang::FieldWildcard* fieldWildcard );
+      void after( indri::lang::ContextInclusionNode* contextInclusionNode );
+      void after( indri::lang::LengthPrior* lengthPrior );
+      void after( indri::lang::DocumentStructureNode * docStruct );
+      void after( indri::lang::ShrinkageScorerNode* shrinkageScorerNode );
+      void after( indri::lang::ExtentDescendant* extentInside );
+      void after( indri::lang::ExtentChild* extentInside );
+      void after( indri::lang::ExtentParent* extentInside );
     };
   }
 }

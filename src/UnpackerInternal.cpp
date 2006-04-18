@@ -77,6 +77,28 @@ indri::lang::Node* indri::lang::Unpacker::_unpack( indri::xml::XMLNode* child ) 
     result = new ScoreAccumulatorNode(*this);
   } else if( type == "AnnotatorNode" ) {
     result = new AnnotatorNode(*this);
+  } else if( type == "FieldWildcard" ) {
+    result = new FieldWildcard(*this);
+  } else if( type == "NestedExtentInside" ) {
+    result = new NestedExtentInside(*this);
+  } else if( type == "NestedRawScorerNode" ) {
+    result = new NestedRawScorerNode(*this);
+  } else if( type == "ExtentEnforcement" ) {
+    result = new ExtentEnforcement(*this);
+  } else if( type == "ContextInclusionNode" ) {
+    result = new ContextInclusionNode(*this);
+  } else if( type == "LengthPrior" ) {
+    result = new LengthPrior(*this);
+  } else if( type == "DocumentStructureNode" ) {
+    result = new DocumentStructureNode(*this);
+  } else if( type == "ShrinkageScorerNode" ) {
+    result = new ShrinkageScorerNode(*this);
+  } else if( type == "ExtentDescendant" ) {
+    result = new ExtentDescendant(*this);
+  } else if( type == "ExtentChild" ) {
+    result = new ExtentChild(*this);
+  } else if( type == "ExtentParent" ) {
+    result = new ExtentParent(*this);
   } else {
     LEMUR_THROW( LEMUR_RUNTIME_ERROR, "Unknown node type '" + type + "' found during unpacking." );
   }

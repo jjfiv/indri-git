@@ -60,15 +60,16 @@
 #ifndef INDRI_OFFSETANNOTATIONANNOTATOR_HPP
 #define INDRI_OFFSETANNOTATIONANNOTATOR_HPP
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <set>
+#include <utility>
+
 #include "indri/Buffer.hpp"
 #include "indri/Transformation.hpp"
-#include <iostream>
 #include "indri/TagExtent.hpp"
 #include "indri/ParsedDocument.hpp"
-#include "indri/IntervalTree.hpp"
-#include <vector>
-#include <string.h>
-#include <string>
 #include "indri/HashTable.hpp"
 #include "indri/greedy_vector"
 #include "indri/Conflater.hpp"
@@ -206,6 +207,7 @@ namespace indri {
 
             delete (*j); // TagExtent
           }
+          delete (*i).first;
           delete(p_set);
         }
 
@@ -217,9 +219,12 @@ namespace indri {
         // deleted above.
 
         _tag_id_map.clear();
+ //     for ( indri::utility::HashTable<UINT64,AttributeValuePair*>::iterator i = _attribute_id_map.begin(); i != _attribute_id_map.end(); i++ ) {
+//        delete (*i).second;
+//      }
         _attribute_id_map.clear();
 
-        }
+      }
 
       void convert_annotations( std::set<indri::parse::TagExtent*>* raw_tags,
                                 std::set<indri::parse::TagExtent*>* converted_tags, 
@@ -248,7 +253,7 @@ namespace indri {
       {
         _p_conflater = p_conflater;
       }
-      
+
       void setHandler( ObjectHandler<indri::api::ParsedDocument>& handler ) {
 
         _handler = &handler;

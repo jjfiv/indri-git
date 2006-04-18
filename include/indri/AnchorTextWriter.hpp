@@ -76,7 +76,7 @@ namespace indri
 
         // count links
         for( unsigned int i=0; i<document->tags.size(); i++ ) {
-          TagExtent& extent = document->tags[i];
+          TagExtent& extent = *(document->tags[i]);
 
           // we only extract absolute urls
           if( !strcmp( extent.name, "absolute-url" ) ||
@@ -107,7 +107,7 @@ namespace indri
         urlEnd = -1;
 
         for( unsigned int i=0; i<document->tags.size(); i++ ) {
-          TagExtent& extent = document->tags[i];
+          TagExtent& extent = *(document->tags[i]);
 
           if( !strcmp( extent.name, "absolute-url" ) ||
               !strcmp( extent.name, "relative-url" ) ) {  // this is an absolute url

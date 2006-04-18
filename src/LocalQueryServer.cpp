@@ -39,6 +39,8 @@
 
 #include "indri/TreePrinterWalker.hpp"
 
+#include "indri/DocumentStructure.hpp"
+
 //
 // Response objects
 //
@@ -351,8 +353,11 @@ INT64 indri::server::LocalQueryServer::documentCount( const std::string& term ) 
 }
 
 indri::server::QueryServerResponse* indri::server::LocalQueryServer::runQuery( std::vector<indri::lang::Node*>& roots, int resultsRequested, bool optimize ) {
+
+  indri::lang::TreePrinterWalker printer;
+
   // use UnnecessaryNodeRemover to get rid of window nodes, ExtentAnd nodes and ExtentOr nodes
-  // that only have one child
+  // that only have one child and LengthPrior nodes where the exponent is zero
   indri::lang::ApplyCopiers<indri::lang::UnnecessaryNodeRemoverCopier> unnecessary( roots );
 
   // run the contextsimplecountcollectorcopier to gather easy stats
@@ -410,4 +415,50 @@ indri::server::QueryServerVectorsResponse* indri::server::LocalQueryServer::docu
   }
 
   return response;
+}
+
+indri::server::QueryServerMetadataResponse* indri::server::LocalQueryServer::pathNames( const std::vector<int>& documentIDs, const std::vector<int>& pathBegins, const std::vector<int>& pathEnds ) {
+
+  int lastDoc = 0;
+  indri::index::DocumentStructure docStruct;
+  std::vector<std::string> result;
+
+  std::vector<std::pair<int, int> > docSorted;
+  for( unsigned int i=0; i<documentIDs.size(); i++ ) {
+    docSorted.push_back( std::make_pair( documentIDs[i], i ) );
+  }
+  std::sort( docSorted.begin(), docSorted.end() );
+
+  for( unsigned int i=0; i<docSorted.size(); i++ ) {
+    indri::collection::Repository::index_state indexes = _repository.indexes();
+    bool docStructLoaded = true;
+    int documentID = docSorted[i].first;
+    if ( documentID != lastDoc ) {
+      indri::index::Index * index = _indexWithDocument(indexes, documentID);
+      const indri::index::TermList * termList = index->termList( documentID );
+      if ( termList != 0 ) {
+        docStruct.setIndex( *index );
+        docStruct.loadStructure( termList->fields() );
+        delete termList;
+        lastDoc = docStructLoaded;
+      } else {
+        docStructLoaded = false;
+      }       
+    }
+
+    std::string path = "";
+    if ( docStructLoaded ) {
+      path = docStruct.path( docStruct.findLeaf( pathBegins[docSorted[i].second], 
+                                                 pathEnds[docSorted[i].second] ) );
+    }
+    result.push_back( path );
+  }
+
+  std::vector<std::string> actual;
+  actual.resize( documentIDs.size() );
+  for( unsigned int i=0; i<docSorted.size(); i++ ) {
+    actual[docSorted[i].second] = result[i];
+  }
+
+  return new indri::server::LocalQueryServerMetadataResponse( actual );
 }

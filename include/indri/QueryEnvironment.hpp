@@ -69,7 +69,8 @@ namespace indri
                                                              const std::string& q,
                                                              int resultsRequested,
                                                              const std::vector<lemur::api::DOCID_T>* documentIDs,
-                                                             QueryAnnotation** annotation );
+                                                             QueryAnnotation** annotation,
+                                                             const std::string &queryType = "indri"  );
       void _scoredQuery( indri::infnet::InferenceNetwork::MAllResults& results, indri::lang::Node* queryRoot, std::string& accumulatorName, int resultsRequested, const std::vector<lemur::api::DOCID_T>* documentSet );
 
       QueryEnvironment( QueryEnvironment& other ) {}
@@ -80,6 +81,9 @@ namespace indri
       /// \brief Set the amount of memory to use.
       /// @param memory number of bytes to allocate
       void setMemory( UINT64 memory );
+      /// \brief Set whether there should be one single background model or context sensitive models
+      /// @param background true for one background model false for context sensitive models
+      void setSingleBackgroundModel( bool background );
       /// \brief Set the scoring rules
       /// @param rules the vector of scoring rules.
       void setScoringRules( const std::vector<std::string>& rules );
@@ -109,17 +113,17 @@ namespace indri
       /// @param query the query to run
       /// @param resultsRequested maximum number of results to return
       /// @return the vector of ScoredExtentResults for the query
-      std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
+      std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, int resultsRequested, const std::string &queryType = "indri" );
 
-      std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
+      std::vector<indri::api::ScoredExtentResult> runQuery( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested, const std::string &queryType = "indri" );
 
       /// \brief Run an Indri query language query. @see QueryAnnotation
       /// @param query the query to run
       /// @param resultsRequested maximum number of results to return
       /// @return pointer to QueryAnnotations for the query
-      QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );  
+      QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested, const std::string &queryType = "indri" );  
 
-      QueryAnnotation* runAnnotatedQuery( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
+      QueryAnnotation* runAnnotatedQuery( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested, const std::string &queryType = "indri" );
 
 
       /// \brief Fetch the parsed documents for a given list of document ids.
@@ -142,6 +146,12 @@ namespace indri
       /// @param attributeName the name of the metadata attribute
       /// @return the vector of string values for that attribute
       std::vector<std::string> documentMetadata( const std::vector<indri::api::ScoredExtentResult>& documentIDs, const std::string& attributeName );
+
+      /// \brief Fetch the XPath names of extents for a list of ScoredExtentResults
+      /// @param results the list of ScoredExtentResults
+      /// @return the vector of string XPath names for the extents
+      std::vector<std::string> pathNames( const std::vector<indri::api::ScoredExtentResult>& results );
+
 
       /// \brief Fetch all documents with a metadata key that matches attributeName, with a value matching one of the attributeValues.
       /// @param attributeName the name of the metadata attribute (e.g. 'url' or 'docno')
@@ -180,7 +190,8 @@ namespace indri
       INT64 stemFieldCount( const std::string& term, const std::string& field );
       /// \brief Return the total number of times this expression appears in the collection.
       /// @param expression The expression to evaluate, probably an ordered or unordered window expression
-      double expressionCount( const std::string& expression );
+      double expressionCount( const std::string& expression,
+                              const std::string &queryType = "indri" );
       /// \brief Return the list of fields.
       /// @return vector of field names.
       std::vector<std::string> fieldList();

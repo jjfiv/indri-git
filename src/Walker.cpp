@@ -78,6 +78,28 @@ namespace indri {
    void Walker::after( class ScoreAccumulatorNode* n ) { defaultAfter( n ); }
    void Walker::before( class AnnotatorNode* n ) { defaultBefore( n ); }
    void Walker::after( class AnnotatorNode* n ) { defaultAfter( n ); }
+   void Walker::before( class FieldWildcard* n ) { defaultBefore( n ); }
+   void Walker::after( class FieldWildcard* n ) { defaultAfter( n ); }
+   void Walker::before( class NestedExtentInside* n ) { defaultBefore( n ); }
+   void Walker::after( class NestedExtentInside* n ) { defaultAfter( n ); }
+   void Walker::before( class NestedRawScorerNode* n ) { defaultBefore( n ); }
+   void Walker::after( class NestedRawScorerNode* n ) { defaultAfter( n ); }
+   void Walker::before( class ExtentEnforcement* n ) { defaultBefore( n ); }
+   void Walker::after( class ExtentEnforcement* n ) { defaultAfter( n ); }
+   void Walker::before( class ContextInclusionNode* n ) { defaultBefore( n ); }
+   void Walker::after( class ContextInclusionNode* n ) { defaultAfter( n ); }
+   void Walker::before( class LengthPrior* n ) { defaultBefore( n ); }
+   void Walker::after( class LengthPrior* n ) { defaultAfter( n ); }
+   void Walker::before( class DocumentStructureNode* n ) { defaultBefore( n ); }
+   void Walker::after( class DocumentStructureNode* n ) { defaultAfter( n ); }
+   void Walker::before( class ShrinkageScorerNode* n ) { defaultBefore( n ); }
+   void Walker::after( class ShrinkageScorerNode* n ) { defaultAfter( n ); }
+   void Walker::before( class ExtentDescendant* n ) { defaultBefore( n ); }
+   void Walker::after( class ExtentDescendant* n ) { defaultAfter( n ); }
+   void Walker::before( class ExtentChild* n ) { defaultBefore( n ); }
+   void Walker::after( class ExtentChild* n ) { defaultAfter( n ); }
+   void Walker::before( class ExtentParent* n ) { defaultBefore( n ); }
+   void Walker::after( class ExtentParent* n ) { defaultAfter( n ); }
  };
 };
 

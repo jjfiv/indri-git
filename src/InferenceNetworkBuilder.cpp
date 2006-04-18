@@ -53,6 +53,19 @@
 #include "indri/TermFrequencyBeliefNode.hpp"
 #include "indri/CachedFrequencyBeliefNode.hpp"
 #include "indri/BooleanAndNode.hpp"
+#include "indri/FieldWildcardNode.hpp"
+#include "indri/NestedExtentInsideNode.hpp"
+#include "indri/NestedListBeliefNode.hpp"
+#include "indri/ExtentEnforcementNode.hpp"
+#include "indri/ContextInclusionAndNode.hpp"
+#include "indri/LengthPriorNode.hpp"
+#include "indri/DocumentStructureHolderNode.hpp"
+#include "indri/ShrinkageBeliefNode.hpp"
+#include "indri/ExtentParentNode.hpp"
+#include "indri/ExtentChildNode.hpp"
+#include "indri/ExtentDescendantNode.hpp"
+
+#include "indri/FieldBelowWalker.hpp"
 
 #include <stdexcept>
 
@@ -142,7 +155,10 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::Field* field ) 
 //
 
 void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ExtentRestriction* erNode ) {
-  if( _nodeMap.find( erNode ) == _nodeMap.end() ) {
+  indri::lang::ExtentEnforcement* eeNode = dynamic_cast<indri::lang::ExtentEnforcement*>(erNode);
+  if( eeNode ) {
+    _after( eeNode );
+  } else if( _nodeMap.find( erNode ) == _nodeMap.end() ) {
     indri::infnet::BeliefNode* childNode = dynamic_cast<indri::infnet::BeliefNode*>(_nodeMap[erNode->getChild()]);
     indri::infnet::ListIteratorNode* fieldNode = dynamic_cast<indri::infnet::ListIteratorNode*>(_nodeMap[erNode->getField()]);
     indri::infnet::ExtentRestrictionNode* extentRestriction = new indri::infnet::ExtentRestrictionNode( erNode->nodeName(), childNode, fieldNode );
@@ -217,14 +233,32 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WeightedExtentO
 //
 
 void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ExtentInside* extentInside ) {
-  if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
-    ExtentInsideNode* extentInsideNode = new ExtentInsideNode( 
-                                                              extentInside->nodeName(),
-                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
-                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]) );
+  indri::lang::NestedExtentInside* nestedExtentInside = dynamic_cast<indri::lang::NestedExtentInside*>(extentInside);
+  if( nestedExtentInside ) {
+    _after( nestedExtentInside );
+  } else if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
+    indri::lang::FieldBelowWalker fieldFinder;
+    extentInside->walk( fieldFinder );
+    // If we use a field in specifying the ExtentInside (is that always?), we could have nested fields (or overlapping) and need the
+    // NestedExtentInside operator.  It would be nice later if Field lists know whether there's nesting or not (auto-detection at index time?)
+    // and then the FieldBelowWalker would check for nested/overlapping fields below rather than all fields.
+    if ( fieldFinder.fieldBelow() ) {    
+      NestedExtentInsideNode* extentInsideNode = new NestedExtentInsideNode( 
+                                                                            extentInside->nodeName(),
+                                                                            dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                                            dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]) );
 
-    _network->addListNode( extentInsideNode );
-    _nodeMap[extentInside] = extentInsideNode;
+      _network->addListNode( extentInsideNode );
+      _nodeMap[extentInside] = extentInsideNode;
+    } else {
+      ExtentInsideNode* extentInsideNode = new ExtentInsideNode( 
+                                                                extentInside->nodeName(),
+                                                                dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                                dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]) );
+
+      _network->addListNode( extentInsideNode );
+      _nodeMap[extentInside] = extentInsideNode;
+    }
   }
 }
 
@@ -670,7 +704,13 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::TermFrequencySc
 }
 
 void indri::infnet::InferenceNetworkBuilder::after( indri::lang::RawScorerNode* rawScorerNode ) {
-  if( _nodeMap.find( rawScorerNode ) == _nodeMap.end() ) {
+  indri::lang::NestedRawScorerNode * nested = dynamic_cast<indri::lang::NestedRawScorerNode*>(rawScorerNode);
+  indri::lang::ShrinkageScorerNode * shrinkage = dynamic_cast<indri::lang::ShrinkageScorerNode*>(rawScorerNode);
+  if ( nested ) {
+    _after( nested );
+  } else if ( shrinkage ) {
+    _after( shrinkage );
+  } else if( _nodeMap.find( rawScorerNode ) == _nodeMap.end() ) {
     BeliefNode* belief;
     InferenceNetworkNode* untypedRawExtentNode = _nodeMap[rawScorerNode->getRawExtent()];
     InferenceNetworkNode* untypedContextNode = _nodeMap[rawScorerNode->getContext()];
@@ -696,8 +736,15 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::RawScorerNode* 
       // only frequency lists are "max-scored"
       double maximumScore = INDRI_HUGE_SCORE;
       double maximumBackgroundScore = INDRI_HUGE_SCORE;
-      
-      belief = new ListBeliefNode( rawScorerNode->nodeName(), *iterator, context, rawIterator, *function, maximumBackgroundScore, maximumScore );
+
+      // We need to use the NestedListBeliefNode if there is a field in the rawIterator or below it
+      indri::lang::FieldBelowWalker fieldFinder;
+      rawScorerNode->getRawExtent()->walk( fieldFinder );
+      if ( fieldFinder.fieldBelow() ) {      
+        belief = new NestedListBeliefNode( rawScorerNode->nodeName(), *iterator, context, rawIterator, *function, maximumBackgroundScore, maximumScore );
+      } else {
+        belief = new ListBeliefNode( rawScorerNode->nodeName(), *iterator, context, rawIterator, *function, maximumBackgroundScore, maximumScore );
+      }
     } else {
       belief = new NullScorerNode( rawScorerNode->nodeName(), *function );
     }
@@ -827,5 +874,278 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::CombineNode* co
 
     _network->addBeliefNode( wandNode );
     _nodeMap[combineNode] = wandNode;
+  }
+}
+
+
+//
+// FieldWildcard
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::FieldWildcard* fieldWildcard ) {
+  if( _nodeMap.find( fieldWildcard ) == _nodeMap.end() ) {
+    indri::infnet::FieldWildcardNode* fieldWildcardNode = 
+      new indri::infnet::FieldWildcardNode( fieldWildcard->nodeName() );
+
+    _network->addListNode( fieldWildcardNode );
+    _nodeMap[fieldWildcard] = fieldWildcardNode;
+  }
+}
+
+
+//
+// NestedExtentInside
+//
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::NestedExtentInside* extentInside ) {
+  if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
+    NestedExtentInsideNode* extentInsideNode = new NestedExtentInsideNode( 
+                                                              extentInside->nodeName(),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]) );
+
+    _network->addListNode( extentInsideNode );
+    _nodeMap[extentInside] = extentInsideNode;
+  }
+}
+
+
+//
+// NestedRawScorer
+//
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::NestedRawScorerNode* rawScorerNode ) {
+  if( _nodeMap.find( rawScorerNode ) == _nodeMap.end() ) {
+    BeliefNode* belief;
+    InferenceNetworkNode* untypedRawExtentNode = _nodeMap[rawScorerNode->getRawExtent()];
+    InferenceNetworkNode* untypedContextNode = _nodeMap[rawScorerNode->getContext()];
+    ListIteratorNode* iterator = dynamic_cast<ListIteratorNode*>(untypedRawExtentNode);
+
+    indri::query::TermScoreFunction* function = 0;
+
+    function = _buildTermScoreFunction( rawScorerNode->getSmoothing(),
+                                        rawScorerNode->getOccurrences(),
+                                        rawScorerNode->getContextSize() );
+
+    if( rawScorerNode->getOccurrences() > 0 && iterator != 0 ) {
+      ListIteratorNode* rawIterator = 0;
+      ListIteratorNode* context = dynamic_cast<ListIteratorNode*>(untypedContextNode);
+
+      if( context ) {
+        rawIterator = iterator;
+        iterator = new ExtentInsideNode( "", rawIterator, context );
+        _network->addListNode( iterator );
+      }
+      
+      // this is here to turn max-score off for this term
+      // only frequency lists are "max-scored"
+      double maximumScore = INDRI_HUGE_SCORE;
+      double maximumBackgroundScore = INDRI_HUGE_SCORE;
+      
+      belief = new NestedListBeliefNode( rawScorerNode->nodeName(), *iterator, context, rawIterator, *function, maximumBackgroundScore, maximumScore );
+    } else {
+      belief = new NullScorerNode( rawScorerNode->nodeName(), *function );
+    }
+
+    _network->addScoreFunction( function );
+    _network->addBeliefNode( belief );
+    _nodeMap[rawScorerNode] = belief;
+  }
+}
+
+//
+// ExtentEnforcement
+//
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::ExtentEnforcement* eeNode ) {
+  if( _nodeMap.find( eeNode ) == _nodeMap.end() ) {
+    indri::infnet::BeliefNode* childNode = dynamic_cast<indri::infnet::BeliefNode*>(_nodeMap[eeNode->getChild()]);
+    indri::infnet::ListIteratorNode* fieldNode = dynamic_cast<indri::infnet::ListIteratorNode*>(_nodeMap[eeNode->getField()]);
+    indri::infnet::ExtentEnforcementNode* extentEnforcement = new indri::infnet::ExtentEnforcementNode( eeNode->nodeName(), childNode, fieldNode );
+    _network->addBeliefNode( extentEnforcement );    
+    _nodeMap[eeNode] = extentEnforcement;
+  }
+}
+
+//
+// ContextInclusion
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ContextInclusionNode* contextInclusionNode ) {
+  if( _nodeMap.find( contextInclusionNode ) == _nodeMap.end() ) {
+    const std::vector<indri::lang::ScoredExtentNode*>& children = contextInclusionNode->getChildren();
+    double weight = 1. / double(children.size());
+
+    std::vector<BeliefNode*> translation = _translate<BeliefNode,indri::lang::ScoredExtentNode>( children );
+    indri::infnet::ContextInclusionAndNode* ciaNode = new indri::infnet::ContextInclusionAndNode( contextInclusionNode->nodeName() );
+
+    indri::lang::ScoredExtentNode* preserveExtentsChild = contextInclusionNode->getPreserveExtentsChild();
+    for( unsigned int i=0; i<children.size(); i++ ) {
+      bool preserveExtents = false;
+      if (children[i] == preserveExtentsChild) {
+        preserveExtents = true;
+      }
+      ciaNode->addChild( weight, translation[i], preserveExtents );
+    }
+
+    ciaNode->doneAddingChildren();
+
+    _network->addBeliefNode( ciaNode );
+    _nodeMap[contextInclusionNode] = ciaNode;
+  }
+}
+
+//
+// LengthPrior
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::LengthPrior* lengthPrior ) {
+  if( _nodeMap.find( lengthPrior ) == _nodeMap.end() ) {
+
+    BeliefNode * child = dynamic_cast<BeliefNode*>(_nodeMap[lengthPrior->getChild()]);
+
+    indri::infnet::LengthPriorNode * lengthPriorNode = 
+      new indri::infnet::LengthPriorNode( lengthPrior->nodeName(), child, lengthPrior->getExponent() );
+
+    _network->addBeliefNode( lengthPriorNode );
+    _nodeMap[lengthPrior] = lengthPriorNode;
+  }
+}
+
+
+//
+// DocumentStructureNode
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::DocumentStructureNode* docStructNode ) {
+  if( _nodeMap.find( docStructNode ) == _nodeMap.end() ) {
+    indri::infnet::DocumentStructureHolderNode* docStructHolderNode = 
+      new indri::infnet::DocumentStructureHolderNode( docStructNode->nodeName() );
+
+    _network->addDocumentStructureHolderNode( docStructHolderNode );
+    _nodeMap[docStructNode] = docStructHolderNode;
+  }
+}
+
+//
+// ShrinkageScorer
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ShrinkageScorerNode* shrinkScorerNode ) {
+  _after( shrinkScorerNode );
+}
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::ShrinkageScorerNode* shrinkScorerNode ) {
+  if( _nodeMap.find( shrinkScorerNode ) == _nodeMap.end() ) {
+    BeliefNode* belief;
+    InferenceNetworkNode* untypedShrinkExtentNode = _nodeMap[shrinkScorerNode->getRawExtent()];
+    InferenceNetworkNode* untypedContextNode = _nodeMap[shrinkScorerNode->getContext()];
+    ListIteratorNode* iterator = dynamic_cast<ListIteratorNode*>(untypedShrinkExtentNode);
+
+    indri::query::TermScoreFunction* function = 0;
+
+    function = _buildTermScoreFunction( shrinkScorerNode->getSmoothing(),
+                                        shrinkScorerNode->getOccurrences(),
+                                        shrinkScorerNode->getContextSize());
+
+    if( shrinkScorerNode->getOccurrences() > 0 && iterator != 0 ) {
+      
+      DocumentStructureHolderNode* docStruct = dynamic_cast<DocumentStructureHolderNode*>(_nodeMap[shrinkScorerNode->getDocumentStructure()]);
+      
+      // this is here to turn max-score off for this term
+      // only frequency lists are "max-scored"
+      double maximumScore = INDRI_HUGE_SCORE;
+      double maximumBackgroundScore = INDRI_HUGE_SCORE;
+      
+      ShrinkageBeliefNode * shrinkageBelief = new ShrinkageBeliefNode( shrinkScorerNode->nodeName(), *iterator, *docStruct, *function, maximumBackgroundScore, maximumScore );
+      belief = shrinkageBelief;
+      std::vector<std::string> shrinkageRules = shrinkScorerNode->getShrinkageRules();
+      std::vector<std::string>::iterator ruleIter = shrinkageRules.begin();
+      while( ruleIter != shrinkageRules.end() ) {
+        shrinkageBelief->addShrinkageRule( *ruleIter );
+        ruleIter++;
+      }
+
+    } else {
+      belief = new NullScorerNode( shrinkScorerNode->nodeName(), *function );
+    }
+
+    _network->addScoreFunction( function );
+    _network->addBeliefNode( belief );
+    _nodeMap[shrinkScorerNode] = belief;
+  }
+}
+
+//
+// ExtentDescendant
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ExtentDescendant* extentInside ) {
+  _after( extentInside );
+}
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::ExtentDescendant* extentInside ) {
+  if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
+   
+    DocumentStructureHolderNode* docStruct = dynamic_cast<DocumentStructureHolderNode*>(_nodeMap[extentInside->getDocumentStructure()]);
+
+    ExtentDescendantNode* extentInsideNode = new ExtentDescendantNode( 
+                                                              extentInside->nodeName(),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]),
+                                                              *docStruct );
+
+    _network->addListNode( extentInsideNode );
+    _nodeMap[extentInside] = extentInsideNode;
+  }
+}
+
+
+//
+// ExtentChild
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ExtentChild* extentInside ) {
+  _after( extentInside );
+}
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::ExtentChild* extentInside ) {
+  if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
+
+    DocumentStructureHolderNode* docStruct = dynamic_cast<DocumentStructureHolderNode*>(_nodeMap[extentInside->getDocumentStructure()]);
+   
+    ExtentChildNode* extentInsideNode = new ExtentChildNode( 
+                                                              extentInside->nodeName(),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]),
+                                                              *docStruct );
+
+    _network->addListNode( extentInsideNode );
+    _nodeMap[extentInside] = extentInsideNode;
+  }
+}
+
+
+//
+// ExtentParent
+//
+
+void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ExtentParent* extentInside ) {
+  _after( extentInside );
+}
+
+void indri::infnet::InferenceNetworkBuilder::_after( indri::lang::ExtentParent* extentInside ) {
+  if( _nodeMap.find( extentInside ) == _nodeMap.end() ) {
+
+    DocumentStructureHolderNode* docStruct = dynamic_cast<DocumentStructureHolderNode*>(_nodeMap[extentInside->getDocumentStructure()]);
+   
+    ExtentParentNode* extentInsideNode = new ExtentParentNode( 
+                                                              extentInside->nodeName(),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getInner()]),
+                                                              dynamic_cast<ListIteratorNode*>(_nodeMap[extentInside->getOuter()]),
+                                                              *docStruct );
+
+    _network->addListNode( extentInsideNode );
+    _nodeMap[extentInside] = extentInsideNode;
   }
 }
