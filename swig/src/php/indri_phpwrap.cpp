@@ -1247,7 +1247,7 @@ zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
   zval *retval = 0, *_cPtr;
   MAKE_STD_ZVAL(_cPtr);
   MAKE_STD_ZVAL(retval);
-  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 1);
+  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 0);
   *_cPtr = *retval;
   INIT_ZVAL(*retval);
   object_init_ex(retval,ptr_ce_swig_QueryAnnotationNode);
