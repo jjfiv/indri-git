@@ -287,6 +287,9 @@
 				RelativePath=".\LengthPriorNode.cpp">
 			</File>
 			<File
+				RelativePath=".\ListAccumulator.cpp">
+			</File>
+			<File
 				RelativePath=".\ListBeliefNode.cpp">
 			</File>
 			<File
@@ -806,6 +809,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\LengthPriorNode.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\ListAccumulator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\ListBeliefNode.hpp">
