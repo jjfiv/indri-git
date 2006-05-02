@@ -59,6 +59,8 @@ public:
 	public: void mQUOTE(bool _createToken);
 	public: void mDOT(bool _createToken);
 	public: void mCOMMA(bool _createToken);
+	public: void mSLASH(bool _createToken);
+	public: void mB_SLASH(bool _createToken);
 	protected: void mDASH(bool _createToken);
 	public: void mCOLON(bool _createToken);
 	protected: void mTAB(bool _createToken);
