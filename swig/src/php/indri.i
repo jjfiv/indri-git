@@ -138,5 +138,11 @@ public:
   std::vector<std::string> fieldList();
   INT64 documentCount();
   INT64 onedocumentCount( const std::string& term );
+
+      double expressionCount( const std::string& expression,
+                              const std::string &queryType = "indri" );
+      std::vector<indri::api::ScoredExtentResult> expressionList( const std::string& expression, 
+                                                      const std::string& queryType = "indri" );
+
 };
 }}

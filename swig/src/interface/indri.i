@@ -95,6 +95,11 @@ public:
   INT64 documentCount( const std::string& term );
 
   std::vector<indri::api::DocumentVector*> documentVectors( const std::vector<int>& documentIDs );
+      double expressionCount( const std::string& expression,
+                              const std::string &queryType = "indri" );
+      std::vector<indri::api::ScoredExtentResult> expressionList( const std::string& expression, 
+                                                      const std::string& queryType = "indri" );
+
 };
 
 %feature("director") IndexStatus;
