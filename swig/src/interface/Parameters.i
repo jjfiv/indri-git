@@ -13,6 +13,10 @@
 %typemap(jtype) indri::api::Parameters* "Map"
 %typemap(jstype) indri::api::Parameters* "Map"
 
+%typemap(jni) indri::api::Parameters& "jobject"
+%typemap(jtype) indri::api::Parameters& "Map"
+%typemap(jstype) indri::api::Parameters& "Map"
+
 %{
 
 struct jni_parameters_info {
@@ -132,8 +136,19 @@ void java_parameters_map( JNIEnv* jenv, jni_parameters_info& info, indri::api::P
   }
 }
   
+%typemap(in) indri::api::Parameters& ( indri::api::Parameters p ) {
+  if( $input != 0 ) {
+    jni_parameters_info info;
+    java_parameters_init( jenv, info );
+  
+    java_parameters_map( jenv, info, p, $input );
+  }   
+    $1 = &p;
+}
+
 %typemap(javain) indri::api::Parameters "$javainput";
 %typemap(javain) indri::api::Parameters* "$javainput";
+%typemap(javain) indri::api::Parameters& "$javainput";
 
 %typemap(javaimports) indri::api::Parameters "import java.util.Map;";
 %typemap(javaimports) indri::api::Parameters* "import java.util.Map;";

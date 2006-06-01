@@ -1,4 +1,6 @@
 include ../../MakeDefns
+## GCC 4.0 misoptimizes the wrappers with strict-aliasing
+CXXFLAGS += -fno-strict-aliasing
 INCPATH=-I../../include $(patsubst %, -I../../contrib/%/include, $(DEPENDENCIES))
 LIBPATH=-L../../obj $(patsubst %,-L../../contrib/%/obj, $(DEPENDENCIES))
 LIBS=-lindri $(patsubst %,-l%, $(DEPENDENCIES))

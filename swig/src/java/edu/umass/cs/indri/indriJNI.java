@@ -84,6 +84,18 @@ class indriJNI {
   public final static native int IndexEnvironment_addParsedDocument(long jarg1, ParsedDocument jarg2);
   public final static native int IndexEnvironment_documentsIndexed(long jarg1);
   public final static native int IndexEnvironment_documentsSeen(long jarg1);
+  public final static native void delete_QueryExpander(long jarg1);
+  public final static native ScoredExtentResult[] QueryExpander_runExpandedQuery__SWIG_0(long jarg1, String jarg2, int jarg3, boolean jarg4);
+  public final static native ScoredExtentResult[] QueryExpander_runExpandedQuery__SWIG_1(long jarg1, String jarg2, int jarg3);
+  public final static native String QueryExpander_expand(long jarg1, String jarg2, ScoredExtentResult[] jarg3);
+  public final static native long new_RMExpander(long jarg1, Map jarg2);
+  public final static native String RMExpander_expand(long jarg1, String jarg2, ScoredExtentResult[] jarg3);
+  public final static native void delete_RMExpander(long jarg1);
+  public final static native long new_PonteExpander(long jarg1, Map jarg2);
+  public final static native String PonteExpander_expand(long jarg1, String jarg2, ScoredExtentResult[] jarg3);
+  public final static native void delete_PonteExpander(long jarg1);
+  public final static native long SWIGRMExpanderUpcast(long jarg1);
+  public final static native long SWIGPonteExpanderUpcast(long jarg1);
 
   /* Director upcall methods: */
 
