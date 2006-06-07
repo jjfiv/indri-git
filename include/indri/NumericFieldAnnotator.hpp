@@ -48,7 +48,9 @@ namespace indri
 
       indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
         for( size_t i=0; i<document->tags.size(); i++ ) {
+          _foundNonNumeric = false;
           TagExtent * extent = document->tags[i];
+          // The change below has broken filling in numbers.
 
           if( _field == extent->name && extent->begin != extent->end ) {
             char* numberText = document->terms[ extent->begin ]; 
@@ -78,6 +80,7 @@ namespace indri
                 break;
               }
             }
+            
             INT64 value = 0;
             int len = end - begin;
             if ( len > 0 ) {
@@ -90,7 +93,7 @@ namespace indri
                 len = _numberCopyLength;
               }
               _numberCopy[ len ] = '\0';
-              strncpy( begin, _numberCopy, len );
+              strncpy( _numberCopy, begin, len );
               // convert the number
               value = string_to_i64( _numberCopy );
             }
