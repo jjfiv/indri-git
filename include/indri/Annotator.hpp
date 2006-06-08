@@ -26,6 +26,7 @@
 #include "indri/BeliefNode.hpp"
 #include "indri/EvaluatorNode.hpp"
 #include "indri/Extent.hpp"
+#include <set>
 namespace indri
 {
   /*! \brief Inference net and inference net node classes. */
@@ -38,6 +39,8 @@ namespace indri
       EvaluatorNode::MResults _annotations;
       std::string _name;
 
+      std::map<std::string, std::set<indri::api::ScoredExtentResult, indri::api::ScoredExtentResult::score_greater> > _seen;
+      
     public:
       Annotator( const std::string& name, BeliefNode* belief );
       void add( InferenceNetworkNode* node, int documentID, indri::index::Extent &extent );
