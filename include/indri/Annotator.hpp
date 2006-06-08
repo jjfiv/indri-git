@@ -22,11 +22,13 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <set>
+
 #include "indri/InferenceNetworkNode.hpp"
 #include "indri/BeliefNode.hpp"
 #include "indri/EvaluatorNode.hpp"
 #include "indri/Extent.hpp"
-#include <set>
+
 namespace indri
 {
   /*! \brief Inference net and inference net node classes. */
