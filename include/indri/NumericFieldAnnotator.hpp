@@ -50,7 +50,6 @@ namespace indri
         for( size_t i=0; i<document->tags.size(); i++ ) {
           _foundNonNumeric = false;
           TagExtent * extent = document->tags[i];
-          // The change below has broken filling in numbers.
 
           if( _field == extent->name && extent->begin != extent->end ) {
             char* numberText = document->terms[ extent->begin ]; 
@@ -65,9 +64,6 @@ namespace indri
               } else {
                 if ( _foundNonNumeric == false ) {
                   _foundNonNumeric = true;
-                  std::cerr << "Warning: non-numeric text encountered in " 
-                            <<  _field << " field. Trying to extract first number"
-                            << " from field text; extraction errors may occur." << std::endl;
                 }
               }
             }
@@ -76,20 +72,15 @@ namespace indri
               if (! ( *end == '-' ||
                       // *end == '.' || // for now, the recognizer only handles integers
                       (*end >= '0' && *end <= '9') 
-                    ) ) {
+                      ) ) {
                 break;
               }
             }
-            
             INT64 value = 0;
             int len = end - begin;
             if ( len > 0 ) {
               // make a copy
               if ( len > _numberCopyLength ) {
-                std::cerr << "Warning: NumericFieldAnnotator found a very long number of " << len 
-                          << " characters in " << _field 
-                          << ".  Truncating to " << _numberCopyLength  << " characters."
-                          << std::endl;
                 len = _numberCopyLength;
               }
               _numberCopy[ len ] = '\0';

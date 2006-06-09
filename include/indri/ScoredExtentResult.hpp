@@ -93,7 +93,7 @@ namespace indri
         return ( document == other.document && score == other.score
                  && begin == other.begin && end == other.end );
       }
-      
+
       double score;
       int document;
       int begin;
