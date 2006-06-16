@@ -1334,6 +1334,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
                     ac_config_files="$ac_config_files MakeDefns Makefile.app"
 
+                                        ac_config_files="$ac_config_files site-search/build.param site-search/crawl-index site-search/seeds.txt site-search/excluded_hosts"
+
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   if test -f $ac_dir/install-sh; then
@@ -6513,6 +6515,10 @@ do
   # Handling of arguments.
   "MakeDefns" ) CONFIG_FILES="$CONFIG_FILES MakeDefns" ;;
   "Makefile.app" ) CONFIG_FILES="$CONFIG_FILES Makefile.app" ;;
+  "site-search/build.param" ) CONFIG_FILES="$CONFIG_FILES site-search/build.param" ;;
+  "site-search/crawl-index" ) CONFIG_FILES="$CONFIG_FILES site-search/crawl-index" ;;
+  "site-search/seeds.txt" ) CONFIG_FILES="$CONFIG_FILES site-search/seeds.txt" ;;
+  "site-search/excluded_hosts" ) CONFIG_FILES="$CONFIG_FILES site-search/excluded_hosts" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
@@ -6883,6 +6889,13 @@ s,@INSTALL@,$ac_INSTALL,;t t
     rm -f $tmp/out
   fi
 
+  # Run the commands associated with the file.
+  case $ac_file in
+    site-search/build.param ) test -f site-search/crawl-index && chmod +x site-search/crawl-index ;;
+    site-search/crawl-index ) test -f site-search/crawl-index && chmod +x site-search/crawl-index ;;
+    site-search/seeds.txt ) test -f site-search/crawl-index && chmod +x site-search/crawl-index ;;
+    site-search/excluded_hosts ) test -f site-search/crawl-index && chmod +x site-search/crawl-index ;;
+  esac
 done
 _ACEOF
 

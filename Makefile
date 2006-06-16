@@ -2,7 +2,7 @@
 
 INSTALLDIRS = $(bindir) $(includedir) $(pkgincludedir) $(includedir)/lemur $(libdir) $(pkgdatadir) $(pkgdatadir)/doc
 
-.PHONY: all dist clean install $(INSTALLDIRS)
+.PHONY: all dist clean install $(INSTALLDIRS) site-search
 
 all: 
 	$(MAKE) -C contrib
@@ -17,6 +17,7 @@ endif
 	$(MAKE) -C harvestlinks
 	$(MAKE) -C rmodel
 	$(MAKE) -C makeprior
+	$(MAKE) -C site-search
 
 $(INSTALLDIRS):
 	$(INSTALL_DIR) $@
@@ -34,6 +35,7 @@ endif
 	$(MAKE) clean -C harvestlinks
 	$(MAKE) clean -C rmodel
 	$(MAKE) clean -C makeprior
+	$(MAKE) -C site-search clean
 	rm -f depend/*
 
 distclean: clean
@@ -57,4 +59,5 @@ endif
 	$(MAKE) install -C rmodel
 	$(MAKE) install -C makeprior
 	$(MAKE) install -C doc
+	$(MAKE) -C site-search install
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)

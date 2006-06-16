@@ -15,12 +15,16 @@
 		  swig generated java wrappers. Default is disabled.
 		- <tt>--enable-php</tt> compiles and installs the
 		  swig generated php wrappers. Default is disabled.
+		- <tt>--enable-csharp</tt> compiles and installs the
+		  swig generated C# wrappers. Default is disabled.
 		- <tt>--with-javahome=<path></tt> Path to JAVAHOME for
 		  compiling the swig generated shared library. 
 		- <tt>--with-php-config=<path></tt> Path to php-config
                   binary. Only required if php-config is not on the path. 
 		- <tt>--with-swig=<path></tt> Path to swig binary. Only
 		  required if the wrapper interfaces are changed. 
+                - <tt>--with-site-seed=&lt;hostname&gt;</tt> Hostname
+                  to use as the seed for building a site search index.
 
   - To make the indri library and applications
       -# go to top level indri directory.
@@ -74,6 +78,12 @@ the shared library will be installed in
 <install-directory>/lib/libindri_php.so. You will need to manually
 install it in the correct extensions directory for your php
 configuration. 
+
+<p>If configured with --enable-csharp,
+the shared library will be installed in
+&lt;install-directory&gt;/lib/libindri_csharp.so. The C# wrapper classes
+assembly will be installed  in &lt;install-directory&gt;/lib/IndriCsharp.dll
+This assembly should be referenced by your C# program.
 
   \section program  Programming with the indri library
 
