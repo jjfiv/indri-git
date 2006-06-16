@@ -5,6 +5,7 @@
 // 24 August 2004 -- tds
 //
 
+#ifdef SWIGJAVA
 %typemap(jni) const std::map<std::string,std::string>& "jobjectArray"
 %typemap(jtype) const std::map<std::string,std::string>& "Map"
 %typemap(jstype) const std::map<std::string,std::string>& "Map"
@@ -60,3 +61,4 @@
 
 %typemap(javain) const std::map<std::string,std::string>& "$javainput";
 
+#endif

@@ -50,10 +50,10 @@ PHP_RINIT_FUNCTION(indri);
 PHP_RSHUTDOWN_FUNCTION(indri);
 PHP_MINFO_FUNCTION(indri);
 
-ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult);
-ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult);
 ZEND_NAMED_FUNCTION(_wrap_new_TermExtent);
 ZEND_NAMED_FUNCTION(_wrap_new_TermExtent);
+ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult);
+ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult);
 ZEND_NAMED_FUNCTION(_wrap_ParsedDocument_getContent);
 ZEND_NAMED_FUNCTION(_wrap_ParsedDocument_getContent);
 ZEND_NAMED_FUNCTION(_wrap_new_ParsedDocument);

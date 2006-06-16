@@ -1,6 +1,6 @@
-Name: edu/umass/cs/indri
+Name: lemurproject/indri
 Specification-Title:  Indri java wrappers
-Specification-Vendor: CIIR
+Specification-Vendor: Lemur Project
 Specification-Version: 0.6
-Package-Title: edu.umass.cs.indri
-Package-Vendor: CIIR
+Package-Title: lemurproject.indri
+Package-Vendor: Lemur Project

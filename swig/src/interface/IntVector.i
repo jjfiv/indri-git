@@ -5,7 +5,7 @@
 // 10 August 2004 -- tds
 //
 
-
+#ifdef SWIGJAVA
 %typemap(jni) const std::vector<int>& "jintArray"
 %typemap(jtype) const std::vector<int>& "int[]"
 %typemap(jstype) const std::vector<int>& "int[]"
@@ -37,7 +37,14 @@
   $result = jenv->NewIntArray(input.size()); 
   jint * body = jenv->GetIntArrayElements($result, 0);
   for( jsize i=0; i<input.size(); i++ ) {
-     body[i] = input[i];
+    body[i] = input[i];
   }
   jenv->ReleaseIntArrayElements($result, body, 0);
 }
+#endif
+
+#ifdef SWIGCSHARP
+
+%template(IntVector) std::vector<int>;
+
+#endif

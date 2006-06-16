@@ -1,5 +1,5 @@
 -include ../MakeDefns
-DOXYGEN = /usr/dan/users9/dfisher/ciir/doxygen-1.4.2/bin/doxygen
+DOXYGEN = /usr/bin/doxygen
 auto:
 	$(DOXYGEN) config
 

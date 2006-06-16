@@ -6,6 +6,7 @@
 // 24 August 2004 -- tds
 //
 
+#ifdef SWIGJAVA
 %typemap(jni) const std::vector<indri::parse::MetadataPair>& "jobjectArray"
 %typemap(jtype) const std::vector<indri::parse::MetadataPair>& "Map"
 %typemap(jstype) const std::vector<indri::parse::MetadataPair>& "Map"
@@ -91,3 +92,21 @@
 
 %typemap(javain) const std::vector<indri::parse::MetadataPair>& "$javainput";
 
+#endif
+
+#ifdef SWIGCSHARP
+%include "cpointer.i"
+
+SWIG_STD_VECTOR_SPECIALIZE_MINIMUM(MetadataPair, indri::parse::MetadataPair)
+  %template(MetadataPairVector) std::vector<indri::parse::MetadataPair>;
+namespace indri {
+  namespace parse {
+    %nodefault MetadataPair;
+    struct MetadataPair {
+      const char* key;
+      const void* value;
+      int valueLength;
+    };
+  }
+}
+#endif

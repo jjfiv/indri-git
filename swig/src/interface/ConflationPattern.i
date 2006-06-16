@@ -4,6 +4,7 @@
 //
 // 26 Sept 2005 -- dmf
 //
+#ifdef SWIGJAVA
 
 %typemap(jni) const std::map<indri::parse::ConflationPattern*,std::string>& "jobjectArray"
 %typemap(jtype) const std::map<indri::parse::ConflationPattern*,std::string>& "Map"
@@ -12,7 +13,7 @@
 %typemap(javain) const std::map<indri::parse::ConflationPattern*,std::string>& "$javainput";
 
 %typemap(in) const std::map<indri::parse::ConflationPattern*,std::string>&  (std::map<indri::parse::ConflationPattern*,std::string> map){
-   // make a conflations map to go in it
+  // make a conflations map to go in it
   // get map class and entrySet method pointer
   jobject src = $input;
   jclass mapClazz = jenv->GetObjectClass(src);
@@ -29,7 +30,7 @@
   // get the array size
   jsize entryArrayLength = jenv->GetArrayLength(entryArray);
 
-  jclass conflationClazz = jenv->FindClass("edu/umass/cs/indri/ConflationPattern");
+  jclass conflationClazz = jenv->FindClass("lemurproject/indri/ConflationPattern");
   jfieldID tag_nameField = jenv->GetFieldID(conflationClazz, "tag_name", "Ljava/lang/String;" );
   jfieldID attribute_nameField = jenv->GetFieldID(conflationClazz, "attribute_name", "Ljava/lang/String;"  );
   jfieldID valueField = jenv->GetFieldID(conflationClazz, "value", "Ljava/lang/String;" );
@@ -69,3 +70,28 @@
   }
   $1 = &map;
 }
+#endif
+#ifdef SWIGCSHARP
+%typemap(ctype) indri::parse::ConflationPattern * "void *"
+%typemap(imtype, out="IntPtr") indri::parse::ConflationPattern * "HandleRef"
+%typemap(cstype) indri::parse::ConflationPattern * "ConflationPattern"
+
+%template(ConfMap) std::map<indri::parse::ConflationPattern*, std::string>;
+
+namespace indri {
+  namespace parse {
+
+    // The tag_name and attribute_name strings in the
+    // ConflationPattern should always be downcased, but value should
+    // appear as it does in the source document.
+    
+    struct ConflationPattern {
+      const char* tag_name;
+      const char* attribute_name;
+      const char* value;
+    };
+
+  }
+}
+
+#endif

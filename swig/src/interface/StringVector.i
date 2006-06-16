@@ -4,7 +4,7 @@
 //
 // 10 August 2004 -- tds
 //
-
+#ifdef SWIGJAVA
 %typemap(jni) const std::vector<std::string>& "jobjectArray"
 %typemap(jtype) const std::vector<std::string>& "String[]"
 %typemap(jstype) const std::vector<std::string>& "String[]"
@@ -46,3 +46,7 @@
   return $jnicall;
 }
 
+#endif
+#ifdef SWIGCSHARP
+%template(StringVector) std::vector<std::string>;
+#endif

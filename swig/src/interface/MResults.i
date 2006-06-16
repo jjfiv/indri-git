@@ -6,7 +6,7 @@
 //
 // 10 August 2004 -- tds
 //
-
+#ifdef SWIGJAVA
 %typemap(jni) const indri::infnet::EvaluatorNode::MResults& "jobject"
 %typemap(jtype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
 %typemap(jstype) const indri::infnet::EvaluatorNode::MResults& "java.util.Map"
@@ -22,7 +22,7 @@
   jmethodID putMethod = jenv->GetMethodID(mapClazz, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;" );
 
   // look up information about ScoredExtentResults
-  jclass seClazz = jenv->FindClass("edu/umass/cs/indri/ScoredExtentResult");
+  jclass seClazz = jenv->FindClass("lemurproject/indri/ScoredExtentResult");
   jmethodID seConstructor = jenv->GetMethodID(seClazz, "<init>", "()V" );
 
   jfieldID scoreField = jenv->GetFieldID(seClazz, "score", "D" );
@@ -61,3 +61,12 @@
   return $jnicall;
 }
 
+#endif
+
+#ifdef SWIGCSHARP
+%typemap(ctype) const indri::infnet::EvaluatorNode::MResults & "void *"
+%typemap(imtype, out="IntPtr")  const indri::infnet::EvaluatorNode::MResults & "HandleRef"
+%typemap(cstype) const indri::infnet::EvaluatorNode::MResults & "MResults"
+
+%template(MResults) std::map< std::string, std::vector<indri::api::ScoredExtentResult> > ;
+#endif

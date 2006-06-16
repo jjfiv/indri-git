@@ -17,7 +17,9 @@ if test -z "$AR" ; then
    AC_MSG_ERROR([cannot find the program ar on your path. Add AR=/path/to/ar to your configure command line])
 fi
 AC_SUBST(SHARED)
-
+INDRI_STANDALONE=1
+AC_DEFINE(INDRI_STANDALONE, 1, [standalone indri])
+AC_SUBST(INDRI_STANDALONE)
 dnl Checks for libraries.
 AC_CHECK_LIB(m, log)
 AC_CHECK_LIB(pthread, pthread_create)
@@ -31,6 +33,8 @@ case $host in
      PHP_SO=".so"
      JAVA_SHARED="-G"
      JAVA_SO=".so"
+     CSHARP_SHARED="-G"
+     CSHARP_SO=".so"
      ;;
    *linux*) 
      SHARED="-shared -fPIC"
@@ -38,6 +42,8 @@ case $host in
      PHP_SO=".so"
      JAVA_SHARED="-shared"
      JAVA_SO=".so"
+     CSHARP_SHARED="-shared"
+     CSHARP_SO=".so"
      ;;
    *-*-darwin*)
      SHARED=
@@ -47,6 +53,8 @@ case $host in
      PHP_SO=".so"
      JAVA_SHARED="-dynamiclib -framework JavaVM"
      JAVA_SO=".jnilib"
+     CSHARP_SHARED="-bundle  -undefined suppress -flat_namespace"
+     CSHARP_SO=".so"
      ;;
    *);;
 esac
@@ -132,17 +140,27 @@ AC_CHECK_FUNCS(mkstemp)
 AC_CHECK_FUNCS(mkstemps)
 
 dnl check for optional components.
-
+WITH_SWIG=0
 AC_ARG_ENABLE(php,
 	    AS_HELP_STRING(--enable-php,Enable php shared library generation))
 if test "$enable_php" = "yes" ; then
+  WITH_SWIG=1
   WITH_PHP=1
 else
   WITH_PHP=0
 fi
+AC_ARG_ENABLE(csharp,
+	    AS_HELP_STRING(--enable-csharp,Enable csharp shared library generation))
+if test "$enable_csharp" = "yes" ; then
+   WITH_SWIG=1
+   WITH_CSHARP=1
+else
+   WITH_CSHARP=0
+fi
 AC_ARG_ENABLE(java,
 	    AS_HELP_STRING(--enable-java,Enable java shared library generation))
 if test "$enable_java" = "yes" ; then
+  WITH_SWIG=1
   WITH_JAVA=1
 else
   WITH_JAVA=0
@@ -235,16 +253,24 @@ fi
 AC_SUBST(PHPINCLUDE)
 AC_SUBST(WITH_PHP)
 
+dnl Look for mono csharp compiler
+if test "$enable_csharp" = yes ; then
+  if test -z "$MCS" ; then
+     AC_PATH_PROG(MCS, mcs)
+  fi
+fi
+if test -z "$MCS" ; then
+   AC_MSG_WARN([cannot find the program mcs on your path. Add MCS=/path/to/mcs to your configure command line])
+   MCS="echo install mcs"
+fi
+
 dnl Look for swig
 SWIG=
-if test "$enable_java" = yes -o "$enable_php" = "yes" ; then
-  WITH_SWIG=1
+if test $WITH_SWIG = 1 ; then
   AC_ARG_WITH(swig, [  --with-swig=path       Set location of swig executable],[SWIG="$withval"])
   if test -z "$SWIG" ; then
      AC_PATH_PROGS(SWIG, swig)
   fi
-else
-  WITH_SWIG=0
 fi
 
 dnl check for antlr
@@ -256,9 +282,20 @@ AC_CHECK_HEADER([antlr/ANTLRException.hpp], [NEED_ANTLR=0])
 AC_LANG_POP()
 AC_SUBST(NEED_ANTLR)
 AC_SUBST(SWIG)
+AC_SUBST(WITH_CSHARP)
+AC_SUBST(MCS)
 AC_SUBST(WITH_SWIG)
 AC_SUBST(PHP_SHARED)
 AC_SUBST(JAVA_SHARED)
+AC_SUBST(CSHARP_SHARED)
 AC_SUBST(PHP_SO)
 AC_SUBST(JAVA_SO)
+AC_SUBST(CSHARP_SO)
+AC_SUBST(CSHARP_SO)
+
+dnl site search parameters
+SITESEED="unknownhost"
+AC_ARG_WITH(site-seed, [  --with-site-seed=hostname       Set the seed host for site-search],[SITESEED="$withval"])
+AC_SUBST(SITESEED)
+
 AC_OUTPUT

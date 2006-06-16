@@ -994,31 +994,26 @@ extern "C" {
 
 
 #include "indri/indri-platform.h"
+#ifdef INDRI_STANDALONE
 #include "lemur/lemur-compat.hpp"
+#else
+#include "lemur-compat.hpp"
+#endif
 #include "indri/QueryEnvironment.hpp"
 #include "indri/QueryExpander.hpp"
 #include "indri/RMExpander.hpp"
 #include "indri/PonteExpander.hpp"
+#include "indri/ScoredExtentResult.hpp"
+#include "indri/ParsedDocument.hpp"
+#include "indri/IndexEnvironment.hpp"
+#include "indri/Parameters.hpp"
+#include "indri/ConflationPattern.hpp"
+#ifdef INDRI_STANDALONE
 #include "lemur/Exception.hpp"
-// remap overloaded method names.
-#define onetermCount termCount
-#define onedocumentCount documentCount
-#define runQuerydocset runQuery
-#define runAnnotatedQuerydocset runAnnotatedQuery
-#define documentsdocids documents
-#define documentMetadatadocids documentMetadata
-
-#define set_int set
-#define set_bool set
-#define set_string set
-#define set_UINT64 set
-#define set_double set
-#define get_bool get
-#define get_int get
-#define get_string get
-#define get_INT64 get
-#define get_double get
-
+#else
+#include "Exception.hpp"
+#endif
+  
 
 #if PHP_MAJOR_VERSION < 5
 # define SWIG_exception(code, msg) { zend_error(E_ERROR, msg); }
@@ -1033,6 +1028,43 @@ extern "C" {
 #include <string>
 
 
+#include "indri/indri-platform.h"
+#ifdef INDRI_STANDALONE
+#include "lemur/lemur-compat.hpp"
+#else
+#include "lemur-compat.hpp"
+#endif
+#include "indri/QueryEnvironment.hpp"
+#include "indri/QueryExpander.hpp"
+#include "indri/RMExpander.hpp"
+#include "indri/PonteExpander.hpp"
+#ifdef INDRI_STANDALONE
+#include "lemur/Exception.hpp"
+#else
+#include "Exception.hpp"
+#endif
+  // remap overloaded method names.
+#define onetermCount termCount
+#define onedocumentCount documentCount
+#define runQuerydocset runQuery
+#define runAnnotatedQuerydocset runAnnotatedQuery
+#define documentsdocids documents
+#define documentMetadatadocids documentMetadata
+
+
+#define set_int set
+#define set_bool set
+#define set_string set
+#define set_UINT64 set
+#define set_double set
+#define get_bool get
+#define get_int get
+#define get_string get
+#define get_INT64 get
+#define get_double get
+
+  
+
 #include <stdexcept>
 
 
@@ -1040,14 +1072,14 @@ extern "C" {
 #include <algorithm>
 #include <stdexcept>
 
-static int _wrap_propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
-static int _propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
-static pval _wrap_propget_ScoredExtentResult(zend_property_reference *property_reference);
-static int _propget_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
 static int _wrap_propset_TermExtent(zend_property_reference *property_reference, pval *value);
 static int _propset_TermExtent(zend_property_reference *property_reference, pval *value);
 static pval _wrap_propget_TermExtent(zend_property_reference *property_reference);
 static int _propget_TermExtent(zend_property_reference *property_reference, pval *value);
+static int _wrap_propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
+static int _propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
+static pval _wrap_propget_ScoredExtentResult(zend_property_reference *property_reference);
+static int _propget_ScoredExtentResult(zend_property_reference *property_reference, pval *value);
 static int _wrap_propset_ParsedDocument(zend_property_reference *property_reference, pval *value);
 static int _propset_ParsedDocument(zend_property_reference *property_reference, pval *value);
 static pval _wrap_propget_ParsedDocument(zend_property_reference *property_reference);
@@ -1081,16 +1113,16 @@ static int _propset_PonteExpander(zend_property_reference *property_reference, p
 static pval _wrap_propget_PonteExpander(zend_property_reference *property_reference);
 static int _propget_PonteExpander(zend_property_reference *property_reference, pval *value);
 /* class entry subsection */
-/* Function entries for ScoredExtentResult */
-static zend_function_entry ScoredExtentResult_functions[] = {
- ZEND_NAMED_FE(new_scoredextentresult,_wrap_new_ScoredExtentResult, NULL)
- ZEND_NAMED_FE(scoredextentresult,_wrap_new_ScoredExtentResult, NULL)
-   { NULL, NULL, NULL}
-};
 /* Function entries for TermExtent */
 static zend_function_entry TermExtent_functions[] = {
  ZEND_NAMED_FE(new_termextent,_wrap_new_TermExtent, NULL)
  ZEND_NAMED_FE(termextent,_wrap_new_TermExtent, NULL)
+   { NULL, NULL, NULL}
+};
+/* Function entries for ScoredExtentResult */
+static zend_function_entry ScoredExtentResult_functions[] = {
+ ZEND_NAMED_FE(new_scoredextentresult,_wrap_new_ScoredExtentResult, NULL)
+ ZEND_NAMED_FE(scoredextentresult,_wrap_new_ScoredExtentResult, NULL)
    { NULL, NULL, NULL}
 };
 /* Function entries for ParsedDocument */
@@ -1338,10 +1370,10 @@ static swig_cast_info *swig_cast_initial[] = {
 
 /* end header section */
 /* vdecl subsection */
-static zend_class_entry ce_swig_ScoredExtentResult;
-static zend_class_entry* ptr_ce_swig_ScoredExtentResult=NULL;
 static zend_class_entry ce_swig_TermExtent;
 static zend_class_entry* ptr_ce_swig_TermExtent=NULL;
+static zend_class_entry ce_swig_ScoredExtentResult;
+static zend_class_entry* ptr_ce_swig_ScoredExtentResult=NULL;
 static zend_class_entry ce_swig_ParsedDocument;
 static zend_class_entry* ptr_ce_swig_ParsedDocument=NULL;
 static zend_class_entry ce_swig_QueryAnnotationNode;
@@ -1376,140 +1408,38 @@ static int le_swig__p_indri__api__QueryAnnotationNode=0; /* handle for QueryAnno
 /* wrapper section */
 
 
-zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
-  zval *retval = 0, *_cPtr;
-  MAKE_STD_ZVAL(_cPtr);
-  MAKE_STD_ZVAL(retval);
-  SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 0);
-  *_cPtr = *retval;
-  INIT_ZVAL(*retval);
-  object_init_ex(retval,ptr_ce_swig_QueryAnnotationNode);
-  add_property_zval(retval,"_cPtr",_cPtr);
-  // don't deref NULL
-  if (inNode) {
-  // name
-  // type
-  // query text
-  // children
-  add_property_string(retval, "name", (char *)inNode->name.c_str(), 1);
-  add_property_string(retval, "type",  (char *)inNode->type.c_str(), 1);
-  add_property_string(retval, "queryText",  (char *)inNode->queryText.c_str(), 1);
-  zval *children;
-  MAKE_STD_ZVAL(children);
-  array_init(children);
-  add_property_zval(retval, "children", children);
-  for( unsigned int i=0; i<inNode->children.size(); i++ ) {
-    zval *child;
-    child = php_makeQueryAnnotationNode(inNode->children[i]);
-    add_next_index_zval(children, child);
-  }
-}
-  // need the _cPtr, etc.
-  return retval;
-}
-
-/* This function is designed to be called by the zend list destructors */
-/* to typecast and do the actual destruction */
-void __wrap_delete_ScoredExtentResult(zend_rsrc_list_entry *rsrc, const char *type_name TSRMLS_DC) {
-  swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
-  void *ptr=value->ptr ;
-  int newobject=value->newobject ;
-  indri::api::ScoredExtentResult *arg1 = (indri::api::ScoredExtentResult *) 0 ;
-  
-  efree(value);
-  if (! newobject) return; /* can't delete it! */
-  SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__ScoredExtentResult TSRMLS_CC);
-  if (! arg1) zend_error(E_ERROR, "indri::api::ScoredExtentResult resource already free'd");
-  delete arg1;
-  
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult) {
-  indri::api::ScoredExtentResult *result = 0 ;
-  zval **args[0];
-  
-  SWIG_ResetError();
-  /* NATIVE Constructor */
-  if(((ZEND_NUM_ARGS() )!= 0) || (zend_get_parameters_array_ex(0, args)!= SUCCESS)) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  result = (indri::api::ScoredExtentResult *)new indri::api::ScoredExtentResult();
-  {
-    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
-  }
-  /* Wrap this return value */
-  if (this_ptr) {
-    /* NATIVE Constructor, use this_ptr */
-    zval *_cPtr; MAKE_STD_ZVAL(_cPtr);
-    *_cPtr = *return_value;
-    INIT_ZVAL(*return_value);
-    add_property_zval(this_ptr,"_cPtr",_cPtr);
-  } else if (! this_ptr) {
-    /* ALTERNATIVE Constructor, make an object wrapper */
-    zval *obj, *_cPtr;
-    MAKE_STD_ZVAL(obj);
+  zval *php_makeQueryAnnotationNode(indri::api::QueryAnnotationNode *inNode) {
+    zval *retval = 0, *_cPtr;
     MAKE_STD_ZVAL(_cPtr);
-    *_cPtr = *return_value;
-    INIT_ZVAL(*return_value);
-    object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
-    add_property_zval(obj,"_cPtr",_cPtr);
-    *return_value=*obj;
+    MAKE_STD_ZVAL(retval);
+    SWIG_SetPointerZval(retval, (void *)inNode,SWIGTYPE_p_indri__api__QueryAnnotationNode, 0);
+    *_cPtr = *retval;
+    INIT_ZVAL(*retval);
+    object_init_ex(retval,ptr_ce_swig_QueryAnnotationNode);
+    add_property_zval(retval,"_cPtr",_cPtr);
+    // don't deref NULL
+    if (inNode) {
+      // name
+      // type
+      // query text
+      // children
+      add_property_string(retval, "name", (char *)inNode->name.c_str(), 1);
+      add_property_string(retval, "type",  (char *)inNode->type.c_str(), 1);
+      add_property_string(retval, "queryText",  (char *)inNode->queryText.c_str(), 1);
+      zval *children;
+      MAKE_STD_ZVAL(children);
+      array_init(children);
+      add_property_zval(retval, "children", children);
+      for( unsigned int i=0; i<inNode->children.size(); i++ ) {
+        zval *child;
+        child = php_makeQueryAnnotationNode(inNode->children[i]);
+        add_next_index_zval(children, child);
+      }
+    }
+    // need the _cPtr, etc.
+    return retval;
   }
-  return;
-fail:
-  zend_error(ErrorCode(),ErrorMsg());
-}
-
-
-/* property handler for class ScoredExtentResult */
-static pval _wrap_propget_ScoredExtentResult(zend_property_reference *property_reference) {
-  pval result;
-  pval **_result;
-  zend_llist_element *element = property_reference->elements_list->head;
-  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
-  result.type = IS_NULL;
-  if (_propget_ScoredExtentResult(property_reference, &result)==SUCCESS) return result;
-  /* return it ourselves */
-  if (zend_hash_find(Z_OBJPROP_P(property_reference->object),Z_STRVAL_P(&(property->element)),1+Z_STRLEN_P(&(property->element)),(void**)&_result)==SUCCESS) {
-  zval *_value;
-  MAKE_STD_ZVAL(_value);  *_value=**_result;
-  INIT_PZVAL(_value);
-  zval_copy_ctor(_value);
-  return *_value;
-  }
-  result.type = IS_NULL;
-  return result;
-}
-static int _propget_ScoredExtentResult(zend_property_reference *property_reference, pval *value) {
-  /* get the property name */
-  zend_llist_element *element = property_reference->elements_list->head;
-  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
-  char *propname=Z_STRVAL_P(&(property->element));
-  return FAILURE;
-}
-
-static int _wrap_propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value) { 
-  zval * _value;
-  zend_llist_element *element = property_reference->elements_list->head;
-  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
-  if (_propset_ScoredExtentResult(property_reference, value)==SUCCESS) return SUCCESS;
-  /* set it ourselves as it is ScoredExtentResult */
-  MAKE_STD_ZVAL(_value);
-  *_value=*value;
-  INIT_PZVAL(_value);
-  zval_copy_ctor(_value);
-  return add_property_zval_ex(property_reference->object,Z_STRVAL_P(&(property->element)),1+Z_STRLEN_P(&(property->element)),_value);
-}
-static int _propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value) {
-  /* get the property name */
-  zend_llist_element *element = property_reference->elements_list->head;
-  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
-  char *propname=Z_STRVAL_P(&(property->element));
-  return FAILURE;
-}
-
+  
 static int _wrap_TermExtent_begin_set(zend_property_reference *property_reference, pval *value) {
   indri::parse::TermExtent *arg1 = (indri::parse::TermExtent *) 0 ;
   int arg2 ;
@@ -1722,6 +1652,108 @@ static int _propset_TermExtent(zend_property_reference *property_reference, pval
   } else  if (strcmp(propname,"end")==0) {
     return _wrap_TermExtent_end_set(property_reference, value);
   } else  return FAILURE;
+}
+
+/* This function is designed to be called by the zend list destructors */
+/* to typecast and do the actual destruction */
+void __wrap_delete_ScoredExtentResult(zend_rsrc_list_entry *rsrc, const char *type_name TSRMLS_DC) {
+  swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
+  void *ptr=value->ptr ;
+  int newobject=value->newobject ;
+  indri::api::ScoredExtentResult *arg1 = (indri::api::ScoredExtentResult *) 0 ;
+  
+  efree(value);
+  if (! newobject) return; /* can't delete it! */
+  SWIG_ZTS_ConvertResourceData(ptr,rsrc->type,type_name,(void **) &arg1,SWIGTYPE_p_indri__api__ScoredExtentResult TSRMLS_CC);
+  if (! arg1) zend_error(E_ERROR, "indri::api::ScoredExtentResult resource already free'd");
+  delete arg1;
+  
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_new_ScoredExtentResult) {
+  indri::api::ScoredExtentResult *result = 0 ;
+  zval **args[0];
+  
+  SWIG_ResetError();
+  /* NATIVE Constructor */
+  if(((ZEND_NUM_ARGS() )!= 0) || (zend_get_parameters_array_ex(0, args)!= SUCCESS)) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  result = (indri::api::ScoredExtentResult *)new indri::api::ScoredExtentResult();
+  {
+    SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__ScoredExtentResult, 1);
+  }
+  /* Wrap this return value */
+  if (this_ptr) {
+    /* NATIVE Constructor, use this_ptr */
+    zval *_cPtr; MAKE_STD_ZVAL(_cPtr);
+    *_cPtr = *return_value;
+    INIT_ZVAL(*return_value);
+    add_property_zval(this_ptr,"_cPtr",_cPtr);
+  } else if (! this_ptr) {
+    /* ALTERNATIVE Constructor, make an object wrapper */
+    zval *obj, *_cPtr;
+    MAKE_STD_ZVAL(obj);
+    MAKE_STD_ZVAL(_cPtr);
+    *_cPtr = *return_value;
+    INIT_ZVAL(*return_value);
+    object_init_ex(obj,ptr_ce_swig_ScoredExtentResult);
+    add_property_zval(obj,"_cPtr",_cPtr);
+    *return_value=*obj;
+  }
+  return;
+fail:
+  zend_error(ErrorCode(),ErrorMsg());
+}
+
+
+/* property handler for class ScoredExtentResult */
+static pval _wrap_propget_ScoredExtentResult(zend_property_reference *property_reference) {
+  pval result;
+  pval **_result;
+  zend_llist_element *element = property_reference->elements_list->head;
+  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
+  result.type = IS_NULL;
+  if (_propget_ScoredExtentResult(property_reference, &result)==SUCCESS) return result;
+  /* return it ourselves */
+  if (zend_hash_find(Z_OBJPROP_P(property_reference->object),Z_STRVAL_P(&(property->element)),1+Z_STRLEN_P(&(property->element)),(void**)&_result)==SUCCESS) {
+  zval *_value;
+  MAKE_STD_ZVAL(_value);  *_value=**_result;
+  INIT_PZVAL(_value);
+  zval_copy_ctor(_value);
+  return *_value;
+  }
+  result.type = IS_NULL;
+  return result;
+}
+static int _propget_ScoredExtentResult(zend_property_reference *property_reference, pval *value) {
+  /* get the property name */
+  zend_llist_element *element = property_reference->elements_list->head;
+  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
+  char *propname=Z_STRVAL_P(&(property->element));
+  return FAILURE;
+}
+
+static int _wrap_propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value) { 
+  zval * _value;
+  zend_llist_element *element = property_reference->elements_list->head;
+  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
+  if (_propset_ScoredExtentResult(property_reference, value)==SUCCESS) return SUCCESS;
+  /* set it ourselves as it is ScoredExtentResult */
+  MAKE_STD_ZVAL(_value);
+  *_value=*value;
+  INIT_PZVAL(_value);
+  zval_copy_ctor(_value);
+  return add_property_zval_ex(property_reference->object,Z_STRVAL_P(&(property->element)),1+Z_STRLEN_P(&(property->element)),_value);
+}
+static int _propset_ScoredExtentResult(zend_property_reference *property_reference, pval *value) {
+  /* get the property name */
+  zend_llist_element *element = property_reference->elements_list->head;
+  zend_overloaded_element *property=(zend_overloaded_element *)element->data;
+  char *propname=Z_STRVAL_P(&(property->element));
+  return FAILURE;
 }
 
 /* This function is designed to be called by the zend list destructors */
@@ -5439,13 +5471,13 @@ SWIG_PropagateClientData(void) {
 
 /* oinit subsection */
 ZEND_INIT_MODULE_GLOBALS(indri, indri_init_globals, indri_destroy_globals);
-/* Define class ScoredExtentResult */
-INIT_OVERLOADED_CLASS_ENTRY(ce_swig_ScoredExtentResult,"scoredextentresult",ScoredExtentResult_functions,NULL,_wrap_propget_ScoredExtentResult,_wrap_propset_ScoredExtentResult);
-if (! (ptr_ce_swig_ScoredExtentResult=zend_register_internal_class_ex(&ce_swig_ScoredExtentResult,NULL,NULL))) zend_error(E_ERROR,"Error registering wrapper for class ScoredExtentResult");
-
 /* Define class TermExtent */
 INIT_OVERLOADED_CLASS_ENTRY(ce_swig_TermExtent,"termextent",TermExtent_functions,NULL,_wrap_propget_TermExtent,_wrap_propset_TermExtent);
 if (! (ptr_ce_swig_TermExtent=zend_register_internal_class_ex(&ce_swig_TermExtent,NULL,NULL))) zend_error(E_ERROR,"Error registering wrapper for class TermExtent");
+
+/* Define class ScoredExtentResult */
+INIT_OVERLOADED_CLASS_ENTRY(ce_swig_ScoredExtentResult,"scoredextentresult",ScoredExtentResult_functions,NULL,_wrap_propget_ScoredExtentResult,_wrap_propset_ScoredExtentResult);
+if (! (ptr_ce_swig_ScoredExtentResult=zend_register_internal_class_ex(&ce_swig_ScoredExtentResult,NULL,NULL))) zend_error(E_ERROR,"Error registering wrapper for class ScoredExtentResult");
 
 /* Define class ParsedDocument */
 INIT_OVERLOADED_CLASS_ENTRY(ce_swig_ParsedDocument,"parseddocument",ParsedDocument_functions,NULL,_wrap_propget_ParsedDocument,_wrap_propset_ParsedDocument);

@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR SHARED JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP SWIG CXXCPP EGREP NEED_ANTLR WITH_SWIG PHP_SHARED JAVA_SHARED PHP_SO JAVA_SO LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX LEX LEXLIB LEX_OUTPUT_ROOT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AR SHARED INDRI_STANDALONE JAVAC JAR JAVAINC JAVAHOME WITH_JAVA PHPCONFIG PHPINCLUDE WITH_PHP MCS SWIG CXXCPP EGREP NEED_ANTLR WITH_CSHARP WITH_SWIG PHP_SHARED JAVA_SHARED CSHARP_SHARED PHP_SO JAVA_SO CSHARP_SO SITESEED LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -858,6 +858,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-largefile     omit support for large files
   --enable-php            Enable php shared library generation
+  --enable-csharp         Enable csharp shared library generation
   --enable-java           Enable java shared library generation
   --enable-assert         Enable assert statements in code
 
@@ -868,6 +869,7 @@ Optional Packages:
   --with-php-config=path       Set location of php-config
   --with-swig=path       Set location of swig executable
   --with-antlr=path       Set location of antlr install
+  --with-site-seed=hostname       Set the seed host for site-search
 
 Some influential environment variables:
   CC          C compiler command
@@ -3101,6 +3103,12 @@ echo "$as_me: error: cannot find the program ar on your path. Add AR=/path/to/ar
    { (exit 1); exit 1; }; }
 fi
 
+INDRI_STANDALONE=1
+
+cat >>confdefs.h <<\_ACEOF
+#define INDRI_STANDALONE 1
+_ACEOF
+
 
 
 echo "$as_me:$LINENO: checking for log in -lm" >&5
@@ -3406,6 +3414,8 @@ fi
      PHP_SO=".so"
      JAVA_SHARED="-G"
      JAVA_SO=".so"
+     CSHARP_SHARED="-G"
+     CSHARP_SO=".so"
      ;;
    *linux*)
      SHARED="-shared -fPIC"
@@ -3413,6 +3423,8 @@ fi
      PHP_SO=".so"
      JAVA_SHARED="-shared"
      JAVA_SO=".so"
+     CSHARP_SHARED="-shared"
+     CSHARP_SO=".so"
      ;;
    *-*-darwin*)
      SHARED=
@@ -3422,6 +3434,8 @@ fi
      PHP_SO=".so"
      JAVA_SHARED="-dynamiclib -framework JavaVM"
      JAVA_SO=".jnilib"
+     CSHARP_SHARED="-bundle  -undefined suppress -flat_namespace"
+     CSHARP_SO=".so"
      ;;
    *);;
 esac
@@ -4898,16 +4912,28 @@ fi
 done
 
 
-
+WITH_SWIG=0
 # Check whether --enable-php or --disable-php was given.
 if test "${enable_php+set}" = set; then
   enableval="$enable_php"
 
 fi;
 if test "$enable_php" = "yes" ; then
+  WITH_SWIG=1
   WITH_PHP=1
 else
   WITH_PHP=0
+fi
+# Check whether --enable-csharp or --disable-csharp was given.
+if test "${enable_csharp+set}" = set; then
+  enableval="$enable_csharp"
+
+fi;
+if test "$enable_csharp" = "yes" ; then
+   WITH_SWIG=1
+   WITH_CSHARP=1
+else
+   WITH_CSHARP=0
 fi
 # Check whether --enable-java or --disable-java was given.
 if test "${enable_java+set}" = set; then
@@ -4915,6 +4941,7 @@ if test "${enable_java+set}" = set; then
 
 fi;
 if test "$enable_java" = "yes" ; then
+  WITH_SWIG=1
   WITH_JAVA=1
 else
   WITH_JAVA=0
@@ -5161,9 +5188,57 @@ fi
 
 
 
+if test "$enable_csharp" = yes ; then
+  if test -z "$MCS" ; then
+     # Extract the first word of "mcs", so it can be a program name with args.
+set dummy mcs; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_MCS+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $MCS in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_MCS="$MCS" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_MCS="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+MCS=$ac_cv_path_MCS
+
+if test -n "$MCS"; then
+  echo "$as_me:$LINENO: result: $MCS" >&5
+echo "${ECHO_T}$MCS" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+fi
+if test -z "$MCS" ; then
+   { echo "$as_me:$LINENO: WARNING: cannot find the program mcs on your path. Add MCS=/path/to/mcs to your configure command line" >&5
+echo "$as_me: WARNING: cannot find the program mcs on your path. Add MCS=/path/to/mcs to your configure command line" >&2;}
+   MCS="echo install mcs"
+fi
+
 SWIG=
-if test "$enable_java" = yes -o "$enable_php" = "yes" ; then
-  WITH_SWIG=1
+if test $WITH_SWIG = 1 ; then
 
 # Check whether --with-swig or --without-swig was given.
 if test "${with_swig+set}" = set; then
@@ -5216,8 +5291,6 @@ fi
 done
 
   fi
-else
-  WITH_SWIG=0
 fi
 
 NEED_ANTLR=1
@@ -5870,6 +5943,21 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+
+
+
+
+
+
+
+SITESEED="unknownhost"
+
+# Check whether --with-site-seed or --without-site-seed was given.
+if test "${with_site_seed+set}" = set; then
+  withval="$with_site_seed"
+  SITESEED="$withval"
+fi;
 
 
 cat >confcache <<\_ACEOF
@@ -6534,6 +6622,7 @@ s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@AR@,$AR,;t t
 s,@SHARED@,$SHARED,;t t
+s,@INDRI_STANDALONE@,$INDRI_STANDALONE,;t t
 s,@JAVAC@,$JAVAC,;t t
 s,@JAR@,$JAR,;t t
 s,@JAVAINC@,$JAVAINC,;t t
@@ -6542,15 +6631,20 @@ s,@WITH_JAVA@,$WITH_JAVA,;t t
 s,@PHPCONFIG@,$PHPCONFIG,;t t
 s,@PHPINCLUDE@,$PHPINCLUDE,;t t
 s,@WITH_PHP@,$WITH_PHP,;t t
+s,@MCS@,$MCS,;t t
 s,@SWIG@,$SWIG,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@NEED_ANTLR@,$NEED_ANTLR,;t t
+s,@WITH_CSHARP@,$WITH_CSHARP,;t t
 s,@WITH_SWIG@,$WITH_SWIG,;t t
 s,@PHP_SHARED@,$PHP_SHARED,;t t
 s,@JAVA_SHARED@,$JAVA_SHARED,;t t
+s,@CSHARP_SHARED@,$CSHARP_SHARED,;t t
 s,@PHP_SO@,$PHP_SO,;t t
 s,@JAVA_SO@,$JAVA_SO,;t t
+s,@CSHARP_SO@,$CSHARP_SO,;t t
+s,@SITESEED@,$SITESEED,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
