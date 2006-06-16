@@ -129,17 +129,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "indri.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "indriPINVOKE.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IntVector.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "indri.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -175,11 +175,6 @@
                 />
                 <File
                     RelPath = "PonteExpander.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Query.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
