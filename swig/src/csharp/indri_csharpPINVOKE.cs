@@ -11,7 +11,7 @@ namespace Indri {
 using System;
 using System.Runtime.InteropServices;
 
-class indriPINVOKE {
+class indri_csharpPINVOKE {
 
   protected class SWIGExceptionHelper {
 
@@ -33,8 +33,8 @@ class indriPINVOKE {
     static ExceptionArgumentDelegate argumentNullDelegate = new ExceptionArgumentDelegate(SetPendingArgumentNullException);
     static ExceptionArgumentDelegate argumentOutOfRangeDelegate = new ExceptionArgumentDelegate(SetPendingArgumentOutOfRangeException);
 
-    [DllImport("indri", EntryPoint="SWIGRegisterExceptionCallbacks_indri")]
-    public static extern void SWIGRegisterExceptionCallbacks_indri(
+    [DllImport("indri_csharp", EntryPoint="SWIGRegisterExceptionCallbacks_indri_csharp")]
+    public static extern void SWIGRegisterExceptionCallbacks_indri_csharp(
                                 ExceptionDelegate applicationDelegate,
                                 ExceptionDelegate arithmeticDelegate,
                                 ExceptionDelegate divideByZeroDelegate, 
@@ -46,8 +46,8 @@ class indriPINVOKE {
                                 ExceptionDelegate overflowDelegate, 
                                 ExceptionDelegate systemExceptionDelegate);
 
-    [DllImport("indri", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_indri")]
-    public static extern void SWIGRegisterExceptionCallbacksArgument_indri(
+    [DllImport("indri_csharp", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_indri_csharp")]
+    public static extern void SWIGRegisterExceptionCallbacksArgument_indri_csharp(
                                 ExceptionArgumentDelegate argumentDelegate,
                                 ExceptionArgumentDelegate argumentNullDelegate,
                                 ExceptionArgumentDelegate argumentOutOfRangeDelegate);
@@ -98,7 +98,7 @@ class indriPINVOKE {
     }
 
     static SWIGExceptionHelper() {
-      SWIGRegisterExceptionCallbacks_indri(
+      SWIGRegisterExceptionCallbacks_indri_csharp(
                                 applicationDelegate,
                                 arithmeticDelegate,
                                 divideByZeroDelegate,
@@ -110,7 +110,7 @@ class indriPINVOKE {
                                 overflowDelegate,
                                 systemDelegate);
 
-      SWIGRegisterExceptionCallbacksArgument_indri(
+      SWIGRegisterExceptionCallbacksArgument_indri_csharp(
                                 argumentDelegate,
                                 argumentNullDelegate,
                                 argumentOutOfRangeDelegate);
@@ -138,7 +138,7 @@ class indriPINVOKE {
       if (pendingException != null)
         throw new ApplicationException("FATAL: An earlier pending exception from unmanaged code was missed and thus not thrown (" + pendingException.ToString() + ")", e);
       pendingException = e;
-      lock(typeof(indriPINVOKE)) {
+      lock(typeof(indri_csharpPINVOKE)) {
         numExceptionsPending++;
       }
     }
@@ -149,7 +149,7 @@ class indriPINVOKE {
         if (pendingException != null) {
           e = pendingException;
           pendingException = null;
-          lock(typeof(indriPINVOKE)) {
+          lock(typeof(indri_csharpPINVOKE)) {
             numExceptionsPending--;
           }
         }
@@ -164,1261 +164,1261 @@ class indriPINVOKE {
     public delegate string SWIGStringDelegate(string message);
     static SWIGStringDelegate stringDelegate = new SWIGStringDelegate(CreateString);
 
-    [DllImport("indri", EntryPoint="SWIGRegisterStringCallback_indri")]
-    public static extern void SWIGRegisterStringCallback_indri(SWIGStringDelegate stringDelegate);
+    [DllImport("indri_csharp", EntryPoint="SWIGRegisterStringCallback_indri_csharp")]
+    public static extern void SWIGRegisterStringCallback_indri_csharp(SWIGStringDelegate stringDelegate);
 
     static string CreateString(string cString) {
       return cString;
     }
 
     static SWIGStringHelper() {
-      SWIGRegisterStringCallback_indri(stringDelegate);
+      SWIGRegisterStringCallback_indri_csharp(stringDelegate);
     }
   }
 
   static protected SWIGStringHelper swigStringHelper = new SWIGStringHelper();
 
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Clear")]
   public static extern void IntVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Add")]
   public static extern void IntVector_Add(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_size")]
   public static extern uint IntVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_capacity")]
   public static extern uint IntVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_reserve")]
   public static extern void IntVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_IntVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_IntVector__SWIG_0")]
   public static extern IntPtr new_IntVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_IntVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_IntVector__SWIG_1")]
   public static extern IntPtr new_IntVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_getitemcopy")]
   public static extern int IntVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_getitem")]
   public static extern int IntVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_setitem")]
   public static extern void IntVector_setitem(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_AddRange")]
   public static extern void IntVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_GetRange")]
   public static extern IntPtr IntVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Insert")]
   public static extern void IntVector_Insert(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_InsertRange")]
   public static extern void IntVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_RemoveAt")]
   public static extern void IntVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_RemoveRange")]
   public static extern void IntVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Repeat")]
   public static extern IntPtr IntVector_Repeat(int jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Reverse__SWIG_0")]
   public static extern void IntVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Reverse__SWIG_1")]
   public static extern void IntVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_SetRange")]
   public static extern void IntVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Contains")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Contains")]
   public static extern bool IntVector_Contains(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_IndexOf")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_IndexOf")]
   public static extern int IntVector_IndexOf(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_LastIndexOf")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_LastIndexOf")]
   public static extern int IntVector_LastIndexOf(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IntVector_Remove")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IntVector_Remove")]
   public static extern void IntVector_Remove(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_IntVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_IntVector")]
   public static extern void delete_IntVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Clear")]
   public static extern void StringVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Add")]
   public static extern void StringVector_Add(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_size")]
   public static extern uint StringVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_capacity")]
   public static extern uint StringVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_reserve")]
   public static extern void StringVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_StringVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_StringVector__SWIG_0")]
   public static extern IntPtr new_StringVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_StringVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_StringVector__SWIG_1")]
   public static extern IntPtr new_StringVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_getitemcopy")]
   public static extern string StringVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_getitem")]
   public static extern string StringVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_setitem")]
   public static extern void StringVector_setitem(HandleRef jarg1, int jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_AddRange")]
   public static extern void StringVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_GetRange")]
   public static extern IntPtr StringVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Insert")]
   public static extern void StringVector_Insert(HandleRef jarg1, int jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_InsertRange")]
   public static extern void StringVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_RemoveAt")]
   public static extern void StringVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_RemoveRange")]
   public static extern void StringVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Repeat")]
   public static extern IntPtr StringVector_Repeat(string jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Reverse__SWIG_0")]
   public static extern void StringVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Reverse__SWIG_1")]
   public static extern void StringVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_SetRange")]
   public static extern void StringVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Contains")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Contains")]
   public static extern bool StringVector_Contains(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_IndexOf")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_IndexOf")]
   public static extern int StringVector_IndexOf(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_LastIndexOf")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_LastIndexOf")]
   public static extern int StringVector_LastIndexOf(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_StringVector_Remove")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_StringVector_Remove")]
   public static extern void StringVector_Remove(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_StringVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_StringVector")]
   public static extern void delete_StringVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ConfMap__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ConfMap__SWIG_0")]
   public static extern IntPtr new_ConfMap__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_ConfMap__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ConfMap__SWIG_1")]
   public static extern IntPtr new_ConfMap__SWIG_1(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_size")]
   public static extern uint ConfMap_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_empty")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_empty")]
   public static extern bool ConfMap_empty(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_clear")]
   public static extern void ConfMap_clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_get")]
   public static extern string ConfMap_get(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_set")]
   public static extern void ConfMap_set(HandleRef jarg1, HandleRef jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_del")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_del")]
   public static extern void ConfMap_del(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ConfMap_has_key")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConfMap_has_key")]
   public static extern bool ConfMap_has_key(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ConfMap")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ConfMap")]
   public static extern void delete_ConfMap(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_tag_name_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_tag_name_set")]
   public static extern void ConflationPattern_tag_name_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_tag_name_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_tag_name_get")]
   public static extern string ConflationPattern_tag_name_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_attribute_name_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_attribute_name_set")]
   public static extern void ConflationPattern_attribute_name_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_attribute_name_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_attribute_name_get")]
   public static extern string ConflationPattern_attribute_name_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_value_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_value_set")]
   public static extern void ConflationPattern_value_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ConflationPattern_value_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ConflationPattern_value_get")]
   public static extern string ConflationPattern_value_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ConflationPattern")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ConflationPattern")]
   public static extern IntPtr new_ConflationPattern();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ConflationPattern")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ConflationPattern")]
   public static extern void delete_ConflationPattern(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_MResults__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_MResults__SWIG_0")]
   public static extern IntPtr new_MResults__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_MResults__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_MResults__SWIG_1")]
   public static extern IntPtr new_MResults__SWIG_1(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_size")]
   public static extern uint MResults_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_empty")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_empty")]
   public static extern bool MResults_empty(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_clear")]
   public static extern void MResults_clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_get")]
   public static extern IntPtr MResults_get(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_set")]
   public static extern void MResults_set(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_del")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_del")]
   public static extern void MResults_del(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MResults_has_key")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MResults_has_key")]
   public static extern bool MResults_has_key(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_MResults")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_MResults")]
   public static extern void delete_MResults(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Clear")]
   public static extern void MetadataPairVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Add")]
   public static extern void MetadataPairVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_size")]
   public static extern uint MetadataPairVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_capacity")]
   public static extern uint MetadataPairVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_reserve")]
   public static extern void MetadataPairVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_MetadataPairVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_MetadataPairVector__SWIG_0")]
   public static extern IntPtr new_MetadataPairVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_MetadataPairVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_MetadataPairVector__SWIG_1")]
   public static extern IntPtr new_MetadataPairVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_getitemcopy")]
   public static extern IntPtr MetadataPairVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_getitem")]
   public static extern IntPtr MetadataPairVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_setitem")]
   public static extern void MetadataPairVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_AddRange")]
   public static extern void MetadataPairVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_GetRange")]
   public static extern IntPtr MetadataPairVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Insert")]
   public static extern void MetadataPairVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_InsertRange")]
   public static extern void MetadataPairVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_RemoveAt")]
   public static extern void MetadataPairVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_RemoveRange")]
   public static extern void MetadataPairVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Repeat")]
   public static extern IntPtr MetadataPairVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Reverse__SWIG_0")]
   public static extern void MetadataPairVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_Reverse__SWIG_1")]
   public static extern void MetadataPairVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPairVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPairVector_SetRange")]
   public static extern void MetadataPairVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_MetadataPairVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_MetadataPairVector")]
   public static extern void delete_MetadataPairVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_key_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_key_set")]
   public static extern void MetadataPair_key_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_key_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_key_get")]
   public static extern string MetadataPair_key_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_value_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_value_set")]
   public static extern void MetadataPair_value_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_value_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_value_get")]
   public static extern IntPtr MetadataPair_value_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_valueLength_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_valueLength_set")]
   public static extern void MetadataPair_valueLength_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_MetadataPair_valueLength_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_MetadataPair_valueLength_get")]
   public static extern int MetadataPair_valueLength_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Clear")]
   public static extern void ParsedDocumentVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Add")]
   public static extern void ParsedDocumentVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_size")]
   public static extern uint ParsedDocumentVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_capacity")]
   public static extern uint ParsedDocumentVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_reserve")]
   public static extern void ParsedDocumentVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ParsedDocumentVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ParsedDocumentVector__SWIG_0")]
   public static extern IntPtr new_ParsedDocumentVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_ParsedDocumentVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ParsedDocumentVector__SWIG_1")]
   public static extern IntPtr new_ParsedDocumentVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_getitemcopy")]
   public static extern IntPtr ParsedDocumentVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_getitem")]
   public static extern IntPtr ParsedDocumentVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_setitem")]
   public static extern void ParsedDocumentVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_AddRange")]
   public static extern void ParsedDocumentVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_GetRange")]
   public static extern IntPtr ParsedDocumentVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Insert")]
   public static extern void ParsedDocumentVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_InsertRange")]
   public static extern void ParsedDocumentVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_RemoveAt")]
   public static extern void ParsedDocumentVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_RemoveRange")]
   public static extern void ParsedDocumentVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Repeat")]
   public static extern IntPtr ParsedDocumentVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Reverse__SWIG_0")]
   public static extern void ParsedDocumentVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_Reverse__SWIG_1")]
   public static extern void ParsedDocumentVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocumentVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocumentVector_SetRange")]
   public static extern void ParsedDocumentVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ParsedDocumentVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ParsedDocumentVector")]
   public static extern void delete_ParsedDocumentVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Clear")]
   public static extern void TermExtentVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Add")]
   public static extern void TermExtentVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_size")]
   public static extern uint TermExtentVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_capacity")]
   public static extern uint TermExtentVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_reserve")]
   public static extern void TermExtentVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_TermExtentVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_TermExtentVector__SWIG_0")]
   public static extern IntPtr new_TermExtentVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_TermExtentVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_TermExtentVector__SWIG_1")]
   public static extern IntPtr new_TermExtentVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_getitemcopy")]
   public static extern IntPtr TermExtentVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_getitem")]
   public static extern IntPtr TermExtentVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_setitem")]
   public static extern void TermExtentVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_AddRange")]
   public static extern void TermExtentVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_GetRange")]
   public static extern IntPtr TermExtentVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Insert")]
   public static extern void TermExtentVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_InsertRange")]
   public static extern void TermExtentVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_RemoveAt")]
   public static extern void TermExtentVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_RemoveRange")]
   public static extern void TermExtentVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Repeat")]
   public static extern IntPtr TermExtentVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Reverse__SWIG_0")]
   public static extern void TermExtentVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_Reverse__SWIG_1")]
   public static extern void TermExtentVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtentVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtentVector_SetRange")]
   public static extern void TermExtentVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_TermExtentVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_TermExtentVector")]
   public static extern void delete_TermExtentVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtent_begin_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtent_begin_set")]
   public static extern void TermExtent_begin_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtent_begin_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtent_begin_get")]
   public static extern int TermExtent_begin_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtent_end_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtent_end_set")]
   public static extern void TermExtent_end_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_TermExtent_end_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_TermExtent_end_get")]
   public static extern int TermExtent_end_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_TermExtent")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_TermExtent")]
   public static extern IntPtr new_TermExtent();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_TermExtent")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_TermExtent")]
   public static extern void delete_TermExtent(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_text_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_text_set")]
   public static extern void ParsedDocument_text_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_text_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_text_get")]
   public static extern string ParsedDocument_text_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_textLength_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_textLength_set")]
   public static extern void ParsedDocument_textLength_set(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_textLength_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_textLength_get")]
   public static extern uint ParsedDocument_textLength_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_content_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_content_set")]
   public static extern void ParsedDocument_content_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_content_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_content_get")]
   public static extern string ParsedDocument_content_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_contentLength_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_contentLength_set")]
   public static extern void ParsedDocument_contentLength_set(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_contentLength_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_contentLength_get")]
   public static extern uint ParsedDocument_contentLength_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_getContent")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_getContent")]
   public static extern string ParsedDocument_getContent(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_positions_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_positions_set")]
   public static extern void ParsedDocument_positions_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_positions_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_positions_get")]
   public static extern IntPtr ParsedDocument_positions_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_metadata_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_metadata_set")]
   public static extern void ParsedDocument_metadata_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ParsedDocument_metadata_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_metadata_get")]
   public static extern IntPtr ParsedDocument_metadata_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ParsedDocument")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ParsedDocument")]
   public static extern IntPtr new_ParsedDocument();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ParsedDocument")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ParsedDocument")]
   public static extern void delete_ParsedDocument(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Clear")]
   public static extern void QueryAnnotationNodeVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Add")]
   public static extern void QueryAnnotationNodeVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_size")]
   public static extern uint QueryAnnotationNodeVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_capacity")]
   public static extern uint QueryAnnotationNodeVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_reserve")]
   public static extern void QueryAnnotationNodeVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_QueryAnnotationNodeVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_QueryAnnotationNodeVector__SWIG_0")]
   public static extern IntPtr new_QueryAnnotationNodeVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_QueryAnnotationNodeVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_QueryAnnotationNodeVector__SWIG_1")]
   public static extern IntPtr new_QueryAnnotationNodeVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_getitemcopy")]
   public static extern IntPtr QueryAnnotationNodeVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_getitem")]
   public static extern IntPtr QueryAnnotationNodeVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_setitem")]
   public static extern void QueryAnnotationNodeVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_AddRange")]
   public static extern void QueryAnnotationNodeVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_GetRange")]
   public static extern IntPtr QueryAnnotationNodeVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Insert")]
   public static extern void QueryAnnotationNodeVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_InsertRange")]
   public static extern void QueryAnnotationNodeVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_RemoveAt")]
   public static extern void QueryAnnotationNodeVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_RemoveRange")]
   public static extern void QueryAnnotationNodeVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Repeat")]
   public static extern IntPtr QueryAnnotationNodeVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Reverse__SWIG_0")]
   public static extern void QueryAnnotationNodeVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_Reverse__SWIG_1")]
   public static extern void QueryAnnotationNodeVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNodeVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNodeVector_SetRange")]
   public static extern void QueryAnnotationNodeVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_QueryAnnotationNodeVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryAnnotationNodeVector")]
   public static extern void delete_QueryAnnotationNodeVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_name_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_name_set")]
   public static extern void QueryAnnotationNode_name_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_name_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_name_get")]
   public static extern string QueryAnnotationNode_name_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_type_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_type_set")]
   public static extern void QueryAnnotationNode_type_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_type_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_type_get")]
   public static extern string QueryAnnotationNode_type_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_queryText_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_queryText_set")]
   public static extern void QueryAnnotationNode_queryText_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_queryText_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_queryText_get")]
   public static extern string QueryAnnotationNode_queryText_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_children_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_children_set")]
   public static extern void QueryAnnotationNode_children_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotationNode_children_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotationNode_children_get")]
   public static extern IntPtr QueryAnnotationNode_children_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_QueryAnnotationNode")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_QueryAnnotationNode")]
   public static extern IntPtr new_QueryAnnotationNode();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_QueryAnnotationNode")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryAnnotationNode")]
   public static extern void delete_QueryAnnotationNode(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotation_getQueryTree")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotation_getQueryTree")]
   public static extern IntPtr QueryAnnotation_getQueryTree(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotation_getAnnotations")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotation_getAnnotations")]
   public static extern IntPtr QueryAnnotation_getAnnotations(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryAnnotation_getResults")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryAnnotation_getResults")]
   public static extern IntPtr QueryAnnotation_getResults(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_QueryAnnotation")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_QueryAnnotation")]
   public static extern IntPtr new_QueryAnnotation();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_QueryAnnotation")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryAnnotation")]
   public static extern void delete_QueryAnnotation(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Clear")]
   public static extern void ScoredExtentResultVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Add")]
   public static extern void ScoredExtentResultVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_size")]
   public static extern uint ScoredExtentResultVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_capacity")]
   public static extern uint ScoredExtentResultVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_reserve")]
   public static extern void ScoredExtentResultVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ScoredExtentResultVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ScoredExtentResultVector__SWIG_0")]
   public static extern IntPtr new_ScoredExtentResultVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_ScoredExtentResultVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ScoredExtentResultVector__SWIG_1")]
   public static extern IntPtr new_ScoredExtentResultVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_getitemcopy")]
   public static extern IntPtr ScoredExtentResultVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_getitem")]
   public static extern IntPtr ScoredExtentResultVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_setitem")]
   public static extern void ScoredExtentResultVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_AddRange")]
   public static extern void ScoredExtentResultVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_GetRange")]
   public static extern IntPtr ScoredExtentResultVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Insert")]
   public static extern void ScoredExtentResultVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_InsertRange")]
   public static extern void ScoredExtentResultVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_RemoveAt")]
   public static extern void ScoredExtentResultVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_RemoveRange")]
   public static extern void ScoredExtentResultVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Repeat")]
   public static extern IntPtr ScoredExtentResultVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Reverse__SWIG_0")]
   public static extern void ScoredExtentResultVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_Reverse__SWIG_1")]
   public static extern void ScoredExtentResultVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResultVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResultVector_SetRange")]
   public static extern void ScoredExtentResultVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ScoredExtentResultVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ScoredExtentResultVector")]
   public static extern void delete_ScoredExtentResultVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_score_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_score_set")]
   public static extern void ScoredExtentResult_score_set(HandleRef jarg1, double jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_score_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_score_get")]
   public static extern double ScoredExtentResult_score_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_document_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_document_set")]
   public static extern void ScoredExtentResult_document_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_document_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_document_get")]
   public static extern int ScoredExtentResult_document_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_begin_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_begin_set")]
   public static extern void ScoredExtentResult_begin_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_begin_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_begin_get")]
   public static extern int ScoredExtentResult_begin_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_end_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_end_set")]
   public static extern void ScoredExtentResult_end_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_ScoredExtentResult_end_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_ScoredExtentResult_end_get")]
   public static extern int ScoredExtentResult_end_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_ScoredExtentResult")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_ScoredExtentResult")]
   public static extern IntPtr new_ScoredExtentResult();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_ScoredExtentResult")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_ScoredExtentResult")]
   public static extern void delete_ScoredExtentResult(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_Parameters")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_Parameters")]
   public static extern IntPtr new_Parameters();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_Parameters")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_Parameters")]
   public static extern void delete_Parameters(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_0")]
   public static extern IntPtr Parameters_get__SWIG_0(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_1")]
   public static extern IntPtr Parameters_get__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_2")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_2")]
   public static extern bool Parameters_get__SWIG_2(HandleRef jarg1, string jarg2, bool jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_3")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_3")]
   public static extern int Parameters_get__SWIG_3(HandleRef jarg1, string jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_4")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_4")]
   public static extern double Parameters_get__SWIG_4(HandleRef jarg1, string jarg2, double jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_5")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_5")]
   public static extern long Parameters_get__SWIG_5(HandleRef jarg1, string jarg2, long jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_get__SWIG_6")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_get__SWIG_6")]
   public static extern string Parameters_get__SWIG_6(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_append")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_append")]
   public static extern IntPtr Parameters_append(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_remove")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_remove")]
   public static extern void Parameters_remove(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_0")]
   public static extern void Parameters_set__SWIG_0(HandleRef jarg1, string jarg2, bool jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_1")]
   public static extern void Parameters_set__SWIG_1(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_2")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_2")]
   public static extern void Parameters_set__SWIG_2(HandleRef jarg1, string jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_3")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_3")]
   public static extern void Parameters_set__SWIG_3(HandleRef jarg1, string jarg2, long jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_4")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_4")]
   public static extern void Parameters_set__SWIG_4(HandleRef jarg1, string jarg2, double jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_set__SWIG_5")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_set__SWIG_5")]
   public static extern void Parameters_set__SWIG_5(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_clear")]
   public static extern void Parameters_clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_size")]
   public static extern uint Parameters_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_exists__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_exists__SWIG_0")]
   public static extern bool Parameters_exists__SWIG_0(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_exists__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_exists__SWIG_1")]
   public static extern bool Parameters_exists__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Parameters_instance")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Parameters_instance")]
   public static extern IntPtr Parameters_instance();
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Clear")]
   public static extern void DocumentVectorVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Add")]
   public static extern void DocumentVectorVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_size")]
   public static extern uint DocumentVectorVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_capacity")]
   public static extern uint DocumentVectorVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_reserve")]
   public static extern void DocumentVectorVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_DocumentVectorVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_DocumentVectorVector__SWIG_0")]
   public static extern IntPtr new_DocumentVectorVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_DocumentVectorVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_DocumentVectorVector__SWIG_1")]
   public static extern IntPtr new_DocumentVectorVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_getitemcopy")]
   public static extern IntPtr DocumentVectorVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_getitem")]
   public static extern IntPtr DocumentVectorVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_setitem")]
   public static extern void DocumentVectorVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_AddRange")]
   public static extern void DocumentVectorVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_GetRange")]
   public static extern IntPtr DocumentVectorVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Insert")]
   public static extern void DocumentVectorVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_InsertRange")]
   public static extern void DocumentVectorVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_RemoveAt")]
   public static extern void DocumentVectorVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_RemoveRange")]
   public static extern void DocumentVectorVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Repeat")]
   public static extern IntPtr DocumentVectorVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Reverse__SWIG_0")]
   public static extern void DocumentVectorVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_Reverse__SWIG_1")]
   public static extern void DocumentVectorVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVectorVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVectorVector_SetRange")]
   public static extern void DocumentVectorVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_DocumentVectorVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_DocumentVectorVector")]
   public static extern void delete_DocumentVectorVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Clear")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Clear")]
   public static extern void FieldVector_Clear(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Add")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Add")]
   public static extern void FieldVector_Add(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_size")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_size")]
   public static extern uint FieldVector_size(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_capacity")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_capacity")]
   public static extern uint FieldVector_capacity(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_reserve")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_reserve")]
   public static extern void FieldVector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_new_FieldVector__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_FieldVector__SWIG_0")]
   public static extern IntPtr new_FieldVector__SWIG_0();
 
-  [DllImport("indri", EntryPoint="CSharp_new_FieldVector__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_FieldVector__SWIG_1")]
   public static extern IntPtr new_FieldVector__SWIG_1(int jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_getitemcopy")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_getitemcopy")]
   public static extern IntPtr FieldVector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_getitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_getitem")]
   public static extern IntPtr FieldVector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_setitem")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_setitem")]
   public static extern void FieldVector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_AddRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_AddRange")]
   public static extern void FieldVector_AddRange(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_GetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_GetRange")]
   public static extern IntPtr FieldVector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Insert")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Insert")]
   public static extern void FieldVector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_InsertRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_InsertRange")]
   public static extern void FieldVector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_RemoveAt")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_RemoveAt")]
   public static extern void FieldVector_RemoveAt(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_RemoveRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_RemoveRange")]
   public static extern void FieldVector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Repeat")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Repeat")]
   public static extern IntPtr FieldVector_Repeat(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Reverse__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Reverse__SWIG_0")]
   public static extern void FieldVector_Reverse__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_Reverse__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_Reverse__SWIG_1")]
   public static extern void FieldVector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_FieldVector_SetRange")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_FieldVector_SetRange")]
   public static extern void FieldVector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_FieldVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_FieldVector")]
   public static extern void delete_FieldVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_name_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_name_set")]
   public static extern void Field_name_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_name_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_name_get")]
   public static extern string Field_name_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_begin_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_begin_set")]
   public static extern void Field_begin_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_begin_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_begin_get")]
   public static extern int Field_begin_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_end_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_end_set")]
   public static extern void Field_end_set(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_end_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_end_get")]
   public static extern int Field_end_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_number_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_number_set")]
   public static extern void Field_number_set(HandleRef jarg1, long jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Field_number_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Field_number_get")]
   public static extern long Field_number_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_Field")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_Field")]
   public static extern IntPtr new_Field();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_Field")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_Field")]
   public static extern void delete_Field(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVector_stems")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVector_stems")]
   public static extern IntPtr DocumentVector_stems(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVector_positions")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVector_positions")]
   public static extern IntPtr DocumentVector_positions(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_DocumentVector_fields")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_DocumentVector_fields")]
   public static extern IntPtr DocumentVector_fields(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_DocumentVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_DocumentVector")]
   public static extern IntPtr new_DocumentVector();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_DocumentVector")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_DocumentVector")]
   public static extern void delete_DocumentVector(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_name_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_name_set")]
   public static extern void Specification_name_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_name_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_name_get")]
   public static extern string Specification_name_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_parser_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_parser_set")]
   public static extern void Specification_parser_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_parser_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_parser_get")]
   public static extern string Specification_parser_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_tokenizer_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_tokenizer_set")]
   public static extern void Specification_tokenizer_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_tokenizer_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_tokenizer_get")]
   public static extern string Specification_tokenizer_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_iterator_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_iterator_set")]
   public static extern void Specification_iterator_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_iterator_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_iterator_get")]
   public static extern string Specification_iterator_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_startDocTag_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_startDocTag_set")]
   public static extern void Specification_startDocTag_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_startDocTag_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_startDocTag_get")]
   public static extern string Specification_startDocTag_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_endDocTag_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_endDocTag_set")]
   public static extern void Specification_endDocTag_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_endDocTag_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_endDocTag_get")]
   public static extern string Specification_endDocTag_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_endMetadataTag_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_endMetadataTag_set")]
   public static extern void Specification_endMetadataTag_set(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_endMetadataTag_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_endMetadataTag_get")]
   public static extern string Specification_endMetadataTag_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_include_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_include_set")]
   public static extern void Specification_include_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_include_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_include_get")]
   public static extern IntPtr Specification_include_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_exclude_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_exclude_set")]
   public static extern void Specification_exclude_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_exclude_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_exclude_get")]
   public static extern IntPtr Specification_exclude_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_index_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_index_set")]
   public static extern void Specification_index_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_index_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_index_get")]
   public static extern IntPtr Specification_index_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_metadata_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_metadata_set")]
   public static extern void Specification_metadata_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_metadata_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_metadata_get")]
   public static extern IntPtr Specification_metadata_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_conflations_set")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_conflations_set")]
   public static extern void Specification_conflations_set(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_Specification_conflations_get")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_Specification_conflations_get")]
   public static extern IntPtr Specification_conflations_get(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_Specification")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_Specification")]
   public static extern IntPtr new_Specification();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_Specification")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_Specification")]
   public static extern void delete_Specification(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_QueryEnvironment")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_QueryEnvironment")]
   public static extern IntPtr new_QueryEnvironment();
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_addServer")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_addServer")]
   public static extern void QueryEnvironment_addServer(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_addIndex")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_addIndex")]
   public static extern void QueryEnvironment_addIndex(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_removeServer")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_removeServer")]
   public static extern void QueryEnvironment_removeServer(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_removeIndex")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_removeIndex")]
   public static extern void QueryEnvironment_removeIndex(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_close")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_close")]
   public static extern void QueryEnvironment_close(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_setMemory")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_setMemory")]
   public static extern void QueryEnvironment_setMemory(HandleRef jarg1, long jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_setScoringRules")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_setScoringRules")]
   public static extern void QueryEnvironment_setScoringRules(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_setStopwords")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_setStopwords")]
   public static extern void QueryEnvironment_setStopwords(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_runQuery__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_runQuery__SWIG_0")]
   public static extern IntPtr QueryEnvironment_runQuery__SWIG_0(HandleRef jarg1, string jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_runQuery__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_runQuery__SWIG_1")]
   public static extern IntPtr QueryEnvironment_runQuery__SWIG_1(HandleRef jarg1, string jarg2, HandleRef jarg3, int jarg4);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_runAnnotatedQuery__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_runAnnotatedQuery__SWIG_0")]
   public static extern IntPtr QueryEnvironment_runAnnotatedQuery__SWIG_0(HandleRef jarg1, string jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_runAnnotatedQuery__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_runAnnotatedQuery__SWIG_1")]
   public static extern IntPtr QueryEnvironment_runAnnotatedQuery__SWIG_1(HandleRef jarg1, string jarg2, HandleRef jarg3, int jarg4);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documents__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documents__SWIG_0")]
   public static extern IntPtr QueryEnvironment_documents__SWIG_0(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documents__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documents__SWIG_1")]
   public static extern IntPtr QueryEnvironment_documents__SWIG_1(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentMetadata__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentMetadata__SWIG_0")]
   public static extern IntPtr QueryEnvironment_documentMetadata__SWIG_0(HandleRef jarg1, HandleRef jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentMetadata__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentMetadata__SWIG_1")]
   public static extern IntPtr QueryEnvironment_documentMetadata__SWIG_1(HandleRef jarg1, HandleRef jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentIDsFromMetadata")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentIDsFromMetadata")]
   public static extern IntPtr QueryEnvironment_documentIDsFromMetadata(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentsFromMetadata")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentsFromMetadata")]
   public static extern IntPtr QueryEnvironment_documentsFromMetadata(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_termCount__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_termCount__SWIG_0")]
   public static extern long QueryEnvironment_termCount__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_termCount__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_termCount__SWIG_1")]
   public static extern long QueryEnvironment_termCount__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_termFieldCount")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_termFieldCount")]
   public static extern long QueryEnvironment_termFieldCount(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_fieldList")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_fieldList")]
   public static extern IntPtr QueryEnvironment_fieldList(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentCount__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentCount__SWIG_0")]
   public static extern long QueryEnvironment_documentCount__SWIG_0(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentCount__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentCount__SWIG_1")]
   public static extern long QueryEnvironment_documentCount__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_documentVectors")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentVectors")]
   public static extern IntPtr QueryEnvironment_documentVectors(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_expressionCount__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionCount__SWIG_0")]
   public static extern double QueryEnvironment_expressionCount__SWIG_0(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_expressionCount__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionCount__SWIG_1")]
   public static extern double QueryEnvironment_expressionCount__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_expressionList__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionList__SWIG_0")]
   public static extern IntPtr QueryEnvironment_expressionList__SWIG_0(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryEnvironment_expressionList__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionList__SWIG_1")]
   public static extern IntPtr QueryEnvironment_expressionList__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_QueryEnvironment")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryEnvironment")]
   public static extern void delete_QueryEnvironment(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_QueryExpander")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryExpander")]
   public static extern void delete_QueryExpander(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryExpander_runExpandedQuery__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryExpander_runExpandedQuery__SWIG_0")]
   public static extern IntPtr QueryExpander_runExpandedQuery__SWIG_0(HandleRef jarg1, string jarg2, int jarg3, bool jarg4);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryExpander_runExpandedQuery__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryExpander_runExpandedQuery__SWIG_1")]
   public static extern IntPtr QueryExpander_runExpandedQuery__SWIG_1(HandleRef jarg1, string jarg2, int jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_QueryExpander_expand")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryExpander_expand")]
   public static extern string QueryExpander_expand(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_new_RMExpander")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_RMExpander")]
   public static extern IntPtr new_RMExpander(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_RMExpander_expand")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_RMExpander_expand")]
   public static extern string RMExpander_expand(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_RMExpander")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_RMExpander")]
   public static extern void delete_RMExpander(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_new_PonteExpander")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_PonteExpander")]
   public static extern IntPtr new_PonteExpander(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_PonteExpander_expand")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_PonteExpander_expand")]
   public static extern string PonteExpander_expand(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_PonteExpander")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_PonteExpander")]
   public static extern void delete_PonteExpander(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_delete_IndexStatus")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_IndexStatus")]
   public static extern void delete_IndexStatus(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexStatus_status")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexStatus_status")]
   public static extern void IndexStatus_status(HandleRef jarg1, int jarg2, string jarg3, string jarg4, int jarg5, int jarg6);
 
-  [DllImport("indri", EntryPoint="CSharp_new_IndexEnvironment")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_new_IndexEnvironment")]
   public static extern IntPtr new_IndexEnvironment();
 
-  [DllImport("indri", EntryPoint="CSharp_delete_IndexEnvironment")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_delete_IndexEnvironment")]
   public static extern void delete_IndexEnvironment(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setDocumentRoot")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setDocumentRoot")]
   public static extern void IndexEnvironment_setDocumentRoot(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setAnchorTextPath")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setAnchorTextPath")]
   public static extern void IndexEnvironment_setAnchorTextPath(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setOffsetMetadataPath")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setOffsetMetadataPath")]
   public static extern void IndexEnvironment_setOffsetMetadataPath(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setOffsetAnnotationsPath")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setOffsetAnnotationsPath")]
   public static extern void IndexEnvironment_setOffsetAnnotationsPath(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addFileClass__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addFileClass__SWIG_0")]
   public static extern void IndexEnvironment_addFileClass__SWIG_0(HandleRef jarg1, string jarg2, string jarg3, string jarg4, string jarg5, string jarg6, string jarg7, string jarg8, HandleRef jarg9, HandleRef jarg10, HandleRef jarg11, HandleRef jarg12, HandleRef jarg13);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_getFileClassSpec")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_getFileClassSpec")]
   public static extern IntPtr IndexEnvironment_getFileClassSpec(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addFileClass__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addFileClass__SWIG_1")]
   public static extern void IndexEnvironment_addFileClass__SWIG_1(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_deleteDocument")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_deleteDocument")]
   public static extern void IndexEnvironment_deleteDocument(HandleRef jarg1, int jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setIndexedFields")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setIndexedFields")]
   public static extern void IndexEnvironment_setIndexedFields(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setNumericField__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setNumericField__SWIG_0")]
   public static extern void IndexEnvironment_setNumericField__SWIG_0(HandleRef jarg1, string jarg2, bool jarg3, string jarg4);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setNumericField__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setNumericField__SWIG_1")]
   public static extern void IndexEnvironment_setNumericField__SWIG_1(HandleRef jarg1, string jarg2, bool jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setMetadataIndexedFields")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setMetadataIndexedFields")]
   public static extern void IndexEnvironment_setMetadataIndexedFields(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setStopwords")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setStopwords")]
   public static extern void IndexEnvironment_setStopwords(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setStemmer")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setStemmer")]
   public static extern void IndexEnvironment_setStemmer(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setMemory")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setMemory")]
   public static extern void IndexEnvironment_setMemory(HandleRef jarg1, long jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_setNormalization")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_setNormalization")]
   public static extern void IndexEnvironment_setNormalization(HandleRef jarg1, bool jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_create__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_create__SWIG_0")]
   public static extern void IndexEnvironment_create__SWIG_0(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_create__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_create__SWIG_1")]
   public static extern void IndexEnvironment_create__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_open__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_open__SWIG_0")]
   public static extern void IndexEnvironment_open__SWIG_0(HandleRef jarg1, string jarg2, HandleRef jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_open__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_open__SWIG_1")]
   public static extern void IndexEnvironment_open__SWIG_1(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_close")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_close")]
   public static extern void IndexEnvironment_close(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addFile__SWIG_0")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addFile__SWIG_0")]
   public static extern void IndexEnvironment_addFile__SWIG_0(HandleRef jarg1, string jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addFile__SWIG_1")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addFile__SWIG_1")]
   public static extern void IndexEnvironment_addFile__SWIG_1(HandleRef jarg1, string jarg2, string jarg3);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addString")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addString")]
   public static extern int IndexEnvironment_addString(HandleRef jarg1, string jarg2, string jarg3, HandleRef jarg4);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_addParsedDocument")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_addParsedDocument")]
   public static extern int IndexEnvironment_addParsedDocument(HandleRef jarg1, HandleRef jarg2);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_documentsIndexed")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_documentsIndexed")]
   public static extern int IndexEnvironment_documentsIndexed(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_IndexEnvironment_documentsSeen")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_IndexEnvironment_documentsSeen")]
   public static extern int IndexEnvironment_documentsSeen(HandleRef jarg1);
 
-  [DllImport("indri", EntryPoint="CSharp_RMExpanderUpcast")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_RMExpanderUpcast")]
   public static extern IntPtr RMExpanderUpcast(IntPtr objectRef);
 
-  [DllImport("indri", EntryPoint="CSharp_PonteExpanderUpcast")]
+  [DllImport("indri_csharp", EntryPoint="CSharp_PonteExpanderUpcast")]
   public static extern IntPtr PonteExpanderUpcast(IntPtr objectRef);
 }
 
