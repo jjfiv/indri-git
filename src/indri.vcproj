@@ -467,6 +467,9 @@
 				RelativePath=".\UTF8CaseNormalizationTransformation.cpp">
 			</File>
 			<File
+				RelativePath=".\UTF8Transcoder.cpp">
+			</File>
+			<File
 				RelativePath=".\UtilityThread.cpp">
 			</File>
 			<File
