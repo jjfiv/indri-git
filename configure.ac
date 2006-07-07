@@ -17,6 +17,35 @@ AC_PATH_PROGS(AR, ar gar)
 if test -z "$AR" ; then
    AC_MSG_ERROR([cannot find the program ar on your path. Add AR=/path/to/ar to your configure command line])
 fi
+
+dnl We don't want gcc < 3.2
+dnl 3.3.1 has optimization issue (possibly .2 and .3...
+AC_MSG_CHECKING([for a supported version of gcc])
+
+gcc_version=`${CC} -dumpversion`
+GCC_33=0
+case "${gcc_version}" in
+     2.*)
+	AC_MSG_RESULT([no (${gcc_version})])
+	AC_MSG_ERROR([please use a recent (>= gcc-3.2) version of gcc])
+	;;
+     3.0*)
+	AC_MSG_RESULT([no (${gcc_version})])
+	AC_MSG_ERROR([please use a recent (>= gcc-3.2) version of gcc])
+	;;
+     3.1*)
+	AC_MSG_RESULT([no (${gcc_version})])
+	AC_MSG_ERROR([please use a recent (>= gcc-3.2) version of gcc])
+	;;
+     3.3*)
+	AC_MSG_RESULT([buggy (${gcc_version})])
+        GCC_33=1
+	;;
+     *)
+	AC_MSG_RESULT([ok (${gcc_version})])
+	;;
+esac
+AC_SUBST(GCC_33)
 AC_SUBST(SHARED)
 INDRI_STANDALONE=1
 AC_DEFINE(INDRI_STANDALONE, 1, [standalone indri])
@@ -176,11 +205,12 @@ AC_ARG_ENABLE(assert,
 
 dnl Look for java
 if test "$enable_java" = "yes" ; then
-   AC_ARG_WITH(javahome, [  --with-javahome=path       Set location of JAVAHOME],[JAVAHOME="$withval"; JAVACBIN=$JAVAHOME/bin/javac; JAVAINCDIR=$JAVAHOME/include; JAR=$JAVAHOME/bin/jar], [JAVAHOME=])
+   AC_ARG_WITH(javahome, [  --with-javahome=path       Set location of JAVAHOME],[JAVAHOME="$withval"; JAVACBIN=$JAVAHOME/bin/javac; JAVAINCDIR=$JAVAHOME/include; JAR=$JAVAHOME/bin/jar; JAVADOC=$JAVAHOME/bin/javadoc], [JAVAHOME=])
    
    if test -z "$JAVACBIN" ; then
      AC_PATH_PROGS(JAVAC, javac)
      AC_PATH_PROGS(JAR, jar)
+     AC_PATH_PROGS(JAVADOC, javadoc)
    else
      JAVAC="$JAVACBIN"
    fi
@@ -227,7 +257,7 @@ fi
 AC_SUBST(JAVAC)
 AC_SUBST(JAR)
 AC_SUBST(JAVAINC)
-AC_SUBST(JAVAHOME)
+AC_SUBST(JAVADOC)
 AC_SUBST(WITH_JAVA)
 
 dnl Look for php

@@ -71,7 +71,7 @@ DIRS=
 
 JAVAOBJ =  $(patsubst %,$(INDRI_OUTDIR)/%, $(INDRI_JAVASRC:.java=.class)) $(patsubst %,$(INDRI_OUTDIRUI)/%, $(INDRI_JAVASRCUI:.java=.class))
 
-SOLIB=$(OBJ)/java/lib$(PACKAGE).so
+SOLIB=$(OBJ)/java/lib$(PACKAGE)$(JAVA_SO)
 
 OUTDIRCSHARP=$(OBJ)/csharp
 CSHARP_SO=.so
@@ -86,7 +86,7 @@ DOC_PCK=$(INDRI_PCK) $(INDRI_PCK).ui
 DOCARGS=-private -author -version
 DOCS=$(patsubst %,$(INDRI_OUTDIR)/%,$(patsubst %.java,%.html,$(INDRI_JAVASRC)))
 DOCSUI=$(patsubst %,$(INDRI_OUTDIRUI)/%,$(patsubst %.java,%.html,$(INDRI_JAVASRCUI)))
-DOC=$(JAVAHOME)/bin/javadoc -classpath java  $(DOCARGS)
+DOC=$(JAVADOC) -classpath java  $(DOCARGS)
 DOCDEP=$(OBJ)/java/docs/index.html
 TARGETS=
 ifeq ($(WITH_SWIG), 1)
@@ -125,10 +125,15 @@ $(OBJ)/java/indri_jni.o: java/indri_jni.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(JAVAINC)
 
 java/indri_jni.cpp: $(INTERFACES)
+ifneq ("$(SWIG)", "")
 	$(SWIG) $(SWIG_DEFS) -c++ -java -package $(INDRI_PCK) -o $@ -outdir $(INDRI_JSRC) $(INDRI_SRC) 
+endif
 
 $(INDRI_CSHARP_CPP): $(INTERFACES)
+ifneq ("$(SWIG)", "")
 	$(SWIG) -c++ -csharp -namespace Indri -o $@ -outdir csharp $(INDRI_CSHARPSRC) 
+endif
+
 $(OUTDIRCSHARP)/indri_csharp.o: $(INDRI_CSHARP_CPP)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
@@ -174,7 +179,9 @@ $(OBJ)/java/IndexUI.jar: $(JAVAOBJ) $(MFSTIND) $(DOCDEP)
 
 ## PHP
 php/indri_phpwrap.cpp: $(PHPINTERFACES)
+ifneq ("$(SWIG)", "")
 	$(SWIG) -php4 -c++ -o php/indri_phpwrap.cpp -outdir php $(INCLUDES) $(PHPSRC) 
+endif
 
 $(OUTDIRPHP)/indri_phpwrap.o: php/indri_phpwrap.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(PHPINCLUDE)
