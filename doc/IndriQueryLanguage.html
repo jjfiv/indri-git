@@ -113,11 +113,13 @@ termOp		:=	( "#od" POS_INTEGER | "#od" | '#' POS_INTEGER  ) '(' ( unscoredTerm )
 		|	"#datebefore" '(' date ')'
 		|	"#dateafter" '(' date ')'
 		|	"#datebetween" '(' date ',' date ')'
+		|	"#dateequals" '(' date ')'
 		|	"<" ( unscoredTerm )+ ">"
 		|	"{" ( unscoredTerm )+ "}"
 		|	"#syn" '(' ( unscoredTerm )+ ')'
 		|	"#wsyn" '(' ( weight unscoredTerm )+ ')' 
 		|	"#any" ':' TERM
+		|	"#any" '(' TERM ')'
 		|	"#less" '(' TERM integer ')'
 		|	"#greater" '(' TERM integer ')'
 		|	"#between" '(' TERM integer integer ')'
@@ -231,7 +233,7 @@ NOTE: The arguments given to this operator can only be term/proximity expression
 
 <i>Examples:</i>
 <ul>
-<li>#any:PERSON -- matches any occurence of a PERSON extent
+<li>#any:PERSON -- matches any occurence of a PERSON extent. Note that the syntax #any(PERSON) is also accepted.
 <li>#1(napolean died in #any:DATE) -- matches exact phrases of the form: "napolean died in &lt;date&gt;...&lt;/date&gt;"
 </ul>
 
@@ -347,9 +349,10 @@ are very useful when used in combination with the filter operators.
 
 <h3>Date operators:</h3>
 <ul>
-<li>#date:after( D ) -- matches numeric "date" extents if date is after D
-<li>#date:before( D ) -- matches numeric "date" extents if date is before D
-<li>#date:between( D_low, D_high ) -- matches numeric "date" extents if D_low &lt; date &lt; D_high
+<li>#dateafter( D ) -- matches numeric "date" extents if date is after D
+<li>#datebefore( D ) -- matches numeric "date" extents if date is before D
+<li>#datebetween( D_low, D_high ) -- matches numeric "date" extents if D_low &lt; date &lt; D_high
+<li>#dateequals( D ) -- matches numeric "date" extents if date == D
 </ul>
 
 <i>Acceptable date formats:</i>
