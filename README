@@ -5,6 +5,7 @@ Contents:
   * Using Indri
   * Building Indri
   * Running Indri
+  * Additional Programs
 
 -----
 Help!
@@ -14,6 +15,12 @@ If you have trouble using Indri, check online at lemurproject.org for updated
 documentation.  You can also ask a question in the Lemur public
 forum, also at lemurproject.org.  The Lemur and Indri developers watch the forum
 and can answer your questions.
+
+These links should help:
+   http://www.lemurproject.org/phorum -- The Lemur public forum
+   http://ciir.cs.umass.edu/~strohman/indri -- The Indri Tips page
+   http://www.lemurproject.org/lemur/IndriQueryLanguage.html -- Query language
+   http://www.lemurproject.org/doxygen/lemur/html -- Code documentation
 
 --------------
 What is Indri?
@@ -39,11 +46,11 @@ license.  Enterprise support for Indri is available from third parties.
 Using Indri
 -----------
 
-Indri comes with three command line programs: buildindex, runquery, and indrid.
+Indri comes with three main command line programs: buildindex, runquery, and indrid.
 In addition, Indri comes with two GUI programs: RetUI and IndexUI.  For many 
 research tasks, these tools may meet your needs completely.  However, if your needs
 are more complex, you may wish to use Indri as a library and build your own
-applications.  You can access Indri from C++, Java or PHP.
+applications.  You can access Indri from C++, Java, C# or PHP.
 
 Applications: 
 
@@ -65,7 +72,7 @@ making retrieval using a cluster of machines possible.
 Library:
 
 Indri provides the QueryEnvironment and IndexEnvrionment classes, which can be used
-from C++, Java or PHP (although indexing is not supported from PHP).  The 
+from C++, Java, C# or PHP (although indexing is not supported from PHP).  The 
 buildindex and runquery applications use these classes exclusively.
 
 IndexEnvironment understands many different file types.  However, you can create your
@@ -82,6 +89,20 @@ with an instance of IndexEnvironment, you can evaluate queries on an index that
 is currently being built.  The addServer method allows you to connect to indrid 
 processes for distributed retrieval.
 
+Web:
+
+A fully functional web query interface comes with the Indri distribution.
+You can find this interface in the lang/php/web directory, along with some 
+instructions on how to use it. 
+
+Site Search:
+
+Indri now comes complete with a web site search system, suitable for indexing your own
+website and providing search capabilities for your own pages.  This site search 
+system combines a web crawler with Indri's link analysis, indexing and retrieval 
+tools and a web interface.  More information on this is available in the site-search
+directory.
+
 --------------
 Building Indri
 --------------
@@ -91,28 +112,22 @@ solution file provided to build the source tree.  Note that the release
 build of this software has Pentium IV optimizations turned on, which may
 or may not work on your machine.
 
-Linux, Solaris, Mac OS X:  To build on a Unix variant, first run configure and
-then type "make" in the indri directory.  By  default, the project will
-build in debug mode, meaning that debug symbols are included.  To run in
-release mode (optimizations on, no symbols), type: make STYLE=release 
-Be sure to type 'make clean' first to clean out all the old object
-files.
+Linux, Solaris, Mac OS X, FreeBSD:  To build on a Unix variant, first run
+configure and then type "make" in the indri directory. 
 
 configure generates MakeDefns and Makefile.app. configure accepts
 following arguments: 
- * --enable-assert: Enable assert statements in the code. Default is
-   disabled. 
- * --enable-swig: compiles and installs the swig generated java
-   wrappers. Default is disabled. 
- * --with-javahome=<path> Path to JAVAHOME for compiling the swig
-   generated shared library.  
- * --with-swig=<path> Path to swig binary. Only required if the wrapper
-   interfaces are changed.  
- * --with-php-config=<path> Path to php-config binary. If not specified,
-   it will be searched for. If not found, php wrapper generation will
-   be disabled.
- * --prefix=<install-directory> Specifies the base directory for
-   installation. Default is /usr/local.
+  --disable-largefile     omit support for large files
+  --enable-php            Enable php shared library generation
+  --enable-csharp         Enable csharp shared library generation
+  --enable-java           Enable java shared library generation
+  --enable-assert         Enable assert statements in code
+
+  --with-javahome=path       Set location of JAVAHOME
+  --with-php-config=path       Set location of php-config
+  --with-swig=path       Set location of swig executable
+  --with-antlr=path       Set location of antlr install
+  --with-site-seed=hostname       Set the seed host for site-search
 
 -------------
 Running Indri
@@ -228,6 +243,14 @@ Formatting parameters:
   trecFormat: the symbol true to produce TREC scorable output, otherwise
   the symbol false.
 
+  printDocuments: print the full text of each document retrieved
+
+  printPassages: print only the passages of text retrieved (same as
+    printDocuments when passage retrieval is not used)
+
+  printSnippets: print a short bit of text summarizing each document
+    retrieved, with all matching words capitalized
+
 Pseudo-Relevance Feedback Parameters
 
   fbDocs: an integer specifying the number of documents to use for
@@ -253,4 +276,28 @@ indrid takes the following options:
   index: Relative path to the index you want to serve.
 
   port: (optional) The port you want to listen on (default is 16743)
+
+-------------------
+Additional Programs
+-------------------
+
+Indri also comes with some additional programs, which will only be briefly
+mentioned here.
+
+dumpindex -- A useful tool for printing information stored in an Indri index,
+  including the names of indexed fields, the number of times each word in the
+  vocabulary occurs in the index, etc.  If you are not sure if Indri is indexing
+  your data correctly, try using dumpindex to find out.
+
+harvestlinks -- A tool for extracting anchor text from TREC formatted web
+  collections.  This data can then be used with buildindex to add anchor text
+  to web document representations.
+
+rmodel -- Builds relevance models from the top ranked documents for a particular
+  query.  It supports n-grams too, where n can be arbitrarily large.
+
+makeprior -- Allows you to add prior probabilities to documents in an Indri index
+  for use with PageRank or URL depth features.  Once this prior information is
+  added to the index, you can reference it in your queries with the #prior operator
+  (e.g. #prior(urldepth)).
 
