@@ -75,6 +75,18 @@ static void printGrams( const std::string& query, const std::vector<indri::query
   }
 }
 
+static void usage( indri::api::Parameters param ) {
+  if( !param.exists( "query" ) || !( param.exists( "index" ) || param.exists( "server" ) ) || !param.exists( "documents" ) ) {
+   std::cerr << "rmodel usage: " << std::endl
+             << "   rmodel -query=myquery -index=myindex -documents=10 -maxGrams=2" << std::endl
+             << "     myquery: a valid Indri query (be sure to use quotes around it if there are spaces in it)" << std::endl
+             << "     myindex: a valid Indri index" << std::endl
+             << "     documents: the number of documents to use to build the relevance model" << std::endl
+             << "     maxGrams (optional): maximum length (in words) of phrases to be added to the model, default is 1 (unigram)" << std::endl;
+   exit(-1);
+  }
+}
+
 // open repository
 // for each query
 //    run query
@@ -88,6 +100,7 @@ int main( int argc, char** argv ) {
   try {
     indri::api::Parameters& param = indri::api::Parameters::instance();
     param.loadCommandLine( argc, argv );
+    usage( param );
 
     indri::api::QueryEnvironment environment;
     open_indexes( environment, param );
