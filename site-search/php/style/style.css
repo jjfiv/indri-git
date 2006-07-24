@@ -40,16 +40,15 @@
   /* indri image */
 /*  background-image: url(http://indri6.cs.umass.edu/~dfisher/cs-crawl-linkz/images/indri.png);
 */
-/*
+
   background-image: url(../images/indri.png);
-  background-position:0%;
-*/
-
-/* lemur image */
-
-  background-image: url(../images/lemur_logo_32.gif);
   background-position:100%;
 
+/* lemur image */
+/*
+  background-image: url(../images/lemur_logo_32.gif);
+  background-position:100%;
+*/
   text-align: center;
   background-repeat: no-repeat;
 
@@ -159,11 +158,25 @@ a:hover {
   font-size: 1em;
 }
 
+#searchboxquery {
+  margin-top: 14px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+#searchbox {
+  border: 1px solid #36c;
+  background-color: rgb( 229, 236, 249);
+}
+
 #indentedresult {
   padding-left: 40px;
 }
 
 #resultbanner {
+  border: 1px solid #36c;
   background-color: rgb( 229, 236, 249);
 }
 #indentedresult a {
