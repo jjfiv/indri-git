@@ -419,6 +419,9 @@
 				RelativePath=".\ShrinkageBeliefNode.cpp">
 			</File>
 			<File
+				RelativePath=".\SnippetBuilder.cpp">
+			</File>
+			<File
 				RelativePath=".\StemmerFactory.cpp">
 			</File>
 			<File
@@ -1055,6 +1058,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\SmoothingAnnotatorWalker.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\SnippetBuilder.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\StemmerFactory.hpp">
