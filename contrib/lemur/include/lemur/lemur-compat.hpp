@@ -165,14 +165,18 @@ inline int strncasecmp( const char* one, const char* two, int length ) {
 #endif
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__SVR4)
 inline const char* strcasestr( const char* one, const char* two ) {
   const char* t = two;
   char oneLower = tolower(*one);
 
   for( ; *t; t++ ) {
     if (tolower(*t) == oneLower) {
+#ifdef WIN32
       int result = ::_strnicmp( one, t, strlen(one) );
+#else
+      int result = strncasecmp( one, t, strlen(one) );
+#endif
 
       if( result == 0 )
         return t;
