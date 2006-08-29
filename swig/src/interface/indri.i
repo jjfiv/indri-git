@@ -200,8 +200,9 @@ namespace indri{
     setEx(QueryEnvironment::documents);
     setEx(QueryEnvironment::documentsdocids);
     setEx(QueryEnvironment::documentMetadata)
-      setEx(QueryEnvironment::documentMetadatadocids);
-
+    setEx(QueryEnvironment::documentMetadatadocids);
+    setEx(QueryEnvironment::documentIDsFromMetadata);
+    
     class QueryEnvironment {
     public:
       ~QueryEnvironment();
@@ -226,6 +227,8 @@ namespace indri{
 
       std::vector<std::string> documentMetadatadocids( const std::vector<lemur::api::DOCID_T>& documentIDs, const std::string& attributeName );
       std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
+
+      std::vector<lemur::api::DOCID_T> documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue ) ;
 
       INT64 termCount();
       INT64 onetermCount( const std::string& term );

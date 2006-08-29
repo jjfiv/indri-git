@@ -1181,6 +1181,8 @@ static zend_function_entry QueryEnvironment_functions[] = {
  ZEND_NAMED_FE(documentmetadatadocids,_wrap_QueryEnvironment_documentMetadatadocids, NULL)
  ZEND_NAMED_FE(queryenvironment_documentmetadata,_wrap_QueryEnvironment_documentMetadata, NULL)
  ZEND_NAMED_FE(documentmetadata,_wrap_QueryEnvironment_documentMetadata, NULL)
+ ZEND_NAMED_FE(queryenvironment_documentidsfrommetadata,_wrap_QueryEnvironment_documentIDsFromMetadata, NULL)
+ ZEND_NAMED_FE(documentidsfrommetadata,_wrap_QueryEnvironment_documentIDsFromMetadata, NULL)
  ZEND_NAMED_FE(queryenvironment_termcount,_wrap_QueryEnvironment_termCount, NULL)
  ZEND_NAMED_FE(termcount,_wrap_QueryEnvironment_termCount, NULL)
  ZEND_NAMED_FE(queryenvironment_onetermcount,_wrap_QueryEnvironment_onetermCount, NULL)
@@ -3186,6 +3188,82 @@ fail:
   {
     // freearg typemap
     delete arg2;
+  }
+  zend_error(ErrorCode(),ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentIDsFromMetadata) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::vector<std::string > *arg3 = 0 ;
+  SwigValueWrapper<std::vector<lemur::api::DOCID_T > > result;
+  std::string temp2 ;
+  zval **args[2];
+  
+  SWIG_ResetError();
+  /* This function uses a this_ptr*/
+  if(((ZEND_NUM_ARGS() )!= 2) || (zend_get_parameters_array_ex(2, args)!= SUCCESS)) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    /* typemap(in) SWIGTYPE * */
+    if(SWIG_ConvertPtr(*&this_ptr, (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_documentIDsFromMetadata. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  {
+    convert_to_string_ex(args[0]);
+    temp2 = std::string(Z_STRVAL_PP(args[0]),Z_STRLEN_PP(args[0]));
+    arg2 = &temp2;
+  }
+  {
+    int iStatus;
+    ulong iIndex;
+    char *sIndex=NULL;
+    zval **Data;
+    arg3=new std::vector< std::string >;
+    convert_to_array(*args[1]);
+    zend_hash_internal_pointer_reset((*args[1])->value.ht);
+    while((iStatus=zend_hash_get_current_key((*args[1])->value.ht,&sIndex,&iIndex,1))!=HASH_KEY_NON_EXISTANT) {
+      zend_hash_get_current_data((*args[1])->value.ht,(void **) &Data);
+      convert_to_string(*Data);
+      arg3->push_back((*Data)->value.str.val);
+      zend_hash_move_forward((*args[1])->value.ht);  
+      if (sIndex) {
+        efree(sIndex);
+        sIndex=NULL;
+      }
+    }
+    zend_hash_internal_pointer_reset((*args[1])->value.ht);
+  }
+  {
+    try {
+      result = (arg1)->documentIDsFromMetadata((std::string const &)*arg2,(std::vector<std::string > const &)*arg3);
+    } catch( lemur::api::Exception& e ) {
+      //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+      // get a warning message rather than abort the script.
+      //      zend_error(E_WARNING, e.what().c_str());
+      RETURN_NULL() ;
+    }
+  }
+  {
+    std::vector< lemur::api::DOCID_T >::size_type iIndex;
+    array_init(return_value);
+    std::vector< lemur::api::DOCID_T > *resultobj = &result; 
+    for (iIndex=0;iIndex<resultobj->size();iIndex++) 
+    add_next_index_long(return_value,(*resultobj)[iIndex]);
+  }
+  {
+    // freearg typemap
+    delete arg3;
+  }
+  return;
+fail:
+  {
+    // freearg typemap
+    delete arg3;
   }
   zend_error(ErrorCode(),ErrorMsg());
 }
