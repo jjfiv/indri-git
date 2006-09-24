@@ -61,3 +61,5 @@ endif
 	$(MAKE) install -C doc
 	$(MAKE) -C site-search install
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)
+
+test:
