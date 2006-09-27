@@ -287,7 +287,7 @@ private:
       }
     } else {
       // We only want document names, so the documentMetadata call may be faster
-      documentNames = _environment.documentMetadata( _results, "docno" );
+      documentNames = _environment.documentMetadata( resultSubset, "docno" );
     }
     
     // Print results
