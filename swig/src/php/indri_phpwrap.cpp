@@ -1203,6 +1203,8 @@ static zend_function_entry QueryEnvironment_functions[] = {
  ZEND_NAMED_FE(expressioncount,_wrap_QueryEnvironment_expressionCount, NULL)
  ZEND_NAMED_FE(queryenvironment_expressionlist,_wrap_QueryEnvironment_expressionList, NULL)
  ZEND_NAMED_FE(expressionlist,_wrap_QueryEnvironment_expressionList, NULL)
+ ZEND_NAMED_FE(queryenvironment_documentlength,_wrap_QueryEnvironment_documentLength, NULL)
+ ZEND_NAMED_FE(documentlength,_wrap_QueryEnvironment_documentLength, NULL)
  ZEND_NAMED_FE(new_queryenvironment,_wrap_new_QueryEnvironment, NULL)
  ZEND_NAMED_FE(queryenvironment,_wrap_new_QueryEnvironment, NULL)
    { NULL, NULL, NULL}
@@ -3833,6 +3835,40 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionList) {
   
   ErrorCode() = E_ERROR;
   ErrorMsg() = "No matching function for overloaded 'QueryEnvironment_expressionList'";
+  zend_error(ErrorCode(),ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentLength) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  int arg2 ;
+  int result;
+  zval **args[1];
+  
+  SWIG_ResetError();
+  /* This function uses a this_ptr*/
+  if(((ZEND_NUM_ARGS() )!= 1) || (zend_get_parameters_array_ex(1, args)!= SUCCESS)) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    /* typemap(in) SWIGTYPE * */
+    if(SWIG_ConvertPtr(*&this_ptr, (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_documentLength. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  {
+    /*@SWIG:CONVERT_INT_IN@*/
+    convert_to_long_ex(args[0]);
+    arg2 = (int) Z_LVAL_PP(args[0]);
+    /*@SWIG@*/;
+  }
+  result = (int)(arg1)->documentLength(arg2);
+  {
+    ZVAL_LONG(return_value,result);
+  }
+  return;
+fail:
   zend_error(ErrorCode(),ErrorMsg());
 }
 
