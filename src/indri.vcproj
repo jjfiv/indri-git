@@ -1168,6 +1168,9 @@
 				RelativePath="..\include\indri\UnparsedDocument.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\URLTextAnnotator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\UTF8CaseNormalizationTransformation.hpp">
 			</File>
 			<File
