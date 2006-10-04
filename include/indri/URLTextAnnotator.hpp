@@ -22,6 +22,7 @@
 #ifndef INDRI_URLTEXTANNOTATOR_HPP
 #define INDRI_URLTEXTANNOTATOR_HPP
 
+#include <algorithm>
 #include "indri/Buffer.hpp"
 #include "indri/Transformation.hpp"
 #include "indri/TagExtent.hpp"
