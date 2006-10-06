@@ -20,7 +20,7 @@
       jenv->SetDoubleField(result, parseTimeField, results.parseTime );
       jenv->SetDoubleField(result, executeTimeField, results.executeTime );
       jenv->SetDoubleField(result, documentsTimeField, results.documentsTime );
-      jenv->SetDoubleField(result, estMatchesField, results.estimatedMatches );
+      jenv->SetIntField(result, estMatchesField, results.estimatedMatches );
 
       jclass qrClazz = jenv->FindClass("lemurproject/indri/QueryResult");
       jmethodID qrConstructor = jenv->GetMethodID(qrClazz, "<init>", "()V" );

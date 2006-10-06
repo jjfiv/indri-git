@@ -21,7 +21,6 @@
   jobjectArray formulators = (jobjectArray) jenv->GetObjectField($input, formulatorsField);
 
   jobjectArray metadata = (jobjectArray) jenv->GetObjectField($input, metadataField);
-  std::cerr << formulators  << ":" << metadata << std::endl;
   jint resultsRequested = jenv->GetIntField($input, resultsRequestedField);
   jint startNum = jenv->GetIntField($input, startNumField);
   jint options = jenv->GetIntField($input, optionsField);

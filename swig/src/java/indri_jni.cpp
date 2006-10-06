@@ -1015,7 +1015,7 @@ SWIGINTERN void SWIG_JavaException(JNIEnv *jenv, int code, const char *msg) {
       jenv->SetDoubleField(result, parseTimeField, results.parseTime );
       jenv->SetDoubleField(result, executeTimeField, results.executeTime );
       jenv->SetDoubleField(result, documentsTimeField, results.documentsTime );
-      jenv->SetDoubleField(result, estMatchesField, results.estimatedMatches );
+      jenv->SetIntField(result, estMatchesField, results.estimatedMatches );
 
       jclass qrClazz = jenv->FindClass("lemurproject/indri/QueryResult");
       jmethodID qrConstructor = jenv->GetMethodID(qrClazz, "<init>", "()V" );
@@ -1839,7 +1839,6 @@ JNIEXPORT jobject JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1run
     jobjectArray formulators = (jobjectArray) jenv->GetObjectField(jarg2, formulatorsField);
     
     jobjectArray metadata = (jobjectArray) jenv->GetObjectField(jarg2, metadataField);
-    std::cerr << formulators  << ":" << metadata << std::endl;
     jint resultsRequested = jenv->GetIntField(jarg2, resultsRequestedField);
     jint startNum = jenv->GetIntField(jarg2, startNumField);
     jint options = jenv->GetIntField(jarg2, optionsField);
