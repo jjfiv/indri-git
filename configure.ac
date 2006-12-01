@@ -1,5 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([Indri],[2.3],[indri-info@ciir.cs.umass.edu])
+AC_INIT([Indri],[2.4],[indri-info@ciir.cs.umass.edu])
+CFLAGS=${CFLAGS:-"-g -O3"}
+CXXFLAGS=${CXXFLAGS:-"-g -O3"}
 AC_CONFIG_SRCDIR(indri.sln)
 AC_CONFIG_FILES(MakeDefns Makefile.app)
 AC_CONFIG_FILES([site-search/build.param site-search/crawl-index site-search/seeds.txt site-search/excluded_hosts], [test -f site-search/crawl-index && chmod +x site-search/crawl-index])
