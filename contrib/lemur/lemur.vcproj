@@ -102,6 +102,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\src\compress.c">
+			</File>
+			<File
 				RelativePath=".\src\fileio.c">
 			</File>
 			<File
@@ -141,6 +144,12 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\InvFPTypes.hpp">
+			</File>
+			<File
+				RelativePath=".\include\lemur\integer_types.h">
+			</File>
+			<File
+				RelativePath=".\include\lemur\key_consts.h">
 			</File>
 			<File
 				RelativePath=".\include\lemur\keydef.h">
