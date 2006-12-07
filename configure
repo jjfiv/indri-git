@@ -5386,7 +5386,7 @@ NEED_ANTLR=1
 # Check whether --with-antlr or --without-antlr was given.
 if test "${with_antlr+set}" = set; then
   withval="$with_antlr"
-  CPPFLAGS="-I$withval/include $CPPFLAGS"; LDFLAGS="-L$withval/lib $LDFLAGS"; LIBS="-lantlr $LIBS" NEED_ANTLR=0
+  CPPFLAGS="-I$withval/include $CPPFLAGS"; LDFLAGS="-L$withval/lib $LDFLAGS"; LIBS="-lantlr $LIBS"; NEED_ANTLR=0
 fi;
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6016,7 +6016,7 @@ echo "${ECHO_T}$ac_cv_header_antlr_ANTLRException_hpp" >&6
 
 fi
 if test $ac_cv_header_antlr_ANTLRException_hpp = yes; then
-  NEED_ANTLR=0
+  LIBS="-lantlr $LIBS"; NEED_ANTLR=0
 fi
 
 

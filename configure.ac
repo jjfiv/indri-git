@@ -310,9 +310,9 @@ fi
 dnl check for antlr
 NEED_ANTLR=1
 AC_ARG_WITH(antlr, [  --with-antlr=path       Set location of antlr install],
-                   [CPPFLAGS="-I$withval/include $CPPFLAGS"; LDFLAGS="-L$withval/lib $LDFLAGS"; LIBS="-lantlr $LIBS" NEED_ANTLR=0])
+                   [CPPFLAGS="-I$withval/include $CPPFLAGS"; LDFLAGS="-L$withval/lib $LDFLAGS"; LIBS="-lantlr $LIBS"; NEED_ANTLR=0])
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADER([antlr/ANTLRException.hpp], [NEED_ANTLR=0])
+AC_CHECK_HEADER([antlr/ANTLRException.hpp], [LIBS="-lantlr $LIBS"; NEED_ANTLR=0])
 AC_LANG_POP()
 AC_SUBST(NEED_ANTLR)
 AC_SUBST(SWIG)
