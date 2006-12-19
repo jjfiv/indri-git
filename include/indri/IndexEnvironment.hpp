@@ -103,6 +103,8 @@ namespace indri
       ParsedDocument* _applyAnnotators( std::vector<indri::parse::Transformation*>& annotators, 
                                         ParsedDocument* parsed ); 
 
+      int _maxWildcardTerms;
+
     public:
       friend class QueryEnvironment;
 
@@ -240,11 +242,13 @@ namespace indri
       /// @param fileClass the file class to add (eg trecweb).
       /// @param metadata the metadata pairs associated with the string.
       int addString( const std::string& documentString, 
-                      const std::string& fileClass, 
-                      const std::vector<indri::parse::MetadataPair>& metadata );
+                     const std::string& fileClass, 
+                     const std::vector<indri::parse::MetadataPair>& metadata );
 
-int addString( const std::string& documentString, const std::string&
-               fileClass, const std::vector<indri::parse::MetadataPair>& metadata, const std::vector<indri::parse::TagExtent *> &tags );
+      int addString( const std::string& documentString, 
+                     const std::string& fileClass, 
+                     const std::vector<indri::parse::MetadataPair>& metadata, 
+                     const std::vector<indri::parse::TagExtent *> &tags );
       
       /// add an already parsed document to the index and repository
       /// @param document the document to add
@@ -261,6 +265,9 @@ int addString( const std::string& documentString, const std::string&
       /// which is the sum of the documents indexed and the documents
       /// skipped.
       int documentsSeen();
+
+      void setMaxWildcardTerms(int maxTerms) { _maxWildcardTerms=maxTerms; }
+      int  getMaxWildcardTerms(int maxTerms) { return _maxWildcardTerms; }
     };
   }
 }

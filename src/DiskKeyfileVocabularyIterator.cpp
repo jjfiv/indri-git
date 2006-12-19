@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 //
 // DiskKeyfileVocabularyIterator
@@ -74,6 +74,7 @@ void indri::index::DiskKeyfileVocabularyIterator::startIteration() {
 
   _bulkIterator->startIteration();
   _readData();
+  _justStartedIteration=true;
 }
 
 //
@@ -81,23 +82,28 @@ void indri::index::DiskKeyfileVocabularyIterator::startIteration() {
 //
 
 bool indri::index::DiskKeyfileVocabularyIterator::_readData() {
+
   if( _bulkIterator->finished() ) {
     _release();
     return false;
   }
 
   int actual;
-  UINT32 key;
+  int actualKeyLen;
 
-  _bulkIterator->get( key, _compressedData.front(), _compressedData.size(), actual );
+  //_bulkIterator->get( _termString, _compressedData.front(), _compressedData.size(), actual );
+        
+  memset(_termString, 0, 1024);
+  _bulkIterator->get( _termString, 1024, actualKeyLen, _compressedData.front(), _compressedData.size(), actual );
   indri::utility::RVLDecompressStream stream( _compressedData.front(), actual );
 
   _diskTermData = ::disktermdata_decompress( stream,
-                                            _decompressedData.front(),
-                                            _fieldCount,
-                                            DiskTermData::WithOffsets |
-                                            DiskTermData::WithString );
-  _diskTermData->termID = _baseID + key;
+                                             _decompressedData.front(),
+                                             _fieldCount,
+                                             DiskTermData::WithOffsets |
+                                             DiskTermData::WithTermID );
+
+  _diskTermData->termData->term = _termString;
   return true;
 }
 
@@ -107,7 +113,73 @@ bool indri::index::DiskKeyfileVocabularyIterator::_readData() {
 
 bool indri::index::DiskKeyfileVocabularyIterator::nextEntry() {
   _bulkIterator->nextEntry();
+  _justStartedIteration=false;
+
   return _readData();
+}
+
+//
+// nextEntry (const char *)
+//
+
+bool indri::index::DiskKeyfileVocabularyIterator::nextEntry(const char *skipTo) {
+
+  assert(skipTo!=NULL);
+
+  if (_justStartedIteration) {
+    // position the iterator at the first
+    // item that matches...
+    _justStartedIteration=false;
+
+    // get an iterator to the first term here
+    indri::file::BulkTreeIterator *findIterator=_bulkTree.findFirst(skipTo);
+    if (!findIterator) return false;
+
+    // replace the current iterator with the new one
+    if (_bulkIterator) delete _bulkIterator;
+    _bulkIterator=findIterator;
+    if (!_readData()) return false;
+
+  } else {
+    // get the next item...
+    // assume all items w/ the same prefix are clumped together
+    _bulkIterator->nextEntry();
+    if (!_readData()) return false;
+  }
+
+  // make sure we're not at the end
+  if (_bulkIterator->finished()) {
+    return false;
+  }
+
+  // get the current entry
+  indri::index::DiskTermData* thisEntry=currentEntry();
+  if (!thisEntry) return false;
+
+  // make sure we're still in the patten
+  if (strstr(thisEntry->termData->term, skipTo)==thisEntry->termData->term) {
+    return true;
+  }
+
+  // just to be certain - check the next entry...
+  // read the next item...
+  _bulkIterator->nextEntry();
+  if (!_readData()) return false;
+        
+  // ensure we're not finished
+  if (_bulkIterator->finished()) return false;
+
+  // get the next entry...
+  thisEntry=currentEntry();
+  if (!thisEntry) return false;
+
+  // check it.
+  if (strstr(thisEntry->termData->term, skipTo)==thisEntry->termData->term) {
+    return true;
+  }
+
+  // ok - I'm satisfied that we're done...
+  return false;
 }
 
 //
@@ -128,4 +200,3 @@ indri::index::DiskTermData* indri::index::DiskKeyfileVocabularyIterator::current
 bool indri::index::DiskKeyfileVocabularyIterator::finished() {
   return _bulkIterator->finished();
 }
-

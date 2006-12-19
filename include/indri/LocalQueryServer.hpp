@@ -43,6 +43,8 @@ namespace indri
       indri::collection::Repository& _repository;
       indri::lang::ListCache _cache;
 
+      int _maxWildcardMatchesPerTerm;
+
       indri::index::Index* _indexWithDocument( indri::collection::Repository::index_state& state, int documentID );
 
     public:
@@ -83,6 +85,13 @@ namespace indri
 
       // vector
       QueryServerVectorsResponse* documentVectors( const std::vector<int>& documentIDs );
+
+      ///
+      /// \brief sets the maximum number of terms to be generated for a wildcard
+      /// term. If the synonym list is greater than this, an exception will be thrown
+      /// @param maxTerms the maximum number of terms
+      void setMaxWildcardTerms(int maxTerms);
+
     };
   }
 }

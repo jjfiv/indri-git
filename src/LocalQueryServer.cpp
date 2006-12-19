@@ -136,7 +136,7 @@ namespace indri
 //
 
 indri::server::LocalQueryServer::LocalQueryServer( indri::collection::Repository& repository ) :
-  _repository(repository)
+  _repository(repository), _maxWildcardMatchesPerTerm(indri::index::DEFAULT_MAX_WILDCARD_TERMS)
 {
   // if supplied and false, turn off optimization for all queries.
   _optimizeParameter = indri::api::Parameters::instance().get( "optimize", 1 );
@@ -385,9 +385,10 @@ indri::server::QueryServerResponse* indri::server::LocalQueryServer::runQuery( s
     networkRoots = contexts.roots();
   }
   /*
-  indri::lang::TreePrinterWalker printer;
-  indri::lang::ApplyWalker<indri::lang::TreePrinterWalker> printTree(networkRoots, &printer);
+    indri::lang::TreePrinterWalker printer;
+    indri::lang::ApplyWalker<indri::lang::TreePrinterWalker> printTree(networkRoots, &printer);
   */
+
   // build an inference network
   indri::infnet::InferenceNetworkBuilder builder( _repository, _cache, resultsRequested );
   indri::lang::ApplyWalker<indri::infnet::InferenceNetworkBuilder> buildWalker( networkRoots, &builder );
@@ -464,4 +465,11 @@ indri::server::QueryServerMetadataResponse* indri::server::LocalQueryServer::pat
   }
 
   return new indri::server::LocalQueryServerMetadataResponse( actual );
+}
+
+//
+// setMaxWildcardTerms
+//
+void indri::server::LocalQueryServer::setMaxWildcardTerms(int maxTerms) {
+  _maxWildcardMatchesPerTerm = maxTerms;
 }

@@ -191,6 +191,7 @@ void indri::collection::Repository::_copyParameters( indri::api::Parameters& opt
     _parameters.set( "stemmer", "" );
     _parameters["stemmer"] = options["stemmer"];
   }
+
 }
 
 //
@@ -962,7 +963,9 @@ void indri::collection::Repository::_merge( index_state& state ) {
   if( state->size() <= 2 || 
       ( _mergeMemory( *state ) < memoryBound && 
         _mergeFiles(*state) < MERGE_FILE_LIMIT ) ) {
+                                        
     indri::index::Index* index = _mergeStage( state );
+
     result->push_back( index );
   } else {
     // divide and conquer

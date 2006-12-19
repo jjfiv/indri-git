@@ -525,7 +525,8 @@ indri::index::VocabularyIterator* indri::index::DiskIndex::frequentVocabularyIte
 //
 
 indri::index::VocabularyIterator* indri::index::DiskIndex::infrequentVocabularyIterator() {
-  return new indri::index::DiskKeyfileVocabularyIterator( _infrequentTermBase, _infrequentIdToTerm, _lock, _fieldData.size() );
+  // mhoy - modified 11/06/2006 to return the term->ID btree instead of the ID->term one
+  return new indri::index::DiskKeyfileVocabularyIterator( _infrequentTermBase, _infrequentStringToTerm, _lock, _fieldData.size() );
 }
 
 //

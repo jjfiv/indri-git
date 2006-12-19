@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
-*/
+ */
 
 
 //
@@ -39,6 +39,7 @@ namespace indri {
 
       void startIteration();
       bool nextEntry();
+      bool nextEntry(const char *skipTo);
       DiskTermData* currentEntry();
       bool finished();
     };

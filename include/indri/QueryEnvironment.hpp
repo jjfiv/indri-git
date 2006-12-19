@@ -19,6 +19,10 @@
 #ifndef INDRI_QUERYENVIRONMENT_HPP
 #define INDRI_QUERYENVIRONMENT_HPP
 
+// default maximum # of synonyms per wildcard found
+// throws error if breached. (mhoy - 10/23/06)
+#define MAX_SYN_LIST_PER_WILDCARD 100
+
 #include <map>
 #include "indri/ScoredExtentResult.hpp"
 #include "indri/QueryServer.hpp"
@@ -257,6 +261,8 @@ namespace indri
       /// @param documentIDs the vector of document ids.
       /// @return DocumentVector pointer for the specified document.
       std::vector<DocumentVector*> documentVectors( const std::vector<lemur::api::DOCID_T>& documentIDs );
+
+      void setMaxWildcardTerms(int maxTerms);
     };
   }
 }
