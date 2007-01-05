@@ -127,6 +127,8 @@ termOp		:=	( "#od" POS_INTEGER | "#od" | '#' POS_INTEGER  ) '(' ( unscoredTerm )
 		|	"#base64" '(' ( "\t" | " " )* ( BASE64_CHAR )+ ( "\t" | " " )* ')'
 		|	"#base64quote" '(' ( '\t' | ' ' )* ( BASE64_CHAR )+ ( '\t' | ' ' )* ')'
 		|	'"' text '"'
+                | "#wildcard" '(' TERM ')'
+                | TEXT_TERM '*'
 		|	POS_INTEGER
 		|	POS_FLOAT
 		|	TERM 
@@ -225,6 +227,30 @@ operator treats the terms as synonyms, but allows weights to be assigned to each
 
 NOTE: The arguments given to this operator can only be term/proximity expressions.
 <p>
+  <h4>Wildcard Operations:</h4>
+  <p>
+  As of version 2.4, the Indri Query Language now supports wildcard terms in the form
+  of suffix-only wildcard operations. To specify a wildcard, use the <tt>#wildcard</tt>
+  operator or place an asterisk (*) at the end of term. Note that only suffix-based
+  wildcards are available at this time - that is, a wildcard term must have at least one
+  character at the beginning and the wildcard operator (*) must occur at the end.
+  </p>
+  <p>
+  Since the wildcard operator will create a synonym list of available terms, it is necessary
+  for performance reasons to limit the number of terms generated for any given wildcard operator.
+  The default maximum number of synonyms generated is 100 for every wildcard term. This can be
+  overridden in the query parameters by the use of the <tt>&lt;maxWildcardTerms&gt;</tt> parameter.
+  If the limit is breached, an exception will be thrown.
+  </p>
+
+  <p>
+  <i>Examples:</i>
+  <ul>
+    <li><tt>#wildcard( lem ) </tt> - would match &quot;lemur&quot;, &quot;lemming&quot;, etc.</li>
+    <li><tt>lem*</tt> - would also match &quot;lemur&quot;, &quot;lemming&quot;, etc.</li>
+    <li><tt>le*ur</tt> - <i>will actually generate two tokens - &quot;le*&quot; and &quot;ur&quot;.</i> You should ensure that you use only suffix-based wildcards.</li>
+  </ul>
+  </p>
 
 <h3>"Any" operator:</h3>
 <ul>
