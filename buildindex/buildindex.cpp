@@ -54,6 +54,7 @@ line. The known classes are:
 <li>html -- web page data.
 <li>trecweb -- TREC web format, eg terabyte track.
 <li>trectext -- TREC format, eg TREC-3 onward.
+<li>trecalt -- TREC format, eg TREC-3 onward, with only the TEXT field included.
 <li>doc -- Microsoft Word format (windows platform only).
 <li>ppt -- Microsoft Powerpoint format (windows platform only).
 <li>pdf --  Adobe PDF format.
@@ -339,6 +340,7 @@ line. The known classes are:
 <li>html -- web page data.
 <li>trecweb -- TREC web format, eg terabyte track.
 <li>trectext -- TREC format, eg TREC-3 onward.
+<li>trecalt -- TREC format, eg TREC-3 onward, with only the TEXT field included.
 <li>doc -- Microsoft Word format (windows platform only).
 <li>ppt -- Microsoft Powerpoint format (windows platform only).
 <li>pdf --  Adobe PDF format.
