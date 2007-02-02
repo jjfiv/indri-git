@@ -446,22 +446,23 @@ smoothing conditions).
 <h3>Pseudo-Relevance Feedback / Query Expansion</h3>
 Both pseudo-relevance feedback and query expansion methods typically begin with some intial query, do some
 processing, and then return a list of expansion terms. The original query is then augmented with the
-expansion terms and rerun. Given the original query "hubble telescope repairs" and the expansion terms
-"universe", "system", "mission", "search", "galaxies" we can then
-construct the following Indri query:
+expansion terms and rerun. 
+
+Indri's pseudo-relevance feedback mechanism is an adaptation of
+Lavrenko's relevance models.
 
 <br><br>
-<div class="example">
-<pre>
-#weight( 0.75 #combine ( hubble telescope achievements )
-	 0.25 #combine ( universe system mission search galaxies ) )
-</pre>
-</div>
-
-<br>
-This is how Indri's built-in query expansion method formulates expanded queries. We see that the query is
-made up of two parts: the original query and the expanded query. The two parts are then combined via a
-#weight to appropriately weight the original and expanded parts of the query.
+The following is a basic summary of the process:
+<ol>
+<li>Retrieve documents using original query, which results in a ranked
+list ordered by P( I | D )
+<li>Compute relevance model, P(r | I), over representation concepts
+(features) using top <i>fbDocs</i> documents from original ranked list
+<li>Sort representation concepts by P(r | I) and keep top <i>fbTerms</i>
+<li>Construct query Q_RM as: <pre>#weight( P(r_1 | I) r_1 ... P(r_fbTerms | I ) r_fbTerms )</pre>
+<li>Construct expanded query as: <pre>#weight( fbOrigWeight Q 1-fbOrigWeight Q_RM )</pre>
+<li>Retrieve documents based on expanded query
+</ol>
 
 <h3>Named Page Finding / Homepage Finding</h3>
 Named page finding and homepage finding are examples of known-item search. That is, the user knows some
