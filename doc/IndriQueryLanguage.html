@@ -227,7 +227,7 @@ operator treats the terms as synonyms, but allows weights to be assigned to each
 
 NOTE: The arguments given to this operator can only be term/proximity expressions.
 <p>
-  <h3 id="wildcard">Wildcard Operations:</a></h3>
+  <h3 id="wildcard">Wildcard Operations:</h3>
   <p>
   As of version 2.4, the Indri Query Language now supports wildcard terms in the form
   of suffix-only wildcard operations. To specify a wildcard, use the <tt>#wildcard</tt>
@@ -377,34 +377,40 @@ are very useful when used in combination with the filter operators.
 <ul>
 <li>#dateafter( D ) -- matches numeric "date" extents if date is after D
 <li>#datebefore( D ) -- matches numeric "date" extents if date is before D
-<li>#datebetween( D_low, D_high ) -- matches numeric "date" extents if D_low &lt; date &lt; D_high
+<li>#datebetween( D_low, D_high ) -- matches numeric "date" extents if D_low &lt;= date &lt;= D_high
 <li>#dateequals( D ) -- matches numeric "date" extents if date == D
 </ul>
 
 <i>Acceptable date formats:</i>
 <ul>
-<li>11 january 2004
-<li>11-JAN-04
-<li>11-JAN-2004
 <li>January 11 2004
-<li>01/11/04 (MM/DD/YY)
+<li>11 january 2004
+<li>11-JAN-2004
+<li>11-01-2004 (DD-MM-YYYY)
 <li>01/11/2004 (MM/DD/YYYY)
 </ul>
 
+<p>Note that in the first three forms, the month name can be an
+abbreviation.
+<p>
 <i>Examples:</i>
 <ul>
-<li>#filreq(#less(READINGLEVEL 10) george washington) -- if each document in a collection contained a
-numeric tag that specified the reading level of the document, then this query will only retrieve
-documents that have a reading level below grade 10 and documents will be ranked according to the
-query "george washington".
-<li>#combine( european history #date:between( 01/01/1800, 01/01/1900 ) ) -- such a query may be
-constructed to find information about 19th century european history, as this query will find
-pages that discuss "european history" and contain 19th century dates.
+<li>#filreq(#less(READINGLEVEL 10) george washington) -- if each
+document in a collection contained a numeric tag that specified the
+reading level of the document, then this query will only retrieve 
+documents that have a reading level below grade 10 and documents will be
+ranked according to the query "george washington".
+<li>#filreq( #date:between( 01/01/1800, 12/31/1899 ) #combine( european
+history ) ) -- such a query may be
+constructed to find information about 19th century european history, as
+this query will find pages that discuss "european history" and contain
+19th century dates. 
 </ul>
 
-NOTE: The general numeric operators only work on indexed numeric fields, whereas the date
-operators are only applicable to a specially indexed numeric field named "date". See the
-indexing documentation for more on numeric fields.
+NOTE: The general numeric operators only work on indexed numeric fields,
+whereas the date operators are only applicable to a specially indexed
+numeric field named "date" processed with the DateFieldAnnotator. See
+the indexing documentation for more on numeric fields.
 
 <h2 id="prior">DOCUMENT PRIORS</h2>
 
@@ -484,7 +490,7 @@ The scores for the two terms are then #combined together.
 
 <br><br>
 <i>Written by: Don Metzler</i><br>
-<i>Last updated: Sun Jun 12 01:07:17 EDT 2005</i>
+<i>Last updated: Thu Mar 22 09:30:50 EDT 2007</i>
 
 </body>
 </html>
