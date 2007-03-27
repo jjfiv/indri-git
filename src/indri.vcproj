@@ -586,6 +586,9 @@
 				RelativePath="..\include\indri\DagCopier.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\DateFieldAnnotator.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\DateParse.hpp">
 			</File>
 			<File
