@@ -118,7 +118,7 @@ std::vector<indri::parse::Transformation*> indri::api::IndexEnvironment::_create
 
 indri::api::ParsedDocument* indri::api::IndexEnvironment::_applyAnnotators( std::vector<indri::parse::Transformation*>& annotators,
                                                                             indri::api::ParsedDocument* parsed ) {
-  for( unsigned int i=0; i<annotators.size(); i++ ) {
+  for( size_t i=0; i<annotators.size(); i++ ) {
     if( annotators[i] ) { 
       parsed = annotators[i]->transform( parsed ); 
     }

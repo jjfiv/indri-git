@@ -31,7 +31,7 @@ void indri::parse::HTMLParser::initialize( TokenizedDocument* tokenized, indri::
   bool have_URL = false;
 
   // find the DOCHDR tag, so we can yank out the URL
-  for( unsigned int i=0; i<tokenized->metadata.size(); i++ ) {
+  for( size_t i=0; i<tokenized->metadata.size(); i++ ) {
     if( !strcmp(tokenized->metadata[i].key, "url") ) have_URL = true;
     if( !strcmp(tokenized->metadata[i].key, "dochdr") ) {
       char* beginURL = (char*) tokenized->metadata[i].value;
@@ -142,9 +142,6 @@ void indri::parse::HTMLParser::handleTag( TagEvent* te ) {
             char* write_location = _urlBuffer.write( len + 1 );
             memcpy( write_location, tmp_buf, len + 1 );
             _document.terms.push_back( write_location );
-
-//          std::cout << "Token [" << write_location << "] <" 
-//                    << (*i).begin << ", " << (*i).end << ">" << std::endl;
 
             // decrement number of tokens removed from the stream 
             // so that future field positions line up correctly.
@@ -367,7 +364,7 @@ bool indri::parse::HTMLParser::normalizeURL(char *s) {
 
     // some ".." dir was found, so we're going to clean it out
     if( unusableFound ) {
-      for( int i=0; i<(int)usable.size(); i++ ) {
+      for( size_t i=0; i<usable.size(); i++ ) {
         if( !usable[i] ) {
           // search back to find something to mark false
           // to account for this '..'
@@ -388,7 +385,7 @@ bool indri::parse::HTMLParser::normalizeURL(char *s) {
       strncpy(tmp_buf, normurl, dotCleanStart);
       tmp_buf[dotCleanStart] = 0;
 
-      for( int i=0; i<(int)usable.size(); i++ ) {
+      for( size_t i=0; i<usable.size(); i++ ) {
         if( usable[i] ) {
           if( slashes.size() == i+1 )
             strcat( tmp_buf, normurl + slashes[i] );

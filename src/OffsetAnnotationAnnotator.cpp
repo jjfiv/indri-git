@@ -424,16 +424,6 @@ indri::parse::OffsetAnnotationAnnotator::ReadAnnotationTag indri::parse::OffsetA
   int fieldCount = 0;
   int fieldOffset = 0;
 
-  /*
-  char* docno = NULL;
-  char* name = NULL;
-  char* s_value = NULL;
-  int type = 0;  // TAG = 1, ATTRIBUTE = 2
-  UINT64 id = 0;
-  UINT64 i_value = 0;
-  UINT64 parent = 0;
-  */
-
   int len = 0;
 
   // set the return tag default values

@@ -21,7 +21,7 @@ void indri::api::SnippetBuilder::_getRawNodes( std::vector<std::string>& nodeNam
   if( node->type == "IndexTerm" || node->type == "OrderedWindowNode" ) {
     nodeNames.push_back( node->name );
   } else {
-    for( int i=0; i<node->children.size(); i++ ) {
+    for( size_t i=0; i<node->children.size(); i++ ) {
       _getRawNodes( nodeNames, node->children[i] );
     }
   }
@@ -56,7 +56,7 @@ std::vector< std::pair<indri::index::Extent, int> > indri::api::SnippetBuilder::
                                                             const std::vector<std::string>& nodeNames ) {
   std::vector< std::pair<indri::index::Extent, int> > extents;
   
-  for( int i=0; i<nodeNames.size(); i++ ) {
+  for( size_t i=0; i<nodeNames.size(); i++ ) {
     std::map< std::string, std::vector<indri::api::ScoredExtentResult> >::const_iterator iter;
     const std::string& nodeName = nodeNames[i];
     
@@ -68,7 +68,7 @@ std::vector< std::pair<indri::index::Extent, int> > indri::api::SnippetBuilder::
     
     // there are annotations, so get just the ones for this document
     const std::vector<indri::api::ScoredExtentResult>& matches = iter->second;
-    for( int j=0; j<matches.size(); j++ ) {
+    for( size_t j=0; j<matches.size(); j++ ) {
 
       if( matches[j].document == document ) {
         indri::index::Extent e;
@@ -86,7 +86,7 @@ std::vector< std::pair<indri::index::Extent, int> > indri::api::SnippetBuilder::
 }
 
 bool should_skip( const std::vector< indri::api::SnippetBuilder::Region >& skips, int begin, int end ) {
-  for( int i=0; i<skips.size(); i++ ) {
+  for( size_t i=0; i<skips.size(); i++ ) {
     if( skips[i].begin <= begin && skips[i].end >= end )
       return true;
   }
@@ -111,7 +111,7 @@ indri::api::SnippetBuilder::Region indri::api::SnippetBuilder::_bestRegion(
 
   std::vector< Region >::const_iterator skipIter = skipRegions.begin();
 
-  for( int i=0; i<extents.size(); i++ ) {
+  for( size_t i=0; i<extents.size(); i++ ) {
     if( should_skip( skipRegions, extents[i].first.begin, extents[i].first.end ) )
       continue;
 
@@ -127,7 +127,7 @@ indri::api::SnippetBuilder::Region indri::api::SnippetBuilder::_bestRegion(
 
     std::set<int> nodes;
     nodes.insert( extents[i].second );
-    int j;
+    size_t j;
 
     for( j=i; j<extents.size(); j++ ) {
       int newEnd = std::max( extents[j].first.end, region.end );
@@ -189,7 +189,7 @@ std::vector<indri::api::SnippetBuilder::Region> indri::api::SnippetBuilder::_bui
 
   // now we have some match regions, so put together some reasonable context for them
   // BUGBUG: need additional logic here to ensure we don't get overlap between the regions.
-  for( int i=0; i<matchRegions.size(); i++ ) {
+  for( size_t i=0; i<matchRegions.size(); i++ ) {
     matchRegions[i].begin = std::max( 0, matchRegions[i].begin - matchWidth / 2 );
     matchRegions[i].end = std::min( positionCount, matchRegions[i].end + matchWidth / 2 );
   }
@@ -357,7 +357,7 @@ std::string indri::api::SnippetBuilder::build( int documentID, const indri::api:
   std::string snippet;
   int wordCount = 0;
   
-  for( int i=0; i<regions.size() && windowSize > wordCount; i++ ) {
+  for( size_t i=0; i<regions.size() && windowSize > wordCount; i++ ) {
     Region& region = regions[i];
     
     if( region.begin != 0 && i == 0 ) {
@@ -372,7 +372,7 @@ std::string indri::api::SnippetBuilder::build( int documentID, const indri::api:
     int current = beginByte;
     wordCount += region.end - region.begin;
     
-    for( int j=0; j<region.extents.size(); j++ ) {
+    for( size_t j=0; j<region.extents.size(); j++ ) {
       int regionBegin = region.extents[j].begin;
       int regionEnd = region.extents[j].end;
 	  

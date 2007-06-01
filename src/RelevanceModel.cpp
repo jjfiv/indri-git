@@ -69,7 +69,7 @@ const std::vector<indri::api::ScoredExtentResult>& indri::query::RelevanceModel:
 //
 
 void indri::query::RelevanceModel::_extractDocuments() {
-  for( int i=0; i<_results.size(); i++ ) {
+  for( size_t i=0; i<_results.size(); i++ ) {
     _documentIDs.push_back( _results[i].document );
   }
 }
@@ -83,7 +83,7 @@ void indri::query::RelevanceModel::_extractDocuments() {
 
 void indri::query::RelevanceModel::_countGrams() {
   // for each query result
-  for( int i=0; i<_results.size(); i++ ) {
+  for( size_t i=0; i<_results.size(); i++ ) {
     // run through the text, extracting n-grams
     indri::api::ScoredExtentResult& result = _results[i];
     indri::api::DocumentVector* v = _vectors[i];

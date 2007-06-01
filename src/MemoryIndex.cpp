@@ -346,10 +346,10 @@ void indri::index::MemoryIndex::_writeFieldExtents( int documentID, indri::utili
   int offset = fields.size();
   
   // convert to field extents, set ids, and create the node map
-  for( unsigned int i=0; i<indexedTags.size(); i++ ) {
+  for( size_t i=0; i<indexedTags.size(); i++ ) {
     indri::parse::TagExtent * extent = indexedTags[i];
     
-    int ordinal = i + 1;
+    int ordinal = int(i) + 1;
 
     // this is the id for the field type
     int tagId = _fieldID( extent->name );
@@ -368,8 +368,8 @@ void indri::index::MemoryIndex::_writeFieldExtents( int documentID, indri::utili
   }
 
   // set the parent ordinals
-  for( unsigned int i=0; i<indexedTags.size(); i++ ) {
-    indri::parse::TagExtent * extent = indexedTags[i];
+  for( size_t j=0; j<indexedTags.size(); j++ ) {
+    indri::parse::TagExtent * extent = indexedTags[j];
     
     // look up the parent 
     int parentOrdinal = 0;
@@ -383,7 +383,7 @@ void indri::index::MemoryIndex::_writeFieldExtents( int documentID, indri::utili
       }
     }
     // set the parent
-    fields[ offset + i ].parentOrdinal = parentOrdinal;
+    fields[ offset + j ].parentOrdinal = parentOrdinal;
   }
 }
 

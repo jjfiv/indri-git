@@ -154,7 +154,7 @@ indri::api::ParsedDocument* indri::parse::TaggedTextParser::parse( indri::parse:
 
   _document.metadata = document->metadata;
   // have to process metadata tag conflations.
-  for (int i = 0; i < _document.metadata.size(); i++) {
+  for (size_t i = 0; i < _document.metadata.size(); i++) {
     _document.metadata[i].key = _p_conflater->conflate(_document.metadata[i].key);
   }
   

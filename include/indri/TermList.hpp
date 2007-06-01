@@ -118,13 +118,13 @@ namespace indri {
             << fieldCount;
         
         // write out terms
-        for( int i=0; i<_terms.size(); i++ ) {
+        for( size_t i=0; i<_terms.size(); i++ ) {
           assert( _terms[i] >= 0 );
           out << _terms[i];
         }
 
         // write out fields
-        for( unsigned int i=0; i<_fields.size(); i++ ) {
+        for( size_t i=0; i<_fields.size(); i++ ) {
 
           assert( _fields[i].id >= 0 );
           assert( _fields[i].ordinal == i + 1 );

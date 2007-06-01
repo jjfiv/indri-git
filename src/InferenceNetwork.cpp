@@ -182,7 +182,7 @@ void indri::infnet::InferenceNetwork::_indexChanged( indri::index::Index& index 
 int indri::infnet::InferenceNetwork::_nextCandidateDocument( indri::index::DeletedDocumentList::read_transaction* deleted ) {
   int candidate = MAX_INT32;
 
-  for( unsigned int i=0; i<_complexEvaluators.size(); i++ ) {
+  for( size_t i=0; i<_complexEvaluators.size(); i++ ) {
     candidate = lemur_compat::min( candidate, _complexEvaluators[i]->nextCandidateDocument() );
   }
 
@@ -196,7 +196,7 @@ int indri::infnet::InferenceNetwork::_nextCandidateDocument( indri::index::Delet
 void indri::infnet::InferenceNetwork::_evaluateDocument( indri::index::Index& index, int document ) {
   int candidateLength = index.documentLength( document );
 
-  for( unsigned int i=0; i<_complexEvaluators.size(); i++ ) {
+  for( size_t i=0; i<_complexEvaluators.size(); i++ ) {
     _complexEvaluators[i]->evaluate( document, candidateLength );
   }
 }
@@ -358,7 +358,7 @@ const indri::infnet::InferenceNetwork::MAllResults& indri::infnet::InferenceNetw
   }
 
   _results.clear();
-  for( unsigned int i=0; i<_evaluators.size(); i++ ) {
+  for( size_t i=0; i<_evaluators.size(); i++ ) {
     _results[ _evaluators[i]->getName() ] = _evaluators[i]->getResults();
   }
 

@@ -440,7 +440,7 @@ const indri::utility::greedy_vector<bool>& indri::infnet::ShrinkageBeliefNode::h
 
   _buildScoreCache( documentID );
 
-  for ( int i = 0 ; i < matchExtents.size() ; i++ ) {
+  for ( size_t i = 0 ; i < matchExtents.size() ; i++ ) {
     const indri::index::Extent * extent =  &(matchExtents[i]);
     std::set<int> leafs;
     if ( extent->ordinal == 0 ) {

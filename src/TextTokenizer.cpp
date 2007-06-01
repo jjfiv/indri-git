@@ -452,9 +452,8 @@ static long byte_position;
 #define TAG           2
 #define ASCII_TOKEN   3
 #define UTF8_TOKEN    4
-#define URL_TOKEN     5
 
-#line 459 "../src/TextTokenizer.cpp"
+#line 458 "../src/TextTokenizer.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -605,10 +604,10 @@ YY_DECL
 	register char *yy_cp = NULL, *yy_bp = NULL;
 	register int yy_act;
 
-#line 43 "../src/TextTokenizer.l"
+#line 42 "../src/TextTokenizer.l"
 
 
-#line 613 "../src/TextTokenizer.cpp"
+#line 612 "../src/TextTokenizer.cpp"
 
 	if ( yy_init )
 		{
@@ -693,50 +692,50 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 45 "../src/TextTokenizer.l"
+#line 44 "../src/TextTokenizer.l"
 { byte_position += tokleng; return TAG; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "../src/TextTokenizer.l"
+#line 45 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ZAP; /* symbols */ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 47 "../src/TextTokenizer.l"
+#line 46 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ASCII_TOKEN; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 48 "../src/TextTokenizer.l"
+#line 47 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ASCII_TOKEN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 49 "../src/TextTokenizer.l"
+#line 48 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ASCII_TOKEN; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 50 "../src/TextTokenizer.l"
+#line 49 "../src/TextTokenizer.l"
 { byte_position += tokleng; return UTF8_TOKEN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 52 "../src/TextTokenizer.l"
+#line 51 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ZAP; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 53 "../src/TextTokenizer.l"
+#line 52 "../src/TextTokenizer.l"
 { byte_position += tokleng; return ZAP; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 55 "../src/TextTokenizer.l"
+#line 54 "../src/TextTokenizer.l"
 ECHO;
 	YY_BREAK
-#line 741 "../src/TextTokenizer.cpp"
+#line 740 "../src/TextTokenizer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1618,7 +1617,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 55 "../src/TextTokenizer.l"
+#line 54 "../src/TextTokenizer.l"
 
 
 indri::parse::TokenizedDocument* indri::parse::TextTokenizer::tokenize( indri::parse::UnparsedDocument* document ) {
@@ -2135,9 +2134,6 @@ void indri::parse::TextTokenizer::writeToken( char* token, int token_len,
   strncpy( write_loc, token, token_len );
   write_loc[token_len] = '\0';
   _document.terms.push_back( write_loc );
-
-//   std::cout << "Token [" << token << "], <" << extent.begin << ", " 
-//          << extent.end << ">" << std::endl;
 }
 
 

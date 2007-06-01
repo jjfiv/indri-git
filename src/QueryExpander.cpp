@@ -69,7 +69,7 @@ std::vector<std::string> * indri::query::QueryExpander::getVocabulary( std::vect
 std::vector<std::string> * indri::query::QueryExpander::getVocabulary( std::vector<indri::api::DocumentVector*>& docVectors ) {
   std::map<std::string, bool> terms;
 
-  for( int doc = 0; doc < docVectors.size(); doc++ ) {
+  for( size_t doc = 0; doc < docVectors.size(); doc++ ) {
     indri::api::DocumentVector * docVec = docVectors[ doc ];
     std::vector<int> term_positions = docVec->positions();
     std::vector<std::string> term_list = docVec->stems();

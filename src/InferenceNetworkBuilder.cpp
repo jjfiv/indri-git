@@ -273,7 +273,7 @@ static bool inferencenetworkbuilder_contains_stopwords( const std::vector<indri:
   // scan for stopwords
   int stopwords = 0;
 
-  for( unsigned int i=0; i<nodes.size(); i++ ) {
+  for( size_t i=0; i<nodes.size(); i++ ) {
     if( inferencenetworkbuilder_is_stopword(nodes[i]) )
       stopwords++;
   }
@@ -457,7 +457,7 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::UWNode* uwNode 
     std::vector<ListIteratorNode*> nullsRemoved;
     nullsRemoved.reserve( translation.size() );
 
-    for( unsigned int i=0; i<translation.size(); i++ ) {
+    for( size_t i=0; i<translation.size(); i++ ) {
       NullListNode* nullNode = dynamic_cast<NullListNode*>(translation[i]);
       // we want to remove words that are stopwords (either query or index) because they'll cause this window not to match
       if( !(nullNode && nullNode->isStopword()) ) 
@@ -792,11 +792,11 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WeightNode* wei
     WeightedAndNode* wandNode = new WeightedAndNode( weightNode->nodeName() );
     
     double totalWeights = 0;
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       totalWeights += children[i].first;
     }
 
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       wandNode->addChild( children[i].first / totalWeights,
                           dynamic_cast<BeliefNode*>( _nodeMap[children[i].second] ) );
     }
@@ -814,11 +814,11 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WSumNode* wsumN
     WeightedSumNode* weightedSumNode = new WeightedSumNode( wsumNode->nodeName() );
 
     double totalWeights = 0;
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       totalWeights += children[i].first;
     }
 
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       weightedSumNode->addChild( children[i].first / totalWeights,
                                  dynamic_cast<BeliefNode*>( _nodeMap[children[i].second] ) );
     }
@@ -834,11 +834,11 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WAndNode* wandN
     WeightedAndNode* weightedAndNode = new WeightedAndNode( wandNode->nodeName() );
 
     double totalWeights = 0;
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       totalWeights += children[i].first;
     }
 
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       weightedAndNode->addChild( children[i].first / totalWeights,
                                  dynamic_cast<BeliefNode*>( _nodeMap[children[i].second] ) );
     }
@@ -888,7 +888,7 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::CombineNode* co
     std::vector<BeliefNode*> translation = _translate<BeliefNode,indri::lang::ScoredExtentNode>( children );
     WeightedAndNode* wandNode = new WeightedAndNode( combineNode->nodeName() );
 
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       wandNode->addChild( weight, translation[i] );
     }
 
@@ -1002,7 +1002,7 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::ContextInclusio
     indri::infnet::ContextInclusionAndNode* ciaNode = new indri::infnet::ContextInclusionAndNode( contextInclusionNode->nodeName() );
 
     indri::lang::ScoredExtentNode* preserveExtentsChild = contextInclusionNode->getPreserveExtentsChild();
-    for( unsigned int i=0; i<children.size(); i++ ) {
+    for( size_t i=0; i<children.size(); i++ ) {
       bool preserveExtents = false;
       if (children[i] == preserveExtentsChild) {
         preserveExtents = true;
