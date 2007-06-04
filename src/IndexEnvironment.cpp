@@ -206,7 +206,7 @@ void indri::api::IndexEnvironment::setIndexedFields( const std::vector<std::stri
     bool found = false;
     if( existingFields ) {
       Parameters fields = _parameters["field"];
-      for( int j=0; j<fields.size(); j++ ) {
+      for( size_t j=0; j<fields.size(); j++ ) {
         std::string parameterFieldName = fields[j]["name"];
         if( parameterFieldName == fieldNames[i] ) {
           // already there, don't add
@@ -224,7 +224,7 @@ void indri::api::IndexEnvironment::setNumericField( const std::string& fieldName
 
   if (existingFields) {
     Parameters fields = _parameters["field"];
-    for( int i=0; i<fields.size(); i++ ) {
+    for( size_t i=0; i<fields.size(); i++ ) {
       std::string parameterFieldName = fields[i]["name"];
 
       if( parameterFieldName == fieldName ) {
@@ -246,7 +246,7 @@ void indri::api::IndexEnvironment::setOrdinalField( const std::string& fieldName
   if ( existingFields ) {
     Parameters fields = _parameters["field"];
     
-    for( int i=0; i<fields.size(); i++ ) {
+    for( size_t i=0; i<fields.size(); i++ ) {
       std::string parameterFieldName = fields[i]["name"];
       
       if( parameterFieldName == fieldName ) {

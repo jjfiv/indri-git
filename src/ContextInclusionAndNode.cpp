@@ -58,7 +58,7 @@ void indri::infnet::ContextInclusionAndNode::_computeQuorum() {
   if( _quorumIndex < 0 )
     _quorumIndex = 0;
 
-  if( _quorumIndex > _children.size()-1 )
+  if( _quorumIndex > (int)_children.size()-1 )
     _recomputeThreshold = DBL_MAX;
   else
     _recomputeThreshold = maximumScore;

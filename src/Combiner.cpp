@@ -31,9 +31,9 @@
 #define COMBINER_WRITE_BUFFER_SIZE (1*1024*1024)
 
 indri::parse::Combiner::url_entry* indri::parse::Combiner::_newUrlEntry( char* url, char* corpusPath, char* docNo ) {
-  int urlLen = strlen(url) + 1;
-  int corpusLen = strlen(corpusPath) + 1;
-  int docLen = strlen(docNo) + 1;
+  int urlLen = (int)strlen(url) + 1;
+  int corpusLen = (int)strlen(corpusPath) + 1;
+  int docLen = (int)strlen(docNo) + 1;
   int total = urlLen + corpusLen + docLen;
 
   char* buffer = (char*) malloc(total + sizeof(url_entry));
@@ -72,7 +72,7 @@ void indri::parse::Combiner::_openWriteBuckets( std::vector<std::stringstream*>&
 
 void indri::parse::Combiner::_closeWriteBuckets( std::vector<std::stringstream*>& buffers, std::vector<std::ofstream*>& buckets ) {
   for( size_t i=0; i<buckets.size(); i++ ) {
-    _flushWriteBuffer( buffers, buckets, true, i );
+    _flushWriteBuffer( buffers, buckets, true, (int)i );
     delete buffers[i];
     buckets[i]->close();
     delete buckets[i];
@@ -81,7 +81,7 @@ void indri::parse::Combiner::_closeWriteBuckets( std::vector<std::stringstream*>
 
 void indri::parse::Combiner::_flushWriteBuffers( std::vector<std::stringstream*>& buffers, std::vector<std::ofstream*>& buckets, bool force ) {
   for( size_t i=0; i<buckets.size(); i++ ) {
-    _flushWriteBuffer( buffers, buckets, force, i );
+    _flushWriteBuffer( buffers, buckets, force, (int)i );
   }
 }
 
@@ -632,13 +632,13 @@ void indri::parse::Combiner::sortCorpusFiles( const std::string& outputPath, con
 
       for( int i=0; i<linkCount; i++ ) {
         in.getline( linkDocno, sizeof linkDocno );
-        int linkDocnoLen = strlen(linkDocno);
+        int linkDocnoLen = (int)strlen(linkDocno);
 
         in.getline( linkFrom, sizeof linkFrom );
-        int linkFromLen = strlen(linkFrom);
+        int linkFromLen = (int)strlen(linkFrom);
 
         in.getline( linkText, sizeof linkText );
-        int linkTextLen = strlen(linkText);
+        int linkTextLen = (int)strlen(linkText);
 
         sprintf( e->linkinfo.write(linkDocnoLen+2), "%s\n", linkDocno );
         e->linkinfo.unwrite(1);

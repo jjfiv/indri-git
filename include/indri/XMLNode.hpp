@@ -312,7 +312,7 @@ inline int base64_decode( void* output, int outputLength, const std::string& inp
 /// @param out the string for the output
 inline void base64_decode_string( std::string& out, const std::string& in ) {
   char* buf = new char[in.size()+1];
-  size_t outLength = base64_decode( buf, in.size()+5, in );
+  size_t outLength = base64_decode( buf, (int)in.size()+5, in );
   buf[outLength] = 0;
   out = buf;
   delete[] buf;

@@ -308,8 +308,8 @@ void indri::parse::OffsetAnnotationAnnotator::convert_annotations( std::set<indr
       }
 
       // ensure tag boundaries are still within the document
-      if (te->end > document->positions.size()) {
-        te->end = document->positions.size();
+      if (te->end > (int)document->positions.size()) {
+        te->end = (int)document->positions.size();
       } 
       if (te->end < 1) {
         te->end = 1;
@@ -367,7 +367,7 @@ void indri::parse::OffsetAnnotationAnnotator::convert_annotations( std::set<indr
       }
 
       // Make sure tag boundaries are within the document
-      if (te->begin >= document->positions.size()) {
+      if (te->begin >= (int)document->positions.size()) {
         te->begin = document->positions.size() - 1;
       } 
       if (te->begin < 0) {

@@ -139,7 +139,7 @@ indri::server::LocalQueryServer::LocalQueryServer( indri::collection::Repository
   _repository(repository), _maxWildcardMatchesPerTerm(indri::infnet::InferenceNetworkBuilder::DEFAULT_MAX_WILDCARD_TERMS)
 {
   // if supplied and false, turn off optimization for all queries.
-  _optimizeParameter = indri::api::Parameters::instance().get( "optimize", 1 );
+  _optimizeParameter = indri::api::Parameters::instance().get( "optimize", true );
 }
 
 //
@@ -233,7 +233,7 @@ INT64 indri::server::LocalQueryServer::termCount() {
   indri::collection::Repository::index_state indexes = _repository.indexes();
   INT64 total = 0;
 
-  for( int i=0; i<indexes->size(); i++ ) {
+  for( size_t i=0; i<indexes->size(); i++ ) {
     indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
     total += (*indexes)[i]->termCount();
   }
@@ -255,7 +255,7 @@ INT64 indri::server::LocalQueryServer::stemCount( const std::string& stem ) {
   indri::collection::Repository::index_state indexes = _repository.indexes();
   INT64 total = 0;
 
-  for( int i=0; i<indexes->size(); i++ ) {
+  for( size_t i=0; i<indexes->size(); i++ ) {
     indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
     total += (*indexes)[i]->termCount( stem );
   }
@@ -277,7 +277,7 @@ INT64 indri::server::LocalQueryServer::stemFieldCount( const std::string& stem, 
   indri::collection::Repository::index_state indexes = _repository.indexes();
   INT64 total = 0;
 
-  for( int i=0; i<indexes->size(); i++ ) {
+  for( size_t i=0; i<indexes->size(); i++ ) {
     indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
     total += (*indexes)[i]->fieldTermCount( field, stem );
   }
@@ -309,7 +309,7 @@ std::vector<std::string> indri::server::LocalQueryServer::fieldList() {
   std::vector<std::string> result;
   const std::vector<indri::collection::Repository::Field>& fields = _repository.fields();
 
-  for( int i=0; i<fields.size(); i++ ) {
+  for( size_t i=0; i<fields.size(); i++ ) {
     result.push_back( fields[i].name );
   }
 
@@ -332,7 +332,7 @@ INT64 indri::server::LocalQueryServer::documentCount() {
   indri::collection::Repository::index_state indexes = _repository.indexes();
   INT64 total = 0;
   
-  for( int i=0; i<indexes->size(); i++ ) {
+  for( size_t i=0; i<indexes->size(); i++ ) {
     indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
     total += (*indexes)[i]->documentCount();
   }
@@ -347,7 +347,7 @@ INT64 indri::server::LocalQueryServer::documentCount( const std::string& term ) 
   INT64 total = 0;
   if( stem.length() == 0 ) return total;
   
-  for( int i=0; i<indexes->size(); i++ ) {
+  for( size_t i=0; i<indexes->size(); i++ ) {
     indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
     //    total += (*indexes)[i]->documentCount( term );
     total += (*indexes)[i]->documentCount( stem );
@@ -402,7 +402,7 @@ indri::server::QueryServerResponse* indri::server::LocalQueryServer::runQuery( s
 }
 
 indri::server::QueryServerVectorsResponse* indri::server::LocalQueryServer::documentVectors( const std::vector<int>& documentIDs ) {
-  indri::server::LocalQueryServerVectorsResponse* response = new indri::server::LocalQueryServerVectorsResponse( documentIDs.size() );
+  indri::server::LocalQueryServerVectorsResponse* response = new indri::server::LocalQueryServerVectorsResponse( (int)documentIDs.size() );
   indri::collection::Repository::index_state indexes = _repository.indexes();
   std::map<int, std::string> termIDStringMap;
 

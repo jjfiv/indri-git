@@ -58,7 +58,7 @@ void indri::infnet::WeightedAndNode::_computeQuorum() {
   if( _quorumIndex < 0 )
     _quorumIndex = 0;
 
-  if( _quorumIndex > _children.size()-1 )
+  if( _quorumIndex > (int)_children.size()-1 )
     _recomputeThreshold = DBL_MAX;
   else
     _recomputeThreshold = maximumScore;
@@ -149,7 +149,7 @@ void indri::infnet::WeightedAndNode::indexChanged( indri::index::Index& index ) 
     }
   }
 
-  for( int i=0; i<lists.size(); i++ )
+  for( size_t i=0; i<lists.size(); i++ )
     delete lists[i];
 
   // compute quorum

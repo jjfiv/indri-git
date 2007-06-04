@@ -266,7 +266,7 @@ void indri::api::QueryEnvironment::_mergeQueryResults( indri::infnet::InferenceN
 
         for( size_t j=0; j<partialResultList.size(); j++ ) {
           indri::api::ScoredExtentResult singleResult = partialResultList[j];
-          singleResult.document = (singleResult.document*int(_servers.size())) + i;
+          singleResult.document = (singleResult.document*int(_servers.size())) + int(i);
           totalResultList.push_back( singleResult );
         }
       }
@@ -348,7 +348,7 @@ void indri::api::QueryEnvironment::removeIndex( const std::string& pathname ) {
   if (iter != _repositoryNameMap.end()) {
     indri::server::QueryServer * s = iter->second.first;
     indri::collection::Repository * r = iter->second.second;
-    for (int i = 0; i < _servers.size(); i++) {
+    for (size_t i = 0; i < _servers.size(); i++) {
       if (_servers[i] == s) {
         delete(_servers[i]);
         _servers.erase(_servers.begin() + i);
@@ -356,7 +356,7 @@ void indri::api::QueryEnvironment::removeIndex( const std::string& pathname ) {
       }
     }
     
-    for (int i = 0; i < _repositories.size(); i++) {
+    for (size_t i = 0; i < _repositories.size(); i++) {
       if (_repositories[i] == r) {
         delete(_repositories[i]);
         _repositories.erase(_repositories.begin() + i);
@@ -375,7 +375,7 @@ void indri::api::QueryEnvironment::addServer( const std::string& hostname ) {
   indri::net::NetworkStream* stream = new indri::net::NetworkStream;
   unsigned int port = INDRID_PORT;
   std::string host = hostname;
-  int colon = hostname.find(':');
+  int colon = (int)hostname.find(':');
 
   if( colon > 0 ) {
     host = hostname.substr( 0, colon );
@@ -410,7 +410,7 @@ void indri::api::QueryEnvironment::removeServer( const std::string& hostname ) {
   if (iter != _serverNameMap.end()) {
     indri::server::QueryServer * s = iter->second.first;
     indri::net::NetworkStream * n = iter->second.second;
-    for (int i = 0; i < _servers.size(); i++) {
+    for (size_t i = 0; i < _servers.size(); i++) {
       if (_servers[i] == s) {
         delete(_servers[i]);
         _servers.erase(_servers.begin() + i);
@@ -418,7 +418,7 @@ void indri::api::QueryEnvironment::removeServer( const std::string& hostname ) {
       }
     }
     
-    for (int i = 0; i < _streams.size(); i++) {
+    for (size_t i = 0; i < _streams.size(); i++) {
       if (_streams[i] == n) {
         delete(_streams[i]);
         _streams.erase(_streams.begin() + i);
@@ -447,7 +447,7 @@ std::vector<std::string> indri::api::QueryEnvironment::documentMetadata( const s
   results.resize( documentIDs.size() );
 
   // split document numbers into lists for each query server
-  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, _servers.size() );
+  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, (int)_servers.size() );
 
   indri::utility::greedy_vector<indri::server::QueryServerMetadataResponse*> responses;
 
@@ -494,7 +494,7 @@ std::vector<std::string> indri::api::QueryEnvironment::pathNames( const std::vec
   paths.resize( documentIDs.size() );
   
   // split document numbers into lists for each query server
-  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, _servers.size() );
+  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, (int)_servers.size() );
 
   // copy begins and ends over given the document scattering
   for( size_t i=0; i<docIDLists.size(); i++ ) {
@@ -543,7 +543,7 @@ std::vector<indri::api::ParsedDocument*> indri::api::QueryEnvironment::documents
   results.resize( documentIDs.size() );
 
   // split document numbers into lists for each query server
-  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, _servers.size() );
+  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, (int)_servers.size() );
 
   indri::utility::greedy_vector<indri::server::QueryServerDocumentsResponse*> responses;
 
@@ -626,11 +626,11 @@ std::vector<DOCID_T> indri::api::QueryEnvironment::documentIDsFromMetadata( cons
   std::vector<DOCID_T> results;
 
   // gather results
-  for( unsigned int i=0; i<responses.size(); i++ ) {
+  for( size_t i=0; i<responses.size(); i++ ) {
     std::vector<DOCID_T>& responseResults = responses[i]->getResults();
 
-    for( unsigned int j=0; j<responseResults.size(); j++ ) {
-      DOCID_T converted = (responseResults[j] * _servers.size()) + i;
+    for( size_t j=0; j<responseResults.size(); j++ ) {
+      DOCID_T converted = (DOCID_T)((responseResults[j] * _servers.size()) + i);
       results.push_back( converted );
     }
   }
@@ -650,7 +650,7 @@ void indri::api::QueryEnvironment::_scoredQuery( indri::infnet::InferenceNetwork
 
   // scatter the document IDs out to the servers
   if( documentSet )
-    qenv_scatter_document_ids( *documentSet, docIDLists, docIDPositions, _servers.size() );
+    qenv_scatter_document_ids( *documentSet, docIDLists, docIDPositions, (int)_servers.size() );
 
   accumulatorName = "";
 
@@ -717,7 +717,7 @@ void indri::api::QueryEnvironment::_annotateQuery( indri::infnet::InferenceNetwo
   std::vector< std::vector<DOCID_T> > docIDPositions;
 
   // scatter the document IDs out to the servers
-  qenv_scatter_document_ids( documentSet, docIDLists, docIDPositions, _servers.size() );
+  qenv_scatter_document_ids( documentSet, docIDLists, docIDPositions, (int)_servers.size() );
 
   // For each server, make a FilterNode and an AnnotatorNode, then run the query.
   // The filter node makes sure that we only annotate the documents that are interesting
@@ -747,7 +747,7 @@ void indri::api::QueryEnvironment::_annotateQuery( indri::infnet::InferenceNetwo
     root.push_back( annotatorNode );
 
     // don't optimize these queries, otherwise we won't be able to distinguish some annotations from others
-    indri::server::QueryServerResponse* response = _servers[i]->runQuery( root, docIDLists[i].size(), false );
+    indri::server::QueryServerResponse* response = _servers[i]->runQuery( root, (int)docIDLists[i].size(), false );
     queryResponses.push_back(response);
   }
 
@@ -894,7 +894,7 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
   _scoredQuery( results, rootNode, accumulatorName, resultsRequested, documentSet );
   std::vector<indri::api::ScoredExtentResult> queryResults = results[accumulatorName]["scores"];
   std::stable_sort( queryResults.begin(), queryResults.end(), indri::api::ScoredExtentResult::score_greater() );
-  if( queryResults.size() > resultsRequested )
+  if( (int)queryResults.size() > resultsRequested )
     queryResults.resize( resultsRequested );
 
   PRINT_TIMER( "Query complete" );
@@ -922,7 +922,7 @@ static void _getRawNodes( std::set<std::string>& nodeTerms,
   if( node->type == "IndexTerm" ) {
     nodeTerms.insert( node->queryText );
   } else {
-    for( int i=0; i<node->children.size(); i++ ) {
+    for( size_t i=0; i<node->children.size(); i++ ) {
       _getRawNodes( nodeTerms, node->children[i] );
     }
   }
@@ -1004,7 +1004,7 @@ indri::api::QueryResults indri::api::QueryEnvironment::runQuery( indri::api::Que
     queryResults.erase(queryResults.begin(), queryResults.begin() + request.startNum);
   }
 
-  if( queryResults.size() > request.resultsRequested )
+  if( (int)queryResults.size() > request.resultsRequested )
     queryResults.resize( request.resultsRequested );
 
   std::string annotatorName;
@@ -1034,8 +1034,8 @@ indri::api::QueryResults indri::api::QueryEnvironment::runQuery( indri::api::Que
 
   // slice these into blocks of 50/100/500?
   // 1000 is 29M on AP89.
-  for( int start = 0; start < _results.size(); start += 100 ) {
-    int end = std::min<int>( start + 100, _results.size() );
+  for( size_t start = 0; start < _results.size(); start += 100 ) {
+    size_t end = lemur_compat::min<size_t>( start + 100, _results.size() );
     resultSubset.assign( _results.begin() + start, _results.begin() + end );
     docs = documents( resultSubset );
     indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter;
@@ -1083,7 +1083,7 @@ indri::api::QueryResults indri::api::QueryEnvironment::runQuery( indri::api::Que
   std::set<std::string>::iterator iter;
   int estCount = 0;
   for (iter = queryTerms.begin(); iter != queryTerms.end(); iter++) {
-    int count = documentCount(*iter);
+    int count = (int)documentCount(*iter);
     // argMax over df(t)
     if (count > estCount) estCount = count;
   }
@@ -1244,7 +1244,7 @@ std::vector<indri::api::DocumentVector*> indri::api::QueryEnvironment::documentV
   results.resize( documentIDs.size() );
 
   // split document numbers into lists for each query server
-  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, _servers.size() );
+  qenv_scatter_document_ids( documentIDs, docIDLists, docIDPositions, (int)_servers.size() );
 
   indri::utility::greedy_vector<indri::server::QueryServerVectorsResponse*> responses;
 
@@ -1266,7 +1266,7 @@ std::vector<indri::api::DocumentVector*> indri::api::QueryEnvironment::documentV
 
 int indri::api::QueryEnvironment::documentLength(lemur::api::DOCID_T documentID) {
   int length = 0;
-  int serverCount = _servers.size();
+  int serverCount = (int)_servers.size();
   DOCID_T id = documentID/serverCount;
   int serverID = documentID % serverCount;
   length = _servers[serverID]->documentLength( id );

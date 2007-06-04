@@ -76,7 +76,7 @@ namespace indri
         t.end = -1;
         t.next = _openList;
         _tags.push_back(t);
-        _openList = _tags.size()-1;
+        _openList = (int)_tags.size()-1;
       }
 
       void endTag(const char *name, const char* conflation, int end) {

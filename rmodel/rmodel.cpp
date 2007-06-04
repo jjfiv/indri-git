@@ -31,7 +31,7 @@ static bool copy_parameters_to_string_vector( std::vector<std::string>& vec, ind
 
   indri::api::Parameters slice = p[parameterName];
   
-  for( int i=0; i<slice.size(); i++ ) {
+  for( size_t i=0; i<slice.size(); i++ ) {
     vec.push_back( slice[i] );
   }
 
@@ -62,13 +62,13 @@ static void open_indexes( indri::api::QueryEnvironment& environment, indri::api:
 
 static void printGrams( const std::string& query, const std::vector<indri::query::RelevanceModel::Gram*>& grams ) {
   std::cout << "# query: " << query << std::endl;
-  for( int j=0; j<grams.size(); j++ ) {
+  for( size_t j=0; j<grams.size(); j++ ) {
     std::cout << std::setw(15)
               << std::setprecision(15)
               << grams[j]->weight << " ";
     std::cout << grams[j]->terms.size() << " ";
 
-    for( int k=0; k<grams[j]->terms.size(); k++ ) {
+    for( size_t k=0; k<grams[j]->terms.size(); k++ ) {
       std::cout << grams[j]->terms[k] << " ";
     }
 
@@ -111,7 +111,7 @@ int main( int argc, char** argv ) {
     int documents = (int) param[ "documents" ];
     int maxGrams = (int) param.get( "maxGrams", 1 ); // unigram is default
 
-    for( int i=0; i<parameterQueries.size(); i++ ) {
+    for( size_t i=0; i<parameterQueries.size(); i++ ) {
       std::string query = parameterQueries[i];
       indri::query::RelevanceModel model( environment, rmSmoothing, maxGrams, documents );
       model.generate( query );

@@ -287,7 +287,7 @@ namespace indri
       /// Retrieve the n'th entry.
       /// @param index the index of the entry to retrieve.
       /// @return a Parameters object.
-      Parameters get( int index );
+      Parameters get( size_t index );
       /// Retrieve the entry associated with name.
       /// @param name the key value.
       /// @return a Parameters object.
@@ -327,7 +327,7 @@ namespace indri
       /// Retrieve the n'th entry.
       /// @param index the index of the entry to retrieve.
       /// @return a Parameters object.
-      Parameters operator[] ( int index );
+      Parameters operator[] ( size_t index );
       /// Retrieve the entry indexed by path.
       /// @param path the key of the entry to retrieve.
       /// @return a Parameters object.
@@ -374,7 +374,7 @@ namespace indri
       size_t size();
       /// @param index the index to probe.
       /// @return true if an entry exists for this index, false otherwise.
-      bool exists( int index );
+      bool exists( size_t index );
       /// @param name the key to probe.
       /// @return true if an entry exists for this key, false otherwise.
       bool exists( const std::string& name );

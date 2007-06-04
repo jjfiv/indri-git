@@ -102,7 +102,7 @@ void indri::infnet::UnorderedWindowNode::prepare( int documentID ) {
   std::fill( lastPositions.begin(), lastPositions.end(), -1 );
 
   // determine last pointers
-  for( int i=0; i<allPositions.size(); i++ ) {
+  for( size_t i=0; i<allPositions.size(); i++ ) {
     allPositions[i].last = lastPositions[allPositions[i].type];
     lastPositions[allPositions[i].type] = i;
   }
@@ -119,7 +119,7 @@ void indri::infnet::UnorderedWindowNode::prepare( int documentID ) {
 
       // if the last time this term appeared was before the beginning of this window,
       // then this is a new term for this window
-      if( allPositions[current].last < i ) {
+      if( (size_t)allPositions[current].last < i ) {
         termsFound++;
         weight *= allPositions[current].weight;
       } 

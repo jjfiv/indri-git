@@ -95,11 +95,11 @@ namespace indri
                 std::string key = metadata->getChildren()[j]->getChildValue("key");
                 std::string value = metadata->getChildren()[j]->getChildValue("value");           
             
-                metadataKeyOffset.push_back( buffer.position() );
+                metadataKeyOffset.push_back( (int)buffer.position() );
                 strcpy( buffer.write( key.size()+1 ), key.c_str() );
 
-                metadataValueOffset.push_back( buffer.position() );
-                int length = base64_decode( buffer.write( value.size() ), value.size(), value );
+                metadataValueOffset.push_back( (int)buffer.position() );
+                int length = base64_decode( buffer.write( value.size() ), (int)value.size(), value );
                 buffer.unwrite( value.size()-length );
               }
             }
@@ -109,8 +109,8 @@ namespace indri
 
             if( textNode ) {
               text = textNode->getValue();
-              textOffset = buffer.position();
-              int length = base64_decode( buffer.write( text.size() ), text.size(), text );
+              textOffset = (int)buffer.position();
+              int length = base64_decode( buffer.write( text.size() ), (int)text.size(), text );
               buffer.unwrite( text.size()-length );
             }
 

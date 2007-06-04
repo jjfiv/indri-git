@@ -47,7 +47,7 @@ namespace indri {
         _alphabetical.clear();
         _alphabetical.reserve( _termData.size() );
 
-        for( int i=0; i<_termData.size(); i++ ) {
+        for( size_t i=0; i<_termData.size(); i++ ) {
           _alphabetical.push_back( _termData[i] );
         }
 

@@ -666,7 +666,7 @@ namespace indri {
 
       void walk( Walker& walker ) {
         walker.before(this);
-        for( int i=0; i<_children.size(); i++ ) {
+        for( size_t i=0; i<_children.size(); i++ ) {
           _children[i]->walk(walker);
         }
         walker.after(this);
@@ -1406,7 +1406,7 @@ namespace indri {
         qtext << _raw->queryText();
         if( _context ) {
           // if we haven't added a period yet, put one in
-          int dot = qtext.str().find('.');
+          int dot = (int)qtext.str().find('.');
           if( dot < 0 )
             qtext << '.';
 
@@ -1648,7 +1648,7 @@ namespace indri {
         qtext << _raw->queryText();
         if( _context ) {
           // if we haven't added a period yet, put one in
-          int dot = qtext.str().find('.');
+          int dot = (int)qtext.str().find('.');
           if( dot < 0 )
             qtext << '.';
 
@@ -1781,7 +1781,7 @@ namespace indri {
       UINT64 _hashCode() const {
         UINT64 accumulator = 0;
 
-        for( int i=0; i<_children.size(); i++ ) {
+        for( size_t i=0; i<_children.size(); i++ ) {
           accumulator += _children[i]->hashCode();
         }
 
@@ -2284,8 +2284,8 @@ namespace indri {
     public:
       FixedPassage( Unpacker& unpacker ) {
         _child = unpacker.getScoredExtentNode("child");
-        _windowSize = unpacker.getInteger("windowSize");
-        _increment = unpacker.getInteger("increment");
+        _windowSize = (int)unpacker.getInteger("windowSize");
+        _increment = (int)unpacker.getInteger("increment");
       }
 
       FixedPassage( ScoredExtentNode* child, int windowSize, int increment ) :
@@ -2547,7 +2547,7 @@ namespace indri {
 
         if( _context ) {
           // if we haven't added a period yet, put one in
-          int dot = qtext.str().find('.');
+          int dot = (int)qtext.str().find('.');
           if( dot < 0 )
             qtext << '.';
 
@@ -3044,7 +3044,7 @@ namespace indri {
       UINT64 _hashCode() const {
         UINT64 accumulator = 0;
 
-        for( int i=0; i<_children.size(); i++ ) {
+        for( size_t i=0; i<_children.size(); i++ ) {
           accumulator += _children[i]->hashCode();
         }
 
@@ -3581,7 +3581,7 @@ namespace indri {
 				}
 
 				// lowercase the term
-				for (int i=0; i < _normalizedTerm.size(); ++i) {
+				for (size_t i=0; i < _normalizedTerm.size(); ++i) {
 					_normalizedTerm[i]=tolower(_normalizedTerm[i]);
 				}
 			}

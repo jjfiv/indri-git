@@ -111,8 +111,8 @@ namespace indri {
         indri::utility::RVLCompressStream out( buffer );
         
         // write count of terms and fields in the document first
-        int termCount = _terms.size();
-        int fieldCount = _fields.size();
+        int termCount = (int)_terms.size();
+        int fieldCount = (int)_fields.size();
 
         out << termCount
             << fieldCount;

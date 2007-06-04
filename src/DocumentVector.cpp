@@ -54,8 +54,8 @@ void indri::api::DocumentVector::_init( indri::index::Index* index, const indri:
         }
 
         _stems.push_back( termString );
-        _positions.push_back(_stems.size()-1);
-        termIDMap[terms[i]] = _stems.size()-1;
+        _positions.push_back((int)_stems.size()-1);
+        termIDMap[terms[i]] = (int)_stems.size()-1;
 
         // put the string in the termStringMap for future DocumentVector builders
         if( termStringMap && siter == termStringMap->end() ) {

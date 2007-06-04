@@ -169,7 +169,7 @@ void indri::query::RelevanceModel::_scoreGrams() {
         std::stringstream s;
         s << "#1( ";
 
-        for( int i=0; i< gram->terms.size(); i++ ) {
+        for( size_t i=0; i< gram->terms.size(); i++ ) {
           s << " \"" << gram->terms[i] << "\"" << std::endl;
         }
 
@@ -184,8 +184,8 @@ void indri::query::RelevanceModel::_scoreGrams() {
     // now, aggregate scores for each retrieved item
     std::vector<indri::api::ScoredExtentResult>::iterator riter;
     double gramScore = 0;
-    int c;
-    int r;
+    size_t c;
+    size_t r;
 
     for( r = 0, c = 0; r < _results.size() && c < gramCounts->counts.size(); r++ ) {
       int contextLength = _results[r].end - _results[r].begin;

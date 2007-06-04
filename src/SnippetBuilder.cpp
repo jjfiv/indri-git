@@ -104,7 +104,7 @@ indri::api::SnippetBuilder::Region indri::api::SnippetBuilder::_bestRegion(
   int positionCount, int windowWidth ) {
   // try to find as many unique occurrences as possible
   Region best;
-  int bestUnique = 0;
+  size_t bestUnique = 0;
   std::set<int> bestSet;
   best.begin = 0;
   best.end = 0;
@@ -318,7 +318,7 @@ void indri::api::SnippetBuilder::_completeSnippet( std::string& snippet ) {
   if( _HTMLOutput )
     return;
   
-  int i = 0;
+  size_t i = 0;
 
   // add linebreaks
   while( i < snippet.size() ) {
@@ -346,7 +346,7 @@ std::string indri::api::SnippetBuilder::build( int documentID, const indri::api:
     return std::string();
   
   // calculate the context width for a single match
-  int matchWidth = windowSize / extents.size();
+  int matchWidth = windowSize /(int) extents.size();
   matchWidth = std::max( 15, std::min<int>( 30, extents.size() ) );
   
   // first, we compute a list of regions
@@ -364,7 +364,7 @@ std::string indri::api::SnippetBuilder::build( int documentID, const indri::api:
       _addEllipsis( snippet );
     }
 	
-	  if( region.end > document->positions.size() )
+	  if( region.end > (int)document->positions.size() )
 	    continue;
     
     int beginByte = document->positions[region.begin].begin;
@@ -376,7 +376,7 @@ std::string indri::api::SnippetBuilder::build( int documentID, const indri::api:
       int regionBegin = region.extents[j].begin;
       int regionEnd = region.extents[j].end;
 	  
-	  if( regionEnd > document->positions.size() )
+	  if( regionEnd > (int)document->positions.size() )
 		continue;
       
       int beginMatch = document->positions[regionBegin].begin;

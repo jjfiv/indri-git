@@ -126,7 +126,7 @@ void merge_sorted_runs( indri::file::File& out, std::vector<std::string>& inputs
   
   indri::file::SequentialWriteBuffer* outb = new indri::file::SequentialWriteBuffer( out, 512*1024 );
   
-  int lastDocument = 0;
+  UINT32 lastDocument = 0;
   double lowProbability = -1e10;
   
   UINT32 itemCount = totalDocuments;
@@ -161,7 +161,7 @@ void merge_sorted_runs( indri::file::File& out, std::vector<std::string>& inputs
     itemCount++;
   }
 
-  while( totalDocuments > lastDocument ) {
+  while( (unsigned int)totalDocuments > lastDocument ) {
     outb->write( &lowProbability, sizeof(double) );
     lastDocument++;
   }
@@ -192,7 +192,7 @@ void sort_run( indri::file::File& out, indri::file::File& in, size_t memory ) {
 
 void sort_file( indri::file::File& out, indri::file::File& in, size_t memory, int totalDocuments ) {
   UINT64 length = in.size();
-  int rounded = (memory / 12) * 12;
+  size_t rounded = (memory / 12) * 12;
     
   UINT64 total = 0;
   std::vector<std::string> temporaries;
@@ -303,14 +303,14 @@ void compress_file( indri::file::File& out, indri::file::File& in, const std::ma
   indri::file::SequentialWriteBuffer* outb = new indri::file::SequentialWriteBuffer( out, 512*1024 );
   
   UINT32 itemCount = 0;
-  UINT32 tableCount = values.size();
+  UINT32 tableCount = (UINT32)values.size();
   
   inb->read( &itemCount, sizeof(UINT32) );
   inb->read( &tableCount, sizeof(UINT32) );
   
   std::map<int, double> inverted;
   invert_map( inverted, values );
-  tableCount = inverted.size();
+  tableCount = (UINT32)inverted.size();
   
   outb->write( &itemCount, sizeof(UINT32) );
   outb->write( &tableCount, sizeof(UINT32) );
@@ -403,11 +403,11 @@ int main( int argc, char** argv ) {
     indri::collection::Repository* _repository = new indri::collection::Repository();
     _repository->openRead(index);    
     indri::collection::Repository::index_state indexes = _repository->indexes();
-    INT64 documentCount = 0;
+    int documentCount = 0;
   
     for( size_t i=0; i<indexes->size(); i++ ) {
       indri::thread::ScopedLock lock( (*indexes)[i]->statisticsLock() );
-      documentCount += (*indexes)[i]->documentCount();
+      documentCount += (int)(*indexes)[i]->documentCount();
     }
     delete _repository;
     
