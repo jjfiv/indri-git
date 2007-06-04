@@ -279,7 +279,7 @@ private:
       documents = _environment.documents( resultSubset );
       documentNames.clear();
       
-      for( unsigned int i=0; i<resultSubset.size(); i++ ) {
+      for( size_t i=0; i<resultSubset.size(); i++ ) {
         std::string documentName;
         
         indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( documents[i]->metadata.begin(),
@@ -383,7 +383,7 @@ public:
    if( _parameters.exists( "index" ) ) {
       indri::api::Parameters indexes = _parameters["index"];
 
-      for( unsigned int i=0; i < indexes.size(); i++ ) {
+      for( size_t i=0; i < indexes.size(); i++ ) {
         _environment.addIndex( std::string(indexes[i]) );
       }
     }
@@ -391,7 +391,7 @@ public:
     if( _parameters.exists( "server" ) ) {
       indri::api::Parameters servers = _parameters["server"];
 
-      for( unsigned int i=0; i < servers.size(); i++ ) {
+      for( size_t i=0; i < servers.size(); i++ ) {
         _environment.addServer( std::string(servers[i]) );
       }
     }
