@@ -27,7 +27,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
+				WarningLevel="1"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4267,4018,4244"/>
@@ -69,7 +69,7 @@
 				RuntimeLibrary="2"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
+				WarningLevel="1"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
 			<Tool
