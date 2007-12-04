@@ -108,6 +108,9 @@
 				RelativePath=".\src\fileio.c">
 			</File>
 			<File
+				RelativePath=".\src\fn_f.c">
+			</File>
+			<File
 				RelativePath=".\src\Keyfile.cpp">
 			</File>
 			<File
@@ -168,6 +171,9 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\keyref.h">
+			</File>
+			<File
+				RelativePath=".\include\lemur\kf6ref.h">
 			</File>
 			<File
 				RelativePath=".\include\lemur\lemur-compat.hpp">
