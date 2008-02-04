@@ -15,6 +15,7 @@ endif
 	$(MAKE) -C indrid
 	$(MAKE) -C dumpindex
 	$(MAKE) -C harvestlinks
+	$(MAKE) -C pagerank
 	$(MAKE) -C rmodel
 	$(MAKE) -C makeprior
 	$(MAKE) -C site-search
@@ -33,6 +34,7 @@ endif
 	$(MAKE) clean -C indrid
 	$(MAKE) clean -C dumpindex
 	$(MAKE) clean -C harvestlinks
+	$(MAKE) clean -C pagerank
 	$(MAKE) clean -C rmodel
 	$(MAKE) clean -C makeprior
 	$(MAKE) -C site-search clean
@@ -56,6 +58,7 @@ endif
 	$(MAKE) install -C indrid
 	$(MAKE) install -C dumpindex
 	$(MAKE) install -C harvestlinks
+	$(MAKE) install -C pagerank
 	$(MAKE) install -C rmodel
 	$(MAKE) install -C makeprior
 	$(MAKE) install -C doc
