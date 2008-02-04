@@ -350,6 +350,9 @@
 				RelativePath=".\Packer.cpp">
 			</File>
 			<File
+				RelativePath=".\PageRank.cpp">
+			</File>
+			<File
 				RelativePath=".\Parameters.cpp">
 			</File>
 			<File
@@ -923,6 +926,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\Packer.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\PageRank.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\Parameters.hpp">

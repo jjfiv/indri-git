@@ -16,7 +16,7 @@
 //
 
 #include "indri/PageRank.hpp"
-
+#include <algorithm>
 const double
 indri::parse::PageRank::_intToProb[11] = {log(2.21916E-10), 
                                           log(2.21916E-10),
@@ -240,7 +240,7 @@ void indri::parse::PageRank::_raw2int(std::vector<pagerank> &ranks)
   // if changed, the _intToProb table will need to change.
   int max_pr = 10;
   int rank = max_pr;
-  double B = pow((numDocs + 1),(1.0/max_pr));
+  double B = pow((numDocs + 1.0),(1.0/max_pr));
   int baseNum = int(B - 1);
   int num = baseNum;
   for (int i = 0; i < ranks.size(); i++) {
