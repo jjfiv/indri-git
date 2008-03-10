@@ -12,5 +12,9 @@
         Force aggregation of the component libraries into a unified indri.lib.
 */
 #ifdef WIN32
+#pragma comment (lib, "zlib.lib")
+#pragma comment (lib, "xpdf.lib")
+#pragma comment (lib, "antlr.lib")
+#pragma comment (lib, "lemur.lib")
 #pragma comment (lib, "indri.lib")
 #endif
