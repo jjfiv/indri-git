@@ -205,14 +205,14 @@ struct query_t {
     }
   };
 
-  query_t( int _index, int _number, const std::string& _text ) :
+  query_t( int _index, std::string _number, const std::string& _text ) :
     index( _index ),
     number( _number ),
     text( _text )
   {
   }
 
-  int number;
+  std::string number;
   int index;
   std::string text;
 };
@@ -266,7 +266,7 @@ private:
     }
   }
 
-  void _printResultRegion( std::stringstream& output, int queryIndex, size_t start, size_t end ) {
+  void _printResultRegion( std::stringstream& output, std::string queryIndex, size_t start, size_t end ) {
     std::vector<std::string> documentNames;
     std::vector<indri::api::ParsedDocument*> documents;
     std::vector<indri::api::ScoredExtentResult> resultSubset;
@@ -300,7 +300,7 @@ private:
     // Print results
     for( size_t i=0; i < resultSubset.size(); i++ ) {
       int rank = int(start+i+1);
-      int queryNumber = queryIndex;
+      std::string queryNumber = queryIndex;
       
       if( _trecFormat ) {
         // TREC formatted output: queryNumber, Q0, documentName, rank, score, runID
@@ -341,7 +341,7 @@ private:
     }
   }
   
-  void _printResults( std::stringstream& output, int queryIndex ) {
+  void _printResults( std::stringstream& output, std::string queryIndex ) {
     for( size_t start = 0; start < _results.size(); start += 50 ) {
       size_t end = std::min<size_t>( start + 50, _results.size() );
       _printResultRegion( output, queryIndex, start, end );
@@ -466,15 +466,16 @@ void push_queue( std::queue< query_t* >& q, indri::api::Parameters& queries,
                  int queryOffset ) {
 
   for( size_t i=0; i<queries.size(); i++ ) {
-    int queryNumber;
+    std::string queryNumber;
     std::string queryText;
 
     if( queries[i].exists( "number" ) ) {
       queryText = (std::string) queries[i]["text"];
-      queryNumber = (int) queries[i]["number"];
+      queryNumber = (std::string) queries[i]["number"];
     } else {
       queryText = (std::string) queries[i];
-      queryNumber = queryOffset + int(i);
+      int thisQuery=queryOffset + int(i);
+      queryNumber = "" + thisQuery;
     }
     
     q.push( new query_t( (int)i, queryNumber, queryText ) );
