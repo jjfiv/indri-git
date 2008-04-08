@@ -155,6 +155,9 @@ namespace indri{
       int document;
       int begin;
       int end;
+      INT64 number;
+      int ordinal;
+      int parentOrdinal;
     public:
       ~ScoredExtentResult();
     };

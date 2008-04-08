@@ -1883,6 +1883,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getAnnotations) {
         add_property_long(obj,"document",r->document);
         add_property_long(obj,"begin",r->begin);
         add_property_long(obj,"end",r->end);
+        add_property_long(obj,"number", r->number);
+        add_property_long(obj,"ordinal", r->ordinal);
+        add_property_long(obj,"parentOrdinal", r->parentOrdinal);
         add_property_zval(obj,"_cPtr",_cPtr);
         add_next_index_zval(seRes, obj);
       }
@@ -1932,6 +1935,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryAnnotation_getResults) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -2338,6 +2344,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuery) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -2427,6 +2436,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_runQuerydocset) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -3517,6 +3529,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionList__SWIG_0) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -3569,6 +3584,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionList__SWIG_1) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -4487,6 +4505,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryExpander_runExpandedQuery__SWIG_0) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
@@ -4544,6 +4565,9 @@ ZEND_NAMED_FUNCTION(_wrap_QueryExpander_runExpandedQuery__SWIG_1) {
       add_property_long(obj,"document",r->document);
       add_property_long(obj,"begin",r->begin);
       add_property_long(obj,"end",r->end);
+      add_property_long(obj,"number", r->number);
+      add_property_long(obj,"ordinal", r->ordinal);
+      add_property_long(obj,"parentOrdinal", r->parentOrdinal);
       add_property_zval(obj,"_cPtr",_cPtr);
       add_next_index_zval(return_value, obj);
     }
