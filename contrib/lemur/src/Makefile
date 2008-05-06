@@ -9,11 +9,11 @@ all: $(OBJLIB)
 
 # compiling C++ code
 %.o: ../src/%.cpp
-	$(CXX) $(CXXFLAGS) -I../include/$(MODULE) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -I../../../include -I../include/$(MODULE) -o $@ -c $<
 
 # compiling C code
 %.o: ../src/%.c
-	$(CC) $(CFLAGS) -I../include/$(MODULE) -o $@ -c $<
+	$(CC) $(CFLAGS) -I../../../include -I../include/$(MODULE) -o $@ -c $<
 
 # how to make a library from object files
 $(OBJLIB): $(OBJ)

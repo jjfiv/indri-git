@@ -107,6 +107,9 @@
 				RelativePath=".\Annotator.cpp">
 			</File>
 			<File
+				RelativePath=".\AnchorTextHarvester.cpp">
+			</File>
+			<File
 				RelativePath=".\BooleanAndNode.cpp">
 			</File>
 			<File
@@ -509,6 +512,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath="..\include\indri\AnchorTextAnnotator.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\AnchorTextHarvester.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\AnchorTextWriter.hpp">
