@@ -1,4 +1,4 @@
-#include "lemur/SHA1.hpp"
+#include "SHA1.hpp"
 #include "string.h"
 
 lemur::utility::SHA1::SHA1() { 

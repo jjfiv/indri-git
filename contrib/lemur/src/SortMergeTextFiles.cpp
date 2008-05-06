@@ -1,6 +1,6 @@
-#include "lemur/SortMergeTextFiles.hpp"
+#include "SortMergeTextFiles.hpp"
 #include "indri/Path.hpp"
-#include "lemur/Exception.hpp"
+#include "Exception.hpp"
 #include "indri/ScopedLock.hpp"
 
 lemur::file::SortMergeTextFiles::SortMergeTextFiles(std::string &outputFilePath, std::string &tempDirectory, int numMergeThreads, bool displayStatus) :

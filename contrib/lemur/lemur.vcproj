@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include/lemur"
+				AdditionalIncludeDirectories="include;../../include;include/lemur"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="include/lemur"
+				AdditionalIncludeDirectories="include;../../include;include/lemur"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -111,6 +111,9 @@
 				RelativePath=".\src\fn_f.c">
 			</File>
 			<File
+				RelativePath=".\src\HarvestSortMerge.cpp">
+			</File>
+			<File
 				RelativePath=".\src\Keyfile.cpp">
 			</File>
 			<File
@@ -124,6 +127,12 @@
 			</File>
 			<File
 				RelativePath=".\src\RVLCompress.cpp">
+			</File>
+			<File
+				RelativePath=".\src\SHA1.cpp">
+			</File>
+			<File
+				RelativePath=".\src\SortMergeTextFiles.cpp">
 			</File>
 			<File
 				RelativePath=".\src\string-set.c">
@@ -141,6 +150,9 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\fileio.h">
+			</File>
+			<File
+				RelativePath=".\include\lemur\HarvestSortMerge.hpp">
 			</File>
 			<File
 				RelativePath=".\include\lemur\IndexTypes.hpp">
@@ -183,6 +195,12 @@
 			</File>
 			<File
 				RelativePath=".\include\lemur\RVLCompress.hpp">
+			</File>
+			<File
+				RelativePath=".\include\lemur\SHA1.hpp">
+			</File>
+			<File
+				RelativePath=".\include\lemur\SortMergeTextFiles.hpp">
 			</File>
 			<File
 				RelativePath=".\include\lemur\string-set.h">

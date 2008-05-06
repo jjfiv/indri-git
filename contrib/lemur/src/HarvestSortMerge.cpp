@@ -1,4 +1,4 @@
-#include "lemur/HarvestSortMerge.hpp"
+#include "HarvestSortMerge.hpp"
 
 //      lemur::file::Keyfile *_docNoKeyfile
 
