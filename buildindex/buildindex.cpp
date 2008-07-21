@@ -734,6 +734,23 @@ static void process_ordinal_fields( indri::api::Parameters parameters, indri::ap
   }
 }
 
+//
+// process_parental_fields
+//
+static void process_parental_fields( indri::api::Parameters parameters, indri::api::IndexEnvironment& env ) { // pto
+  std::string parName = "parental";
+  std::string subName = "name";
+  indri::api::Parameters slice = parameters["field"];
+  for( int i=0; i<slice.size(); i++ ) {
+    bool isParental = slice[i].get(parName, false);
+    if( isParental ) {
+      std::string fieldName = slice[i][subName];
+      fieldName = downcase_string( fieldName );
+      env.setParentalField(fieldName, isParental);
+    }
+  }
+}
+
 void require_parameter( const char* name, indri::api::Parameters& p ) {
   if( !p.exists( name ) ) {
     LEMUR_THROW( LEMUR_MISSING_PARAMETER_ERROR, "Must specify a " + name + " parameter." );
@@ -761,7 +778,7 @@ int main(int argc, char * argv[]) {
     env.setMemory( parameters.get("memory", INT64(100*1024*1024)) );
 
     env.setNormalization( parameters.get("normalize", true));
-    
+
     std::string offsetAnnotationHint=parameters.get("offsetannotationhint", "default");
     if (offsetAnnotationHint=="ordered") {
       env.setOffsetAnnotationIndexHint(indri::parse::OAHintOrderedAnnotations);
@@ -811,6 +828,7 @@ int main(int argc, char * argv[]) {
       env.setIndexedFields(fields);
       process_numeric_fields( parameters, env );
       process_ordinal_fields( parameters, env );
+      process_parental_fields( parameters, env ); //pto
     }
 
     if( indri::collection::Repository::exists( repositoryPath ) ) {
