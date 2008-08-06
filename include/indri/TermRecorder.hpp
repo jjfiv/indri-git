@@ -18,6 +18,7 @@
 #include "indri/Buffer.hpp"
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #ifndef INDRI_TERMRECORDER_HPP
 #define INDRI_TERMRECORDER_HPP

@@ -11,6 +11,8 @@
 #include <antlr/config.hpp>
 
 #include <map>
+#include <cstdlib>
+#include <cstring>
 
 #ifdef HAS_NOT_CCTYPE_H
 #include <ctype.h>

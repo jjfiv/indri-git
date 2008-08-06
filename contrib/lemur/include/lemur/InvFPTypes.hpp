@@ -14,6 +14,7 @@
 #ifndef _INVFPTYPES_H
 #define _INVFPTYPES_H
 
+#include <cstring>
 #include "common_headers.hpp"
 #include "IndexTypes.hpp"
 
