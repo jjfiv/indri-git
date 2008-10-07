@@ -19,6 +19,7 @@ endif
 	$(MAKE) -C rmodel
 	$(MAKE) -C makeprior
 	$(MAKE) -C site-search
+	$(MAKE) -C modifyfields
 
 $(INSTALLDIRS):
 	$(INSTALL_DIR) $@
@@ -38,6 +39,7 @@ endif
 	$(MAKE) clean -C rmodel
 	$(MAKE) clean -C makeprior
 	$(MAKE) -C site-search clean
+	$(MAKE) -C modifyfields clean
 	rm -f depend/*
 
 distclean: clean
@@ -61,6 +63,7 @@ endif
 	$(MAKE) install -C pagerank
 	$(MAKE) install -C rmodel
 	$(MAKE) install -C makeprior
+	$(MAKE) install -C modifyfields
 	$(MAKE) install -C doc
 	$(MAKE) -C site-search install
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)
