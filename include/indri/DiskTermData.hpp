@@ -20,6 +20,7 @@
 
 #include "indri/TermData.hpp"
 #include "lemur/Keyfile.hpp"
+#include "lemur/IndexTypes.hpp"
 
 namespace indri {
   namespace index {
@@ -31,7 +32,7 @@ namespace indri {
       };
 
       TermData* termData;
-      int termID;
+      lemur::api::TERMID_T termID;
 
       UINT64 startOffset;
       UINT64 length;
