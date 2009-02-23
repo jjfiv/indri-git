@@ -116,4 +116,4 @@ endif
 
 # generating C++ with flex
 ../src/%.cpp: ../src/%.l
-	$(LEX) -8 -o$@ $<
+	$(LEX) -8 -f -o$@ $<
