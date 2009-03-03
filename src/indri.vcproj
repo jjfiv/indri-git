@@ -485,6 +485,9 @@
 				RelativePath=".\Walker.cpp">
 			</File>
 			<File
+				RelativePath=".\WARCDocumentIterator.cpp">
+			</File>
+			<File
 				RelativePath=".\WeightedAndNode.cpp">
 			</File>
 			<File
@@ -1199,6 +1202,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\Walker.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\WARCDocumentIterator.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\WeightedAndNode.hpp">
