@@ -378,7 +378,8 @@ void indri::collection::Repository::create( const std::string& path, indri::api:
       }
     }
 
-    _collection->create( collectionPath, forwardFields, backwardFields );
+    _collection->create( collectionPath, forwardFields, backwardFields,
+                         options->get( "storeDocs", true) );
 
     _startThreads();
   } catch( lemur::api::Exception& e ) {
@@ -778,8 +779,9 @@ void indri::collection::Repository::_trim() {
     // compute the average number of documents in the indexes we've seen so far
     documentCount = (int)(*state)[position]->documentCount();
 
-    // break if we find an index more than twice as large as the preceding one.
-    if( documentCount > lastDocumentCount*2.0 )
+    // break if we find an index more than 8 times as large 
+    // as the preceding one.
+    if( documentCount > lastDocumentCount*8.0 )
       {
         position++;
         break;
