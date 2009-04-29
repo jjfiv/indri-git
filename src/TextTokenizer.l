@@ -308,7 +308,7 @@ void indri::parse::TextTokenizer::processTag() {
 
             i = 0;
             if ( quoted ) 
-              while ( c[i] != '"' && c[i] != '>' && c[i] =='\'') i++;
+              while ( c[i] != '"' && c[i] != '>' && c[i] !='\'') i++;
             else
 #ifndef WIN32
               while ( ! isspace( c[i] ) && c[i] != '>' ) i++;
