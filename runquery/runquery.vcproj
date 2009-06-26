@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\contrib\antlr\include;..\contrib\lemur\include"
+				AdditionalIncludeDirectories="..\include;..\contrib\antlr\include;..\contrib\lemur\include;..\contrib\zlib\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,7 @@
 				Name="VCCLCompilerTool"
 				GlobalOptimizations="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="..\include;..\contrib\antlr\include;..\contrib\lemur\include"
+				AdditionalIncludeDirectories="..\include;..\contrib\antlr\include;..\contrib\lemur\include;..\contrib\zlib\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="2"
