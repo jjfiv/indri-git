@@ -1250,10 +1250,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\indri\OkapiTermScoreFunction.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\include\indri\OrderedWindowNode.hpp"
 				>
 			</File>
