@@ -388,10 +388,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IntervalTree.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\KrovetzStemmer.cpp"
 				>
 			</File>
@@ -1103,10 +1099,6 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\InternalFileBuffer.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\indri\IntervalTree.hpp"
 				>
 			</File>
 			<File
