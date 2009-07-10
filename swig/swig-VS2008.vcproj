@@ -122,6 +122,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;C:\Program Files (x86)\Java\jdk1.6.0_13\include&quot;;&quot;C:\Program Files (x86)\Java\jdk1.6.0_13\include\win32&quot;;..\include;..\contrib\lemur\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SWIG_EXPORTS;INDRI_STANDALONE"
 				RuntimeLibrary="2"

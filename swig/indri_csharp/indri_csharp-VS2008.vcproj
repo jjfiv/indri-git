@@ -122,6 +122,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..\..\contrib\lemur\include;..\..\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;INDRI_CSHARP_EXPORTS;INDRI_STANDALONE"
 				RuntimeLibrary="2"

@@ -108,6 +108,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../include;../contrib/antlr/include;../contrib/xpdf/include;../contrib/lemur/include;../contrib/zlib/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				MinimalRebuild="true"
