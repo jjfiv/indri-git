@@ -96,12 +96,11 @@ void indri::parse::StopperTransformation::read( const std::vector<char*>& stopwo
 void indri::parse::StopperTransformation::read( indri::api::Parameters& stopwords ) {
   for( unsigned int i=0; i < stopwords.size(); i++ ) {
     _table.insert(strdup(((std::string) stopwords[i] ).c_str()));
-  }
+}
 }
 
 indri::api::ParsedDocument* indri::parse::StopperTransformation::transform( indri::api::ParsedDocument* document ) {
   indri::utility::greedy_vector<char*>& terms = document->terms;
-
   for( size_t i=0; i<terms.size(); i++ ) {
     if( terms[i] && (_table.find(terms[i]) != _table.end()) ) {
       terms[i] = 0;
