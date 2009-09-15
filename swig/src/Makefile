@@ -64,6 +64,7 @@ PHPINTERFACES = $(PHPSRC) interface/indritypemaps.i
 
 OUTDIRPHP=$(OBJ)/php
 PHPLIB=$(OUTDIRPHP)/libindri_php$(PHP_SO)
+PHPLIBPHP=php/libindri_php.php
 
 JAVADIRS = $(INDRI_OUTDIR) $(INDRI_OUTDIRUI) $(INDRI_OUTDIRPROP) $(OBJ)/java/docs
 
@@ -180,7 +181,7 @@ $(OBJ)/java/IndexUI.jar: $(JAVAOBJ) $(MFSTIND) $(DOCDEP)
 ## PHP
 php/indri_phpwrap.cpp: $(PHPINTERFACES)
 ifneq ("$(SWIG)", "")
-	$(SWIG) -php4 -c++ -o php/indri_phpwrap.cpp -outdir php $(INCLUDES) $(PHPSRC) 
+	$(SWIG) -php5 -c++ -o php/indri_phpwrap.cpp -outdir php $(INCLUDES) $(PHPSRC) 
 endif
 
 $(OUTDIRPHP)/indri_phpwrap.o: php/indri_phpwrap.cpp
@@ -217,6 +218,7 @@ ifeq ($(WITH_SWIG), 1)
   endif
   ifeq ($(WITH_PHP), 1)
 	$(INSTALL_PROGRAM) $(PHPLIB) $(libdir)
+	$(INSTALL_DATA) $(PHPLIBPHP) $(pkgdatadir)
   endif
   ifeq ($(WITH_CSHARP), 1)
 	$(INSTALL_PROGRAM) $(CSHARPLIB) $(libdir)

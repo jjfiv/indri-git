@@ -91,10 +91,9 @@ typedef long long UINT64;
   %}
 #endif
 #endif
-#ifdef SWIGPHP4
-%module indri
+#ifdef SWIGPHP5
+%module libindri_php
 %{
-#include "indri/indri-platform.h"
 #ifdef INDRI_STANDALONE
 #include "lemur/lemur-compat.hpp"
 #else
@@ -109,14 +108,15 @@ typedef long long UINT64;
 #else
 #include "Exception.hpp"
 #endif
+
   // remap overloaded method names.
+  // may want to use %rename here?
 #define onetermCount termCount
 #define onedocumentCount documentCount
 #define runQuerydocset runQuery
 #define runAnnotatedQuerydocset runAnnotatedQuery
 #define documentsdocids documents
 #define documentMetadatadocids documentMetadata
-
 
 #define set_int set
 #define set_bool set
@@ -133,16 +133,19 @@ typedef long long UINT64;
 
 %include "typemaps.i"
 %include "std_string.i"
+%include "std_vector.i"
 %include "exception.i"
 %include "indritypemaps.i"
 %include "LemurException.i"
 
+
 namespace indri{
   namespace parse{
     struct TermExtent {
+    public:
       int begin;
       int end;
-    public:
+
       ~TermExtent();
     };
 
@@ -151,6 +154,7 @@ namespace indri{
   namespace api{
 
     class ScoredExtentResult {
+
       double score;
       int document;
       int begin;
@@ -164,16 +168,18 @@ namespace indri{
 
 
     class ParsedDocument {
+      indri::utility::greedy_vector<char*> terms;
+      indri::utility::greedy_vector<indri::parse::TagExtent> tags;
+      indri::utility::greedy_vector<indri::parse::TermExtent> positions;
+      indri::utility::greedy_vector<indri::parse::MetadataPair> metadata;
+
+
       const char* text;
       size_t textLength;
 
       const char* content;
       size_t contentLength;
 
-      greedy_vector<char*> terms;
-      greedy_vector<indri::parse::TagExtent> tags;
-      greedy_vector<indri::parse::TermExtent> positions;
-      greedy_vector<indri::parse::MetadataPair> metadata;
     public:
       ~ParsedDocument();
       std::string getContent();
@@ -187,6 +193,7 @@ namespace indri{
       std::vector<QueryAnnotationNode*> children;
     };
 
+%nodefaultctor QueryAnnotation;
 
     class QueryAnnotation {
     public:
@@ -195,7 +202,6 @@ namespace indri{
       const std::vector<ScoredExtentResult>& getResults() const;
       ~QueryAnnotation();
     };
-
     setEx(QueryEnvironment::runQuery);
     setEx(QueryEnvironment::runQuerydocset);
     setEx(QueryEnvironment::runAnnotatedQuery);
@@ -205,7 +211,7 @@ namespace indri{
     setEx(QueryEnvironment::documentMetadata)
     setEx(QueryEnvironment::documentMetadatadocids);
     setEx(QueryEnvironment::documentIDsFromMetadata);
-    
+
     class QueryEnvironment {
     public:
       ~QueryEnvironment();
@@ -220,8 +226,6 @@ namespace indri{
       std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
       std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
 
-      %newobject runAnnotatedQuery;
-      %newobject runAnnotatedQuerydocset;
       QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
       QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
 
