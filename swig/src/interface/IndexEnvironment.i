@@ -310,6 +310,17 @@ public";
 #ifdef SWIGJAVA
       %javamethodmodifiers  "
 /**
+       set the storeDocs flag
+       @param flag, false to not store documents in the compressed collection, true to do so (default)
+@throws Exception if a lemur::api::Exception was thrown by the JNI library.
+*/
+public";
+#endif
+
+      void setStoreDocs( bool flag ) throw (lemur::api::Exception);
+#ifdef SWIGJAVA
+      %javamethodmodifiers  "
+/**
        create a new index and repository
        @param repositoryPath the path to the repository
        @param callback IndexStatus object to be notified of indexing progress.
