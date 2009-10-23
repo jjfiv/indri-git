@@ -1,3 +1,15 @@
+/*==========================================================================
+ * Copyright (c) 2004-2008 Carnegie Mellon University and University of
+ * Massachusetts.  All Rights Reserved.
+ *
+ * Use of the Lemur Toolkit for Language Modeling and Information Retrieval
+ * is subject to the terms of the software license set forth in the LICENSE
+ * file included with this software, and also available at
+ * http://www.lemurproject.org/license.html
+ *
+ *==========================================================================
+*/
+
 #include "SortMergeTextFiles.hpp"
 #include "indri/Path.hpp"
 #include "Exception.hpp"
@@ -64,9 +76,9 @@ std::string lemur::file::SortMergeTextFiles::_flushChunks(std::string& basePathn
   time(&rawtime);
   chunkPathname << basePathname << "." << (rawtime+clock()) << "_" << currentChunkNumber << ".mchunk";
 
-  std::ofstream outfile(chunkPathname.str().c_str());
+  std::ofstream outfile(chunkPathname.str().c_str(), std::ios::out | std::ios::binary);
   for (std::vector<std::string>::iterator vIter=inMemRecords->begin(); vIter!=inMemRecords->end(); vIter++) {
-    outfile << (*vIter).c_str() << std::endl;
+    outfile << (*vIter).c_str() << "\n"; //std::endl;
   }
   outfile.flush();
   outfile.close();
@@ -91,8 +103,8 @@ void lemur::file::SortMergeTextFiles::_doSingleFileMergesort(std::string &inputF
   }
 
   // reset the buffer size
-  setvbuf(_in, NULL, _IOFBF, 65536);
-
+  //  setvbuf(_in, NULL, _IOFBF, 65536);
+  setvbuf(_in, NULL, _IOFBF, 5*1024*1024);
   std::vector<std::string> outputChunks;
 
   int countInputRecords=0;
@@ -273,6 +285,7 @@ int lemur::file::SortMergeTextFiles::sort(std::vector<std::string> &inputFilePat
     std::string thisTempFile=indri::file::Path::combine(_tempDirectory, thisInputFilename);
     if (_displayStatus) {
       std::cout << "-- sorting input file " << inputFileCounter << " of " << inputFileCount << "\r";
+      std::cout.flush();
       ++inputFileCounter;
     }
     // std::vector<std::string> chunkList;
@@ -360,7 +373,7 @@ UINT64 lemur::file::FileMergeThread::work() {
 
     int whichBuffer=chooseNextBuffer();
     if (whichBuffer > -1) {
-      outfile << _buffer[whichBuffer] << std::endl;
+      outfile << _buffer[whichBuffer] << "\n"; //std::endl;
       ++recordCounter;
       if (!fgets(_buffer[whichBuffer], MAX_INPUT_LINESIZE, inputFile[whichBuffer])) {
         fileDone[whichBuffer]=true;
@@ -386,10 +399,11 @@ UINT64 lemur::file::FileMergeThread::initialize() {
       LEMUR_THROW( LEMUR_IO_ERROR, "Couldn't open temp file " + filePath[i] + "." );
     }
     // reset the buffer size to 64k
-    setvbuf(inputFile[i], NULL, _IOFBF, 65536);
+    //    setvbuf(inputFile[i], NULL, _IOFBF, 5*1024*1024);
+    setvbuf(inputFile[i], NULL, _IOFBF, 1*1024*1024);
   }
-  outfile.open(outputFilePath.c_str());
-  outfile.rdbuf()->pubsetbuf(this->_outputBuffer, MAX_INPUT_LINESIZE);
+  outfile.open(outputFilePath.c_str(), std::ios::out | std::ios::binary);
+  outfile.rdbuf()->pubsetbuf(this->_outputBuffer, sizeof(this->_outputBuffer));
 
   recordCounter=0;
 

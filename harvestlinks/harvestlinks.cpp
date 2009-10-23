@@ -112,14 +112,12 @@ This will allow you to perform retrieval tasks on the anchor text.
 #include "indri/HTMLParser.hpp"
 #include "indri/TokenizerFactory.hpp"
 #include "indri/ConflationPattern.hpp"
-// #include "indri/AnchorTextWriter.hpp"
 #include "indri/AnchorTextHarvester.hpp"
 #include "indri/FileTreeIterator.hpp"
 #include "indri/Path.hpp"
 #include "lemur/Exception.hpp"
 #include "indri/Combiner.hpp"
 #include "lemur/Keyfile.hpp"
-// #include "SortMergeTextFiles.hpp"
 #include "lemur/HarvestSortMerge.hpp"
 #include "indri/IndriTimer.hpp"
 #include "lemur/SHA1.hpp"
@@ -289,13 +287,6 @@ static void harvest_anchor_text( const std::string& corpusPath,
 
       std::string linkFilePath = indri::file::Path::combine( finalHarvestDirectory, linkFileFilename );
       std::string docOrderPath = indri::file::Path::combine( finalHarvestDirectory, docOrderFilename );
-
-      // every 100 files, reset the tokenizer for memory's sake...
-      if ((fCounter % 100)==0) {
-        if (tokenizer) { delete tokenizer; }
-        tokenizer = indri::parse::TokenizerFactory::get( "word" );
-      }
-
       try {
         // now harvest the anchor text in the file
         harvest_anchor_text_file( *files, linkFilePath, docOrderPath, redirectKeyfile, parser, tokenizer, &docUrlNoKeyfile, fileClass );
@@ -326,6 +317,37 @@ static void harvest_anchor_text( const std::string& corpusPath,
   }
 }
 
+static void collect_harvest_paths( const std::string& corpusPath,
+                                 const std::string& fileClass,
+                                 const std::string& harvestPath,
+                                 const std::string& docUrlNoKeyfilePath,
+                                 const std::string& preSortPath,
+                                 const std::string& redirectPath
+                                   ) 
+{
+  if( indri::file::Path::isDirectory( corpusPath ) ) {
+    indri::file::FileTreeIterator files( corpusPath );
+    for( ; files != indri::file::FileTreeIterator::end(); files++ ) {
+      std::string filePath = *files;
+      std::string finalHarvestPath=getFinalHarvestPath(corpusPath, filePath, harvestPath);
+      std::string finalHarvestDirectory=indri::file::Path::directory(finalHarvestPath);
+      std::string linkFileFilename("linkfile-");
+      linkFileFilename += indri::file::Path::filename(filePath);
+      std::string linkFilePath = indri::file::Path::combine( finalHarvestDirectory, linkFileFilename );
+      harvestedLinkPaths.push_back(linkFilePath);
+    }
+  } else {
+    std::string linkFileFilename("linkfile-");
+    linkFileFilename += indri::file::Path::filename(corpusPath);
+    std::string linkFilePath = indri::file::Path::combine( harvestPath, linkFileFilename );
+    harvestedLinkPaths.push_back(linkFilePath);
+  }
+}
+
+//can't stack allocate this buffer on Win XP without modifying the default stack
+// size parameter
+char _outputBuffer[5*1024*1024];
+
 void combineOutputFile(const std::string& corpusFile, const std::string& sortedPath,
                        const std::string& outputSortedLinkFile, const std::string& docOrderPath,
                        lemur::file::Keyfile *urlKeyfile, FILE *sortedDestFile,
@@ -344,8 +366,8 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
 
   // start our output file
   std::string outputFilePath=indri::file::Path::combine(sortedPath, indri::file::Path::filename(corpusFile));
-  std::ofstream outfile(outputFilePath.c_str());
-
+  std::ofstream outfile(outputFilePath.c_str(),std::ios::out | std::ios::binary);
+  outfile.rdbuf()->pubsetbuf(_outputBuffer, sizeof(_outputBuffer));
   // open the docOrder file
   FILE *docOrder=fopen(docOrderPath.c_str(), "rb");
 
@@ -354,8 +376,8 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
     return;
   }
 
-  // reset the buffer size to 64k
-  setvbuf(docOrder, NULL, _IOFBF, 65536);
+  // reset the buffer size to 3MB
+  setvbuf(docOrder, NULL, _IOFBF, 3*1024*1024);
 
   char *currentDocURL;
   size_t currentDocURLLen;
@@ -370,9 +392,9 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
   std::vector<std::string> matchedDocNos;
 
   // reserve some allocated space
-  matchedURLs.reserve(128);
-  matchedAnchorText.reserve(128);
-  matchedDocNos.reserve(128);
+  matchedURLs.reserve(1024);
+  matchedAnchorText.reserve(1024);
+  matchedDocNos.reserve(1024);
 
   std::vector<std::string> splitLine;
   std::vector<std::string> thisDestUrlAndDocno;
@@ -396,9 +418,14 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
       }
 
       // get dest URL from link files
-      long linkFilePosStart;
+      //long linkFilePosStart; // need to use off_t, fseeko (_fseeki64)
+#ifdef WIN32
+	  _int64 linkFilePosStart;
+#else
+	  off_t linkFilePosStart;
+#endif
       int linkFilePosStartSize;
-      if (urlKeyfile->get(finalDestURL.c_str(), &linkFilePosStart, linkFilePosStartSize, sizeof(long))) {
+      if (urlKeyfile->get(finalDestURL.c_str(), &linkFilePosStart, linkFilePosStartSize, sizeof(linkFilePosStart))) {
         // it's here -
 
         // cleanup from any last items
@@ -407,8 +434,11 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
         matchedAnchorText.clear();
 
         // set our sorted file pointer
-        fseek(sortedDestFile, linkFilePosStart, SEEK_SET);
-
+#ifdef WIN32
+        _fseeki64(sortedDestFile, linkFilePosStart, SEEK_SET);
+#else
+		fseeko(sortedDestFile, linkFilePosStart, SEEK_SET);
+#endif
         // process until URLs do not match
         // lines are in destURL->srcURL->anchor_text order
         bool keepReading=true;
@@ -452,13 +482,13 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
         // output file will be doc no -> doc URL -> array of (src url, anchor text)
         int numLinks=matchedURLs.size();
         if (numLinks > 0) {
-          outfile << "DOCNO=" << thisDestDocNo.c_str() << std::endl;
-          outfile << thisDestURL.c_str() << std::endl;
-          outfile << "LINKS=" << numLinks << std::endl;
+          outfile << "DOCNO=" << thisDestDocNo.c_str() << "\n"; //std::endl;
+          outfile << thisDestURL.c_str() << "\n"; //std::endl;
+          outfile << "LINKS=" << numLinks << "\n"; //std::endl;
           for (int i=0; i < numLinks; i++) {
-            outfile << "LINKDOCNO=" << matchedDocNos[i].c_str() << std::endl;
-            outfile << "LINKFROM=" << matchedURLs[i].c_str() << std::endl;
-            outfile << "TEXT=\"" << matchedAnchorText[i].c_str() << "\"" << std::endl;
+            outfile << "LINKDOCNO=" << matchedDocNos[i].c_str() << "\n"; //std::endl;
+            outfile << "LINKFROM=" << matchedURLs[i].c_str() << "\n"; //std::endl;
+            outfile << "TEXT=\"" << matchedAnchorText[i].c_str() << "\"" << "\n"; //std::endl;
           } // end for (int i=0; i < numLinks; i++)
         } // end if (numLinks > 0)
       } // end if (urlKeyfile->get(thisDestURL.c_str(), &linkFilePosStart ...
@@ -489,14 +519,18 @@ void combineSortedFiles(const std::string& corpusPath, const std::string& harves
     return;
   }
   // reset the buffer size to 64k
-  setvbuf(_sortIn, NULL, _IOFBF, 65536);
-
+  //  setvbuf(_sortIn, NULL, _IOFBF, 65536);
+  setvbuf(_sortIn, NULL, _IOFBF, 5*1024*1024);
+  
   indri::utility::Buffer lineBuffer;
   char lastString[lemur::file::FileMergeThread::MAX_INPUT_LINESIZE];
   char *currentLine;
   size_t currentLineLen;
-  long lastFilePos=0;
-
+#ifdef WIN32
+  _int64 lastFilePos=0;
+#else
+  off_t  lastFilePos=0;
+#endif
   lastString[0]=0;
 
   std::cout << "-- gathering destination link positions..." << std::endl;
@@ -520,9 +554,9 @@ void combineSortedFiles(const std::string& corpusPath, const std::string& harves
         // need a SHA1 / Hex hash on currentLine - and we can remove the 511 max restriction
         char currentLineHash[128];
         SHA1Hasher.hashStringToHex((const char*)currentLine, currentLineHash, 128);
-        urlKeyfile.put(currentLineHash, &lastFilePos, sizeof(long));
+        urlKeyfile.put(currentLineHash, &lastFilePos, sizeof(lastFilePos));
       } else {
-        urlKeyfile.put(currentLine, &lastFilePos, sizeof(long));
+        urlKeyfile.put(currentLine, &lastFilePos, sizeof(lastFilePos));
       }
       strncpy(lastString, currentLine, lemur::file::FileMergeThread::MAX_INPUT_LINESIZE-1);
       lastString[lemur::file::FileMergeThread::MAX_INPUT_LINESIZE-1]=0;
@@ -537,7 +571,11 @@ void combineSortedFiles(const std::string& corpusPath, const std::string& harves
         cout.flush();
       }
     }
-    lastFilePos=ftell(_sortIn);
+#ifdef WIN32
+    lastFilePos=_ftelli64(_sortIn); // need to use ftello (_ftelli64)
+#else
+    lastFilePos=ftello(_sortIn); // need to use ftello (_ftelli64)
+#endif
   }
   cout << "-- found " << linkCounter << " unique links..." << std::endl;
 
@@ -614,7 +652,7 @@ int main(int argc, char * argv[]) {
       exit (1);
     }
     
-    if( parameters.get( "version", 0 ) ) {
+    if( parameters.get( "version", false ) ) {
       std::cout << INDRI_DISTRIBUTION << std::endl;
     }
 
@@ -637,9 +675,24 @@ int main(int argc, char * argv[]) {
         indri::file::Path::remove( preSortPath );
       if( indri::file::Path::isDirectory( sortedPath ) )
         indri::file::Path::remove( sortedPath );
-
+      if( ! indri::file::Path::exists( outputPath )  ) {
+        lemur_compat::mkdir( outputPath.c_str(), 0755 );
+      }
       indri::file::Path::make( harvestPath );
       indri::file::Path::make( preSortPath );
+      indri::file::Path::make( sortedPath );
+    }
+    
+    if( ! indri::file::Path::exists( outputPath )  ) {
+      lemur_compat::mkdir( outputPath.c_str(), 0755 );
+	}
+	if ( ! indri::file::Path::exists( harvestPath ) ) {
+      indri::file::Path::make( harvestPath );
+	}
+	if ( ! indri::file::Path::exists( preSortPath) ) {
+      indri::file::Path::make( preSortPath );
+	}
+	if ( ! indri::file::Path::exists( sortedPath ) ) {
       indri::file::Path::make( sortedPath );
     }
 
@@ -648,7 +701,7 @@ int main(int argc, char * argv[]) {
     g_timer.start();
 
     // step 1: harvest text
-    if( parameters.get( "harvest", 1 ) ) {
+    if( parameters.get( "harvest", true ) ) {
       g_timer.printElapsedSeconds(std::cout);
       std::cout << " Phase 1: Harvesting anchor URLs and text..." << std::endl;
       harvest_anchor_text( corpusPath, fileClass, harvestPath, docUrlNoKeyfilePath, preSortPath, redirectPath);
@@ -659,7 +712,9 @@ int main(int argc, char * argv[]) {
     std::string tempDirectory=indri::file::Path::combine(harvestPath, "tmp");
     std::string outputSortedLinkFile=indri::file::Path::combine(harvestPath, "linkFile.sorted");
 
-    if ( parameters.get( "sort", 1) ) {
+    if ( parameters.get( "sort", true ) ) {
+      if (harvestedLinkPaths.size() == 0)
+		  collect_harvest_paths( corpusPath, fileClass, harvestPath, docUrlNoKeyfilePath, preSortPath, redirectPath);
       docUrlNoKeyfile.openRead(docUrlNoKeyfilePath.c_str(), (20*1024*1024));
 
       // step 2: combine and sort our (destURL->srcURL->anchorText) files
@@ -673,9 +728,8 @@ int main(int argc, char * argv[]) {
       docUrlNoKeyfile.close();
     }
 
-    g_timer.printElapsedSeconds(std::cout);
-
-    if ( parameters.get( "clean", 1) ) {
+    if ( parameters.get( "clean", true ) ) {
+      g_timer.printElapsedSeconds(std::cout);
       // delete the temp directory
       std::cout << " Phase 3: intermediate cleanup..." << std::endl;
       indri::file::Path::remove(tempDirectory);
@@ -687,8 +741,9 @@ int main(int argc, char * argv[]) {
     }
 
     // step 3: combine link file with doc file
-    g_timer.printElapsedSeconds(std::cout);
-    if (parameters.get( "combine", 1) ) {
+
+    if (parameters.get( "combine", true ) ) {
+      g_timer.printElapsedSeconds(std::cout);
       std::cout << " Phase 4: Combining harvested links to final output..." << std::endl;
 
       docUrlNoKeyfile.openRead(docUrlNoKeyfilePath.c_str(), (20*1024*1024));
