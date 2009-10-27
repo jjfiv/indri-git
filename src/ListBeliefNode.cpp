@@ -121,6 +121,7 @@ const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& indri::infn
   double occurrences = _contextOccurrences( extent );
   double documentOccurrences = _raw ? _documentOccurrences() : occurrences;
   double score = 0;
+
   
   score = _scoreFunction.scoreOccurrence( occurrences, contextSize, documentOccurrences, documentLength );
 

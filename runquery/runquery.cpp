@@ -176,6 +176,8 @@ is not specified, a default of 100 will be used.
 #include "indri/QueryExpander.hpp"
 #include "indri/RMExpander.hpp"
 #include "indri/PonteExpander.hpp"
+// need a QueryExpanderFactory....
+#include "indri/TFIDFExpander.hpp"
 
 #include "indri/IndriTimer.hpp"
 #include "indri/UtilityThread.hpp"
@@ -407,11 +409,23 @@ public:
     _printDocuments = _parameters.get( "printDocuments", false );
     _printPassages = _parameters.get( "printPassages", false );
     _printSnippets = _parameters.get( "printSnippets", false );
-
-    if( _parameters.get( "fbDocs", 0 ) != 0 ) {
-      _expander = new indri::query::RMExpander( &_environment, _parameters );
+    
+    if (_parameters.exists("baseline")) {
+      // doing a baseline
+      std::string baseline = _parameters["baseline"];
+      _environment.setBaseline(baseline);
+      // need a factory for this...
+      if( _parameters.get( "fbDocs", 0 ) != 0 ) {
+        // have to push the method in...
+        std::string rule = "method:" + baseline;
+        _parameters.set("rule", rule);
+        _expander = new indri::query::TFIDFExpander( &_environment, _parameters );
+      }
+    } else {
+      if( _parameters.get( "fbDocs", 0 ) != 0 ) {
+        _expander = new indri::query::RMExpander( &_environment, _parameters );
+      }
     }
-
     return 0;
   }
 
