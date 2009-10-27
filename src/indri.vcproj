@@ -366,6 +366,7 @@
 			</File>
 			<File
 				RelativePath=".\PlusNode.cpp">
+			</File>
 			<File
 				RelativePath=".\PonteExpander.cpp">
 			</File>
