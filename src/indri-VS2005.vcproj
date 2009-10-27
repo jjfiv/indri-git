@@ -505,6 +505,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PlusNode.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PonteExpander.cpp"
 				>
 			</File>
@@ -621,6 +625,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TFIDFExpander.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\TFIDFTermScoreFunction.cpp"
 				>
 			</File>
@@ -678,6 +686,10 @@
 			</File>
 			<File
 				RelativePath=".\WordDocumentExtractor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WPlusNode.cpp"
 				>
 			</File>
 			<File
@@ -1279,6 +1291,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\indri\PlusNode.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\include\indri\PonteExpander.hpp"
 				>
 			</File>
@@ -1348,6 +1364,10 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\QuerySpec.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\QueryTFWalker.hpp"
 				>
 			</File>
 			<File
@@ -1543,6 +1563,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\indri\TFIDFExpander.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\include\indri\TFIDFTermScoreFunction.hpp"
 				>
 			</File>
@@ -1632,6 +1656,10 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\WordDocumentExtractor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\WPlusNode.hpp"
 				>
 			</File>
 			<File
