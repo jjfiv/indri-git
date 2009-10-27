@@ -365,6 +365,8 @@
 				RelativePath=".\PDFDocumentExtractor.cpp">
 			</File>
 			<File
+				RelativePath=".\PlusNode.cpp">
+			<File
 				RelativePath=".\PonteExpander.cpp">
 			</File>
 			<File
@@ -452,6 +454,9 @@
 				RelativePath=".\TextTokenizer.cpp">
 			</File>
 			<File
+				RelativePath=".\TFIDFExpander.cpp">
+			</File>
+			<File
 				RelativePath=".\TFIDFTermScoreFunction.cpp">
 			</File>
 			<File
@@ -492,6 +497,9 @@
 			</File>
 			<File
 				RelativePath=".\WeightedSumNode.cpp">
+			</File>
+			<File
+				RelativePath=".\WPlusNode.cpp">
 			</File>
 			<File
 				RelativePath=".\WordDocumentExtractor.cpp">
@@ -946,6 +954,9 @@
 				RelativePath="..\include\indri\PDFDocumentExtractor.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\PlusNode.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\PonteExpander.hpp">
 			</File>
 			<File
@@ -998,6 +1009,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\QuerySpec.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\QueryTFWalker.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\RawScorerNodeExtractor.hpp">
@@ -1144,6 +1158,9 @@
 				RelativePath="..\include\indri\TextTokenizer.hpp">
 			</File>
 			<File
+				RelativePath="..\include\indri\TFIDFExpander.hpp">
+			</File>
+			<File
 				RelativePath="..\include\indri\TFIDFTermScoreFunction.hpp">
 			</File>
 			<File
@@ -1211,6 +1228,9 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\WordDocumentExtractor.hpp">
+			</File>
+			<File
+				RelativePath="..\include\indri\WPlusNode.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\WriterLockable.hpp">
