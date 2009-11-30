@@ -364,6 +364,8 @@ void indri::collection::CompressedCollection::create( const std::string& fileNam
   indri::api::Parameters manifest;
   indri::api::Parameters forwardParameters = manifest.append( "forward" );
 
+  manifest.set( "storeDocs", _storeDocs );
+
   for( size_t i=0; i<forwardIndexedFields.size(); i++ ) {
     std::stringstream metalookupName;
     metalookupName << "forwardLookup" << (int)i;
@@ -418,6 +420,7 @@ void indri::collection::CompressedCollection::open( const std::string& fileName 
   _lookup.open( lookupName );
   _output = new indri::file::SequentialWriteBuffer( _storage, 1024*1024 );
 
+  _storeDocs = manifest.get( "storeDocs", true );
   if( manifest.exists("forward.field") ) {
     indri::api::Parameters forward = manifest["forward.field"];
 
