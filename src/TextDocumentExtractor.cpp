@@ -42,9 +42,11 @@ indri::parse::UnparsedDocument* indri::parse::TextDocumentExtractor::nextDocumen
   pair.value = _filename.c_str();
   pair.valueLength = _filename.length()+1;
 
+  _docnostring.assign(_filename.c_str() );
+  cleanDocno();
+  pair.value = _docnostring.c_str();
+  pair.valueLength = _docnostring.length()+1;
   pair.key = "docno";
-  _document.metadata.push_back( pair );
-  pair.key = "path";
   _document.metadata.push_back( pair );
 
   pair.key = "filetype";
