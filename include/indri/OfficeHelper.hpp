@@ -14,10 +14,10 @@
 
 
 #ifdef WIN32
-#include "lemur-compat.hpp"
+#include "lemur/lemur-compat.hpp"
 #include "indri/Buffer.hpp"
 #include "indri/UnparsedDocument.hpp"
-#include "Exception.hpp"
+#include "lemur/Exception.hpp"
 #include <string>
 #include "indri/DocumentIterator.hpp"
 
