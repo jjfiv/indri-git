@@ -41,6 +41,8 @@ indri::parse::UnparsedDocument* indri::parse::TextDocumentExtractor::nextDocumen
   indri::parse::MetadataPair pair;
   pair.value = _filename.c_str();
   pair.valueLength = _filename.length()+1;
+  pair.key = "path";
+  _document.metadata.push_back( pair );
 
   _docnostring.assign(_filename.c_str() );
   cleanDocno();
