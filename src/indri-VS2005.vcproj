@@ -465,6 +465,9 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OfficeHelper.cpp">
+			</File>
+			<File
 				RelativePath=".\OffsetAnnotationAnnotator.cpp"
 				>
 			</File>
@@ -1245,6 +1248,9 @@
 			<File
 				RelativePath="..\include\indri\ObjectHandler.hpp"
 				>
+			</File>
+			<File
+				RelativePath="..\include\indri\OfficeHelper.hpp">
 			</File>
 			<File
 				RelativePath="..\include\indri\OffsetAnnotationAnnotator.hpp"
