@@ -19,7 +19,7 @@
 #ifndef INDRI_NETWORKSTREAM_HPP
 #define INDRI_NETWORKSTREAM_HPP
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(WIN32)
 #define MSG_NOSIGNAL 0
 #endif
 
