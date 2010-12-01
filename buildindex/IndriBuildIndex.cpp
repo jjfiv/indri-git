@@ -18,12 +18,14 @@
 //
 
 /*! \page IndriParameters Indri Parameter Files
-<P>The indri applications, buildindex, indrid, and runquery accept
-parameters from either the command line or from a file. The parameter
-file uses an XML format. The command line uses dotted path notation. The
-top level element in the parameters file is named <em>parameters</em>.
 
-<H3> Repository construction parameters (buildindex)</h3>
+<P>The indri applications, IndriBuildIndex, IndriDaemon, and
+IndriRunQuery accept parameters from either the command line or from a
+file. The parameter file uses an XML format. The command line uses
+dotted path notation. The top level element in the parameters file is
+named <em>parameters</em>.
+
+<H3> Repository construction parameters</h3>
 <dl>
 <dt>memory</dt>
 <dd> an integer value specifying the number of bytes to use for the
@@ -52,6 +54,7 @@ parameter file and as <tt>-corpus.class=trecweb</tt> on the command
 line. The known classes are: 
 <ul>
 <li>html -- web page data.
+<li>xml -- xml marked up data.
 <li>trecweb -- TREC web format, eg terabyte track.
 <li>trectext -- TREC format, eg TREC-3 onward.
 <li>trecalt -- TREC format, eg TREC-3 onward, with only the TEXT field included.
@@ -353,16 +356,8 @@ for the original query in the expanded query. Specified as
 as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
 </dl>
 
-<H3>indrid Parameters</H3>
+<H3>IndriDaemon Parameters</H3>
 <dl>
-<dt>memory</dt>
-<dd> an integer value specifying the number of bytes to use for the
-query retrieval process. The value can include a scaling factor by
-adding a suffix. Valid values are (case insensitive) K = 1000, M =
-1000000, G = 1000000000. So 100M would be equivalent to 100000000. The
-value should contain only decimal digits and the optional
-suffix. Specified as &lt;memory&gt;100M&lt;/memory&gt; in the parameter
-file and as <tt>-memory=100M</tt> on the command line. </dd> 
 <dt>index</dt>
 <dd> path to the Indri Repository to act as server for. Specified as
 &lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
@@ -373,8 +368,9 @@ as <tt>-index=/path/to/repository</tt> on the command line.
 &lt;port&gt;number&lt;/port&gt; in the parameter file and as
 <tt>-port=number</tt> on the command line. </dd> 
 </dl>
+
 */
-/*! \page buildindex Indri Repository Builder
+/*! \page IndriIndexer Indri Repository Builder
 <P>
  This application builds an Indri Repository for a collection of documents.
  Parameter formats for all Indri applications are also described in
@@ -408,6 +404,7 @@ parameter file and as <tt>-corpus.class=trecweb</tt> on the command
 line. The known classes are: 
 <ul>
 <li>html -- web page data.
+<li>xml -- xml marked up data.
 <li>trecweb -- TREC web format, eg terabyte track.
 <li>trectext -- TREC format, eg TREC-3 onward.
 <li>trecalt -- TREC format, eg TREC-3 onward, with only the TEXT field included.
@@ -954,14 +951,14 @@ int main(int argc, char * argv[]) {
 
     env.setMetadataIndexedFields( metadataForward, metadataBackward );
 #if 0    
-     // "document" is a special field.
-     // automagically add it as an indexed field.
-     indri::api::Parameters field = parameters.append("field");
-     field.set( "name", "document" );
-     field.set( "ordinal", true );
-     field.set("parental", true);
+    // "document" is a special field.
+    // automagically add it as an indexed field.
+    indri::api::Parameters field = parameters.append("field");
+    field.set( "name", "document" );
+    field.set( "ordinal", true );
+    field.set("parental", true);
 #endif
-    std::vector<std::string> fields;
+    std::vector<std::string> fields;    
     std::string subName = "name";
     if( copy_parameters_to_string_vector( fields, parameters, "field", &subName ) ) {
       downcase_string_vector(fields);
@@ -1030,7 +1027,7 @@ int main(int argc, char * argv[]) {
         for( ; files != indri::file::FileTreeIterator::end(); files++ ) {
           if( fileClass.length() )
             env.addFile( *files, fileClass );
-          else{
+          else {
             std::string extension = indri::file::Path::extension( *files );
             indri::parse::FileClassEnvironmentFactory::Specification *spec = env.getFileClassSpec(extension);
             if( spec ) {

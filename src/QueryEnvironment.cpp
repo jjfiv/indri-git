@@ -847,7 +847,7 @@ double indri::api::QueryEnvironment::expressionCount( const std::string& express
   
   std::vector<ScoredExtentResult>& occurrencesList = statisticsResults[ contextCounter->nodeName() ][ "occurrences" ];
   delete parser;
-  delete contextCounter;  
+  delete contextCounter;
   return occurrencesList[0].score;
 }
 
@@ -876,7 +876,7 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
 
   PRINT_TIMER( "Parsing complete" );
 
-  if (_baseline) {
+  if (_baseline) {    
     // Replace with a PlusNode
     indri::lang::UnweightedCombinationNode* rootScorer = dynamic_cast<indri::lang::UnweightedCombinationNode*>(rootNode);
     indri::lang::RawScorerNode* rawScorer = dynamic_cast<indri::lang::RawScorerNode*>(rootNode);
@@ -911,7 +911,7 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::_runQu
       }
       rootNode = plusNode;
       nodes.push_back(plusNode);
-    } else if (rawScorer) {        
+    }  else if (rawScorer) {        
       // if a RawScorerNode, just leave it
       // make sure it doesn't have any field restrictions
       if ( q.find(".") != std::string::npos) {
@@ -1198,9 +1198,31 @@ indri::api::QueryAnnotation* indri::api::QueryEnvironment::runAnnotatedQuery( co
   return annotation;
 }
 
+std::string indri::api::QueryEnvironment::stemTerm(const std::string &term) {
+  std::string stem;
+  // return the first stem that differs from the input term
+  // as servers may have different stemmers.
+  for( size_t i=0; i<_servers.size(); i++ ) {
+    stem = _servers[i]->stemTerm(term);
+    if (stem != term) return stem;
+  }
+  return term;
+}
+
 //
 // Term counts
 //
+
+INT64 indri::api::QueryEnvironment::termCountUnique() {
+  // note that we should probably send these requests asynchronously
+  INT64 totalTermCount = 0;
+
+  for( size_t i=0; i<_servers.size(); i++ ) {
+    totalTermCount += _servers[i]->termCountUnique();
+  }
+
+  return totalTermCount;
+}
 
 INT64 indri::api::QueryEnvironment::termCount() {
   // note that we should probably send these requests asynchronously

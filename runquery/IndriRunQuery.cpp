@@ -7,7 +7,7 @@
  * http://www.lemurproject.org/license.html
  *
  *==========================================================================
- */
+*/
 
 //
 // runquery
@@ -15,92 +15,93 @@
 // 24 February 2004 -- tds
 //
 // 18 August 2004 -- dam
-// incorporated multiple query, query expansion, and TREC output support 
+// incorporated multiple query, query expansion, and TREC output support
 //
 //
 // Indri local machine query application
 //
-/*! \page runquery Indri Query Retrieval
-  <H3>QueryEnvironment Parameters</H3>
-  <H4>Retrieval Parameters</H4>
-  <dl>
-  <dt>index</dt>
-  <dd> path to an Indri Repository. Specified as
-  &lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
-  as <tt>-index=/path/to/repository</tt> on the command line. This element
-  can be specified multiple times to combine Repositories.
-  </dd>
-  <dt>server</dt>
-  <dd> hostname of a host running an Indri server (Indrid). Specified as
-  &lt;server&gt;hostname&lt;/server&gt; in the parameter file and
-  as <tt>-server=hostname</tt> on the command line. The hostname can
-  include an optional port number to connect to, using the form
-  <tt>hostname:portnum</tt>. This element
-  can be specified multiple times to combine servers.
-  </dd>
-  <dt>count</dt>
-  <dd>an integer value specifying the maximum number of results to
-  return for a given query. Specified as
-  &lt;count&gt;number&lt;/count&gt; in the parameter file and
-  as <tt>-count=number</tt> on the command line. </dd>
-  <dt>query</dt>
-  <dd>An indri query language query to run. This element can be specified
-  multiple times.
-  </dd>
-  <dt>rule</dt>
-  <dd>specifies the smoothing rule (TermScoreFunction) to apply. Format of
-  the rule is:<br> 
+/*! \page IndriRunQuery Indri Query Retrieval
+<H3>QueryEnvironment Parameters</H3>
+<H4>Retrieval Parameters</H4>
+<dl>
+<dt>index</dt>
+<dd> path to an Indri Repository. Specified as
+&lt;index&gt;/path/to/repository&lt;/index&gt; in the parameter file and
+as <tt>-index=/path/to/repository</tt> on the command line. This element
+can be specified multiple times to combine Repositories.
+</dd>
+<dt>server</dt>
+<dd> hostname of a host running an Indri server (IndriDaemon). Specified as
+&lt;server&gt;hostname&lt;/server&gt; in the parameter file and
+as <tt>-server=hostname</tt> on the command line. The hostname can
+include an optional port number to connect to, using the form
+<tt>hostname:portnum</tt>. This element
+can be specified multiple times to combine servers.
+</dd>
+<dt>count</dt>
+<dd>an integer value specifying the maximum number of results to
+return for a given query. Specified as
+&lt;count&gt;number&lt;/count&gt; in the parameter file and
+as <tt>-count=number</tt> on the command line. </dd>
+<dt>query</dt>
+<dd>An indri query language query to run. This element can be specified
+multiple times.
+</dd>
+<dt>rule</dt>
+<dd>specifies the smoothing rule (TermScoreFunction) to apply. Format of
+the rule is:<br>
 
-  <tt>   ( key ":" value ) [ "," key ":" value ]* </tt>
-  <p>
-  Here's an example rule in command line format:<br>
+<tt>   ( key ":" value ) [ "," key ":" value ]* </tt>
+<p>
+Here's an example rule in command line format:<br>
 
-  <tt>-rule=method:linear,collectionLambda:0.2,field:title</tt>
-  <p> and in parameter file format:<br>
-  <tt>
-  &lt;rule&gt;method:linear,collectionLambda:0.2,field:title&lt;/rule&gt;
-  </tt>
+   <tt>-rule=method:linear,collectionLambda:0.2,field:title</tt>
+<p> and in parameter file format:<br>
+<tt>
+&lt;rule&gt;method:linear,collectionLambda:0.2,field:title&lt;/rule&gt;
+</tt>
 
-  <p>This corresponds to Jelinek-Mercer smoothing with background lambda
-  equal to 0.2, only for items in a title field. 
+<p>This corresponds to Jelinek-Mercer smoothing with background lambda
+equal to 0.2, only for items in a title field.
 
-  <p>If nothing is listed for a key, all values are assumed.
-  So, a rule that does not specify a field matches all fields.  This makes
-  <tt>-rule=method:linear,collectionLambda:0.2</tt> a valid rule. 
+<p>If nothing is listed for a key, all values are assumed.
+So, a rule that does not specify a field matches all fields.  This makes
+<tt>-rule=method:linear,collectionLambda:0.2</tt> a valid rule.
 
-  <p>Valid keys:
-  <dl>
-  <dt>   method</dt><dd> smoothing method (text)</dd>
-  <dt>   field</dt><dd> field to apply this rule to</dd>
-  <dt>   operator
-  <dd> type of item in query to apply to { term, window }</dd>
-  </dl>
+<p>Valid keys:
+<dl>
+<dt>   method</dt><dd> smoothing method (text)</dd>
+<dt>   field</dt><dd> field to apply this rule to</dd>
+<dt>   operator
+<dd> type of item in query to apply to { term, window }</dd>
+</dl>
 
-  <p>Valid methods:
-  <dl>
-  <dt>   dirichlet</dt><dd> (also 'd', 'dir') (default mu=2500)</dd>
-  <dt>   jelinek-mercer</dt><dd> (also 'jm', 'linear') (default
-  collectionLambda=0.4, documentLambda=0.0),  collectionLambda is also
-  known as just "lambda", either will work </dt>
-  <dt>   twostage</dt><dd> (also 'two-stage', 'two') (default mu=2500,
-  lambda=0.4)</dd> 
-  </dl>
-  If the rule doesn't parse correctly, the default is Dirichlet, mu=2500.
-  </dd>
-  <dt>stopper</dt>
-  <dd>a complex element containing one or more subelements named word,
-  specifying the stopword list to use. Specified as
-  &lt;stopper&gt;&lt;word&gt;stopword&lt;/word&gt;&lt;/stopper&gt; and
-  as <tt>-stopper.word=stopword</tt> on the command line. This is an
-  optional parameter with the default of no stopping.</dd>
+<p>Valid methods:
+<dl>
+<dt>   dirichlet</dt><dd> (also 'd', 'dir') (default mu=2500)</dd>
+<dt>   jelinek-mercer</dt><dd> (also 'jm', 'linear') (default
+collectionLambda=0.4, documentLambda=0.0),  collectionLambda is also
+known as just "lambda", either will work </dt>
+<dt>   twostage</dt><dd> (also 'two-stage', 'two') (default mu=2500,
+lambda=0.4)</dd>
+</dl>
+If the rule doesn't parse correctly, the default is Dirichlet, mu=2500.
+</dd>
+<dt>stopper</dt>
+<dd>a complex element containing one or more subelements named word,
+specifying the stopword list to use. Specified as
+&lt;stopper&gt;&lt;word&gt;stopword&lt;/word&gt;&lt;/stopper&gt; and
+as <tt>-stopper.word=stopword</tt> on the command line. This is an
+optional parameter with the default of no stopping.</dd>
 <dt>maxWildcardTerms</dt>
 <dd>
-<i>(optional)</i> An integer specifying the maximum number of wildcard terms that can 
+<i>(optional)</i> An integer specifying the maximum number of wildcard terms that can
 be generated for a synonym list for this query or set of queries. If this limit
 is reached for a wildcard term, an exception will be thrown. If this parameter
 is not specified, a default of 100 will be used.
 </dd>
-  </dl>
+</dl>
+
 <H4>Baseline (non-LM) retrieval</H4>
 <dl>
 <dt>baseline</dt>
@@ -156,49 +157,75 @@ lemur::retrieval::OkapiRetMethod. Pseudo-relevance feedback may
 </dd>
 </dl>
 
-  <H4>Formatting Parameters</H4>
-  <dl>
-  <dt>queryOffset</dt>
-  <dd>an integer value specifying one less than the starting query number, eg 150 for
-  TREC formatted output. Specified as
-  &lt;queryOffset&gt;number&lt;/queryOffset&gt; in the parameter file and
-  as <tt>-queryOffset=number</tt> on the command line.</dd>
-  <dt>runID</dt>
-  <dd>a string specifying the id for a query run, used in TREC scorable
-  output. Specified as
-  &lt;runID&gt;someID&lt;/runID&gt; in the parameter file and
-  as <tt>-runID=someID</tt> on the command line.</dd>
-  <dt>trecFormat</dt>
-  <dd>the symbol <tt>true</tt> to produce TREC scorable output, otherwise
-  the symbol <tt>false</tt>. Specified as
-  &lt;trecFormat&gt;true&lt;/trecFormat&gt; in the parameter file and
-  as <tt>-trecFormat=true</tt> on the command line.  Note that <tt>0</tt>
-  can be used for false, and <tt>1</tt> can be used for true.</dd>
-  </dl>
-  <H4>Pseudo-Relevance Feedback Parameters</H4>
-  <dl>
-  <dt>fbDocs</dt>
-  <dd>an integer specifying the number of documents to use for
-  feedback. Specified as 
-  &lt;fbDocs&gt;number&lt;/fbDocs&gt; in the parameter file and
-  as <tt>-fbDocs=number</tt> on the command line.</dd>
-  <dt>fbTerms</dt>
-  <dd>an integer specifying the number of terms to use for
-  feedback. Specified as 
-  &lt;fbTerms&gt;number&lt;/fbTerms&gt; in the parameter file and
-  as <tt>-fbTerms=number</tt> on the command line.</dd>
-  <dt>fbMu</dt>
-  <dd>a floating point value specifying the value of mu to use for
-  feedback. Specified as
-  &lt;fbMu&gt;number&lt;/fbMu&gt; in the parameter file and
-  as <tt>-fbMu=number</tt> on the command line.</dd>
-  <dt>fbOrigWeight</dt>
-  <dd>a floating point value in the range [0.0..1.0] specifying the weight
-  for the original query in the expanded query. Specified as
-  &lt;fbOrigWeight&gt;number&lt;/fbOrigWeight&gt; in the parameter file and
-  as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
-  </dl>
+<H4>Formatting Parameters</H4>
+<dl>
+<dt>queryOffset</dt>
+<dd>an integer value specifying one less than the starting query number,
+eg 150 for TREC formatted output. Specified as
+&lt;queryOffset&gt;number&lt;/queryOffset&gt; in the parameter file and
+as <tt>-queryOffset=number</tt> on the command line.</dd>
+<dt>runID</dt>
+<dd>a string specifying the id for a query run, used in TREC scorable
+output. Specified as
+&lt;runID&gt;someID&lt;/runID&gt; in the parameter file and
+as <tt>-runID=someID</tt> on the command line.</dd>
+<dt>trecFormat</dt>
+<dd>the symbol <tt>true</tt> to produce TREC scorable output, otherwise
+the symbol <tt>false</tt>. Specified as
+&lt;trecFormat&gt;true&lt;/trecFormat&gt; in the parameter file and
+as <tt>-trecFormat=true</tt> on the command line.  Note that <tt>0</tt>
+can be used for false, and <tt>1</tt> can be used for true.</dd>
+<dt>inex participant-id</dt>
+<dd>triggers output of results in INEX format and specifies the participant-id attribute used in submissions.
+Specified as &lt;inex&gt;&lt;particpantID&gt;someID&lt;/participantID&gt;&lt;inex&gt; in the parameter file and as
+<tt>-inex.participantID=someID</tt> on the command line.
+</dd>
+<dt>inex task</dt>
+<dd>triggers output of results in INEX format and specifies the task attribute (default CO.Thorough).
+Specified as &lt;inex&gt;&lt;task&gt;someTask&lt;/task&gt;&lt;inex&gt; in the parameter file and as
+<tt>-inex.task=someTask</tt> on the command line.
+</dd>
+<dt>inex query</dt>
+<dd>triggers output of results in INEX format and specifies the query attribute (default automatic).
+Specified as &lt;inex&gt;&lt;query&gt;someQueryType&lt;/query&gt;&lt;inex&gt; in the parameter file and as
+<tt>-inex.query=someQueryType</tt> on the command line.
+</dd>
+<dt>inex topic-part</dt>
+<dd>triggers output of results in INEX format and specifies the topic-part attribute (default T).
+Specified as &lt;inex&gt;&lt;topicPart&gt;someTopicPart&lt;/topicPart&gt;&lt;inex&gt; in the parameter file and as
+<tt>-inex.topicPart=someTopicPart</tt> on the command line.
+</dd>
+<dt>inex description</dt>
+<dd>triggers output of results in INEX format and specifies the contents of the description tag.
+Specified as &lt;inex&gt;&lt;description&gt;some description&lt;/description&gt;&lt;inex&gt; in the parameter file and as
+<tt>-inex.description="some description"</tt> on the command line.
+</dd>
+</dl>
+<H4>Pseudo-Relevance Feedback Parameters</H4>
+<dl>
+<dt>fbDocs</dt>
+<dd>an integer specifying the number of documents to use for
+feedback. Specified as
+&lt;fbDocs&gt;number&lt;/fbDocs&gt; in the parameter file and
+as <tt>-fbDocs=number</tt> on the command line.</dd>
+<dt>fbTerms</dt>
+<dd>an integer specifying the number of terms to use for
+feedback. Specified as
+&lt;fbTerms&gt;number&lt;/fbTerms&gt; in the parameter file and
+as <tt>-fbTerms=number</tt> on the command line.</dd>
+<dt>fbMu</dt>
+<dd>a floating point value specifying the value of mu to use for
+feedback. Specified as
+&lt;fbMu&gt;number&lt;/fbMu&gt; in the parameter file and
+as <tt>-fbMu=number</tt> on the command line.</dd>
+<dt>fbOrigWeight</dt>
+<dd>a floating point value in the range [0.0..1.0] specifying the weight
+for the original query in the expanded query. Specified as
+&lt;fbOrigWeight&gt;number&lt;/fbOrigWeight&gt; in the parameter file and
+as <tt>-fbOrigWeight=number</tt> on the command line.</dd>
+</dl>
 */
+
 #include <time.h>
 #include "indri/QueryEnvironment.hpp"
 #include "indri/LocalQueryServer.hpp"
@@ -239,7 +266,7 @@ static bool copy_parameters_to_string_vector( std::vector<std::string>& vec, ind
     return false;
 
   indri::api::Parameters slice = p[parameterName];
-  
+
   for( size_t i=0; i<slice.size(); i++ ) {
     vec.push_back( slice[i] );
   }
@@ -254,6 +281,13 @@ struct query_t {
     }
   };
 
+  query_t( int _index, std::string _number, const std::string& _text, const std::string &queryType,  std::vector<std::string> workSet,   std::vector<std::string> FBDocs) :
+    index( _index ),
+    number( _number ),
+    text( _text ), qType(queryType), workingSet(workSet), relFBDocs(FBDocs)
+  {
+  }
+
   query_t( int _index, std::string _number, const std::string& _text ) :
     index( _index ),
     number( _number ),
@@ -264,6 +298,11 @@ struct query_t {
   std::string number;
   int index;
   std::string text;
+  std::string qType;
+  // working set to restrict retrieval
+  std::vector<std::string> workingSet;
+  // Rel fb docs
+  std::vector<std::string> relFBDocs;
 };
 
 class QueryThread : public indri::thread::UtilityThread {
@@ -285,27 +324,57 @@ private:
 
   std::string _runID;
   bool _trecFormat;
+  bool _inexFormat;
 
   indri::query::QueryExpander* _expander;
   std::vector<indri::api::ScoredExtentResult> _results;
   indri::api::QueryAnnotation* _annotation;
 
   // Runs the query, expanding it if necessary.  Will print output as well if verbose is on.
-  void _runQuery( std::stringstream& output, const std::string& query ) {
+  void _runQuery( std::stringstream& output, const std::string& query,
+                  const std::string &queryType, const std::vector<std::string> &workingSet, std::vector<std::string> relFBDocs ) {
     try {
       if( _printQuery ) output << "# query: " << query << std::endl;
+      std::vector<lemur::api::DOCID_T> docids;;
+      if (workingSet.size() > 0) 
+        docids = _environment.documentIDsFromMetadata("docno", workingSet);
 
-      if( _printSnippets ) {
-        _annotation = _environment.runAnnotatedQuery( query, _initialRequested );
-        _results = _annotation->getResults();
-      } else {
-        _results = _environment.runQuery( query, _initialRequested );
+      if (relFBDocs.size() == 0) {
+          if( _printSnippets ) {
+            if (workingSet.size() > 0) 
+              _annotation = _environment.runAnnotatedQuery( query, docids, _initialRequested, queryType ); 
+            else
+              _annotation = _environment.runAnnotatedQuery( query, _initialRequested );
+            _results = _annotation->getResults();
+          } else {
+            if (workingSet.size() > 0)
+              _results = _environment.runQuery( query, docids, _initialRequested, queryType );
+            else
+              _results = _environment.runQuery( query, _initialRequested, queryType );
+          }
       }
       
       if( _expander ) {
-        std::string expandedQuery = _expander->expand( query, _results );
+        std::vector<indri::api::ScoredExtentResult> fbDocs;
+        if (relFBDocs.size() > 0) {
+          docids = _environment.documentIDsFromMetadata("docno", relFBDocs);
+          for (size_t i = 0; i < docids.size(); i++) {
+            indri::api::ScoredExtentResult r(0.0, docids[i]);
+            fbDocs.push_back(r);
+          }
+        }
+        std::string expandedQuery;
+        if (relFBDocs.size() != 0)
+          expandedQuery = _expander->expand( query, fbDocs );
+        else
+          expandedQuery = _expander->expand( query, _results );
         if( _printQuery ) output << "# expanded: " << expandedQuery << std::endl;
-        _results = _environment.runQuery( expandedQuery, _requested );
+        if (workingSet.size() > 0) {
+          docids = _environment.documentIDsFromMetadata("docno", workingSet);
+          _results = _environment.runQuery( expandedQuery, docids, _requested, queryType );
+        } else {
+          _results = _environment.runQuery( expandedQuery, _requested, queryType );
+        }
       }
     }
     catch( lemur::api::Exception& e )
@@ -315,29 +384,32 @@ private:
     }
   }
 
-  void _printResultRegion( std::stringstream& output, std::string queryIndex, size_t start, size_t end ) {
+  void _printResultRegion( std::stringstream& output, std::string queryIndex, int start, int end  ) {
     std::vector<std::string> documentNames;
     std::vector<indri::api::ParsedDocument*> documents;
+
     std::vector<indri::api::ScoredExtentResult> resultSubset;
-    
+
     resultSubset.assign( _results.begin() + start, _results.begin() + end );
-    
+
+
     // Fetch document data for printing
     if( _printDocuments || _printPassages || _printSnippets ) {
       // Need document text, so we'll fetch the whole document
       documents = _environment.documents( resultSubset );
       documentNames.clear();
-      
+
       for( size_t i=0; i<resultSubset.size(); i++ ) {
+        indri::api::ParsedDocument* doc = documents[i];
         std::string documentName;
-        
+
         indri::utility::greedy_vector<indri::parse::MetadataPair>::iterator iter = std::find_if( documents[i]->metadata.begin(),
-                                                                                                 documents[i]->metadata.end(),
-                                                                                                 indri::parse::MetadataPair::key_equal( "docno" ) );
-        
+          documents[i]->metadata.end(),
+          indri::parse::MetadataPair::key_equal( "docno" ) );
+
         if( iter != documents[i]->metadata.end() )
           documentName = (char*) iter->value;
-        
+
         // store the document name in a separate vector so later code can find it
         documentNames.push_back( documentName );
       }
@@ -345,59 +417,82 @@ private:
       // We only want document names, so the documentMetadata call may be faster
       documentNames = _environment.documentMetadata( resultSubset, "docno" );
     }
-    
+
+    std::vector<std::string> pathNames;
+    if ( _inexFormat ) {
+      // retrieve path names
+      pathNames = _environment.pathNames( resultSubset );
+    }
+
     // Print results
     for( size_t i=0; i < resultSubset.size(); i++ ) {
-      int rank = int(start+i+1);
+      int rank = start+i+1;
       std::string queryNumber = queryIndex;
-      
+
       if( _trecFormat ) {
         // TREC formatted output: queryNumber, Q0, documentName, rank, score, runID
         output << queryNumber << " "
-        << "Q0 "
-        << documentNames[i] << " "
-        << rank << " "
-        << resultSubset[i].score << " "
-        << _runID << std::endl;
+                << "Q0 "
+                << documentNames[i] << " "
+                << rank << " "
+                << resultSubset[ i ].score << " "
+                << _runID << std::endl;
+      } else if( _inexFormat ) {
+
+  output << "    <result>" << std::endl
+         << "      <file>" << documentNames[i] << "</file>" << std::endl
+         << "      <path>" << pathNames[i] << "</path>" << std::endl
+         << "      <rsv>" << resultSubset[i].score << "</rsv>"  << std::endl
+         << "    </result>" << std::endl;
       }
       else {
         // score, documentName, firstWord, lastWord
         output << resultSubset[i].score << "\t"
-        << documentNames[i] << "\t"
-        << resultSubset[i].begin << "\t"
-        << resultSubset[i].end << std::endl;
+                << documentNames[i] << "\t"
+                << resultSubset[i].begin << "\t"
+                << resultSubset[i].end << std::endl;
       }
-      
+
       if( _printDocuments ) {
         output << documents[i]->text << std::endl;
       }
-      
+
       if( _printPassages ) {
-        // we'll print the text from the beginning of the first word
         int byteBegin = documents[i]->positions[ resultSubset[i].begin ].begin;
         int byteEnd = documents[i]->positions[ resultSubset[i].end-1 ].end;
         output.write( documents[i]->text + byteBegin, byteEnd - byteBegin );
         output << std::endl;
       }
-      
+
       if( _printSnippets ) {
         indri::api::SnippetBuilder builder(false);
         output << builder.build( resultSubset[i].document, documents[i], _annotation ) << std::endl;
       }
-      
+
       if( documents.size() )
         delete documents[i];
     }
   }
-  
-  void _printResults( std::stringstream& output, std::string queryIndex ) {
+
+  void _printResults( std::stringstream& output, std::string queryNumber ) {
+    if (_inexFormat) {
+      // output topic header
+      output << "  <topic topic-id=\"" << queryNumber << "\">" << std::endl
+             << "    <collections>" << std::endl
+             << "      <collection>ieee</collection>" << std::endl
+             << "    </collections>" << std::endl;
+    }
     for( size_t start = 0; start < _results.size(); start += 50 ) {
       size_t end = std::min<size_t>( start + 50, _results.size() );
-      _printResultRegion( output, queryIndex, start, end );
+      _printResultRegion( output, queryNumber, start, end );
+    }
+    if( _inexFormat ) {
+      output << "  </topic>" << std::endl;
     }
     delete _annotation;
     _annotation = 0;
   }
+
 
 public:
   QueryThread( std::queue< query_t* >& queries,
@@ -419,10 +514,12 @@ public:
   }
 
   UINT64 initialize() {
+    _environment.setSingleBackgroundModel( _parameters.get("singleBackgroundModel", false) );
+
     std::vector<std::string> stopwords;
     if( copy_parameters_to_string_vector( stopwords, _parameters, "stopper.word" ) )
       _environment.setStopwords(stopwords);
-    
+
     std::vector<std::string> smoothingRules;
     if( copy_parameters_to_string_vector( smoothingRules, _parameters, "rule" ) )
       _environment.setScoringRules( smoothingRules );
@@ -450,11 +547,13 @@ public:
     _initialRequested = _parameters.get( "fbDocs", _requested );
     _runID = _parameters.get( "runID", "indri" );
     _trecFormat = _parameters.get( "trecFormat" , false );
+    _inexFormat = _parameters.exists( "inex" );
+
     _printQuery = _parameters.get( "printQuery", false );
     _printDocuments = _parameters.get( "printDocuments", false );
     _printPassages = _parameters.get( "printPassages", false );
     _printSnippets = _parameters.get( "printSnippets", false );
-    
+
     if (_parameters.exists("baseline")) {
       // doing a baseline
       std::string baseline = _parameters["baseline"];
@@ -471,6 +570,10 @@ public:
         _expander = new indri::query::RMExpander( &_environment, _parameters );
       }
     }
+
+    if (_parameters.exists("maxWildcardTerms")) {
+      _environment.setMaxWildcardTerms((int)_parameters.get("maxWildcardTerms"));
+    }    
     return 0;
   }
 
@@ -487,7 +590,7 @@ public:
   UINT64 work() {
     query_t* query;
     std::stringstream output;
-    
+
     // pop a query off the queue
     {
       indri::thread::ScopedLock sl( &_queueLock );
@@ -504,7 +607,7 @@ public:
       if (_parameters.exists("baseline") && ((query->text.find("#") != std::string::npos) || (query->text.find(".") != std::string::npos)) ) {
         LEMUR_THROW( LEMUR_PARSE_ERROR, "Can't run baseline on this query: " + query->text + "\nindri query language operators are not allowed." );
       }
-      _runQuery( output, query->text );
+      _runQuery( output, query->text, query->qType, query->workingSet, query->relFBDocs );
     } catch( lemur::api::Exception& e ) {
       output << "# EXCEPTION in query " << query->number << ": " << e.what() << std::endl;
     }
@@ -530,19 +633,32 @@ void push_queue( std::queue< query_t* >& q, indri::api::Parameters& queries,
   for( size_t i=0; i<queries.size(); i++ ) {
     std::string queryNumber;
     std::string queryText;
-
-    if( queries[i].exists( "number" ) ) {
+    std::string queryType = "indri";
+    if( queries[i].exists( "type" ) )
+      queryType = (std::string) queries[i]["type"];
+    if (queries[i].exists("text"))
       queryText = (std::string) queries[i]["text"];
+    if( queries[i].exists( "number" ) ) {
       queryNumber = (std::string) queries[i]["number"];
     } else {
-      queryText = (std::string) queries[i];
       int thisQuery=queryOffset + int(i);
       std::stringstream s;
       s << thisQuery;
       queryNumber = s.str();
     }
-    
-    q.push( new query_t( (int)i, queryNumber, queryText ) );
+    if (queryText.size() == 0)
+      queryText = (std::string) queries[i];
+
+    // working set and RELFB docs go here.
+    // working set to restrict retrieval
+    std::vector<std::string> workingSet;
+    // Rel fb docs
+    std::vector<std::string> relFBDocs;
+    copy_parameters_to_string_vector( workingSet, queries[i], "workingSetDocno" );
+    copy_parameters_to_string_vector( relFBDocs, queries[i], "feedbackDocno" );
+
+    q.push( new query_t( i, queryNumber, queryText, queryType, workingSet, relFBDocs ) );
+
   }
 }
 
@@ -558,7 +674,7 @@ int main(int argc, char * argv[]) {
     if( !param.exists( "query" ) )
       LEMUR_THROW( LEMUR_MISSING_PARAMETER_ERROR, "Must specify at least one query." );
 
-    if( !param.exists("index") && !param.exists("server") ) 
+    if( !param.exists("index") && !param.exists("server") )
       LEMUR_THROW( LEMUR_MISSING_PARAMETER_ERROR, "Must specify a server or index to query against." );
 
     if (param.exists("baseline") && param.exists("rule"))
@@ -585,22 +701,40 @@ int main(int argc, char * argv[]) {
 
     int query = 0;
 
+    bool inexFormat = param.exists( "inex" );
+    if( inexFormat ) {
+      std::string participantID = param.get( "inex.participantID", "1");
+      std::string runID = param.get( "runID", "indri" );
+      std::string inexTask = param.get( "inex.task", "CO.Thorough" );
+      std::string inexTopicPart = param.get( "inex.topicPart", "T" );
+      std::string description = param.get( "inex.description", "" );
+      std::string queryType = param.get("inex.query", "automatic");
+      std::cout << "<inex-submission participant-id=\"" << participantID
+    << "\" run-id=\"" << runID
+    << "\" task=\"" << inexTask
+    << "\" query=\"" << queryType
+    << "\" topic-part=\"" << inexTopicPart
+    << "\">" << std::endl
+    << "  <description>" << std::endl << description
+    << std::endl << "  </description>" << std::endl;
+    }
+
     // acquire the lock.
     queueLock.lock();
 
     // process output as it appears on the queue
     while( query < queryCount ) {
       query_t* result = NULL;
-      
+
       // wait for something to happen
       queueEvent.wait( queueLock );
-          
+
       while( output.size() && output.top()->index == query ) {
         result = output.top();
         output.pop();
 
         queueLock.unlock();
-          
+
         std::cout << result->text;
         delete result;
         query++;
@@ -609,6 +743,10 @@ int main(int argc, char * argv[]) {
       }
     }
     queueLock.unlock();
+
+    if( inexFormat ) {
+      std::cout << "</inex-submission>" << std::endl;
+    }
 
     // join all the threads
     for( size_t i=0; i<threads.size(); i++ )

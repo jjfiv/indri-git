@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="indrid"
+	Name="IndriDaemon"
 	ProjectGUID="{6B9EE4C1-7010-41C4-B599-CD17486927D1}"
-	RootNamespace="indrid"
+	RootNamespace="IndriDaemon"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -69,10 +69,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/indrid.exe"
+				OutputFile="$(OutDir)/IndriDaemon.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/indrid.pdb"
+				ProgramDatabaseFile="$(OutDir)/IndriDaemon.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -149,7 +149,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/indrid.exe"
+				OutputFile="$(OutDir)/IndriDaemon.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -232,10 +232,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/indrid.exe"
+				OutputFile="$(OutDir)/IndriDaemon.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/indrid.pdb"
+				ProgramDatabaseFile="$(OutDir)/IndriDaemon.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -313,7 +313,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/indrid.exe"
+				OutputFile="$(OutDir)/IndriDaemon.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -355,7 +355,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\indrid.cpp"
+				RelativePath=".\IndriDaemon.cpp"
 				>
 			</File>
 		</Filter>

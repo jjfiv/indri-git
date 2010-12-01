@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="buildindex"
+	Name="IndriBuildIndex"
 	ProjectGUID="{C43087CE-8F47-4ACC-9ECB-6A55CB517CB9}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -34,10 +34,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/buildindex.exe"
+				OutputFile="$(OutDir)/IndriBuildIndex.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/buildindex.pdb"
+				ProgramDatabaseFile="$(OutDir)/IndriBuildIndex.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -85,7 +85,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/buildindex.exe"
+				OutputFile="$(OutDir)/IndriBuildIndex.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -122,7 +122,7 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\buildindex.cpp">
+				RelativePath=".\IndriBuildIndex.cpp">
 			</File>
 		</Filter>
 		<Filter

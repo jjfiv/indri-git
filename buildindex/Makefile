@@ -4,7 +4,7 @@ SHARED=
 INCPATH=-I../include $(patsubst %, -I../contrib/%/include, $(DEPENDENCIES))
 LIBPATH=-L../obj  $(patsubst %, -L../contrib/%/obj, $(DEPENDENCIES))
 LIBS=-lindri $(patsubst %, -l%, $(DEPENDENCIES))
-APP=buildindex
+APP=IndriBuildIndex
 
 all:
 	$(CXX) $(CXXFLAGS) $(APP).cpp -o $(APP) $(LIBPATH) $(LIBS) $(CPPLDFLAGS)

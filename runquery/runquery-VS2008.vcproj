@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="runquery"
+	Name="IndriRunQuery"
 	ProjectGUID="{0F9FE849-7EAA-461E-9105-335E3045E8DA}"
-	RootNamespace="runquery"
+	RootNamespace="IndriRunQuery"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -68,10 +68,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/runquery.exe"
+				OutputFile="$(OutDir)/IndriRunQuery.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/runquery.pdb"
+				ProgramDatabaseFile="$(OutDir)/IndriRunQuery.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/runquery.exe"
+				OutputFile="$(OutDir)/IndriRunQuery.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -230,10 +230,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/runquery.exe"
+				OutputFile="$(OutDir)/IndriRunQuery.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/runquery.pdb"
+				ProgramDatabaseFile="$(OutDir)/IndriRunQuery.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -311,7 +311,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib"
-				OutputFile="$(OutDir)/runquery.exe"
+				OutputFile="$(OutDir)/IndriRunQuery.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -353,7 +353,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\runquery.cpp"
+				RelativePath=".\IndriRunQuery.cpp"
 				>
 			</File>
 		</Filter>

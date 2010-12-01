@@ -21,10 +21,8 @@
 // additional parser/lexer types here
 #include "indri/QueryLexer.hpp"
 #include "indri/QueryParser.hpp"
-#ifdef NEXI_QUERY
 #include "indri/NexiLexer.hpp"
 #include "indri/NexiParser.hpp"
-#endif
 
 #include "lemur/Exception.hpp"
 
@@ -77,7 +75,6 @@ namespace indri
         QueryParserWrapper *retval = new _Wrapper<indri::lang::QueryLexer, indri::lang::QueryParser>(lexer, parser, queryStream);
         return retval;
       } 
-      #ifdef NEXI_QUERY
       else if (parserType == "nexi") {
         indri::lang::NexiLexer *lexer = new indri::lang::NexiLexer ( *queryStream );
         indri::lang::NexiParser *parser = new indri::lang::NexiParser ( *lexer );
@@ -89,7 +86,6 @@ namespace indri
         QueryParserWrapper *retval = new _Wrapper<indri::lang::NexiLexer, indri::lang::NexiParser>(lexer, parser, queryStream);
         return retval;
       }
-#endif
       else {
         LEMUR_THROW(LEMUR_MISSING_PARAMETER_ERROR, "could not query parser for " + parserType);
       }
