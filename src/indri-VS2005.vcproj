@@ -373,10 +373,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IndriTermInfoList.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\IndriTimer.cpp"
 				>
 			</File>
@@ -449,6 +445,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NexiLexer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NexiParser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\NormalizationTransformation.cpp"
 				>
 			</File>
@@ -465,7 +469,8 @@
 				>
 			</File>
 			<File
-				RelativePath=".\OfficeHelper.cpp">
+				RelativePath=".\OfficeHelper.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\OffsetAnnotationAnnotator.cpp"
@@ -1090,10 +1095,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\indri\IndriTermInfoList.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\include\indri\IndriTimer.hpp"
 				>
 			</File>
@@ -1222,6 +1223,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\indri\NexiLexer.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\NexiLexerTokenTypes.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\NexiParser.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\include\indri\NormalDistribution.hpp"
 				>
 			</File>
@@ -1250,7 +1263,8 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\indri\OfficeHelper.hpp">
+				RelativePath="..\include\indri\OfficeHelper.hpp"
+				>
 			</File>
 			<File
 				RelativePath="..\include\indri\OffsetAnnotationAnnotator.hpp"
