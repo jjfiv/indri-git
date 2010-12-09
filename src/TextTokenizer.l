@@ -63,9 +63,9 @@ indri::parse::TokenizedDocument* indri::parse::TextTokenizer::tokenize( indri::p
 
   _termBuffer.clear();
   if ( _tokenize_entire_words)
-    _termBuffer.grow( document->textLength );
+    _termBuffer.grow( document->textLength * 4);
   else
-    _termBuffer.grow( document->textLength * 2 ); // extra null per char.
+    _termBuffer.grow( document->textLength * 8 ); // extra null per char.
 
   _document.terms.clear();
   _document.tags.clear();
