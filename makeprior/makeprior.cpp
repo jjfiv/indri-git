@@ -275,9 +275,11 @@ void convert_docnoscore_to_binary( indri::file::File& outfile, const std::string
        
     std::vector<lemur::api::DOCID_T> result = env.documentIDsFromMetadata( docnoName, docnoValues );
     
-    if( result.size() == 0 ) 
-      LEMUR_THROW( LEMUR_IO_ERROR, "No document exists with docno: " + docno );
-      
+    if( result.size() == 0 ) {
+      //      LEMUR_THROW( LEMUR_IO_ERROR, "No document exists with docno: " + docno );
+      continue; // allow entries that don't exist and ignore silently.
+    }
+    
     int document = result[0];
     std::cout << document << std::endl;
       
