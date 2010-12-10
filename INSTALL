@@ -70,7 +70,7 @@ basic collection indexing GUI for building an indri repository. Both are
 installed in <install-directory>/share/indri and can be run with 
 <br>
 <pre>
-java -jar <jarfilename>
+java -jar &lt;jarfilename&gt;
 </pre>
 
 <p>If configured with --enable-php,
