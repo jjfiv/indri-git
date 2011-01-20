@@ -6,10 +6,12 @@ using namespace lemur::api;
 /** construction / destruction **/
 DBInterface::DBInterface() {
   output=NULL;
+  _env = NULL;
 }
 
 DBInterface::DBInterface(CGIOutput *outputInterface) {
   output=outputInterface;
+  _env = NULL;
 }
 
 DBInterface::~DBInterface() {
