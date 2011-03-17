@@ -54,6 +54,6 @@ std::string indri::parse::StemmerFactory::preferredName( const std::string& name
   } else if( name[0] == 'p' || name[0] == 'P' ) {
     return STEMMER_PORTER;
   }
-
-  return STEMMER_KROVETZ;
+  // no match, return whatever was passed in.
+  return name;
 }
