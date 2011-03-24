@@ -278,10 +278,12 @@ void lemur::utility::SHA1::byteToHexString(unsigned char *input, int inputLen, c
 
 void lemur::utility::SHA1::hash(unsigned char *input, int inputLen, unsigned char *output) {
   SHA1Context context;
+
+  memset(&context, 0, sizeof(SHA1Context));
+
   start(&context);
   update(&context, input, inputLen);
   finish(&context, output);
-  memset(&context, 0, sizeof(SHA1Context));
 }
 
 void lemur::utility::SHA1::hashStringToHex(const char *input, char *output, int maxOutputLen) {
