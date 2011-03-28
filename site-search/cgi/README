@@ -86,6 +86,12 @@ Also, there is an element, <supportanchortext> that can be set to true to
 also include support for retrieval of inlinks if you have used the 
 harvestlinks program to gather these from your corpus.
 
+The element <duplicateresultattribute> can be used to set the attribute that 
+is used to check search results for duplicate records.  If the element is not 
+present, or has an empty value, no duplicate checking is performed.  The value 
+'docno' (without quotes) can be used for external document id. The value 'url' 
+can be used, if the url meta data is present in the index. 
+
 If you wish to use the default HTML templates, no modifications are
 necessary, but if you want to modify the HTML templates for your own uses,
 be sure to read the "README_Templates.txt" file for instructions on

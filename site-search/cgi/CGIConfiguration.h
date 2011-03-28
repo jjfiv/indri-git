@@ -61,6 +61,9 @@ protected:
 
   string queryLogPath;
 
+  /** variables for using duplicate results attribute */
+  string duplicateResultAttribute;
+  bool	_useDuplicateResultAttribute;
   /** our root paths as defined by the configuration */
   vector<string>  rootPaths;
 
@@ -219,6 +222,13 @@ public:
 
   string getQueryLogPath() {
     return queryLogPath;
+  }
+
+  string getDuplicateResultAttribute() {
+    return duplicateResultAttribute;
+  }
+  bool useDuplicateResultAttribute() {
+    return _useDuplicateResultAttribute;
   }
 
 }; // end class CGIConfiguration

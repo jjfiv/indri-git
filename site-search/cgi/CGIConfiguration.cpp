@@ -91,6 +91,15 @@ bool CGIConfiguration::readConfigFile(char *filePath) {
     supportPageRank=true;      
   }  
 
+  _useDuplicateResultAttribute=false;
+  const XMLNode *duplicateResultAttributeNode=rootNode->getChild("duplicateresultattribute");
+  if (duplicateResultAttributeNode) {
+    duplicateResultAttribute=duplicateResultAttributeNode->getValue();
+    _useDuplicateResultAttribute=true;
+  }
+
+
+
   const XMLNode *indexesStart=rootNode->getChild("indexes");
   if (indexesStart) {
     std::vector<XMLNode*> indexes=indexesStart->getChildren();

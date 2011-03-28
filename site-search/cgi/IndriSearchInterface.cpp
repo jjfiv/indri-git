@@ -1,4 +1,5 @@
 #include "IndriSearchInterface.h"
+#include "CGIConfiguration.h"
 #include "lemur-compat.hpp"
 
 #include <time.h>
@@ -453,7 +454,20 @@ std::vector<indri::api::ScoredExtentResult> IndriSearchInterface::indriRemoveDup
   std::map<std::string, int> seenIDs; // map of normalized URL, document ID
   std::map<int, int> vecPositions; // map of vectorPosition, document ID
 
-  std::vector<std::string> urlStrings = indriEnvironment->documentMetadata(results, "url");
+
+  std::vector<std::string> urlStrings;
+ 
+  std::string attribute = CGIConfiguration::getInstance().getDuplicateResultAttribute();
+
+  if (( CGIConfiguration::getInstance().useDuplicateResultAttribute() ) && 
+      ( attribute.length() != 0 ) ){
+    urlStrings = indriEnvironment->documentMetadata(results, attribute);    
+  }
+  else {
+    // no Attribute or attribute has an empty string. We will not do duplicate record checking in this case.
+    return results;
+  }
+
 
   retVector.clear();
   seenIDs.clear();
