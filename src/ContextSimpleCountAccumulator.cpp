@@ -31,7 +31,7 @@ void indri::infnet::ContextSimpleCountAccumulator::_computeCounts( indri::index:
 
   if( _context.size() ) {
     _size += index.fieldTermCount( _context );
-    _documentCount += index.fieldTermCount( _context );
+    _documentCount += index.fieldDocumentCount( _context );
   } else {
     _size += index.termCount();
     _documentCount += index.documentCount();
