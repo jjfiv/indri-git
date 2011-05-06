@@ -49,8 +49,9 @@ const indri::utility::greedy_vector<bool>& indri::infnet::NullScorerNode::hasMat
 
 const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& indri::infnet::NullScorerNode::score( lemur::api::DOCID_T documentID, indri::index::Extent &extent, int documentLength ) {
   _scores.clear();
+  double score = _scoreFunction.scoreOccurrence(0, documentLength);
   indri::api::ScoredExtentResult result(extent);
-  result.score=_maximumScore;
+  result.score=score;
   result.document=documentID;
   _scores.push_back( result );
 
@@ -66,7 +67,8 @@ const std::string& indri::infnet::NullScorerNode::getName() const {
 }
 
 void indri::infnet::NullScorerNode::indexChanged( indri::index::Index& index ) {
-  // do nothing
+  _maximumBackgroundScore = INDRI_HUGE_SCORE;
+  _maximumScore = INDRI_HUGE_SCORE;
 }
 
 
