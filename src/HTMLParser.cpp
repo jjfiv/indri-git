@@ -336,18 +336,22 @@ bool indri::parse::HTMLParser::normalizeURL(char *s) {
   }
   // relative url
   else {
-    char tmp_buf[MAX_URL_LENGTH*4];
-    strncpy(tmp_buf, s, MAX_URL_LENGTH-1);
-    tmp_buf[MAX_URL_LENGTH-1] = 0;
-    if(*s == '/') {
-      normurl[0] = 0;
-      strcat( normurl, base_url );
-      strcat( normurl, tmp_buf );
-    } else {
-      normurl[0] = 0;
-      strcat( normurl, base_url );
-      strcat( normurl, "/" );
-      strcat( normurl, tmp_buf );
+    // while unlikely, base_url may be a relative url, in which case
+    // we do not want to be performing the strcat operations on it.    
+    if (s != base_url) {
+      char tmp_buf[MAX_URL_LENGTH*4];
+      strncpy(tmp_buf, s, MAX_URL_LENGTH-1);
+      tmp_buf[MAX_URL_LENGTH-1] = 0;
+      if(*s == '/') {
+        normurl[0] = 0;
+        strcat( normurl, base_url );
+        strcat( normurl, tmp_buf );
+      } else {
+        normurl[0] = 0;
+        strcat( normurl, base_url );
+        strcat( normurl, "/" );
+        strcat( normurl, tmp_buf );
+      }
     }
     
     char* colonSlashSlash = 0;
