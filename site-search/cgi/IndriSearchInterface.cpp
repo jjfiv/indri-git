@@ -250,8 +250,10 @@ std::string IndriSearchInterface::getScoredExtentSummaryString(indri::api::Score
 
 void IndriSearchInterface::findAndReplace(std::string &source, const std::string &find, const std::string &replace) {
   size_t f;
-  for (; (f=source.find(find))!=std::string::npos;) {
-    source.replace(f, find.length(), replace);
+  if (find != replace) {
+    for (; (f=source.find(find))!=std::string::npos;) {
+      source.replace(f, find.length(), replace);
+    }
   }
 }
 
@@ -297,12 +299,12 @@ std::string IndriSearchInterface::getASCIIFromPercentEncoding(std::string inputS
 std::string IndriSearchInterface::normalizeURL(std::string inputURL) {
   // intermediate - get the protocol, domain, port, path, file, 
   // and any parameters
-  std::string urlProtocol;
-  std::string urlDomain;
-  std::string urlPort;
-  std::string urlPath;
-  std::string urlFile;
-  std::string urlParameters;
+  std::string urlProtocol = "";
+  std::string urlDomain = "";
+  std::string urlPort = "";
+  std::string urlPath = "";
+  std::string urlFile = "";
+  std::string urlParameters = "";
 
   std::string thisURL=inputURL;
 
@@ -395,23 +397,37 @@ std::string IndriSearchInterface::normalizeURL(std::string inputURL) {
 
   // step 3 - transform escape sequences in the path, filename, and parameters
   size_t pctPlace=urlPath.find_first_of("%");
+  size_t strlen = 0;
+
   while (pctPlace!=std::string::npos) {
     std::string pctItem=urlPath.substr(pctPlace, 3);
     findAndReplace(urlPath, pctItem, getASCIIFromPercentEncoding(pctItem));
-    pctPlace=urlPath.find_first_of("%");
+    strlen = urlPath.length();
+    if (strlen > pctPlace+1)
+      pctPlace=urlPath.find_first_of("%", pctPlace+1);
+    else
+      pctPlace = -1;
   }
   pctPlace=urlFile.find_first_of("%");
   while (pctPlace!=std::string::npos) {
     std::string pctItem=urlFile.substr(pctPlace, 3);
     findAndReplace(urlFile, pctItem, getASCIIFromPercentEncoding(pctItem));
-    pctPlace=urlFile.find_first_of("%");
+    strlen = urlPath.length();
+    if (strlen > pctPlace+1)
+      pctPlace=urlFile.find_first_of("%", pctPlace+1);
+    else
+      pctPlace = -1;
   }
   pctPlace=urlParameters.find_first_of("%");
   while (pctPlace!=std::string::npos) {
     std::string pctItem=urlParameters.substr(pctPlace, 3);
     findAndReplace(urlParameters, pctItem, 
 		   getASCIIFromPercentEncoding(pctItem));
-    pctPlace=urlParameters.find_first_of("%");
+    strlen = urlParameters.length();
+    if (strlen > pctPlace+1)
+      pctPlace=urlParameters.find_first_of("%", pctPlace+1);
+    else
+      pctPlace = -1;
   }
 
   // step 4 - recombine final URL
@@ -824,6 +840,17 @@ void IndriSearchInterface::performSearch(string &query, int maxNumResults,
       std::vector< std::string > titleStrings=queryEnvironment->documentMetadata(docIDVec, "title");
       if (titleStrings.size() > 0) {
         thisTitle=(*(titleStrings.begin()));
+	// Trim the string to see if we have anyting we can use
+	string::size_type pos = thisTitle.find_last_not_of(' ');
+	if(pos != string::npos) {
+	  thisTitle.erase(pos + 1);
+	  pos = thisTitle.find_first_not_of(' ');
+	  if(pos != string::npos) thisTitle.erase(0, pos);
+	}
+	else thisTitle.erase(thisTitle.begin(), thisTitle.end());
+	// if we have an empty string then we use the URL.
+	if (thisTitle.empty())
+	    thisTitle=thisURL;
       } else {
         thisTitle=thisURL;
       }
