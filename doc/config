@@ -465,7 +465,9 @@ INPUT                  = /Users/dfisher/Development/indri \
 FILE_PATTERNS          = *.cpp \
                          *.c \
                          *.hpp \
-                         *.h
+                         *.h \
+                         *.cs \
+                         *.java
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
@@ -477,7 +479,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = /Users/dfisher/Development/indri/validate /Users/dfisher/Development/indri/test /Users/dfisher/Development/indri/autom4te.cache /Users/dfisher/Development/indri/contrib  /Users/dfisher/Development/indri/dist contrib/site-search  /Users/dfisher/Development/indri/lang
+EXCLUDE                = /Users/dfisher/Development/indri/validate /Users/dfisher/Development/indri/test /Users/dfisher/Development/indri/autom4te.cache /Users/dfisher/Development/indri/contrib  /Users/dfisher/Development/indri/dist /Users/dfisher/Development/indri/site-search  /Users/dfisher/Development/indri/lang
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
