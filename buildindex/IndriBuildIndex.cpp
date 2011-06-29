@@ -203,6 +203,34 @@ as <tt>-count=number</tt> on the command line. </dd>
 <dt>query</dt>
 <dd>An indri query language query to run. This element can be specified
 multiple times.
+ The query element may take numerous optional parameters. 
+With none of the optional parameters, the query text can be the body of 
+the element, eg:<br> 
+
+&lt;query&gt;#combine(query terms)&lt;/query&gt;
+<p>
+The optional parameters are:
+<dl>
+<dt>type</dt><dd>one of <tt>indri</tt>, to use the indri query language, 
+or <tt>nexi</tt> to use the nexi query language. The default is 
+<tt>indri</tt>. This element may appear 0 or 1 times.</dd>
+<dt>number</dt><dd>The query number or identifier. This may be a 
+non-numeric symbol. The default is to number the queries in the parameters in
+order, starting with 0. This element may appear 0 or 1 times.</dd>
+<dt>text</dt><dd>The query text, eg, "#combine(query terms)". This element 
+may appear 0 or 1 times and must be used if any of the other 
+parameters are supplied.</dd>
+<dt>workingSetDocno</dt><dd>The external document id of a document to add to 
+the working set for the query. This element may appear 0 or more times. 
+When specified, query evaluation is restricted to the document ids 
+specified.</dd>
+<dt>feedbackDocno</dt><dd>The external document id of a document to add to 
+the relevance feeedback set for the query. This element may appear 0 or more 
+times. When specified, query expansion is performed using only the document 
+ids specified. It is still necessary to specify a non-zero value for the
+fbDocs parameter when specifying feedbackDocno elements.</dd>
+</dl>
+
 </dd>
 <dt>rule</dt>
 <dd>specifies the smoothing rule (TermScoreFunction) to apply. Format of
