@@ -340,6 +340,37 @@ list of passages (of length 100) that match the given query.
 The slides found <a href="http://ciir.cs.umass.edu/~metzler/presentations/indri-labmeeting-summer04.pdf">here</a> discuss
 more of the details and gives further examples.
 
+<h3>Accessing children, parent and ancestor extents / passages</h3>
+
+<p> Beginning
+with the Lemur Toolkit version 4.3.2 and Indri version 2.3.2, it is
+possible to reference parent and ancestor extents. The outer field
+stands in relation to the inner field in each of the expressions.
+</p>
+<ul>
+<li>use the .\field operator to access a child reference, eg
+#combine[child](#combine[.\parent](query))
+<li>use the ./field operator to access a parent reference, eg
+#combine[parent](#combine./child(query))
+<li>use the .//field operator to access an ancestor reference, eg
+#combine[ancestor](#combine.//descendant(query))
+</ul>
+Example:<br>
+
+#combine[section]( bootstrap #combine[ ./title ]( methodology ) ) -- rank sections matching bootstrap where the section's title also matches methodology
+<p>
+Note: if child, parent, or ancestor queries are slow, you may want to be
+certain to index the specified fields explicitly as an ordinal. This
+speeds things up at the cost of a minimal amount of disk space. In the
+example above ("title"), the following would be placed in the build
+index parameters:
+</p>
+<pre>
+&lt;field&gt;
+&lt;name&gt;title&lt;/name&gt; &lt;ordinal&gt;true&lt;/ordinal&gt;
+&lt;/field&gt;
+</pre>
+
 <h2 id="filter">FILTER OPERATORS</h2>
 
 Filter operators allow you to score only a subset of an entire collection by filtering out those documents
