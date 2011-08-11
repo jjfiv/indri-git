@@ -1059,6 +1059,12 @@ class indri_csharpPINVOKE {
   [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_terms_get")]
   public static extern IntPtr ParsedDocument_terms_get(HandleRef jarg1);
 
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_positions_set")]
+  public static extern void ParsedDocument_positions_set(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_ParsedDocument_positions_get")]
+  public static extern IntPtr ParsedDocument_positions_get(HandleRef jarg1);
+
   [DllImport("indri_csharp", EntryPoint="CSharp_new_ParsedDocument")]
   public static extern IntPtr new_ParsedDocument();
 

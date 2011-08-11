@@ -6573,6 +6573,28 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_ParsedDocument_terms_get(void * jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_ParsedDocument_positions_set(void * jarg1, void * jarg2) {
+  indri::api::ParsedDocument *arg1 = (indri::api::ParsedDocument *) 0 ;
+  indri::utility::greedy_vector< indri::parse::TermExtent > *arg2 = (indri::utility::greedy_vector< indri::parse::TermExtent > *) 0 ;
+  
+  arg1 = (indri::api::ParsedDocument *)jarg1; 
+  arg2 = (indri::utility::greedy_vector< indri::parse::TermExtent > *)jarg2; 
+  if (arg1) (arg1)->positions = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_ParsedDocument_positions_get(void * jarg1) {
+  void * jresult ;
+  indri::api::ParsedDocument *arg1 = (indri::api::ParsedDocument *) 0 ;
+  indri::utility::greedy_vector< indri::parse::TermExtent > *result = 0 ;
+  
+  arg1 = (indri::api::ParsedDocument *)jarg1; 
+  result = (indri::utility::greedy_vector< indri::parse::TermExtent > *)& ((arg1)->positions);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_new_ParsedDocument() {
   void * jresult ;
   indri::api::ParsedDocument *result = 0 ;

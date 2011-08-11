@@ -390,9 +390,9 @@ namespace indri {
       std::string getContent();
       indri::utility::greedy_vector<indri::parse::MetadataPair> metadata;
       indri::utility::greedy_vector<char *> terms;
-    private:
-      indri::utility::greedy_vector<indri::parse::TagExtent> tags;
       indri::utility::greedy_vector<indri::parse::TermExtent> positions;
+private:
+      indri::utility::greedy_vector<indri::parse::TagExtent> tags;
 
     };
 

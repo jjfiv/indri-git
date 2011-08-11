@@ -108,6 +108,17 @@ public class ParsedDocument : IDisposable {
     } 
   }
 
+  public TermExtentVector positions {
+    set {
+      indri_csharpPINVOKE.ParsedDocument_positions_set(swigCPtr, TermExtentVector.getCPtr(value));
+    } 
+    get {
+      IntPtr cPtr = indri_csharpPINVOKE.ParsedDocument_positions_get(swigCPtr);
+      TermExtentVector ret = (cPtr == IntPtr.Zero) ? null : new TermExtentVector(cPtr, false);
+      return ret;
+    } 
+  }
+
   public ParsedDocument() : this(indri_csharpPINVOKE.new_ParsedDocument(), true) {
   }
 
