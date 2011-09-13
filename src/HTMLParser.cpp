@@ -69,7 +69,8 @@ void indri::parse::HTMLParser::initialize( TokenizedDocument* tokenized, indri::
   }
 
   _urlBuffer.clear();
-  _urlBuffer.grow( parsed->textLength * 4 ); // will this be large enough?
+  //  _urlBuffer.grow( parsed->textLength * 4 ); // will this be large enough?
+  _urlBuffer.grow( 1024 * 1024 * 25 );
 }
 
 void indri::parse::HTMLParser::cleanup( indri::parse::TokenizedDocument* tokenized, indri::api::ParsedDocument* parsed ) {
