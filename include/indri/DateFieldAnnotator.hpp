@@ -56,55 +56,59 @@ namespace indri
       ObjectHandler<indri::api::ParsedDocument>* _handler;
       std::string& _field;
       
-      void _parseDate(const std::string &date, TagExtent *extent) const
-      {
-        std::string day, month, year;
-        // is it a slash-date, dash-date, or space-date, or a single number?
-        if (extent->begin == extent->end-1) {
-          // single number date YYYYMMDD
-          year = date.substr( 0, 4 ); 
-          month = date.substr( 4, 2 );
-          day = date.substr( 6, 2 );
-          extent->number = indri::parse::DateParse::convertDate( year, month, day );
-        } else {
-          bool swapMonth = false;
-          std::string delim = "/";
-          int firstDash;        
-          int secondDash;
-          if ((firstDash = date.find(delim)) == std::string::npos) {
-            delim = "-";
-            if ((firstDash = date.find(delim)) == std::string::npos) {
-              delim = " ";
-              if ((firstDash = date.find(delim)) == std::string::npos) 
-                // nothing to parse
-                return;
-              else {
-                // space date is Month DD YYYY or DD Month YYYY
-                if (firstDash > 2) swapMonth = true;
-              }
-            }
+      void _parseDate(const std::string &date, TagExtent *extent) const {
+        try {
+          std::string day, month, year;
+          // is it a slash-date, dash-date, or space-date, or a single number?
+          if (extent->begin == extent->end-1) {
+            // single number date YYYYMMDD
+            year = date.substr( 0, 4 ); 
+            month = date.substr( 4, 2 );
+            day = date.substr( 6, 2 );
+            extent->number = indri::parse::DateParse::convertDate( year, month, day );
           } else {
-                // slash date is MM/DD/YYYY
-            swapMonth = true;
-          }
+            bool swapMonth = false;
+            std::string delim = "/";
+            int firstDash;        
+            int secondDash;
+            if ((firstDash = date.find(delim)) == std::string::npos) {
+              delim = "-";
+              if ((firstDash = date.find(delim)) == std::string::npos) {
+                delim = " ";
+                if ((firstDash = date.find(delim)) == std::string::npos) 
+                  // nothing to parse
+                  return;
+                else {
+                  // space date is Month DD YYYY or DD Month YYYY
+                  if (firstDash > 2) swapMonth = true;
+                }
+              }
+            } else {
+              // slash date is MM/DD/YYYY
+              swapMonth = true;
+            }
 
-          secondDash = date.find(delim, firstDash+1);
-          day = date.substr( 0, firstDash ); 
-          month = date.substr( firstDash+1, secondDash-firstDash-1 );
-          year = date.substr( secondDash+1 );
+            secondDash = date.find(delim, firstDash+1);
+            day = date.substr( 0, firstDash ); 
+            month = date.substr( firstDash+1, secondDash-firstDash-1 );
+            year = date.substr( secondDash+1 );
           
-          if (firstDash == 4)
-            // YYYY-MM-DD or YYYY/MM/DD
-            extent->number = indri::parse::DateParse::convertDate( day, month, year );
-          else {
-            // hack for 2 digit years in WSJ
-            if (year.length() == 2) year = "19" + year;
-            if (swapMonth)
-              //  Month DD YYYY MM-DD-YY
-              extent->number = indri::parse::DateParse::convertDate( year, day, month );
-            else  
-              extent->number = indri::parse::DateParse::convertDate( year, month, day );
+            if (firstDash == 4)
+              // YYYY-MM-DD or YYYY/MM/DD
+              extent->number = indri::parse::DateParse::convertDate( day, month, year );
+            else {
+              // hack for 2 digit years in WSJ
+              if (year.length() == 2) year = "19" + year;
+              if (swapMonth)
+                //  Month DD YYYY MM-DD-YY
+                extent->number = indri::parse::DateParse::convertDate( year, day, month );
+              else  
+                extent->number = indri::parse::DateParse::convertDate( year, month, day );
+            }
           }
+        } catch (std::out_of_range ex) {
+          // silently ignore malformed data
+          std::cerr << "Ignoring invalid date field data: "<<date<< std::endl;
         }
       }
       
