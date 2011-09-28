@@ -21,6 +21,10 @@
 #include "XRef.h"
 #include "Error.h"
 
+Stream * xpdf::Parser::getStream() { return lexer->getStream(); }
+
+int xpdf::Parser::getPos() { return lexer->getPos(); }
+
 xpdf::Parser::Parser(XRef *xrefA, Lexer *lexerA, GBool allowStreamsA) {
   xref = xrefA;
   lexer = lexerA;
