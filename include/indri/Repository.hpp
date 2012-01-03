@@ -19,6 +19,8 @@
 #ifndef INDRI_REPOSITORY_HPP
 #define INDRI_REPOSITORY_HPP
 
+#include <iterator>
+
 #include "indri/Parameters.hpp"
 #include "indri/Transformation.hpp"
 #include "indri/MemoryIndex.hpp"
