@@ -1149,6 +1149,7 @@ namespace indri
       "aide",
       "bathe",
       "caste",
+      "currency",
       "cute",
       "dame",
       "dime",
