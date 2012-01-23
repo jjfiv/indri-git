@@ -16,6 +16,7 @@ libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
+datarootdir = @datarootdir@
 oldincludedir = /usr/include
 pkgdatadir = $(datadir)/@PACKAGE_TARNAME@
 pkglibdir = $(libdir)/@PACKAGE_TARNAME@
