@@ -22,6 +22,15 @@
 #include "indri/QueryEnvironment.hpp"
 #include <iostream>
 
+void print_document_expression_count( const std::string& indexName, const std::string& expression ) {
+  indri::api::QueryEnvironment env;
+  // compute the expression list using the QueryEnvironment API
+  env.addIndex( indexName );
+  double result = env.documentExpressionCount( expression );
+  env.close();
+  std::cout << expression << ":" << result << std::endl;
+}
+
 void print_expression_count( const std::string& indexName, const std::string& expression ) {
   indri::api::QueryEnvironment env;
 
@@ -460,6 +469,7 @@ void usage() {
   std::cout << "    fieldpositions (fp)  Field name     Print inverted list for a field, with positions" << std::endl;
   std::cout << "    expressionlist (e)   Expression     Print inverted list for an Indri expression, with positions" << std::endl;
   std::cout << "    xcount (x)           Expression     Print count of occurrences of an Indri expression" << std::endl;
+  std::cout << "    dxcount (dx)         Expression     Print document count of occurrences of an Indri expression" << std::endl;
   std::cout << "    documentid (di)      Field, Value   Print the document IDs of documents having a metadata field matching this value" << std::endl;
   std::cout << "    documentname (dn)    Document ID    Print the text representation of a document ID" << std::endl;
   std::cout << "    documenttext (dt)    Document ID    Print the text of a document" << std::endl;
@@ -516,6 +526,10 @@ int main( int argc, char** argv ) {
         REQUIRE_ARGS(4);
         std::string expression = argv[3];
         print_expression_count( repName, expression );
+      } else if( command == "dx" || command == "dxcount" ) {
+        REQUIRE_ARGS(4);
+      std::string expression = argv[3];
+        print_document_expression_count( repName, expression );
       } else if( command == "dn" || command == "documentname" ) {
         REQUIRE_ARGS(4);
         print_document_name( r, argv[3] );

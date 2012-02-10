@@ -157,6 +157,10 @@ namespace indri
                                                              const std::string &queryType = "indri" );
       void _scoredQuery( indri::infnet::InferenceNetwork::MAllResults& results, indri::lang::Node* queryRoot, std::string& accumulatorName, int resultsRequested, const std::vector<lemur::api::DOCID_T>* documentSet );
 
+      double _expCount( const std::string& expression,
+                        const std::string& whichOccurrences,
+                        const std::string &queryType = "indri" );
+
       QueryEnvironment( QueryEnvironment& other ) {}
 
     public:
@@ -297,6 +301,10 @@ namespace indri
       /// \brief Return the total number of times this expression appears in the collection.
       /// @param expression The expression to evaluate, probably an ordered or unordered window expression
       double expressionCount( const std::string& expression,
+                              const std::string &queryType = "indri" );
+      /// \brief Return the total number of documents this expression appears in the collection.
+      /// @param expression The expression to evaluate, probably an ordered or unordered window expression
+      double documentExpressionCount( const std::string& expression,
                               const std::string &queryType = "indri" );
       /// \brief Return all the occurrences of this expression in the collection.
       /// Note that the returned vector may be quite large for large collections, and therefore

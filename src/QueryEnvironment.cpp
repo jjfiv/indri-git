@@ -815,10 +815,12 @@ std::vector<indri::api::ScoredExtentResult> indri::api::QueryEnvironment::expres
 }
 
 //
-// expressionCount
+// _expressionCount
 //
 
-double indri::api::QueryEnvironment::expressionCount( const std::string& expression, const std::string& queryType ) {
+double indri::api::QueryEnvironment::_expCount( const std::string& expression, 
+                                                const std::string& whichOccurrences,
+                                                const std::string& queryType ) {
   QueryParserWrapper* parser = QueryParserFactory::get(expression, queryType);
   indri::lang::ScoredExtentNode* rootNode;
 
@@ -845,10 +847,17 @@ double indri::api::QueryEnvironment::expressionCount( const std::string& express
   indri::infnet::InferenceNetwork::MAllResults statisticsResults;
   _sumServerQuery( statisticsResults, roots, MAX_INT32 ); // 1000
   
-  std::vector<ScoredExtentResult>& occurrencesList = statisticsResults[ contextCounter->nodeName() ][ "occurrences" ];
+  std::vector<ScoredExtentResult>& occurrencesList = statisticsResults[ contextCounter->nodeName() ][ whichOccurrences ];
   delete parser;
   delete contextCounter;
   return occurrencesList[0].score;
+}
+
+double indri::api::QueryEnvironment::expressionCount( const std::string& expression, const std::string& queryType ) {
+  return _expCount(expression, "occurrences", queryType);
+}
+double indri::api::QueryEnvironment::documentExpressionCount( const std::string& expression, const std::string& queryType ) {
+  return _expCount(expression, "documentOccurrences", queryType);
 }
 
 // run a query (Indri query language)
