@@ -808,7 +808,9 @@ void DBInterface::getTermInvPosListField(string *term) {
 
     if (theField.length()==0) {
       // not found? use the old method...
-      getTermInvList(term);
+      // changed to add Pos
+      //getTermInvList(term);
+      getTermInvPosList(term);
       return;
     }
     
