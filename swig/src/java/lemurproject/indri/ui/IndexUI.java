@@ -871,7 +871,7 @@ public class IndexUI extends JPanel implements ActionListener,
           // now, if there's any numeric fields, we need to set those...
           for (int f=0; f < numericFields.size(); f++) {
                   String thisNumericField=(String)numericFields.get(f);
-                  env.setNumericField(thisNumericField, true);
+                  env.setNumericField(thisNumericField, true, "NumericFieldAnnotator");
           }
 
           String [] metafields = colFields.getText().split(",");;
