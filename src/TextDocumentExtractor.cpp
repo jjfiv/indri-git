@@ -20,11 +20,10 @@
 #include "lemur/Exception.hpp"
 
 void indri::parse::TextDocumentExtractor::open( const std::string& filename ) {
-  _in.clear();
-  _in.open( filename.c_str() );
+  _in = gzopen( filename.c_str(), "rb" );
   _filename = filename;
 
-  if( !_in.good() )
+  if( !_in )
     LEMUR_THROW( LEMUR_IO_ERROR, "Couldn't open file " + filename + "." );
 }
 
@@ -34,7 +33,7 @@ indri::parse::UnparsedDocument* indri::parse::TextDocumentExtractor::nextDocumen
   _document.textLength = 0;
   _document.metadata.clear();
 
-  if( _in.eof() )
+  if( gzeof( _in ) )
     return 0;
 
   // set up metadata
@@ -43,25 +42,25 @@ indri::parse::UnparsedDocument* indri::parse::TextDocumentExtractor::nextDocumen
   pair.valueLength = _filename.length()+1;
   pair.key = "path";
   _document.metadata.push_back( pair );
-
+  /*
   _docnostring.assign(_filename.c_str() );
   cleanDocno();
   pair.value = _docnostring.c_str();
   pair.valueLength = _docnostring.length()+1;
   pair.key = "docno";
   _document.metadata.push_back( pair );
-
+  */
   pair.key = "filetype";
   pair.value = (void*) "TEXT";
   pair.valueLength = 5;
   _document.metadata.push_back( pair );
 
   // get document text
-  while( !_in.eof() ) {
+  while( !gzeof(_in) ) {
     int readChunk = 1024*1024;
     char* textSpot = _buffer.write(readChunk);
-    _in.read( textSpot, readChunk );
-    _buffer.unwrite( readChunk - _in.gcount() );
+    int read = gzread( _in, textSpot, readChunk );
+    _buffer.unwrite( readChunk - read );
   }
   *_buffer.write(1) = 0;
 
@@ -74,5 +73,5 @@ indri::parse::UnparsedDocument* indri::parse::TextDocumentExtractor::nextDocumen
 }
 
 void indri::parse::TextDocumentExtractor::close() {
-  _in.close();
+  gzclose(_in);
 }

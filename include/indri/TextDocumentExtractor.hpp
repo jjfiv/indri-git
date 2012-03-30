@@ -18,7 +18,7 @@
 
 #ifndef INDRI_TEXTDOCUMENTEXTRACTOR_HPP
 #define INDRI_TEXTDOCUMENTEXTRACTOR_HPP
-
+#include "zlib.h"
 #include "indri/DocumentIterator.hpp"
 #include "indri/UnparsedDocument.hpp"
 #include "indri/Buffer.hpp"
@@ -33,7 +33,7 @@ namespace indri
       std::string _filename;
       UnparsedDocument _document;
       indri::utility::Buffer _buffer;
-      std::ifstream _in;
+      gzFile _in;
 
     public:
       void open( const std::string& filename );
