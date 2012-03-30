@@ -146,8 +146,18 @@ field to an unsigned integer value. The default is NumericFieldAnnotator. If num
 </dd>
 <dt>stemmer</dt>
 <dd>a complex element specifying the stemming algorithm to use in the
-subelement name. Valid options are Porter or Krovetz (case
-insensitive). Specified as
+subelement name. Valid options are:
+<ul>
+<li> porter -- Porter stemmer
+<li> krovetz -- Krovetz stemmer
+<li> arabic_stop -- Larkey stemmer, remove stopwords
+<li>  arabic_norm2  -- Larkey stemmer, table normalization
+<li>  arabic_norm2_stop -- Larkey stemmer, table normalization with stopping
+<li>  arabic_light10 -- Larkey stemmer, light9 plus ll prefix
+<li>  arabic_light10_stop -- Larkey stemmer, light10 and remove stop words
+</ul>
+
+Specified as
 &lt;stemmer&gt;&lt;name&gt;stemmername&lt;/name&gt;&lt;/stemmer&gt; and
 as <tt>-stemmer.name=stemmername</tt> on the command line. This is an
 optional parameter with the default of no stemming.
@@ -522,8 +532,18 @@ field to an unsigned integer value. The default is NumericFieldAnnotator. If num
 </dd>
 <dt>stemmer</dt>
 <dd>a complex element specifying the stemming algorithm to use in the
-subelement name. Valid options are Porter or Krovetz (case
-insensitive). Specified as
+subelement name. Valid options are:
+<ul>
+<li> porter -- Porter stemmer
+<li> krovetz -- Krovetz stemmer
+<li> arabic_stop -- Larkey stemmer, remove stopwords
+<li>  arabic_norm2  -- Larkey stemmer, table normalization
+<li>  arabic_norm2_stop -- Larkey stemmer, table normalization with stopping
+<li>  arabic_light10 -- Larkey stemmer, light9 plus ll prefix
+<li>  arabic_light10_stop -- Larkey stemmer, light10 and remove stop words
+</ul>
+
+Specified as
 &lt;stemmer&gt;&lt;name&gt;stemmername&lt;/name&gt;&lt;/stemmer&gt; and
 as <tt>-stemmer.name=stemmername</tt> on the command line. This is an
 optional parameter with the default of no stemming.

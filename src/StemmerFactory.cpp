@@ -19,10 +19,12 @@
 #include "indri/StemmerFactory.hpp"
 #include "indri/PorterStemmerTransformation.hpp"
 #include "indri/KrovetzStemmerTransformation.hpp"
+#include "indri/ArabicStemmerTransformation.hpp"
 #include "lemur/Exception.hpp"
 
 #define STEMMER_PORTER ( "Porter" )
 #define STEMMER_KROVETZ ( "Krovetz" )
+#define STEMMER_ARABIC ( "Arabic" )
 
 //
 // Directions for adding your own stemmer:
@@ -42,6 +44,8 @@ indri::parse::Transformation* indri::parse::StemmerFactory::get( const std::stri
     return new indri::parse::PorterStemmerTransformation();
   } else if( name == STEMMER_KROVETZ ) {
     return new indri::parse::KrovetzStemmerTransformation( stemmerParams );
+  } else if( name == STEMMER_ARABIC ) {
+    return new indri::parse::ArabicStemmerTransformation( stemmerParams );
   }
   
   LEMUR_THROW( LEMUR_RUNTIME_ERROR, stemmerName + " is not a known stemmer." );
@@ -53,6 +57,8 @@ std::string indri::parse::StemmerFactory::preferredName( const std::string& name
     return STEMMER_KROVETZ;
   } else if( name[0] == 'p' || name[0] == 'P' ) {
     return STEMMER_PORTER;
+  } else if( name[0] == 'a' || name[0] == 'A' ) {
+    return STEMMER_ARABIC;
   }
   // no match, return whatever was passed in.
   return name;
