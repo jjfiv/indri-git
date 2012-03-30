@@ -14,6 +14,7 @@
 // 07/29/2005
 #ifndef _KROVETZ_STEMMER_H_
 #define _KROVETZ_STEMMER_H_
+#include <iostream>
 #include <cstring>
 #ifdef WIN32
 #include <hash_map>
