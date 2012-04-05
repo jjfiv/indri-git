@@ -303,6 +303,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Arabic_Stemmer_utf8.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ArabicStemmerTransformation.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BooleanAndNode.cpp"
 				>
 			</File>
@@ -787,6 +795,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\uint64comp.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\UnorderedWindowNode.cpp"
 				>
 			</File>
@@ -874,6 +886,14 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\Appliers.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\Arabic_Stemmer_utf8.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\ArabicStemmerTransformation.hpp"
 				>
 			</File>
 			<File
@@ -1750,6 +1770,10 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\TwoStageTermScoreFunction.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\uint64comp.hpp"
 				>
 			</File>
 			<File
