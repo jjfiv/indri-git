@@ -246,9 +246,9 @@ void indri::parse::TextTokenizer::processTag() {
 
         i = 0;
 #ifndef WIN32
-        while ( isalnum( c[i] ) ) i++;
+        while ( isalnum( c[i] ) || c[i] == '-' || c[i] == '_' ) i++;
 #else
-        while ( (c[i] >= 0) && isalnum( c[i] ) ) i++;
+        while ( (c[i] >= 0) && isalnum( c[i] ) || c[i] == '-' || [i]c == '_') i++;
 #endif
 
         if ( i == 0 ) break;
@@ -300,15 +300,17 @@ void indri::parse::TextTokenizer::processTag() {
           } else {
 
             bool quoted = true;
-
-            if ( *c == '"' || *c =='\'' ) { c++; offset++; }
+            char quote_char;
+            if ( *c == '"' || *c =='\'' ) { quote_char = *c; c++; offset++; }
             else quoted = false;
 
             // Attribute value starts here.
 
             i = 0;
+// make sure the opening and closing quote character match...
             if ( quoted ) 
-              while ( c[i] != '"' && c[i] != '>' && c[i] !='\'') i++;
+//              while ( c[i] != '"' && c[i] != '>' && c[i] !='\'') i++;
+              while ( c[i] != quote_char && c[i] != '>') i++;
             else
 #ifndef WIN32
               while ( ! isspace( c[i] ) && c[i] != '>' ) i++;
