@@ -47,7 +47,8 @@ indri::query::TermScoreFunction* indri::query::TermScoreFunctionFactory::get( co
   // this is something that never happens in our collection, so we assume that it
   // happens somewhat less often than 1./collectionSize.  I picked 1/(2*collectionSize)
   // because it seemed most appropriate (from InferenceNetworkBuilder)
-
+  if (contextSize == 0) contextSize = 1; // For non-existant fields.
+  
   double collectionFrequency = occurrences ? (occurrences/contextSize) :
     (collectionFrequency = 1.0 / double(contextSize*2.));
 
