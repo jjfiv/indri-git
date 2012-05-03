@@ -1174,7 +1174,6 @@ void indri::collection::Repository::close() {
     }
 
     _closeIndexes();
-    _collection->close();
     
     _closePriors();
 
