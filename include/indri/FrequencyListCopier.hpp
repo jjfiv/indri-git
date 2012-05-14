@@ -52,6 +52,7 @@ namespace indri
       }
 
       void before( indri::lang::ExtentAnd* exAnd ) {
+        _disqualifiedTree = true;
         _disqualifiers.push(exAnd);
       }
 
@@ -60,38 +61,45 @@ namespace indri
       }
 
       void before( indri::lang::ExtentInside* exInside ) {
-        _disqualifiedTree = true;
+        _disqualifiedTree = true;       
       }
 
       void before( indri::lang::NestedExtentInside* nestExInside ) {
-        _disqualifiedTree = true;
+        _disqualifiedTree = true;       
       }
 
       void before( indri::lang::ExtentRestriction* exRestrict ) {
+        _disqualifiedTree = true;       
         _disqualifiers.push(exRestrict);
       }
 
       void before( indri::lang::ExtentEnforcement* exEnforce ) {
+        _disqualifiedTree = true;       
         _disqualifiers.push(exEnforce);
       }
 
       void before( indri::lang::FixedPassage* fixedPassage ) {
+        _disqualifiedTree = true;       
         _disqualifiers.push(fixedPassage);
       }
 
       void before( indri::lang::FieldGreaterNode* fieldGreater ) {
+        _disqualifiedTree = true;
         _disqualifiers.push(fieldGreater);
       }
 
       void before( indri::lang::FieldLessNode* fieldLess ) {
+        _disqualifiedTree = true;       
         _disqualifiers.push(fieldLess);
       }
       
       void before( indri::lang::FieldEqualsNode* fieldEquals ) {
+        _disqualifiedTree = true;
         _disqualifiers.push(fieldEquals);
       }
 
       void before( indri::lang::FieldBetweenNode* fieldBetween ) {
+        _disqualifiedTree = true;
         _disqualifiers.push(fieldBetween);
       }
 
