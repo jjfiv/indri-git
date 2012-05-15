@@ -69,6 +69,7 @@
 #include "indri/ExtentDescendantNode.hpp"
 
 #include "indri/FieldBelowWalker.hpp"
+#include <cmath>
 
 #include <stdexcept>
 
@@ -792,10 +793,10 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WeightNode* wei
   if( _nodeMap.find( weightNode ) == _nodeMap.end() ) {
     const std::vector< std::pair<double, indri::lang::ScoredExtentNode*> >& children = weightNode->getChildren();
     WeightedAndNode* wandNode = new WeightedAndNode( weightNode->nodeName() );
-    
+    // normalize over absolute values
     double totalWeights = 0;
     for( size_t i=0; i<children.size(); i++ ) {
-      totalWeights += children[i].first;
+      totalWeights += fabs(children[i].first);
     }
 
     for( size_t i=0; i<children.size(); i++ ) {
@@ -814,10 +815,10 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WSumNode* wsumN
   if( _nodeMap.find( wsumNode ) == _nodeMap.end() ) {
     const std::vector< std::pair<double, indri::lang::ScoredExtentNode*> >& children = wsumNode->getChildren();
     WeightedSumNode* weightedSumNode = new WeightedSumNode( wsumNode->nodeName() );
-
+    // normalize over absolute values.
     double totalWeights = 0;
     for( size_t i=0; i<children.size(); i++ ) {
-      totalWeights += children[i].first;
+      totalWeights += fabs(children[i].first);
     }
 
     for( size_t i=0; i<children.size(); i++ ) {
@@ -834,10 +835,10 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WAndNode* wandN
   if( _nodeMap.find( wandNode ) == _nodeMap.end() ) {
     const std::vector< std::pair<double, indri::lang::ScoredExtentNode*> >& children = wandNode->getChildren();
     WeightedAndNode* weightedAndNode = new WeightedAndNode( wandNode->nodeName() );
-
+    // normalize over absolute values
     double totalWeights = 0;
     for( size_t i=0; i<children.size(); i++ ) {
-      totalWeights += children[i].first;
+      totalWeights += fabs(children[i].first);
     }
 
     for( size_t i=0; i<children.size(); i++ ) {

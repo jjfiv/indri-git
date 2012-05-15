@@ -27,6 +27,7 @@
 #include "indri/delete_range.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/ExtentRestrictionNode.hpp"
+#include <cmath>
 
 double indri::infnet::WeightedAndNode::_computeMaxScore( unsigned int start ) {
   // first, find the maximum score of the first few columns
@@ -253,7 +254,8 @@ indri::utility::greedy_vector<indri::api::ScoredExtentResult>& indri::infnet::We
   for( iter = _children.begin(); iter != _children.end(); iter++ ) {
     const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = (*iter).node->score( documentID, extent, documentLength );
     scores.push_back(childResults);
-    sumWeight += (*iter).weight * childResults.size();
+    // normalize over absolute values
+    sumWeight += fabs((*iter).weight) * childResults.size();
   }
   int i = 0;
   for( iter = _children.begin(); iter != _children.end(); iter++ ) {

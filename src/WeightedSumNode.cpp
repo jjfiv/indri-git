@@ -20,6 +20,7 @@
 #include "lemur/lemur-compat.hpp"
 #include <math.h>
 #include "indri/Annotator.hpp"
+#include <cmath>
 
 indri::infnet::WeightedSumNode::WeightedSumNode( const std::string& name ) : _name(name)
 {
@@ -72,7 +73,8 @@ const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& indri::infn
   for( unsigned i=0; i<_children.size(); i++ ) {
     const indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = _children[i]->score( documentID, extent, documentLength );
     scores.push_back(childResults);
-    sumWeight += _weights[i] * childResults.size();
+    // normalize over absolute values
+    sumWeight += fabs(_weights[i]) * childResults.size();
   }
   for( unsigned i=0; i<_children.size(); i++ ) {
     indri::utility::greedy_vector<indri::api::ScoredExtentResult>& childResults = scores[i];
