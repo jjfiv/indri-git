@@ -4004,12 +4004,13 @@ void indri::parse::TextTokenizer::processTag() {
 
     for ( char *c = toktext + 2; 
 #ifndef WIN32
-          isalnum( *c ) || *c == '-' || *c == '_'; c++ ) {
+          isalnum( *c ) || *c == '-' || *c == '_' || *c == ':' ; c++ ) {
 #else
-          ((*c >= 0) && isalnum( *c )) || *c == '-' || *c == '_'; c++ ) {
+          ((*c >= 0) && isalnum( *c )) || *c == '-' || *c == '_' || *c == ':' ; c++ ) {
 #endif
 
       *c = tolower( *c );
+      if ( *c == ':' ) *c = '_'; /* replace colon (from namespaces) */
       len++;
     }
 
@@ -4046,17 +4047,19 @@ void indri::parse::TextTokenizer::processTag() {
     char* write_loc;
 
 #ifndef WIN32
-    while ( isalnum( c[i] ) || c[i] == '-' || c[i] == '_' ) i++;
+    while ( isalnum( c[i] ) || c[i] == '-' || c[i] == '_' || c[i] == ':' ) i++;
 #else
-    while ( ( (c[i] >= 0) && isalnum( c[i] )) || c[i] == '-' || c[i] == '_' ) i++;
+    while ( ( (c[i] >= 0) && isalnum( c[i] )) || c[i] == '-' || c[i] == '_' || c[i] == ':' ) i++;
 #endif
     if ( c[i] == '>' ) {
 
       // open tag with no attributes, eg. <title>
 
       // Ensure tag name is downcased
-      for ( int j = 0; j < i; j++ )
+      for ( int j = 0; j < i; j++ ) {
         c[j] = tolower( c[j] );
+        if ( c[j] == ':' ) c[j] = '_'; /* replace colon (from namespaces) */
+      }
 
       TagEvent te;
 
@@ -4088,8 +4091,10 @@ void indri::parse::TextTokenizer::processTag() {
       te.open_tag = true;
 
       // Ensure tag name is downcased
-      for ( int j = 0; j < i; j++ )
+      for ( int j = 0; j < i; j++ ) {
         c[j] = tolower( c[j] );
+        if ( c[j] == ':' ) c[j] = '_'; /* replace colon (from namespaces) */
+      }
 
       // need to write i characters, plus a NULL
       char* write_loc = _termBuffer.write( i + 1 );
