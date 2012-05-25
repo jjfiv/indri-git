@@ -43,6 +43,8 @@ public class indriJNI {
   public final static native DocumentVector[] QueryEnvironment_documentVectors(long jarg1, QueryEnvironment jarg1_, int[] jarg2) throws java.lang.Exception;
   public final static native double QueryEnvironment_expressionCount__SWIG_0(long jarg1, QueryEnvironment jarg1_, String jarg2, String jarg3) throws java.lang.Exception;
   public final static native double QueryEnvironment_expressionCount__SWIG_1(long jarg1, QueryEnvironment jarg1_, String jarg2) throws java.lang.Exception;
+  public final static native double QueryEnvironment_documentExpressionCount__SWIG_0(long jarg1, QueryEnvironment jarg1_, String jarg2, String jarg3) throws java.lang.Exception;
+  public final static native double QueryEnvironment_documentExpressionCount__SWIG_1(long jarg1, QueryEnvironment jarg1_, String jarg2) throws java.lang.Exception;
   public final static native ScoredExtentResult[] QueryEnvironment_expressionList__SWIG_0(long jarg1, QueryEnvironment jarg1_, String jarg2, String jarg3) throws java.lang.Exception;
   public final static native ScoredExtentResult[] QueryEnvironment_expressionList__SWIG_1(long jarg1, QueryEnvironment jarg1_, String jarg2) throws java.lang.Exception;
   public final static native int QueryEnvironment_documentLength(long jarg1, QueryEnvironment jarg1_, int jarg2) throws java.lang.Exception;

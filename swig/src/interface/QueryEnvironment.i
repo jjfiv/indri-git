@@ -345,6 +345,19 @@ public";
 #endif
 
       double expressionCount( const std::string& expression, const std::string &queryType = "indri" ) throw (lemur::api::Exception);
+
+#ifdef SWIGJAVA
+      %javamethodmodifiers  "
+/**
+        Return the total number of documents this expression appears in the collection.
+       @param expression The expression to evaluate, probably an ordered or unordered window expression
+@throws Exception if a lemur::api::Exception was thrown by the JNI library.
+*/
+public";
+#endif
+      double documentExpressionCount( const std::string& expression,
+                              const std::string &queryType = "indri" )  throw (lemur::api::Exception);
+
 #ifdef SWIGJAVA
       %javamethodmodifiers  "
 /**

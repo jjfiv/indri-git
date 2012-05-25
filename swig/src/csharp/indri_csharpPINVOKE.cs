@@ -1731,6 +1731,12 @@ class indri_csharpPINVOKE {
   [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionCount__SWIG_1")]
   public static extern double QueryEnvironment_expressionCount__SWIG_1(HandleRef jarg1, string jarg2);
 
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentExpressionCount__SWIG_0")]
+  public static extern double QueryEnvironment_documentExpressionCount__SWIG_0(HandleRef jarg1, string jarg2, string jarg3);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentExpressionCount__SWIG_1")]
+  public static extern double QueryEnvironment_documentExpressionCount__SWIG_1(HandleRef jarg1, string jarg2);
+
   [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_expressionList__SWIG_0")]
   public static extern IntPtr QueryEnvironment_expressionList__SWIG_0(HandleRef jarg1, string jarg2, string jarg3);
 

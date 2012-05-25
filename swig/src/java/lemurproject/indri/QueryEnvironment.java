@@ -354,6 +354,26 @@ public double expressionCount(String expression) throws java.lang.Exception {
 
   
 /**
+        Return the total number of documents this expression appears in the collection.
+       @param expression The expression to evaluate, probably an ordered or unordered window expression
+@throws Exception if a lemur::api::Exception was thrown by the JNI library.
+*/
+public double documentExpressionCount(String expression, String queryType) throws java.lang.Exception {
+    return indriJNI.QueryEnvironment_documentExpressionCount__SWIG_0(swigCPtr, this, expression, queryType);
+  }
+
+  
+/**
+        Return the total number of documents this expression appears in the collection.
+       @param expression The expression to evaluate, probably an ordered or unordered window expression
+@throws Exception if a lemur::api::Exception was thrown by the JNI library.
+*/
+public double documentExpressionCount(String expression) throws java.lang.Exception {
+    return indriJNI.QueryEnvironment_documentExpressionCount__SWIG_1(swigCPtr, this, expression);
+  }
+
+  
+/**
         Return all the occurrences of this expression in the collection.
        Note that the returned vector may be quite large for large collections, and therefore
        has the very real possibility of exhausting the memory of the machine.  Use this method
