@@ -3199,6 +3199,127 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionCount) {
 }
 
 
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentExpressionCount__SWIG_0) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp2 ;
+  std::string temp3 ;
+  zval **args[3];
+  double result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_documentExpressionCount. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  convert_to_string_ex(args[2]);
+  temp3.assign(Z_STRVAL_PP(args[2]), Z_STRLEN_PP(args[2]));
+  arg3 = &temp3;
+  
+  result = (double)(arg1)->documentExpressionCount((std::string const &)*arg2,(std::string const &)*arg3);
+  {
+    ZVAL_DOUBLE(return_value,result);
+  }
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentExpressionCount__SWIG_1) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  double result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_documentExpressionCount. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  result = (double)(arg1)->documentExpressionCount((std::string const &)*arg2);
+  {
+    ZVAL_DOUBLE(return_value,result);
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentExpressionCount) {
+  int argc;
+  zval **argv[3];
+  
+  argc = ZEND_NUM_ARGS();
+  zend_get_parameters_array_ex(argc,argv);
+  if (argc == 2) {
+    int _v;
+    {
+      void *tmp;
+      _v = (SWIG_ConvertPtr(*argv[0], (void**)&tmp, SWIGTYPE_p_indri__api__QueryEnvironment, 0) >= 0);
+    }
+    if (_v) {
+      _v = ( Z_TYPE_PP(argv[1]) == IS_STRING ) ? 1 : 0;
+      
+      if (_v) {
+        return _wrap_QueryEnvironment_documentExpressionCount__SWIG_1(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *tmp;
+      _v = (SWIG_ConvertPtr(*argv[0], (void**)&tmp, SWIGTYPE_p_indri__api__QueryEnvironment, 0) >= 0);
+    }
+    if (_v) {
+      _v = ( Z_TYPE_PP(argv[1]) == IS_STRING ) ? 1 : 0;
+      
+      if (_v) {
+        _v = ( Z_TYPE_PP(argv[2]) == IS_STRING ) ? 1 : 0;
+        
+        if (_v) {
+          return _wrap_QueryEnvironment_documentExpressionCount__SWIG_0(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+        }
+      }
+    }
+  }
+  
+  SWIG_ErrorCode() = E_ERROR;
+  SWIG_ErrorMsg() = "No matching function for overloaded 'QueryEnvironment_documentExpressionCount'";
+  zend_error(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionList__SWIG_0) {
   indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
   std::string *arg2 = 0 ;
@@ -4594,6 +4715,7 @@ static zend_function_entry libindri_php_functions[] = {
  SWIG_ZEND_NAMED_FE(queryenvironment_documentcount,_wrap_QueryEnvironment_documentCount,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_onedocumentcount,_wrap_QueryEnvironment_onedocumentCount,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_expressioncount,_wrap_QueryEnvironment_expressionCount,NULL)
+ SWIG_ZEND_NAMED_FE(queryenvironment_documentexpressioncount,_wrap_QueryEnvironment_documentExpressionCount,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_expressionlist,_wrap_QueryEnvironment_expressionList,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_documentlength,_wrap_QueryEnvironment_documentLength,NULL)
  SWIG_ZEND_NAMED_FE(new_queryenvironment,_wrap_new_QueryEnvironment,NULL)

@@ -66,6 +66,7 @@ ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_fieldList);
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentCount);
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_onedocumentCount);
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionCount);
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentExpressionCount);
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_expressionList);
 ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_documentLength);
 ZEND_NAMED_FUNCTION(_wrap_new_QueryEnvironment);

@@ -331,6 +331,14 @@ class QueryEnvironment {
 		return $r;
 	}
 
+	public function documentExpressionCount($expression,$queryType=null) {
+		switch (func_num_args()) {
+		case 1: $r=QueryEnvironment_documentExpressionCount($this->_cPtr,$expression); break;
+		default: $r=QueryEnvironment_documentExpressionCount($this->_cPtr,$expression,$queryType);
+		}
+		return $r;
+	}
+
 	public function expressionList($expression,$queryType=null) {
 		switch (func_num_args()) {
 		case 1: $r=QueryEnvironment_expressionList($this->_cPtr,$expression); break;
