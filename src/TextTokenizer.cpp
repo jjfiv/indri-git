@@ -4127,7 +4127,7 @@ void indri::parse::TextTokenizer::processTag() {
 #ifndef WIN32
         while ( isalnum( c[i] ) || c[i] == '-' || c[i] == '_' ) i++;
 #else
-        while ( (c[i] >= 0) && isalnum( c[i] ) || c[i] == '-' || [i]c == '_') i++;
+        while ( (c[i] >= 0) && isalnum( c[i] ) || c[i] == '-' || c[i] == '_') i++;
 #endif
 
         if ( i == 0 ) break;
