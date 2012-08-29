@@ -13,7 +13,7 @@
 /* $ANTLR 2.7.7 (2006-11-01): "indrilang.g" -> "QueryParser.hpp"$ */
 #include <antlr/TokenStream.hpp>
 #include <antlr/TokenBuffer.hpp>
-#include "QueryLexerTokenTypes.hpp"
+#include "indri/QueryLexerTokenTypes.hpp"
 #include <antlr/LLkParser.hpp>
 
 ANTLR_BEGIN_NAMESPACE(indri)

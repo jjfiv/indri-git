@@ -14,7 +14,7 @@
 #include <antlr/CommonToken.hpp>
 #include <antlr/InputBuffer.hpp>
 #include <antlr/BitSet.hpp>
-#include "QueryLexerTokenTypes.hpp"
+#include "indri/QueryLexerTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
 ANTLR_BEGIN_NAMESPACE(indri)
 ANTLR_BEGIN_NAMESPACE(lang)

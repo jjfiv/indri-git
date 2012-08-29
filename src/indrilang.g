@@ -666,6 +666,7 @@ extentRestriction [ indri::lang::ScoredExtentNode* sn, indri::lang::RawExtentNod
     int windowSize = atoi(passageWindowSize->getText().c_str() + startWindow );
     
     er = new indri::lang::FixedPassage(sn, windowSize, increment);
+    _nodes.push_back(er);
   } |
   ( O_SQUARE TERM ) =>  O_SQUARE fName=fieldNameString C_SQUARE
   {
