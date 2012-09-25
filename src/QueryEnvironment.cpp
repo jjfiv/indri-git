@@ -1223,11 +1223,12 @@ std::string indri::api::QueryEnvironment::stemTerm(const std::string &term) {
 //
 
 INT64 indri::api::QueryEnvironment::termCountUnique() {
-  // note that we should probably send these requests asynchronously
+  // note that this only provides a lower bound estimate
   INT64 totalTermCount = 0;
 
   for( size_t i=0; i<_servers.size(); i++ ) {
-    totalTermCount += _servers[i]->termCountUnique();
+    totalTermCount = lemur_compat::max(_servers[i]->termCountUnique(), 
+                                        totalTermCount);
   }
 
   return totalTermCount;
