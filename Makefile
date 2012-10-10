@@ -21,6 +21,7 @@ endif
 	$(MAKE) -C site-search
 	$(MAKE) -C modifyfields
 	$(MAKE) -C clarity
+	$(MAKE) -C reformulate
 
 $(INSTALLDIRS):
 	$(INSTALL_DIR) $@
@@ -42,6 +43,7 @@ endif
 	$(MAKE) -C site-search clean
 	$(MAKE) -C modifyfields clean
 	$(MAKE) -C clarity clean
+	$(MAKE) -C reformulate clean
 	rm -f depend/*
 
 distclean: clean
@@ -67,6 +69,7 @@ endif
 	$(MAKE) install -C makeprior
 	$(MAKE) install -C modifyfields
 	$(MAKE) install -C clarity
+	$(MAKE) install -C reformulate
 	$(MAKE) install -C doc
 	$(MAKE) -C site-search install
 	$(INSTALL_DATA) Makefile.app $(pkgdatadir)

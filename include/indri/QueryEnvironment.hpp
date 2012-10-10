@@ -29,9 +29,11 @@
 #include "indri/Repository.hpp"
 #include "indri/QueryAnnotation.hpp"
 #include "lemur/IndexTypes.hpp"
+#include "indri/ReformulateQuery.hpp"
 
 namespace indri 
 {
+
   namespace api 
   {
     /*! \brief Structure for aggregating a query and its parameters.
@@ -127,6 +129,9 @@ namespace indri
     */
     class QueryEnvironment {
     private:
+      indri::api::Parameters reformulatorParams;
+      indri::query::ReformulateQuery *reformulator;
+
       // first is entry in _servers, second is entry _streams
       // derive idx to erase from those.
       std::map<std::string, std::pair<indri::server::QueryServer *, indri::net::NetworkStream *> > _serverNameMap;
@@ -346,7 +351,9 @@ namespace indri
       void setMaxWildcardTerms(int maxTerms);
       const std::vector<indri::server::QueryServer*>& getServers() const { return _servers;
       }
-      
+   
+      void setFormulationParameters(Parameters &p);
+      std::string reformulateQuery(const std::string &query);
     };
   }
 }

@@ -146,6 +146,7 @@ void qenv_gather_document_results( const std::vector< std::vector<DOCID_T> >& do
 //
 
 indri::api::QueryEnvironment::QueryEnvironment() : _baseline(false) { 
+  reformulator = new indri::query::ReformulateQuery(reformulatorParams);
 }
 
 indri::api::QueryEnvironment::~QueryEnvironment() {
@@ -456,6 +457,7 @@ void indri::api::QueryEnvironment::close() {
   indri::utility::delete_vector_contents<indri::net::NetworkMessageStream*>( _messageStreams );
   indri::utility::delete_vector_contents<indri::net::NetworkStream*>( _streams );
   indri::utility::delete_vector_contents<indri::collection::Repository*>( _repositories );
+  delete(reformulator);
 }
 
 std::vector<std::string> indri::api::QueryEnvironment::documentMetadata( const std::vector<DOCID_T>& documentIDs, const std::string& attributeName ) {
@@ -1400,4 +1402,12 @@ void indri::api::QueryEnvironment::setMaxWildcardTerms(int maxTerms) {
 
 }
 
+void indri::api::QueryEnvironment::setFormulationParameters(Parameters &p) {
+  reformulatorParams = p;
+  reformulator->setParameters(p);
+}
 
+std::string indri::api::QueryEnvironment::reformulateQuery(const std::string &query) {
+  std::string reform = reformulator->transform(query);
+  return reform;
+}
