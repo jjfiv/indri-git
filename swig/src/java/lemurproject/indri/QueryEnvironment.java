@@ -408,4 +408,24 @@ public int documentLength(int documentID) throws java.lang.Exception {
     return indriJNI.QueryEnvironment_documentLength(swigCPtr, this, documentID);
   }
 
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public void setFormulationParameters(Map p) {
+    indriJNI.QueryEnvironment_setFormulationParameters(swigCPtr, this, p);
+  }
+
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public String reformulateQuery(String query) {
+    return indriJNI.QueryEnvironment_reformulateQuery(swigCPtr, this, query);
+  }
+
 }

@@ -360,6 +360,8 @@ namespace Swig {
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/ConflationPattern.hpp"
+#include "indri/ReformulateQuery.hpp"
+
 #ifdef INDRI_STANDALONE
 #include "lemur/Exception.hpp"
 #else
@@ -10300,6 +10302,39 @@ SWIGEXPORT int SWIGSTDCALL CSharp_QueryEnvironment_documentLength(void * jarg1, 
   }
   
   jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_QueryEnvironment_setFormulationParameters(void * jarg1, void * jarg2) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  indri::api::Parameters *arg2 = 0 ;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  arg2 = (indri::api::Parameters *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "indri::api::Parameters & type is null", 0);
+    return ;
+  } 
+  (arg1)->setFormulationParameters(*arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_QueryEnvironment_reformulateQuery(void * jarg1, char * jarg2) {
+  char * jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  result = (arg1)->reformulateQuery((std::string const &)*arg2);
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
   return jresult;
 }
 

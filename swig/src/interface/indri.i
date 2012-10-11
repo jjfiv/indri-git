@@ -17,6 +17,8 @@
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/ConflationPattern.hpp"
+#include "indri/ReformulateQuery.hpp"
+
 #ifdef INDRI_STANDALONE
 #include "lemur/Exception.hpp"
 #else
@@ -77,6 +79,7 @@ typedef long long UINT64;
 %include "QueryEnvironment.i"
 %include "QueryExpander.i"
 %include "IndexEnvironment.i"
+
 #ifdef INDRI_STANDALONE
 %pragma(java) jniclasscode=%{
   static {
@@ -138,7 +141,6 @@ typedef long long UINT64;
 %include "indritypemaps.i"
 %include "LemurException.i"
 
-
 namespace indri{
   namespace parse{
     struct TermExtent {
@@ -152,105 +154,6 @@ namespace indri{
   }
 
   namespace api{
-
-    class ScoredExtentResult {
-
-      double score;
-      int document;
-      int begin;
-      int end;
-      INT64 number;
-      int ordinal;
-      int parentOrdinal;
-    public:
-      ~ScoredExtentResult();
-    };
-
-
-    class ParsedDocument {
-      indri::utility::greedy_vector<char*> terms;
-      indri::utility::greedy_vector<indri::parse::TagExtent> tags;
-      indri::utility::greedy_vector<indri::parse::TermExtent> positions;
-      indri::utility::greedy_vector<indri::parse::MetadataPair> metadata;
-
-
-      const char* text;
-      size_t textLength;
-
-      const char* content;
-      size_t contentLength;
-
-    public:
-      ~ParsedDocument();
-      std::string getContent();
-    };
-
-
-    class QueryAnnotationNode {
-      std::string name;
-      std::string type;
-      std::string queryText;
-      std::vector<QueryAnnotationNode*> children;
-    };
-
-%nodefaultctor QueryAnnotation;
-
-    class QueryAnnotation {
-    public:
-      const QueryAnnotationNode* getQueryTree() const;
-      const indri::infnet::EvaluatorNode::MResults& getAnnotations() const;
-      const std::vector<ScoredExtentResult>& getResults() const;
-      ~QueryAnnotation();
-    };
-    setEx(QueryEnvironment::runQuery);
-    setEx(QueryEnvironment::runQuerydocset);
-    setEx(QueryEnvironment::runAnnotatedQuery);
-    setEx(QueryEnvironment::runAnnotatedQuerydocset);
-    setEx(QueryEnvironment::documents);
-    setEx(QueryEnvironment::documentsdocids);
-    setEx(QueryEnvironment::documentMetadata)
-    setEx(QueryEnvironment::documentMetadatadocids);
-    setEx(QueryEnvironment::documentIDsFromMetadata);
-
-    class QueryEnvironment {
-    public:
-      ~QueryEnvironment();
-      void addServer( const std::string& hostname );
-      void addIndex( const std::string& pathname );
-      void close();
-  
-      void setMemory( UINT64 memory );
-      void setScoringRules( const std::vector<std::string>& rules );
-      void setStopwords( const std::vector<std::string>& stopwords );
-
-      std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
-      std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
-
-      QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
-      QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
-
-      std::vector<ParsedDocument*> documentsdocids( const std::vector<lemur::api::DOCID_T>& documentIDs );
-      std::vector<ParsedDocument*> documents( const std::vector<ScoredExtentResult>& results );
-
-      std::vector<std::string> documentMetadatadocids( const std::vector<lemur::api::DOCID_T>& documentIDs, const std::string& attributeName );
-      std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
-
-      std::vector<lemur::api::DOCID_T> documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue ) ;
-
-      INT64 termCount();
-      INT64 onetermCount( const std::string& term );
-      INT64 stemCount( const std::string& term );
-      INT64 termFieldCount( const std::string& term, const std::string& field );
-      INT64 stemFieldCount( const std::string& term, const std::string& field );
-      std::vector<std::string> fieldList();
-      INT64 documentCount();
-      INT64 onedocumentCount( const std::string& term );
-      double expressionCount( const std::string& expression, const
-      std::string &queryType = "indri" );
-      double documentExpressionCount( const std::string& expression, const std::string &queryType = "indri" );
-      std::vector<indri::api::ScoredExtentResult> expressionList( const std::string& expression,  const std::string& queryType = "indri" );
-      int documentLength( int documentID ) ;
-    };
     class Parameters {
     public:
       /// Create
@@ -338,13 +241,116 @@ namespace indri{
       /// load an XML parameters string.
       void load( const std::string& text );
     };
+
+
+    class ScoredExtentResult {
+
+      double score;
+      int document;
+      int begin;
+      int end;
+      INT64 number;
+      int ordinal;
+      int parentOrdinal;
+      std::string attributes;
+    public:
+      ~ScoredExtentResult();
+    };
+
+
+    class ParsedDocument {
+      indri::utility::greedy_vector<char*> terms;
+      indri::utility::greedy_vector<indri::parse::TagExtent> tags;
+      indri::utility::greedy_vector<indri::parse::TermExtent> positions;
+      indri::utility::greedy_vector<indri::parse::MetadataPair> metadata;
+
+
+      const char* text;
+      size_t textLength;
+
+      const char* content;
+      size_t contentLength;
+
+    public:
+      ~ParsedDocument();
+      std::string getContent();
+    };
+
+
+    class QueryAnnotationNode {
+      std::string name;
+      std::string type;
+      std::string queryText;
+      std::vector<QueryAnnotationNode*> children;
+    };
+
+%nodefaultctor QueryAnnotation;
+
+    class QueryAnnotation {
+    public:
+      const QueryAnnotationNode* getQueryTree() const;
+      const indri::infnet::EvaluatorNode::MResults& getAnnotations() const;
+      const std::vector<ScoredExtentResult>& getResults() const;
+      ~QueryAnnotation();
+    };
+    setEx(QueryEnvironment::runQuery);
+    setEx(QueryEnvironment::runQuerydocset);
+    setEx(QueryEnvironment::runAnnotatedQuery);
+    setEx(QueryEnvironment::runAnnotatedQuerydocset);
+    setEx(QueryEnvironment::documents);
+    setEx(QueryEnvironment::documentsdocids);
+    setEx(QueryEnvironment::documentMetadata)
+    setEx(QueryEnvironment::documentMetadatadocids);
+    setEx(QueryEnvironment::documentIDsFromMetadata);
+    setEx(QueryEnvironment::setFormulationParameters);
+    setEx(QueryEnvironment::reformulateQuery);
+
+    class QueryEnvironment {
+    public:
+      ~QueryEnvironment();
+      void addServer( const std::string& hostname );
+      void addIndex( const std::string& pathname );
+      void close();
+  
+      void setMemory( UINT64 memory );
+      void setScoringRules( const std::vector<std::string>& rules );
+      void setStopwords( const std::vector<std::string>& stopwords );
+
+      std::vector<ScoredExtentResult> runQuery( const std::string& query, int resultsRequested );
+      std::vector<ScoredExtentResult> runQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
+
+      QueryAnnotation* runAnnotatedQuery( const std::string& query, int resultsRequested );
+      QueryAnnotation* runAnnotatedQuerydocset( const std::string& query, const std::vector<lemur::api::DOCID_T>& documentSet, int resultsRequested );
+
+      std::vector<ParsedDocument*> documentsdocids( const std::vector<lemur::api::DOCID_T>& documentIDs );
+      std::vector<ParsedDocument*> documents( const std::vector<ScoredExtentResult>& results );
+
+      std::vector<std::string> documentMetadatadocids( const std::vector<lemur::api::DOCID_T>& documentIDs, const std::string& attributeName );
+      std::vector<std::string> documentMetadata( const std::vector<ScoredExtentResult>& documentIDs, const std::string& attributeName );
+
+      std::vector<lemur::api::DOCID_T> documentIDsFromMetadata( const std::string& attributeName, const std::vector<std::string>& attributeValue ) ;
+
+      INT64 termCount();
+      INT64 onetermCount( const std::string& term );
+      INT64 stemCount( const std::string& term );
+      INT64 termFieldCount( const std::string& term, const std::string& field );
+      INT64 stemFieldCount( const std::string& term, const std::string& field );
+      std::vector<std::string> fieldList();
+      INT64 documentCount();
+      INT64 onedocumentCount( const std::string& term );
+      double expressionCount( const std::string& expression, const std::string &queryType = "indri" );
+      double documentExpressionCount( const std::string& expression, const std::string &queryType = "indri" );
+      std::vector<indri::api::ScoredExtentResult> expressionList( const std::string& expression,  const std::string& queryType = "indri" );
+      int documentLength( int documentID ) ;
+      void setFormulationParameters(Parameters &p);
+      std::string reformulateQuery(const std::string &query);
+    };
   }
 }
 namespace indri
 {
   namespace query
   {
-    
     class QueryExpander {
     public:
       QueryExpander( indri::api::QueryEnvironment * env , indri::api::Parameters& param );

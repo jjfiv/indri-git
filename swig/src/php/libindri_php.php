@@ -65,6 +65,98 @@ class TermExtent {
 	}
 }
 
+class Parameters {
+	public $_cPtr=null;
+	protected $_pData=array();
+
+	function __set($var,$value) {
+		if ($var === 'thisown') return swig_libindri_php_alter_newobject($this->_cPtr,$value);
+		$this->_pData[$var] = $value;
+	}
+
+	function __isset($var) {
+		if ($var === 'thisown') return true;
+		return array_key_exists($var, $this->_pData);
+	}
+
+	function __get($var) {
+		if ($var === 'thisown') return swig_libindri_php_get_newobject($this->_cPtr);
+		return $this->_pData[$var];
+	}
+
+	public function __construct($res=null) {
+		if (is_resource($res) && get_resource_type($res) === '_p_indri__api__Parameters') {
+			$this->_cPtr=$res;
+			return;
+		}
+		$this->_cPtr=new_Parameters();
+	}
+
+	public function set($value) {
+		Parameters_set($this->_cPtr,$value);
+	}
+
+	public function get_bool($name,$def) {
+		return Parameters_get_bool($this->_cPtr,$name,$def);
+	}
+
+	public function get_int($name,$def) {
+		return Parameters_get_int($this->_cPtr,$name,$def);
+	}
+
+	public function get_double($name,$def) {
+		return Parameters_get_double($this->_cPtr,$name,$def);
+	}
+
+	public function get_INT64($name,$def) {
+		return Parameters_get_INT64($this->_cPtr,$name,$def);
+	}
+
+	public function get_string($name,$def) {
+		return Parameters_get_string($this->_cPtr,$name,$def);
+	}
+
+	public function remove($path) {
+		Parameters_remove($this->_cPtr,$path);
+	}
+
+	public function set_bool($name,$value) {
+		Parameters_set_bool($this->_cPtr,$name,$value);
+	}
+
+	public function set_string($name,$value) {
+		Parameters_set_string($this->_cPtr,$name,$value);
+	}
+
+	public function set_int($name,$value) {
+		Parameters_set_int($this->_cPtr,$name,$value);
+	}
+
+	public function set_UINT64($name,$value) {
+		Parameters_set_UINT64($this->_cPtr,$name,$value);
+	}
+
+	public function set_double($name,$value) {
+		Parameters_set_double($this->_cPtr,$name,$value);
+	}
+
+	public function clear() {
+		Parameters_clear($this->_cPtr);
+	}
+
+	public function size() {
+		return Parameters_size($this->_cPtr);
+	}
+
+	public function exists($name) {
+		return Parameters_exists($this->_cPtr,$name);
+	}
+
+	public function load($text) {
+		Parameters_load($this->_cPtr,$text);
+	}
+}
+
 class ScoredExtentResult {
 	public $_cPtr=null;
 	protected $_pData=array();
@@ -351,104 +443,20 @@ class QueryEnvironment {
 		return QueryEnvironment_documentLength($this->_cPtr,$documentID);
 	}
 
+	public function setFormulationParameters($p) {
+		QueryEnvironment_setFormulationParameters($this->_cPtr,$p);
+	}
+
+	public function reformulateQuery($query) {
+		return QueryEnvironment_reformulateQuery($this->_cPtr,$query);
+	}
+
 	public function __construct($res=null) {
 		if (is_resource($res) && get_resource_type($res) === '_p_indri__api__QueryEnvironment') {
 			$this->_cPtr=$res;
 			return;
 		}
 		$this->_cPtr=new_QueryEnvironment();
-	}
-}
-
-class Parameters {
-	public $_cPtr=null;
-	protected $_pData=array();
-
-	function __set($var,$value) {
-		if ($var === 'thisown') return swig_libindri_php_alter_newobject($this->_cPtr,$value);
-		$this->_pData[$var] = $value;
-	}
-
-	function __isset($var) {
-		if ($var === 'thisown') return true;
-		return array_key_exists($var, $this->_pData);
-	}
-
-	function __get($var) {
-		if ($var === 'thisown') return swig_libindri_php_get_newobject($this->_cPtr);
-		return $this->_pData[$var];
-	}
-
-	public function __construct($res=null) {
-		if (is_resource($res) && get_resource_type($res) === '_p_indri__api__Parameters') {
-			$this->_cPtr=$res;
-			return;
-		}
-		$this->_cPtr=new_Parameters();
-	}
-
-	public function set($value) {
-		Parameters_set($this->_cPtr,$value);
-	}
-
-	public function get_bool($name,$def) {
-		return Parameters_get_bool($this->_cPtr,$name,$def);
-	}
-
-	public function get_int($name,$def) {
-		return Parameters_get_int($this->_cPtr,$name,$def);
-	}
-
-	public function get_double($name,$def) {
-		return Parameters_get_double($this->_cPtr,$name,$def);
-	}
-
-	public function get_INT64($name,$def) {
-		return Parameters_get_INT64($this->_cPtr,$name,$def);
-	}
-
-	public function get_string($name,$def) {
-		return Parameters_get_string($this->_cPtr,$name,$def);
-	}
-
-	public function remove($path) {
-		Parameters_remove($this->_cPtr,$path);
-	}
-
-	public function set_bool($name,$value) {
-		Parameters_set_bool($this->_cPtr,$name,$value);
-	}
-
-	public function set_string($name,$value) {
-		Parameters_set_string($this->_cPtr,$name,$value);
-	}
-
-	public function set_int($name,$value) {
-		Parameters_set_int($this->_cPtr,$name,$value);
-	}
-
-	public function set_UINT64($name,$value) {
-		Parameters_set_UINT64($this->_cPtr,$name,$value);
-	}
-
-	public function set_double($name,$value) {
-		Parameters_set_double($this->_cPtr,$name,$value);
-	}
-
-	public function clear() {
-		Parameters_clear($this->_cPtr);
-	}
-
-	public function size() {
-		return Parameters_size($this->_cPtr);
-	}
-
-	public function exists($name) {
-		return Parameters_exists($this->_cPtr,$name);
-	}
-
-	public function load($text) {
-		Parameters_load($this->_cPtr,$text);
 	}
 }
 

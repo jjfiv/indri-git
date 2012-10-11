@@ -436,6 +436,8 @@ namespace Swig {
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/ConflationPattern.hpp"
+#include "indri/ReformulateQuery.hpp"
+
 #ifdef INDRI_STANDALONE
 #include "lemur/Exception.hpp"
 #else
@@ -3170,6 +3172,73 @@ SWIGEXPORT jint JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1docum
     }
   }
   jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1setFormulationParameters(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jobject jarg2) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  indri::api::Parameters *arg2 = 0 ;
+  indri::api::Parameters p2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  {
+    if( jarg2 != 0 ) {
+      jni_parameters_info info;
+      java_parameters_init( jenv, info );
+      
+      java_parameters_map( jenv, info, p2, jarg2 );
+    }   
+    arg2 = &p2;
+  }
+  {
+    try {
+      (arg1)->setFormulationParameters(*arg2);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return ; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return ;
+    }
+  }
+}
+
+
+SWIGEXPORT jstring JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1reformulateQuery(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jstring jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  {
+    try {
+      result = (arg1)->reformulateQuery((std::string const &)*arg2);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
 

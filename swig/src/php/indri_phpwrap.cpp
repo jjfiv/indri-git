@@ -1124,6 +1124,8 @@ extern "C" {
 #include "indri/IndexEnvironment.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/ConflationPattern.hpp"
+#include "indri/ReformulateQuery.hpp"
+
 #ifdef INDRI_STANDALONE
 #include "lemur/Exception.hpp"
 #else
@@ -1461,6 +1463,613 @@ ZEND_NAMED_FUNCTION(_wrap_new_TermExtent) {
   result = (indri::parse::TermExtent *)new indri::parse::TermExtent();
   
   SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__parse__TermExtent, 1);
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_new_Parameters) {
+  indri::api::Parameters *result = 0 ;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 0) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  result = (indri::api::Parameters *)new indri::api::Parameters();
+  
+  SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__Parameters, 1);
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+/* This function is designed to be called by the zend list destructors */
+/* to typecast and do the actual destruction */
+static void __wrap_delete_Parameters(zend_rsrc_list_entry *rsrc, const char *type_name TSRMLS_DC) {
+  swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
+  void *ptr=value->ptr ;
+  int newobject=value->newobject ;
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  
+  efree(value);
+  if (! newobject) return; /* can't delete it! */
+  arg1 = (indri::api::Parameters *)SWIG_ZTS_ConvertResourceData(ptr,type_name,SWIGTYPE_p_indri__api__Parameters TSRMLS_CC);
+  if (! arg1) zend_error(E_ERROR, "indri::api::Parameters resource already free'd");
+  delete arg1;
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  (arg1)->set((std::string const &)*arg2);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_get_bool) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  bool result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_bool. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,2,CONVERT_BOOL_IN@*/
+  convert_to_boolean_ex(args[2]);
+  arg3 = (bool) Z_LVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  result = (bool)(arg1)->get_bool((std::string const &)*arg2,arg3);
+  {
+    ZVAL_BOOL(return_value,(result)?1:0);
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_get_int) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  int arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  int result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_int. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,7,CONVERT_INT_IN@*/
+  convert_to_long_ex(args[2]);
+  arg3 = (int) Z_LVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  result = (int)(arg1)->get_int((std::string const &)*arg2,arg3);
+  {
+    ZVAL_LONG(return_value,result);
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_get_double) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  double arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  double result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_double. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,52,CONVERT_FLOAT_IN@*/
+  convert_to_double_ex(args[2]);
+  arg3 = (double) Z_DVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  result = (double)(arg1)->get_double((std::string const &)*arg2,arg3);
+  {
+    ZVAL_DOUBLE(return_value,result);
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_get_INT64) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  INT64 arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  INT64 result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_INT64. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  convert_to_long_ex(args[2]);
+  arg3 = (INT64) Z_LVAL_PP(args[2]);
+  
+  result = (INT64)(arg1)->get_INT64((std::string const &)*arg2,arg3);
+  
+  
+  ZVAL_LONG(return_value,result);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_get_string) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp2 ;
+  std::string temp3 ;
+  zval **args[3];
+  std::string result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_string. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  convert_to_string_ex(args[2]);
+  temp3.assign(Z_STRVAL_PP(args[2]), Z_STRLEN_PP(args[2]));
+  arg3 = &temp3;
+  
+  result = (arg1)->get_string((std::string const &)*arg2,(std::string const &)*arg3);
+  
+  ZVAL_STRINGL(return_value, const_cast<char*>((&result)->data()), (&result)->size(), 1);
+  
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_remove) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_remove. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  (arg1)->remove((std::string const &)*arg2);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set_bool) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_bool. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,2,CONVERT_BOOL_IN@*/
+  convert_to_boolean_ex(args[2]);
+  arg3 = (bool) Z_LVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  (arg1)->set_bool((std::string const &)*arg2,arg3);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set_string) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp2 ;
+  std::string temp3 ;
+  zval **args[3];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_string. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  convert_to_string_ex(args[2]);
+  temp3.assign(Z_STRVAL_PP(args[2]), Z_STRLEN_PP(args[2]));
+  arg3 = &temp3;
+  
+  (arg1)->set_string((std::string const &)*arg2,(std::string const &)*arg3);
+  
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set_int) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  int arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_int. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,7,CONVERT_INT_IN@*/
+  convert_to_long_ex(args[2]);
+  arg3 = (int) Z_LVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  (arg1)->set_int((std::string const &)*arg2,arg3);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set_UINT64) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  UINT64 arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_UINT64. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  convert_to_long_ex(args[2]);
+  arg3 = (UINT64) Z_LVAL_PP(args[2]);
+  
+  (arg1)->set_UINT64((std::string const &)*arg2,arg3);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_set_double) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  double arg3 ;
+  std::string temp2 ;
+  zval **args[3];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_double. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  
+  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,52,CONVERT_FLOAT_IN@*/
+  convert_to_double_ex(args[2]);
+  arg3 = (double) Z_DVAL_PP(args[2]);
+  /*@SWIG@*/;
+  
+  (arg1)->set_double((std::string const &)*arg2,arg3);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_clear) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  zval **args[1];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_array_ex(1, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_clear. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  (arg1)->clear();
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_size) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  zval **args[1];
+  size_t result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_array_ex(1, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_size. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  result = (arg1)->size();
+  {
+    ZVAL_LONG(return_value,result);
+  }
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_exists) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  bool result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_exists. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  result = (bool)(arg1)->exists((std::string const &)*arg2);
+  {
+    ZVAL_BOOL(return_value,(result)?1:0);
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_Parameters_load) {
+  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_load. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  (arg1)->load((std::string const &)*arg2);
+  
   
   return;
 fail:
@@ -3520,6 +4129,87 @@ fail:
 }
 
 
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_setFormulationParameters) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  indri::api::Parameters *arg2 = 0 ;
+  zval **args[2];
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_setFormulationParameters. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  {
+    if(SWIG_ConvertPtr(*args[1], (void **) &arg2, SWIGTYPE_p_indri__api__Parameters, 0) < 0 || arg2 == NULL) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 2 of QueryEnvironment_setFormulationParameters. Expected SWIGTYPE_p_indri__api__Parameters");
+    }
+  }
+  {
+    try {
+      (arg1)->setFormulationParameters(*arg2);
+    } catch( lemur::api::Exception& e ) {
+      //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+      // get a warning message rather than abort the script.
+      //      zend_error(E_WARNING, e.what().c_str());
+      RETURN_NULL() ;
+    }
+  }
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
+ZEND_NAMED_FUNCTION(_wrap_QueryEnvironment_reformulateQuery) {
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  zval **args[2];
+  std::string result;
+  
+  SWIG_ResetError();
+  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
+    WRONG_PARAM_COUNT;
+  }
+  
+  {
+    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__QueryEnvironment, 0) < 0) {
+      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of QueryEnvironment_reformulateQuery. Expected SWIGTYPE_p_indri__api__QueryEnvironment");
+    }
+  }
+  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
+  
+  convert_to_string_ex(args[1]);
+  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
+  arg2 = &temp2;
+  
+  {
+    try {
+      result = (arg1)->reformulateQuery((std::string const &)*arg2);
+    } catch( lemur::api::Exception& e ) {
+      //    SWIG_exception( SWIG_RuntimeError, e.what().c_str() );
+      // get a warning message rather than abort the script.
+      //      zend_error(E_WARNING, e.what().c_str());
+      RETURN_NULL() ;
+    }
+  }
+  
+  ZVAL_STRINGL(return_value, const_cast<char*>((&result)->data()), (&result)->size(), 1);
+  
+  
+  return;
+fail:
+  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
+}
+
+
 ZEND_NAMED_FUNCTION(_wrap_new_QueryEnvironment) {
   indri::api::QueryEnvironment *result = 0 ;
   
@@ -3531,613 +4221,6 @@ ZEND_NAMED_FUNCTION(_wrap_new_QueryEnvironment) {
   result = (indri::api::QueryEnvironment *)new indri::api::QueryEnvironment();
   
   SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__QueryEnvironment, 1);
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_new_Parameters) {
-  indri::api::Parameters *result = 0 ;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 0) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  result = (indri::api::Parameters *)new indri::api::Parameters();
-  
-  SWIG_SetPointerZval(return_value, (void *)result, SWIGTYPE_p_indri__api__Parameters, 1);
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-/* This function is designed to be called by the zend list destructors */
-/* to typecast and do the actual destruction */
-static void __wrap_delete_Parameters(zend_rsrc_list_entry *rsrc, const char *type_name TSRMLS_DC) {
-  swig_object_wrapper *value=(swig_object_wrapper *) rsrc->ptr ;
-  void *ptr=value->ptr ;
-  int newobject=value->newobject ;
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  
-  efree(value);
-  if (! newobject) return; /* can't delete it! */
-  arg1 = (indri::api::Parameters *)SWIG_ZTS_ConvertResourceData(ptr,type_name,SWIGTYPE_p_indri__api__Parameters TSRMLS_CC);
-  if (! arg1) zend_error(E_ERROR, "indri::api::Parameters resource already free'd");
-  delete arg1;
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string temp2 ;
-  zval **args[2];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  (arg1)->set((std::string const &)*arg2);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_get_bool) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  bool arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  bool result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_bool. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,2,CONVERT_BOOL_IN@*/
-  convert_to_boolean_ex(args[2]);
-  arg3 = (bool) Z_LVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  result = (bool)(arg1)->get_bool((std::string const &)*arg2,arg3);
-  {
-    ZVAL_BOOL(return_value,(result)?1:0);
-  }
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_get_int) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  int arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  int result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_int. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,7,CONVERT_INT_IN@*/
-  convert_to_long_ex(args[2]);
-  arg3 = (int) Z_LVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  result = (int)(arg1)->get_int((std::string const &)*arg2,arg3);
-  {
-    ZVAL_LONG(return_value,result);
-  }
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_get_double) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  double arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  double result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_double. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,52,CONVERT_FLOAT_IN@*/
-  convert_to_double_ex(args[2]);
-  arg3 = (double) Z_DVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  result = (double)(arg1)->get_double((std::string const &)*arg2,arg3);
-  {
-    ZVAL_DOUBLE(return_value,result);
-  }
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_get_INT64) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  INT64 arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  INT64 result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_INT64. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  convert_to_long_ex(args[2]);
-  arg3 = (INT64) Z_LVAL_PP(args[2]);
-  
-  result = (INT64)(arg1)->get_INT64((std::string const &)*arg2,arg3);
-  
-  
-  ZVAL_LONG(return_value,result);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_get_string) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string *arg3 = 0 ;
-  std::string temp2 ;
-  std::string temp3 ;
-  zval **args[3];
-  std::string result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_get_string. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  convert_to_string_ex(args[2]);
-  temp3.assign(Z_STRVAL_PP(args[2]), Z_STRLEN_PP(args[2]));
-  arg3 = &temp3;
-  
-  result = (arg1)->get_string((std::string const &)*arg2,(std::string const &)*arg3);
-  
-  ZVAL_STRINGL(return_value, const_cast<char*>((&result)->data()), (&result)->size(), 1);
-  
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_remove) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string temp2 ;
-  zval **args[2];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_remove. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  (arg1)->remove((std::string const &)*arg2);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set_bool) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  bool arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_bool. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,2,CONVERT_BOOL_IN@*/
-  convert_to_boolean_ex(args[2]);
-  arg3 = (bool) Z_LVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  (arg1)->set_bool((std::string const &)*arg2,arg3);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set_string) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string *arg3 = 0 ;
-  std::string temp2 ;
-  std::string temp3 ;
-  zval **args[3];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_string. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  convert_to_string_ex(args[2]);
-  temp3.assign(Z_STRVAL_PP(args[2]), Z_STRLEN_PP(args[2]));
-  arg3 = &temp3;
-  
-  (arg1)->set_string((std::string const &)*arg2,(std::string const &)*arg3);
-  
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set_int) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  int arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_int. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,7,CONVERT_INT_IN@*/
-  convert_to_long_ex(args[2]);
-  arg3 = (int) Z_LVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  (arg1)->set_int((std::string const &)*arg2,arg3);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set_UINT64) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  UINT64 arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_UINT64. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  convert_to_long_ex(args[2]);
-  arg3 = (UINT64) Z_LVAL_PP(args[2]);
-  
-  (arg1)->set_UINT64((std::string const &)*arg2,arg3);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_set_double) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  double arg3 ;
-  std::string temp2 ;
-  zval **args[3];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 3 || zend_get_parameters_array_ex(3, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_set_double. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  
-  /*@SWIG:/Users/dfisher/Development/local/share/swig/2.0.0/php/utils.i,52,CONVERT_FLOAT_IN@*/
-  convert_to_double_ex(args[2]);
-  arg3 = (double) Z_DVAL_PP(args[2]);
-  /*@SWIG@*/;
-  
-  (arg1)->set_double((std::string const &)*arg2,arg3);
-  
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_clear) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  zval **args[1];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_array_ex(1, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_clear. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  (arg1)->clear();
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_size) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  zval **args[1];
-  size_t result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 1 || zend_get_parameters_array_ex(1, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_size. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  result = (arg1)->size();
-  {
-    ZVAL_LONG(return_value,result);
-  }
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_exists) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string temp2 ;
-  zval **args[2];
-  bool result;
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_exists. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  result = (bool)(arg1)->exists((std::string const &)*arg2);
-  {
-    ZVAL_BOOL(return_value,(result)?1:0);
-  }
-  
-  return;
-fail:
-  zend_error_noreturn(SWIG_ErrorCode(),"%s",SWIG_ErrorMsg());
-}
-
-
-ZEND_NAMED_FUNCTION(_wrap_Parameters_load) {
-  indri::api::Parameters *arg1 = (indri::api::Parameters *) 0 ;
-  std::string *arg2 = 0 ;
-  std::string temp2 ;
-  zval **args[2];
-  
-  SWIG_ResetError();
-  if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_array_ex(2, args) != SUCCESS) {
-    WRONG_PARAM_COUNT;
-  }
-  
-  {
-    if(SWIG_ConvertPtr(*args[0], (void **) &arg1, SWIGTYPE_p_indri__api__Parameters, 0) < 0) {
-      SWIG_PHP_Error(E_ERROR, "Type error in argument 1 of Parameters_load. Expected SWIGTYPE_p_indri__api__Parameters");
-    }
-  }
-  if(!arg1) SWIG_PHP_Error(E_ERROR, "this pointer is NULL");
-  
-  convert_to_string_ex(args[1]);
-  temp2.assign(Z_STRVAL_PP(args[1]), Z_STRLEN_PP(args[1]));
-  arg2 = &temp2;
-  
-  (arg1)->load((std::string const &)*arg2);
-  
   
   return;
 fail:
@@ -4684,6 +4767,23 @@ static zend_function_entry libindri_php_functions[] = {
  SWIG_ZEND_NAMED_FE(termextent_end_set,_wrap_TermExtent_end_set,NULL)
  SWIG_ZEND_NAMED_FE(termextent_end_get,_wrap_TermExtent_end_get,NULL)
  SWIG_ZEND_NAMED_FE(new_termextent,_wrap_new_TermExtent,NULL)
+ SWIG_ZEND_NAMED_FE(new_parameters,_wrap_new_Parameters,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set,_wrap_Parameters_set,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_get_bool,_wrap_Parameters_get_bool,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_get_int,_wrap_Parameters_get_int,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_get_double,_wrap_Parameters_get_double,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_get_int64,_wrap_Parameters_get_INT64,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_get_string,_wrap_Parameters_get_string,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_remove,_wrap_Parameters_remove,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set_bool,_wrap_Parameters_set_bool,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set_string,_wrap_Parameters_set_string,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set_int,_wrap_Parameters_set_int,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set_uint64,_wrap_Parameters_set_UINT64,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_set_double,_wrap_Parameters_set_double,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_clear,_wrap_Parameters_clear,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_size,_wrap_Parameters_size,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_exists,_wrap_Parameters_exists,NULL)
+ SWIG_ZEND_NAMED_FE(parameters_load,_wrap_Parameters_load,NULL)
  SWIG_ZEND_NAMED_FE(new_scoredextentresult,_wrap_new_ScoredExtentResult,NULL)
  SWIG_ZEND_NAMED_FE(parseddocument_getcontent,_wrap_ParsedDocument_getContent,NULL)
  SWIG_ZEND_NAMED_FE(new_parseddocument,_wrap_new_ParsedDocument,NULL)
@@ -4718,24 +4818,9 @@ static zend_function_entry libindri_php_functions[] = {
  SWIG_ZEND_NAMED_FE(queryenvironment_documentexpressioncount,_wrap_QueryEnvironment_documentExpressionCount,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_expressionlist,_wrap_QueryEnvironment_expressionList,NULL)
  SWIG_ZEND_NAMED_FE(queryenvironment_documentlength,_wrap_QueryEnvironment_documentLength,NULL)
+ SWIG_ZEND_NAMED_FE(queryenvironment_setformulationparameters,_wrap_QueryEnvironment_setFormulationParameters,NULL)
+ SWIG_ZEND_NAMED_FE(queryenvironment_reformulatequery,_wrap_QueryEnvironment_reformulateQuery,NULL)
  SWIG_ZEND_NAMED_FE(new_queryenvironment,_wrap_new_QueryEnvironment,NULL)
- SWIG_ZEND_NAMED_FE(new_parameters,_wrap_new_Parameters,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set,_wrap_Parameters_set,NULL)
- SWIG_ZEND_NAMED_FE(parameters_get_bool,_wrap_Parameters_get_bool,NULL)
- SWIG_ZEND_NAMED_FE(parameters_get_int,_wrap_Parameters_get_int,NULL)
- SWIG_ZEND_NAMED_FE(parameters_get_double,_wrap_Parameters_get_double,NULL)
- SWIG_ZEND_NAMED_FE(parameters_get_int64,_wrap_Parameters_get_INT64,NULL)
- SWIG_ZEND_NAMED_FE(parameters_get_string,_wrap_Parameters_get_string,NULL)
- SWIG_ZEND_NAMED_FE(parameters_remove,_wrap_Parameters_remove,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set_bool,_wrap_Parameters_set_bool,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set_string,_wrap_Parameters_set_string,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set_int,_wrap_Parameters_set_int,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set_uint64,_wrap_Parameters_set_UINT64,NULL)
- SWIG_ZEND_NAMED_FE(parameters_set_double,_wrap_Parameters_set_double,NULL)
- SWIG_ZEND_NAMED_FE(parameters_clear,_wrap_Parameters_clear,NULL)
- SWIG_ZEND_NAMED_FE(parameters_size,_wrap_Parameters_size,NULL)
- SWIG_ZEND_NAMED_FE(parameters_exists,_wrap_Parameters_exists,NULL)
- SWIG_ZEND_NAMED_FE(parameters_load,_wrap_Parameters_load,NULL)
  SWIG_ZEND_NAMED_FE(queryexpander_runexpandedquery,_wrap_QueryExpander_runExpandedQuery,NULL)
  SWIG_ZEND_NAMED_FE(queryexpander_expand,_wrap_QueryExpander_expand,NULL)
  SWIG_ZEND_NAMED_FE(new_rmexpander,_wrap_new_RMExpander,NULL)

@@ -3,6 +3,7 @@
 #endif
 %include "QueryRequest.i"
 %include "QueryResults.i"
+%include "Parameters.i"
 namespace indri {
   namespace api {
     class QueryEnvironment {
@@ -384,6 +385,9 @@ public";
 #endif
 
       int documentLength( int documentID ) throw (lemur::api::Exception);
+
+      void setFormulationParameters(indri::api::Parameters &p);
+      std::string reformulateQuery(const std::string &query);
     };
   }
 }

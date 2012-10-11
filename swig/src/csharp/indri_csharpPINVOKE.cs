@@ -1746,6 +1746,12 @@ class indri_csharpPINVOKE {
   [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentLength")]
   public static extern int QueryEnvironment_documentLength(HandleRef jarg1, int jarg2);
 
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_setFormulationParameters")]
+  public static extern void QueryEnvironment_setFormulationParameters(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_reformulateQuery")]
+  public static extern string QueryEnvironment_reformulateQuery(HandleRef jarg1, string jarg2);
+
   [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryEnvironment")]
   public static extern void delete_QueryEnvironment(HandleRef jarg1);
 

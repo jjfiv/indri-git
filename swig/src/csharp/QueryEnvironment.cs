@@ -230,6 +230,17 @@ public class QueryEnvironment : IDisposable {
     return ret;
   }
 
+  public void setFormulationParameters(Parameters p) {
+    indri_csharpPINVOKE.QueryEnvironment_setFormulationParameters(swigCPtr, Parameters.getCPtr(p));
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public string reformulateQuery(string query) {
+    string ret = indri_csharpPINVOKE.QueryEnvironment_reformulateQuery(swigCPtr, query);
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
 }
 
 }
