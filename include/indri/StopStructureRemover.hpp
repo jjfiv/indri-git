@@ -21,7 +21,6 @@ namespace indri
 {
   namespace query
   {
-    // want to use tr1/regex, but G++ doesn't have it yet.
     class StopStructureRemover {
     public:
       static std::string transform(std::string query);    };

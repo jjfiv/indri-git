@@ -349,10 +349,20 @@ namespace indri
       /// @param maxTerms the maximum number of terms to expand a wildcard
       /// operator argument (default 100).
       void setMaxWildcardTerms(int maxTerms);
-      const std::vector<indri::server::QueryServer*>& getServers() const { return _servers;
+      
+      /// \brief return the internal query servers.
+      /// @return the local and network query servers.
+      const std::vector<indri::server::QueryServer*>& getServers() const { 
+        return _servers;
       }
-   
+
+      /// \brief set the query reformulation parameters.
+      /// @param p the Parameters object containing the parameters.    
       void setFormulationParameters(Parameters &p);
+
+      /// \brief reformulate a query.
+      /// @param query the bag of words query to reformulate.
+      /// @return the indri query language reformulated query.
       std::string reformulateQuery(const std::string &query);
     };
   }

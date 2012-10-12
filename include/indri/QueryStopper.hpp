@@ -12,17 +12,10 @@
 #ifndef INDRI_QUERYSTOPPER_HPP
 #define INDRI_QUERYSTOPPER_HPP
 #include <string>
-/*
-  Based on: 
-  Samuel Huston and W. Bruce Croft. Evaluating verbose query processing
-  techniques. In Proc. of SIGIR, pages 291-298, 2010.
- */
 namespace indri
 {
   namespace query
   {
-    // definitely need a QueryTransformation interface.
-    // want to use tr1/regex, but G++ doesn't have it yet.
     class QueryStopper {
     public:
       static std::string transform(std::string query);

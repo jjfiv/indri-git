@@ -18,13 +18,14 @@
 std::string indri::query::QueryStopper::transform(std::string query) {
   //# Based on "Intro. to IR", p.25
   //http://www-csli.stanford.edu/~hinrich/information-retrieval-book.html
-  const std::string sw[NUM_STOP_WORDS] = {"a", "about", "am", "an", "and", "are", "as", "at", "be", 
-                            "been", "being", "by", "did", "do", "does",
-                            "doing", "done", "for", "from", "had", "have",
-                            "has", "he", "in", "if", "is", "it", "its", "of","على","اللي","ازاي","أنهي","في","رأيها","يوم","من", "رأي",
-                                          "on", "or", "that", "th", "the", "to", "was", "were", "will", "with","الناس","بتقول","إيه","على","في","إلي","هيحصل","لو","عنده"};
-  
-
+  const std::string sw[NUM_STOP_WORDS] = {"a", "about", "am", "an", "and", 
+                                          "are", "as", "at", "be", 
+                                          "been", "being", "by", "did", "do", 
+                                          "does", "doing", "done", "for", 
+                                          "from", "had", "have", "has", "he", 
+                                          "in", "if", "is", "it", "its", "of",
+                                          "on", "or", "that", "th", "the", 
+                                          "to", "was", "were", "will", "with"};
   std::string token;
   std::istringstream qstream(query);
   std::string result = "";  
