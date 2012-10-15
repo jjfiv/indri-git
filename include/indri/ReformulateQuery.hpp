@@ -41,10 +41,10 @@ namespace indri
         params = NULL;
       };
       ~ReformulateQuery() {
-        delete(params);
+        //        delete(params);
       }
       void setParameters(indri::api::Parameters &p){
-        delete(params);
+        //        delete(params);
         params = new indri::api::Parameters(p);        
       }
       
