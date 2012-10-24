@@ -258,7 +258,7 @@ void indri::query::RelevanceModel::_sortGrams() {
 //
 // Extra care is taken to make sure we don't overflow
 // machine precision when taking exp (log x)
-// This is done by adding a constant K which cancels out
+// This is done by subtracting a constant K which cancels out
 // Right now K is set to maximally preserve the highest value
 // but could be altered to a min or average, or whatever...
 
@@ -271,7 +271,7 @@ static void _logtoposterior(std::vector<indri::api::ScoredExtentResult> &res) {
   double sum=0;
 
   for (iter = res.begin(); iter != res.end(); iter++) {
-    sum += (*iter).score=exp(K+(*iter).score);
+    sum += (*iter).score=exp((*iter).score - K);
   }
   for (iter = res.begin(); iter != res.end(); iter++) {
     (*iter).score/=sum;
