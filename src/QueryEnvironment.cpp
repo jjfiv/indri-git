@@ -454,10 +454,15 @@ void indri::api::QueryEnvironment::removeServer( const std::string& hostname ) {
 
 void indri::api::QueryEnvironment::close() {
   indri::utility::delete_vector_contents<indri::server::QueryServer*>( _servers );
+  _servers.clear();
   indri::utility::delete_vector_contents<indri::net::NetworkMessageStream*>( _messageStreams );
+  _messageStreams.clear();
   indri::utility::delete_vector_contents<indri::net::NetworkStream*>( _streams );
+  _streams.clear();
   indri::utility::delete_vector_contents<indri::collection::Repository*>( _repositories );
+  _repositories.clear();
   delete(reformulator);
+  reformulator = NULL;
 }
 
 std::vector<std::string> indri::api::QueryEnvironment::documentMetadata( const std::vector<DOCID_T>& documentIDs, const std::string& attributeName ) {
