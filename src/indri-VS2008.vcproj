@@ -715,6 +715,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QueryStopper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReformulateQuery.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\RelevanceModel.cpp"
 				>
 			</File>
@@ -748,6 +756,10 @@
 			</File>
 			<File
 				RelativePath=".\StopperTransformation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StopStructureRemover.cpp"
 				>
 			</File>
 			<File
@@ -1545,6 +1557,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\indri\QueryStopper.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\include\indri\QueryTFWalker.hpp"
 				>
 			</File>
@@ -1566,6 +1582,10 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\ref_ptr.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\ReformulateQuery.hpp"
 				>
 			</File>
 			<File
@@ -1650,6 +1670,10 @@
 			</File>
 			<File
 				RelativePath="..\include\indri\StopperTransformation.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\indri\StopStructureRemover.hpp"
 				>
 			</File>
 			<File

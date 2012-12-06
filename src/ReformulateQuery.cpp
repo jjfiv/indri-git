@@ -46,7 +46,7 @@ std::string indri::query::ReformulateQuery::replaceAll(std::string result, const
 }
 
 std::string indri::query::ReformulateQuery::trim(std::string text) {
-  char s[text.size()+1];
+  char *s = new char[text.size()+1];
   strcpy(s, text.c_str());
   int start=0;
   while(start < text.size()) {
@@ -64,8 +64,9 @@ std::string indri::query::ReformulateQuery::trim(std::string text) {
   }
   if(start < end) {
     s[end+1] = '\0';
-    text = std::string(s+start);
+    text.assign(s+start);
   }
+  delete(s);
   text = indri::query::ReformulateQuery::replaceAll(text, "  ", " ");
   return text;
 }
@@ -278,7 +279,7 @@ std::string indri::query::ReformulateQuery::transform(std::string queryText) {
   // lite stopping [bendersky]
   if (liteStop)
     reform = indri::query::QueryStopper::transform(reform);
-  if (reform.size() == 0) return "EMPTYQUERY";
+  if (reform.size() == 0) return std::string("EMPTYQUERY");
   
   std::vector<std::string> queryTerms = split(reform, ' ');
   std::vector<indri::query::ReformulateQuery::weighted_field> fields;
