@@ -26,6 +26,14 @@ indri::infnet::WeightedExtentOrNode::WeightedExtentOrNode( const std::string& na
   _children(children),
   _name(name)
 {
+  double sumWeight = 0;
+  std::vector<double>::iterator iter;
+  for( iter = _weights.begin(); iter != _weights.end(); iter++ ) {
+    sumWeight += (*iter); 
+  }
+  for( iter = _weights.begin(); iter != _weights.end(); iter++ ) {
+    *iter /=sumWeight;
+  }
 }
 
 void indri::infnet::WeightedExtentOrNode::prepare( lemur::api::DOCID_T documentID ) {
