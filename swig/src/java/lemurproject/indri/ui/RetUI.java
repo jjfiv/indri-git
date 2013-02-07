@@ -998,6 +998,15 @@ public class RetUI extends JPanel implements ActionListener {
 		    String myDocText = currentParsedDoc.content;
 		    // insert into doc text pane
 		    docHtmlPane.setContentType("text/html");
+		    /*
+		    * Get round problems parsing <META http-equiv='content-type'
+		    * content='text/html; charset=utf-8'> See
+		    * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4695909 
+		    *
+		    * Is this due to a bug in Java?
+		    */
+		    docHtmlPane.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE); 
+
 		    docHtmlPane.setText(myDocText);
 		    // reset caret to start of doc text.
 		    docHtmlPane.setCaretPosition(0);
