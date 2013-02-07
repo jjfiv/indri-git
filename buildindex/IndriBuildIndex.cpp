@@ -1053,7 +1053,7 @@ int main(int argc, char * argv[]) {
       std::cout << INDRI_DISTRIBUTION << std::endl;
     }
 
-    env.setMemory( parameters.get("memory", INT64(100*1024*1024)) );
+    env.setMemory( parameters.get("memory", INT64(1024*1024*1024)) );
 
     env.setNormalization( parameters.get("normalize", true));
     env.setInjectURL( parameters.get("injectURL", true));
