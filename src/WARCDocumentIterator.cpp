@@ -322,7 +322,7 @@ indri::parse::UnparsedDocument* indri::parse::WARCDocumentIterator::nextDocument
     dochdrMetadata.valueLength += numRead;
   } else {
     // dns response has none
-    numRead = 0;
+    //    numRead = 0;
   }
   
   *_metaBuffer.write(1) = 0; // terminate it.
