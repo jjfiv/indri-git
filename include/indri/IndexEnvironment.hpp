@@ -216,6 +216,10 @@ namespace indri
       /// @param flag True, if text should be normalized, false otherwise.
       void setNormalization( bool flag );
 
+      /// set injection of URL text into document; default is true
+      /// @param flag True, if URL should be injected, false otherwise.
+      void setInjectURL( bool flag );
+
       /// set storing of ParsedDocuments; default is true
       /// @param flag true, if ParsedDocuments should be stored, false otherwise.
       void setStoreDocs( bool flag );

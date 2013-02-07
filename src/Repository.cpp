@@ -137,7 +137,9 @@ void indri::collection::Repository::_buildFields() {
 void indri::collection::Repository::_buildChain( indri::api::Parameters& parameters, indri::api::Parameters* options ) {
   // Extract url from metadata before case normalizing.
   // this could be parameterized.
-  _transformations.push_back(new indri::parse::URLTextAnnotator());
+
+  if (parameters.get("injectURL", true))
+    _transformations.push_back(new indri::parse::URLTextAnnotator());
 
   bool dontNormalize = parameters.exists( "normalize" ) && ( false == (bool) parameters["normalize"] );
 
@@ -181,6 +183,9 @@ void indri::collection::Repository::_buildChain( indri::api::Parameters& paramet
 void indri::collection::Repository::_copyParameters( indri::api::Parameters& options ) {
   if( options.exists( "normalize" ) ) {
     _parameters.set( "normalize", (std::string) options["normalize"] );
+  }
+  if( options.exists( "injectURL" ) ) {
+    _parameters.set( "injectURL", (std::string) options["injectURL"] );
   }
 
   if( options.exists("field") ) {

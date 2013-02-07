@@ -149,6 +149,10 @@ void indri::api::IndexEnvironment::setStoreDocs( bool flag ) {
   _parameters.set( "storeDocs", flag );
 }
 
+void indri::api::IndexEnvironment::setInjectURL( bool flag ) {
+  _parameters.set( "injectURL", flag );
+}
+
 void indri::api::IndexEnvironment::setMemory( UINT64 memory ) {
   _parameters.set("memory", memory);
 }
