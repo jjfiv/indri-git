@@ -21,6 +21,7 @@
 // 15 September 2005 -- mwb
 //
 
+#include <iostream>
 #include <string.h>
 #include <ctype.h>
 #include "indri/TextTokenizer.hpp"
@@ -39,14 +40,16 @@ static long byte_position;
 #define UTF8_TOKEN    4
 
 %}
-%start COMMENT
+%x COMMENT
 %%
 
 "<!--" { BEGIN(COMMENT); byte_position += tokleng; return ZAP; }
 <COMMENT>[^-]+ { byte_position += tokleng; return ZAP; }
 <COMMENT>"-->" { BEGIN(INITIAL); byte_position += tokleng; return ZAP; }
-<COMMENT>"-" { byte_position += tokleng; return ZAP; }
-"<!"[^\>]*">" { byte_position += tokleng; return ZAP; }
+<COMMENT>"-"[^-]* { byte_position += tokleng; return ZAP; }
+"<!"[^-][^\>]*">" { byte_position += tokleng; return ZAP; }
+"<%"[^%\>]+"%>" { byte_position += tokleng; return ZAP; }
+"<?xml"[^\>]*">" { byte_position += tokleng; return ZAP; }
 \<[a-zA-Z/][^\>]*\>                                             { byte_position += tokleng; return TAG; }
 [&]([a-zA-Z]+|[#]([0-9]+|[xX][a-fA-F0-9]+))[;]         { byte_position += tokleng; return ZAP; /* symbols */ }
 [A-Z0-9]"."([A-Z0-9]".")*                                        { byte_position += tokleng; return ASCII_TOKEN; }
@@ -77,6 +80,7 @@ indri::parse::TokenizedDocument* indri::parse::TextTokenizer::tokenize( indri::p
   _document.content = document->content;
   _document.contentLength = document->contentLength;
 
+  BEGIN(INITIAL);
   // byte offset
   byte_position = document->content - document->text;
 
