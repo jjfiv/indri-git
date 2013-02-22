@@ -162,6 +162,60 @@ std::string indri::query::ReformulateQuery::generateSDMQuery(std::vector<std::st
     ") " + wO + " #combine(" + ow + 
     ") " + wU + " #combine(" + uw + "))";
 }
+std::string indri::query::ReformulateQuery::generateCMUFDMQuery(std::string q){
+  std::vector<std::string> strs = split(q, ' ');
+  return generateCMUFDMQuery(strs);
+}
+
+std::string indri::query::ReformulateQuery::generateCMUFDMQuery(std::vector<std::string> tokens) {
+  // parameters
+  // mixture weights
+  std::string w_mixture        = params->get("weightMixture", "1.0");
+  std::string w_dependency     = params->get("weightDependency", "1.0");
+  // field weights
+  std::string w_mixture_url    = params->get("weightURL", "1.0");
+  std::string w_mixture_title  = params->get("weightTitle", "1.0");
+  std::string w_mixture_body   = params->get("weightBody", "1.0");
+  std::string w_mixture_meta   = params->get("weightMeta", "1.0");
+  std::string w_mixture_alt    = params->get("weightAlt", "1.0");
+  std::string w_mixture_inlink = params->get("weightInlink", "1.0");
+  
+  std::string mixtureQuery;
+  std::string fdmQuery;
+  std::string resultQuery;
+  
+  // Begin mixture model
+  mixtureQuery = " #combine ( ";
+  for (int i = 0; i < tokens.size(); i++) {
+    mixtureQuery += "#wsum (" + 
+      w_mixture_url    + " " + tokens[i] + ".(url) "    +
+      w_mixture_title  + " " + tokens[i] + ".(title) "  +
+      w_mixture_body   + " " + tokens[i] + ".(body) "   +
+      w_mixture_meta   + " " + tokens[i] + ".(meta) "   +
+      w_mixture_alt    + " " + tokens[i] + ".(alt) "    +
+      w_mixture_inlink + " " + tokens[i] + ".(inlink)" + ") ";
+  }
+  mixtureQuery += " ) "; 
+  // End Mixture Model
+
+  // Begin Dependency Model
+  if (tokens.size() < 2 ) {
+    std::string q = tokens[0];
+    // pathological case, should just be the term.
+    // SDM weights wT, wO, w.U  
+    std::string wT = params->get("weightT", "0.85" );
+    std::string wO = params->get("weightO", "0.1");
+    std::string wU = params->get("weightU", "0.05");
+    fdmQuery += " #weight  ( " + wT + " " + q + " ";
+    fdmQuery += wO + " #1(" + q + ") ";
+    fdmQuery += wU + " #uw4(" + q + ") ) ";
+  } else {
+    fdmQuery = generateFDMQuery(tokens);
+  }
+  resultQuery = "#weight( " + w_mixture + mixtureQuery 
+    + w_dependency + " " + fdmQuery + " )"; 
+  return resultQuery;
+}
 
 
 std::string indri::query::ReformulateQuery::generateFDMQuery(std::vector<std::string> strs,  std::vector<indri::query::ReformulateQuery::weighted_field> fields) {
@@ -271,6 +325,7 @@ std::string indri::query::ReformulateQuery::transform(std::string queryText) {
   bool liteStop = params->get("liteStop", true);
   bool genSDM = params->get("genSDM", false);
   bool genFDM = params->get("genFDM", false);
+  bool genCMUFDM = params->get("genCMUFDM", false);
   // case normalize
   reform = downcase_string(queryText);
   // remove the stop structures [huston]
@@ -298,6 +353,8 @@ std::string indri::query::ReformulateQuery::transform(std::string queryText) {
     reform = generateSDMQuery(queryTerms, fields);
   else if (genFDM)
     reform = generateFDMQuery(queryTerms, fields);
+  else if (genCMUFDM)
+    reform = generateCMUFDMQuery(queryTerms);
   else 
     reform = generateCombineQuery(queryTerms);
   // additional reformulation steps...

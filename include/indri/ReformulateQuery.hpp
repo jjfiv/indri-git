@@ -68,6 +68,8 @@ namespace indri
       std::string generateFDMQuery(std::string q);
       std::string generateCombineQuery(std::vector<std::string> strs);
       std::string generateCombineQuery(std::string q);
+      std::string generateCMUFDMQuery(std::vector<std::string> strs);
+      std::string generateCMUFDMQuery(std::string q);
     };
   }
 }
