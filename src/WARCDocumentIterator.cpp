@@ -164,6 +164,12 @@ bool indri::parse::WARCRecord::readContent() {
   }
   // terminate the string
   *_buffer.write(1) = 0;
+  // walk the buffer and replace any embedded NUL characters with a space.
+  char * tmpContent = (char *)_buffer.front();
+  for (int i = 0; i < contentLength; i++)
+    if (!tmpContent[i]) { 
+      tmpContent[i] = ' '; 
+    }
   return true;
 }
 
