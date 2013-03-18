@@ -2793,9 +2793,14 @@ static boolean prefix_simple_insert(struct fcb *f, struct ix_block *b, int ix, s
 /*   ignore the request if the old and new keys are identical.              */
 
 static void replace_max_key(struct fcb *f, int index, struct key *old_key, struct key *new_key,
-  struct leveln_pntr child, unsigned level)
-{int ix,bufix; unsigned new_prefix_lc,new_lc; char *name="rep_max_key";
-boolean found=false,propagate; struct leveln_pntr p; struct key k; levelx_pntr px,childx;
+  struct leveln_pntr child, unsigned level) {
+  int ix=0,bufix=0; 
+  unsigned new_prefix_lc=0,new_lc=0; 
+  char *name="rep_max_key";
+  boolean found=false,propagate=false; 
+  struct leveln_pntr p=nulln_ptr; 
+  struct key k={}; 
+  levelx_pntr px={},childx={};
 
   if ( level>f->primary_level[index] ){
     set_error1(f,repl_max_key_err,"**trying to replace_max_key in level above primary=",(int) level);
