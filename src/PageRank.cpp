@@ -431,10 +431,14 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
                                             const int maxIters, 
                                             const double c ) {
   _c = c;
+  double epsilon = 0.000001; // should be a parameter...
+  
   // make sure we don't leak...
   delete prTable;
   // prTable |C| * sizeof(float)  
   prTable = new float[_colLen+1];
+  float *tmp_prTable = new float[_colLen+1];;
+  float *in_prTable_ptr, *out_prTable_ptr;
   // outlinksTable |C| * sizeof(unsigned int)
   unsigned int *outlinksTable = new unsigned int[_colLen+1];
   // ivlIndex |C| * sizeoff(UINT64)
@@ -447,12 +451,13 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
   indri::file::SequentialWriteBuffer *ivlWriteBuffer;
   ivlWriteBuffer = new indri::file::SequentialWriteBuffer(ivlFile, 1024*1024);
   
-  // initialize pr (( 1.0 - _c ) / (double)_colLen;, default value)
+  // initialize pr (( 1.0 ) / (double)_colLen;, default value)
   // initialize outlinksTable
   // initialize ivlIndex
-  float defaultPR = ( 1.0 - _c ) / (double)_colLen;
+  float defaultPR = ( 1.0 ) / (double)_colLen;
   for (int i = 1; i <= _colLen; i++) {
     prTable[i] = defaultPR;
+    tmp_prTable[i] = defaultPR;
     outlinksTable[i] = 0;
     ivlIndex[i] = -1;
   }
@@ -525,7 +530,18 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
   ivlReadBuffer = new indri::file::SequentialReadBuffer(ivlFile);
   
   // iterate on pr
-  for (int i = 0; i < maxIters; i++) {
+  // make final iteration even, so output table is prTable
+  int iters = maxIters;
+    if ((maxIters % 2) != 0) iters++;
+  for (int i = 1; i <= iters; i++) {
+    if ((i % 2) == 0) {
+      in_prTable_ptr = prTable ; 
+      out_prTable_ptr = tmp_prTable ;
+    } else {
+      in_prTable_ptr = tmp_prTable ; 
+      out_prTable_ptr = prTable ;
+    }
+
     for (docid = 1; docid <= _colLen; docid++) {
       INT64 offset = ivlIndex[docid];
       float pr = 0;
@@ -537,16 +553,25 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
                             count * sizeof(lemur::api::DOCID_T));
         for (int j = 0; j < count; j++) {
           lemur::api::DOCID_T link = linkdocs[j];
-          // avoid creating NaNs/inf
-          pr += prTable[link]/(outlinksTable[link] ? outlinksTable[link] : 1.0);
+          pr += out_prTable_ptr[link]/outlinksTable[link];
         }
-        prTable[docid] = ((1.0 - _c)/(double)_colLen) + _c * pr;
+          in_prTable_ptr[docid] = ((1.0 - _c)/(double)_colLen) + _c * pr;
         delete linkdocs;
       }
+    }
+    // test for convergence
+    bool converged = true;
+    for (docid = 1; converged && docid <= _colLen; docid++) {
+      if (abs(out_prTable_ptr[docid] - in_prTable_ptr[docid]) > epsilon)
+        converged = false;
+    }
+    if (converged) {
+      break;
     }
   }
 
   // clean up
+  delete[](tmp_prTable);
   delete outlinksTable;
   delete ivlIndex;
   delete ivlReadBuffer;
