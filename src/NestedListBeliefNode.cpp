@@ -219,7 +219,7 @@ const indri::utility::greedy_vector<bool>& indri::infnet::NestedListBeliefNode::
       }      
     }
     // check whether our extent has a match
-    if ( matchExtents[j].end >= smallestEnd ) {
+    if ( matchExtents[j].end >= smallestEnd && smallestEnd != -1) {
       _matches[j] = true;
     }
   }
