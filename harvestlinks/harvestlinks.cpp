@@ -478,7 +478,7 @@ void combineOutputFile(const std::string& corpusFile, const std::string& sortedP
                   matchedURLs.push_back(splitLine[1]);
                   matchedAnchorText.push_back(splitLine[2]);
                   matchedDocNos.push_back(std::string(sourceDocNo));
-                  if (sourceDocNo) { delete sourceDocNo; }
+                  if (sourceDocNo) { delete[](sourceDocNo); }
                 } // end if (docNoKeyfile->get(splitLine[1].c_str(), sourceDocNo, sourceDocNoSize))
               } // if (finalSplitLineOne.length() > 0)
             } // end if (thisDestURL.compare(splitLine[0]))
