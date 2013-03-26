@@ -30,7 +30,7 @@ PROJECT_NUMBER         = 5.4
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /Users/dfisher/Development/indri/doc
+OUTPUT_DIRECTORY       = /home/dfisher/work1/indri/doc
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -450,10 +450,10 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = /Users/dfisher/Development/indri \
-                         /Users/dfisher/Development/indri/INSTALL \
-                         /Users/dfisher/Development/indri/include/indri/greedy_vector \
-                         /Users/dfisher/Development/indri/include/indri/count_iterator
+INPUT                  = /home/dfisher/work1/indri \
+                         /home/dfisher/work1/indri/INSTALL \
+                         /home/dfisher/work1/indri/include/indri/greedy_vector \
+                         /home/dfisher/work1/indri/include/indri/count_iterator
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -479,7 +479,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = /Users/dfisher/Development/indri/validate /Users/dfisher/Development/indri/test /Users/dfisher/Development/indri/autom4te.cache /Users/dfisher/Development/indri/contrib  /Users/dfisher/Development/indri/dist /Users/dfisher/Development/indri/site-search  /Users/dfisher/Development/indri/lang
+EXCLUDE                = /home/dfisher/work1/indri/validate /home/dfisher/work1/indri/test /home/dfisher/work1/indri/autom4te.cache /home/dfisher/work1/indri/contrib  /home/dfisher/work1/indri/dist /home/dfisher/work1/indri/site-search  /home/dfisher/work1/indri/lang
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
