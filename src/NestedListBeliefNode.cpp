@@ -182,7 +182,7 @@ const indri::utility::greedy_vector<bool>& indri::infnet::NestedListBeliefNode::
   // - keep track of that smallest end
   // - we know the begin is at least as big as the match begin
   //   so we only have to check to make sure that the end is smaller than the match's end
-  int matchBegin = 0;
+  int matchBegin = -1;
   int smallestEnd = -1;
   indri::utility::greedy_vector<const indri::index::Extent>::iterator innerIter = extents.end(); 
 
