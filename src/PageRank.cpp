@@ -125,21 +125,23 @@ void indri::parse::PageRank::_computeOutDegrees( Links& links ) {
   char linkCountText[256];
   char text[65536];
   char linkDocno[512];
-
+  
   indri::file::FileTreeIterator input( _linkPath );
   Links::iterator iter;
 
   for( ; input != indri::file::FileTreeIterator::end(); input++ ) {
     std::string path = *input;
-    std::ifstream in;
-
-    in.open( path.c_str() );
+    bool result = true;
+    
+    if( _in )
+      gzclose( _in );
+    _in = gzopen( path.c_str(), "rb" );
 
     // fill in the links structure for the documents currently under consideration
-    while( in.good() && !in.eof() ) {
-      in.getline( docno, sizeof docno );
-      in.getline( docUrl, sizeof docUrl );
-      in.getline( linkCountText, sizeof linkCountText );
+    while( result ) {
+      result = _readLine( docno );
+      result = _readLine( docUrl );
+      result = _readLine( linkCountText);
 
       if( strncmp( docno, "DOC", 3 ) != 0 )
         break;
@@ -147,9 +149,9 @@ void indri::parse::PageRank::_computeOutDegrees( Links& links ) {
       int linkCount = atoi( linkCountText + sizeof "LINKS=" - 1 );
 
       for( int i=0; i<linkCount; i++ ) {
-        in.getline( linkDocno, sizeof linkDocno );
-        in.getline( text, sizeof text ); // ignore LINKFROM
-        in.getline( text, sizeof text ); // ignore TEXT
+        result = _readLine( linkDocno );
+        result = _readLine( text ); // ignore LINKFROM
+        result = _readLine( text ); // ignore TEXT
 
         // see if this is one of our sources
         iter = links.find( linkDocno + 10 );
@@ -160,18 +162,52 @@ void indri::parse::PageRank::_computeOutDegrees( Links& links ) {
         }
       }
     }
-
-    in.close();
+    if( _in )
+      gzclose( _in );
   }
+}
+
+bool indri::parse::PageRank::_readLine( char* beginLine ){
+  size_t lineLength = 0;
+  size_t actual;
+  
+  // make a buffer of a reasonable size so we're not always allocating
+  if( _gzbuffer.size() < 1024*1024 )
+    _gzbuffer.grow( 1024*1024 );
+  // if we're running out of room, add 25MB
+  if( (_gzbuffer.size() -  _gzbuffer.position()) < 512*1024 ) {
+    _gzbuffer.grow( _gzbuffer.size() + 1024*1024*25 );
+  }
+  
+  size_t readAmount = _gzbuffer.size() - _gzbuffer.position() - 2;
+  
+  // fetch next document line
+  char* buffer = _gzbuffer.write( readAmount );
+  char* result = gzgets( _in, buffer, (int)readAmount );
+  
+  if(!result) {
+    return false;
+  }
+  
+  actual = strlen(buffer);
+  lineLength += actual; 
+  _gzbuffer.unwrite( readAmount - actual );
+  
+  // all finished reading
+  *_gzbuffer.write(1) = 0;
+  strncpy(beginLine, (_gzbuffer.front() + _gzbuffer.position() - lineLength - 1), lineLength);
+  
+  return true;
+  
 }
 
 void indri::parse::PageRank::_doPageRankIter( const int docsPerIter, const std::string& srcFile, const std::string& destFile ) {
   char docno[512];
   char docUrl[4096];
   char linkCountText[256];
-  char linkDocno[512];
   char text[65536];
-
+  char linkDocno[512];
+  
   int docsAdded = 0;
   Links links;
 
@@ -184,18 +220,19 @@ void indri::parse::PageRank::_doPageRankIter( const int docsPerIter, const std::
 
   for( ; input != indri::file::FileTreeIterator::end(); input++ ) {
     std::string filePath = *input;
-    std::ifstream in;
 
     std::string relative = indri::file::Path::relative( _corpusPath, filePath );
     std::string linkFile = indri::file::Path::combine( _linkPath, relative );
 
-    in.open( linkFile.c_str() );
-
+    if( _in )
+      gzclose( _in );
+    _in = gzopen( linkFile.c_str(), "rb" );
+    bool result = true;
     // grab the doc ids of the source documents we're interested in
-    while( in.good() && !in.eof() ) {
-      in.getline( docno, sizeof docno );
-      in.getline( docUrl, sizeof docUrl );
-      in.getline( linkCountText, sizeof linkCountText );
+    while( result ) {
+      result = _readLine( docno);
+      result = _readLine( docUrl );
+      result = _readLine( linkCountText );
 
       if( strncmp( docno, "DOC", 3 ) != 0 )
         break;
@@ -206,9 +243,9 @@ void indri::parse::PageRank::_doPageRankIter( const int docsPerIter, const std::
 
       // skip this stuff
       for( int i = 0; i < linkCount; i++ ) {
-        in.getline( linkDocno, sizeof linkDocno );
-        in.getline( text, sizeof text ); // ignore LINKFROM
-        in.getline( text, sizeof text ); // ignore TEXT
+        result = _readLine( linkDocno );
+        result = _readLine( text ); // ignore LINKFROM
+        result = _readLine( text ); // ignore TEXT
 
         links[ linkDocno + 10 ].first = 0;
         links[ linkDocno + 10 ].second.push_back( docno + 6 );
@@ -222,7 +259,8 @@ void indri::parse::PageRank::_doPageRankIter( const int docsPerIter, const std::
       }
     }
 
-    in.close();
+    if( _in )
+      gzclose( _in );
   }
 
   // do the remainder of the documents
@@ -469,8 +507,9 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
   char docno[512];
   char docUrl[4096];
   char linkCountText[256];
-  char linkDocno[512];
   char text[65536];
+  char linkDocno[512];
+
   lemur::api::DOCID_T docid;
   std::vector<lemur::api::DOCID_T> docids;
   std::vector<lemur::api::DOCID_T> linkids;
@@ -481,13 +520,16 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
     std::ifstream in;
     std::string relative = indri::file::Path::relative( _corpusPath, filePath );
     std::string linkFile = indri::file::Path::combine( _linkPath, relative );
-    in.open( linkFile.c_str() );
+    bool result = true;
+    if( _in )
+      gzclose( _in );
+    _in = gzopen( linkFile.c_str(), "rb" );
 
     // grab the doc ids of the source documents we're interested in
-    while( in.good() && !in.eof() ) {
-      in.getline( docno, sizeof docno );
-      in.getline( docUrl, sizeof docUrl );
-      in.getline( linkCountText, sizeof linkCountText );
+    while( result ) {
+      result = _readLine( docno );
+      result = _readLine( docUrl );
+      result =_readLine( linkCountText );
 
       if( strncmp( docno, "DOC", 3 ) != 0 )
         break;
@@ -499,9 +541,9 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
       linkids.clear();
       
       for( int i = 0; i < linkCount; i++ ) {
-        in.getline( linkDocno, sizeof linkDocno );
-        in.getline( text, sizeof text ); // ignore LINKFROM
-        in.getline( text, sizeof text ); // ignore TEXT
+        result = _readLine( linkDocno );
+        result = _readLine( text ); // ignore LINKFROM
+        result = _readLine( text ); // ignore TEXT
         docids = _repository.collection()->retrieveIDByMetadatum("docno", linkDocno + 10);
         linkids.push_back(docids[0]);
         docids.clear();
@@ -520,7 +562,8 @@ void indri::parse::PageRank::indexPageRank( const std::string& outputFile,
         outlinksTable[doc]++;
       }
     }
-    in.close();
+    if( _in )
+      gzclose( _in );
   }
   ivlWriteBuffer->flush();
   delete ivlWriteBuffer;

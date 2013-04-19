@@ -21,6 +21,8 @@
 #include <vector>
 #include <map>
 #include <cmath>
+#include "zlib.h"
+#include "indri/Buffer.hpp"
 #include "indri/UnparsedDocument.hpp"
 #include "indri/Parameters.hpp"
 #include "indri/FileTreeIterator.hpp"
@@ -66,6 +68,8 @@ namespace indri
     
     class PageRank {
     private:
+      indri::utility::Buffer _gzbuffer;
+      gzFile _in;
       // from Metztler's generate_priors.pl
       static const double _intToProb[11];
       float *prTable;
@@ -86,6 +90,8 @@ namespace indri
 	a = tmp;
       }
 
+      bool _readLine( char* beginLine );
+      
       void _computeColLen();
       
       float _readPageRankFromFile( std::ifstream& src, const std::string& sourceDoc );
@@ -120,6 +126,8 @@ namespace indri
         }
       }
       ~PageRank( ) {
+        if( _in )
+          gzclose( _in );
         delete(prTable);
       }
       
