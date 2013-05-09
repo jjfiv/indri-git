@@ -267,22 +267,22 @@ void convert_docnoscore_to_binary( indri::file::File& outfile, const std::string
 
     if( in.eof() )
       break;
-       
+#ifdef VERBOSE_MAKEPRIOR       
     std::cout << "looking up: " << docno << " " << score << std::endl;
-       
+#endif       
     std::vector<std::string> docnoValues;
     docnoValues.push_back( docno );
        
     std::vector<lemur::api::DOCID_T> result = env.documentIDsFromMetadata( docnoName, docnoValues );
     
     if( result.size() == 0 ) {
-      //      LEMUR_THROW( LEMUR_IO_ERROR, "No document exists with docno: " + docno );
       continue; // allow entries that don't exist and ignore silently.
     }
     
     int document = result[0];
+#ifdef VERBOSE_MAKEPRIOR
     std::cout << document << std::endl;
-      
+#endif
     outb->write( (const void*) &document, sizeof(UINT32) );
     outb->write( (const void*) &score, sizeof(double) );
   }
@@ -426,8 +426,7 @@ int main( int argc, char** argv ) {
     std::string unsortedName;
     
     unsortedBinary.openTemporary( unsortedName );
-    std::cout << "converting to binary...";
-    std::cout.flush();
+    std::cout << "converting to binary..." << std::endl;
     convert_docnoscore_to_binary( unsortedBinary, input, env );
     std::cout << "finished" << std::endl;
     
