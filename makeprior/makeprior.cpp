@@ -435,10 +435,9 @@ int main( int argc, char** argv ) {
     std::string uncompressedPriorName;
     uncompressedPrior.openTemporary( uncompressedPriorName );
     
-    std::cout << "sorting...";
-    std::cout.flush();
+    std::cout << "sorting..."<< std::endl;
     sort_file( uncompressedPrior, unsortedBinary, memory, documentCount );
-    std::cout << "finished";
+    std::cout << "finished" << std::endl;
     
     unsortedBinary.close();
     lemur_compat::remove( unsortedName.c_str() );
@@ -451,15 +450,13 @@ int main( int argc, char** argv ) {
     compressedPrior.openTemporary( compressedPriorName );
     
     indri::file::File& finalPrior = uncompressedPrior;
-    std::cout << "checking for compressability...";
-    std::cout.flush();
+    std::cout << "checking for compressability..." << std::endl;
     bool result = extract_compression_table( table, uncompressedPrior );
     
     if( result ) {
       std::cout << "yep" << std::endl;
       // compress the file by using a lookup table
-      std::cout << "compressing...";
-      std::cout.flush();
+      std::cout << "compressing..." << std::endl;
       compress_file( compressedPrior, uncompressedPrior, table );
       std::cout << std::endl;
       finalPrior = compressedPrior;
@@ -468,8 +465,7 @@ int main( int argc, char** argv ) {
     }
     
     // step four -- install the prior in the index
-    std::cout << "installing...";
-    std::cout.flush();
+    std::cout << "installing..." << std::endl;
     install_prior( index, priorName, finalPrior );
     std::cout << "finished" << std::endl;
     
