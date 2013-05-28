@@ -476,21 +476,26 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::UWNode* uwNode 
 void indri::infnet::InferenceNetworkBuilder::after( indri::lang::BAndNode* bandNode ) {
   if( _nodeMap.find( bandNode ) == _nodeMap.end() ) {
     std::vector<ListIteratorNode*> translation = _translate<ListIteratorNode>( bandNode->getChildren() );
-    // replace with an unordered window.
-    /*
-    BooleanAndNode* booleanAndNode = new BooleanAndNode( bandNode->nodeName(),
-                                                         translation );
+    std::vector<ListIteratorNode*> nullsRemoved;
+    nullsRemoved.reserve( translation.size() );
 
-    _network->addListNode( booleanAndNode );
-    _nodeMap[bandNode] = booleanAndNode;
-    */
-    ListIteratorNode* unorderedNode = 0; 
-    if (translation.size() == 1) {
-      unorderedNode = translation.front();
+    for( size_t i=0; i<translation.size(); i++ ) {
+      NullListNode* nullNode = dynamic_cast<NullListNode*>(translation[i]);
+      // we want to remove words that are stopwords (either query or index) because they'll cause this window not to match
+      if( !(nullNode && nullNode->isStopword()) ) 
+        nullsRemoved.push_back( translation[i] );
     }
-    else {
-      unorderedNode = new UnorderedWindowNode( bandNode->nodeName(), translation, -1);
-    _network->addListNode( unorderedNode );
+
+    ListIteratorNode* unorderedNode = 0; 
+    if( nullsRemoved.size() == 0 ) {
+      unorderedNode = new NullListNode( bandNode->nodeName(), true );
+      _network->addListNode( unorderedNode );
+    } else if( nullsRemoved.size() == 1 ) {
+      unorderedNode = nullsRemoved.front();
+    } else {
+      unorderedNode = new UnorderedWindowNode( bandNode->nodeName(), 
+                                               nullsRemoved, -1 );
+      _network->addListNode( unorderedNode );
     }
     _nodeMap[bandNode] = unorderedNode;
   }
