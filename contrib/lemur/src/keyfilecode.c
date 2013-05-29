@@ -2799,8 +2799,8 @@ static void replace_max_key(struct fcb *f, int index, struct key *old_key, struc
   char *name="rep_max_key";
   boolean found=false,propagate=false; 
   struct leveln_pntr p=nulln_ptr; 
-  struct key k={}; 
-  levelx_pntr px={},childx={};
+  struct key k; 
+  levelx_pntr px,childx;
 
   if ( level>f->primary_level[index] ){
     set_error1(f,repl_max_key_err,"**trying to replace_max_key in level above primary=",(int) level);
