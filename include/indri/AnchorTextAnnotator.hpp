@@ -58,11 +58,10 @@ namespace indri
         size_t actual;
 
         // make a buffer of a reasonable size so we're not always allocating
-        if( _gzbuffer.size() < 1024*1024 )
-          _gzbuffer.grow( 1024*1024 );
-        // if we're running out of room, add 25MB
-        if( (_gzbuffer.size() -  _gzbuffer.position()) < 512*1024 ) {
-          _gzbuffer.grow( _gzbuffer.size() + 1024*1024*25 );
+        if( _gzbuffer.size() < 100*1024*1024 )
+          _gzbuffer.grow( 100*1024*1024 );
+        if( (_gzbuffer.size() -  _gzbuffer.position()) < 1024*1024 ) {
+          _gzbuffer.grow( _gzbuffer.size() + 1024*1024*100 );
         }
 
         size_t readAmount = _gzbuffer.size() - _gzbuffer.position() - 2;
@@ -113,7 +112,7 @@ namespace indri
       void _fetchText( indri::utility::greedy_vector<TagExtent *>& tags, 
                        indri::utility::greedy_vector<char*>& terms ) {
         // now, fetch the additional terms
-        char line[65536 * 10];
+        char line[1024*1024*8];
         bool result;
         _buffer.clear();
         for( int i=0; i<_count; i++ ) {
@@ -214,10 +213,10 @@ namespace indri
 
     indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
       _buffer.clear();
-      _buffer.grow(2*1024*1024);
+      _buffer.grow(100*1024*1024);
         
       _gzbuffer.clear();
-      _gzbuffer.grow( 1024*1024 );
+      _gzbuffer.grow( 100 * 1024*1024 );
       // surround current text with a mainbody tag
       TagExtent * mainbody = new TagExtent;
       mainbody->begin = 0;
