@@ -67,7 +67,7 @@ This data file is suitable for input to the makeprior application.</dd>
 #include "indri/LocalQueryServer.hpp"
 #include "lemur/Exception.hpp"
 #include "indri/PageRank.hpp"
-#include <strings.h>
+#include <cstring>
 #include <iostream>
 
 void require_parameter( const char* name, indri::api::Parameters& p ) {
