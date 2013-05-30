@@ -53,15 +53,14 @@ namespace indri
       indri::utility::Buffer _buffer;
       ObjectHandler<indri::api::ParsedDocument>* _handler;
 
-      bool _readLine( char* beginLine ) {
-        size_t lineLength = 0;
-        size_t actual;
+      bool _readLine( char* beginLine, size_t max ) {
+        size_t actual = 0;
 
         // make a buffer of a reasonable size so we're not always allocating
-        if( _gzbuffer.size() < 100*1024*1024 )
-          _gzbuffer.grow( 100*1024*1024 );
+        if( _gzbuffer.size() < 10*1024*1024 )
+          _gzbuffer.grow( 10*1024*1024 );
         if( (_gzbuffer.size() -  _gzbuffer.position()) < 1024*1024 ) {
-          _gzbuffer.grow( _gzbuffer.size() + 1024*1024*100 );
+          _gzbuffer.grow( _gzbuffer.size() + 1024*1024*10 );
         }
 
         size_t readAmount = _gzbuffer.size() - _gzbuffer.position() - 2;
@@ -76,12 +75,15 @@ namespace indri
         // strip the newline
         actual = strlen(buffer);
         buffer[actual - 1] = 0;
-        lineLength += actual; 
+        // truncate
+        actual = std::min(actual, max);
+        buffer[actual] = 0;
+
         _gzbuffer.unwrite( readAmount - actual );
         
         // all finished reading
         *_gzbuffer.write(1) = 0;
-        strncpy(beginLine, (_gzbuffer.front() + _gzbuffer.position() - lineLength - 1), lineLength);
+        strncpy(beginLine, (_gzbuffer.front() + _gzbuffer.position() - actual - 1), actual);
         return true;
         
       }
@@ -92,17 +94,17 @@ namespace indri
         _count = 0;
 
         // DOCNO=
-        result = _readLine( _docno );
+        result = _readLine( _docno, 256 );
         if( !result ) {
           return;
         }
         // DOCURL=
-        result = _readLine( line );
+        result = _readLine( line, 65536 * 10 );
         if( !result ) {
           return;
         }
         // LINKS=
-        result = _readLine( line );
+        result = _readLine( line, 65536 * 10 );
         if( !result ) {
           return;
         }
@@ -112,25 +114,27 @@ namespace indri
       void _fetchText( indri::utility::greedy_vector<TagExtent *>& tags, 
                        indri::utility::greedy_vector<char*>& terms ) {
         // now, fetch the additional terms
-        char line[1024*1024*8];
+        char *line = new char[1024*1024*8];
         bool result;
-        _buffer.clear();
         for( int i=0; i<_count; i++ ) {
           // LINK
-          result = _readLine( line );
+          result = _readLine( line, 1024*1024*8 );
           if( !result ) {
+            delete[](line);
             return;
           }
 
           // LINKDOCNO 
-          result = _readLine( line );
+          result = _readLine( line, 1024*1024*8 );
           if( !result ) {
+            delete[](line);
             return;
           }
           
           // TEXT=
-          result = _readLine( line );
+          result = _readLine( line, 1024*1024*8 );
           if( !result ) {
+            delete[](line);
             return;
           }
 
@@ -167,6 +171,7 @@ namespace indri
           extent->parent = 0;
           tags.push_back(extent);
         }
+        delete[](line);
       }
       
       bool _matchingDocno( indri::api::ParsedDocument* document ) {
@@ -216,7 +221,7 @@ namespace indri
       _buffer.grow(100*1024*1024);
         
       _gzbuffer.clear();
-      _gzbuffer.grow( 100 * 1024*1024 );
+      _gzbuffer.grow( 10*1024*1024 );
       // surround current text with a mainbody tag
       TagExtent * mainbody = new TagExtent;
       mainbody->begin = 0;
