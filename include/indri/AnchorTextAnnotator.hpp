@@ -33,6 +33,12 @@
 #include <fstream>
 #include <algorithm>
 
+#define LINE_SIZE 65536 * 10
+#define DOCNO_SIZE 256
+#define LINKLINE_SIZE 1024*1024*8
+#define GZ_BUFFER_SIZE 10*1024*1024
+#define BUFFER_SIZE 100*1024*1024
+
 /*! Top level namespace for all indri components. */
 namespace indri
 {
@@ -48,7 +54,9 @@ namespace indri
       indri::parse::Tokenizer* tokenizer;
       indri::parse::TokenizedDocument* tokenized;
       
-      char _docno[256];
+      char _docno[DOCNO_SIZE];
+      char *linkLine;
+      
       int _count;
       indri::utility::Buffer _buffer;
       ObjectHandler<indri::api::ParsedDocument>* _handler;
@@ -57,10 +65,10 @@ namespace indri
         size_t actual = 0;
 
         // make a buffer of a reasonable size so we're not always allocating
-        if( _gzbuffer.size() < 10*1024*1024 )
-          _gzbuffer.grow( 10*1024*1024 );
+        if( _gzbuffer.size() < GZ_BUFFER_SIZE )
+          _gzbuffer.grow( GZ_BUFFER_SIZE );
         if( (_gzbuffer.size() -  _gzbuffer.position()) < 1024*1024 ) {
-          _gzbuffer.grow( _gzbuffer.size() + 1024*1024*10 );
+          _gzbuffer.grow( _gzbuffer.size() + GZ_BUFFER_SIZE );
         }
 
         size_t readAmount = _gzbuffer.size() - _gzbuffer.position() - 2;
@@ -89,22 +97,22 @@ namespace indri
       }
       
       void _readDocumentHeader() {
-        char line[65536 * 10];
+        char line[LINE_SIZE];
         bool result;
         _count = 0;
 
         // DOCNO=
-        result = _readLine( _docno, 256 );
+        result = _readLine( _docno, DOCNO_SIZE );
         if( !result ) {
           return;
         }
         // DOCURL=
-        result = _readLine( line, 65536 * 10 );
+        result = _readLine( line, LINE_SIZE );
         if( !result ) {
           return;
         }
         // LINKS=
-        result = _readLine( line, 65536 * 10 );
+        result = _readLine( line, LINE_SIZE );
         if( !result ) {
           return;
         }
@@ -114,32 +122,29 @@ namespace indri
       void _fetchText( indri::utility::greedy_vector<TagExtent *>& tags, 
                        indri::utility::greedy_vector<char*>& terms ) {
         // now, fetch the additional terms
-        char *line = new char[1024*1024*8];
+        char line[LINE_SIZE];
         bool result;
         for( int i=0; i<_count; i++ ) {
           // LINK
-          result = _readLine( line, 1024*1024*8 );
+          result = _readLine( line, LINE_SIZE );
           if( !result ) {
-            delete[](line);
             return;
           }
 
           // LINKDOCNO 
-          result = _readLine( line, 1024*1024*8 );
+          result = _readLine( line, LINE_SIZE );
           if( !result ) {
-            delete[](line);
             return;
           }
           
           // TEXT=
-          result = _readLine( line, 1024*1024*8 );
+          result = _readLine( linkLine, LINKLINE_SIZE );
           if( !result ) {
-            delete[](line);
             return;
           }
 
-          if (!line[0]) continue;
-          char *textStart = line+6;
+          if (!linkLine[0]) continue;
+          char *textStart = linkLine+6;
           size_t textLen = strlen(textStart);
           // now insert the terms with a separate inlink for each
           // line.
@@ -171,7 +176,6 @@ namespace indri
           extent->parent = 0;
           tags.push_back(extent);
         }
-        delete[](line);
       }
       
       bool _matchingDocno( indri::api::ParsedDocument* document ) {
@@ -196,6 +200,7 @@ namespace indri
     AnchorTextAnnotator() {
       tokenizer = indri::parse::TokenizerFactory::get("Word");
       _handler = 0;
+      linkLine = new char[LINKLINE_SIZE];
     }
 
     ~AnchorTextAnnotator() {
@@ -203,6 +208,7 @@ namespace indri
         gzclose( _in );
       _in = 0;
       delete tokenizer;
+      delete[](linkLine);
     }
 
     void open( const std::string& anchorFile ) {
@@ -218,10 +224,10 @@ namespace indri
 
     indri::api::ParsedDocument* transform( indri::api::ParsedDocument* document ) {
       _buffer.clear();
-      _buffer.grow(100*1024*1024);
+      _buffer.grow( BUFFER_SIZE );
         
       _gzbuffer.clear();
-      _gzbuffer.grow( 10*1024*1024 );
+      _gzbuffer.grow( GZ_BUFFER_SIZE );
       // surround current text with a mainbody tag
       TagExtent * mainbody = new TagExtent;
       mainbody->begin = 0;
