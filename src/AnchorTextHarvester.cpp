@@ -92,7 +92,7 @@ void AnchorTextHarvester::handle( indri::api::ParsedDocument* document ) {
 
   // first - our document / page so we can sort it by url
   _docOrder << page << '\t' << docno << "\n"; //std::endl;
-
+  _docOrder.flush();
   // tag this to our docno keyfile
   // account for the trailing \0
 
@@ -174,7 +174,7 @@ void AnchorTextHarvester::handle( indri::api::ParsedDocument* document ) {
       } // end for( size_t j=extent.begin; int(j) < extent.end && textLength < 60000; j++ )
 
       _linkFile << "\n"; //std::endl;
-
+      _linkFile.flush();
       // only do the same link once
       url = 0;
 
