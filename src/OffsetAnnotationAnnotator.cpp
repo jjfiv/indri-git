@@ -291,19 +291,7 @@ void indri::parse::OffsetAnnotationAnnotator::convert_annotations( std::set<indr
         te->end = tok_pos;
 
       } else { 
-
-        // Current tag ends inside the current token.
-
-        if ( te->end <= (*token).begin + ( (*token).end - (*token).begin )/2 ) {
-
-          te->end = tok_pos; // Round down to previous token boundary.
-
-        } else {
-          
-          te->end = tok_pos + 1; // Round up to next token boundary.
-          
-        }
-
+        te->end = tok_pos + 1; // Round up to next token boundary.
       }
 
       // ensure tag boundaries are still within the document
