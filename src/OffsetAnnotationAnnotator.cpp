@@ -245,9 +245,6 @@ void indri::parse::OffsetAnnotationAnnotator::_cleanup() {
   // deleted above.
 
   _tag_id_map->clear();
-//     for ( indri::utility::HashTable<UINT64,AttributeValuePair*>::iterator i = _attribute_id_map.begin(); i != _attribute_id_map.end(); i++ ) {
-//        delete (*i).second;
-//      }
   _attribute_id_map->clear();
 
 }
@@ -335,24 +332,11 @@ void indri::parse::OffsetAnnotationAnnotator::convert_annotations( std::set<indr
       // store this map so that we can convert the parent pointers
       tagMap[ *curr_raw_tag ] = te;
 
-      // When the tag begins in the middle of the token, we need to
-      // decide whether to round up (activate the tag at this token
-      // position) or round down (activate the tag at tok_pos + 1).
+      // When the tag begins inside the token, we activate the tag at 
+      // this token position
 
-      if ( (*curr_raw_tag)->begin <= (*token).begin + ( (*token).end - (*token).begin )/2 ) {
-
-        // Tag either begins before the token, or is closer to begin
-        // than to the end of the token, so we are rounding up.  Begin
-        // value will be be set to the current token position.
-        te->begin = tok_pos;
-
-      } else {
-
-        // Tag begins closer to where the token ends, so we'll round down.
-        te->begin = tok_pos + 1;
-
-      }
-
+      te->begin = tok_pos;
+      
       // Make sure tag boundaries are within the document
       if (te->begin >= (int)document->positions.size()) {
         te->begin = document->positions.size() - 1;
