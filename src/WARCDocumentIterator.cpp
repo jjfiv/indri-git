@@ -161,8 +161,8 @@ bool indri::parse::WARCRecord::readContent() {
   numRead = gzread(_gzin, _buffer.write(contentLength), contentLength);
   if (numRead == -1) 
     {
-      int errno;
-      const char *err = gzerror(_gzin, &errno);
+      int error;
+      const char *err = gzerror(_gzin, &error);
       std::cerr << "gzread error: " << err << std::endl;
     }
   
