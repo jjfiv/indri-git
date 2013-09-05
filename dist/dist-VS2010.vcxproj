@@ -83,6 +83,10 @@
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">indri</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">indri</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">indri</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">indri</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
