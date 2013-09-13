@@ -14,6 +14,7 @@ int put_rec      (void *f, char *key, int key_lc, void *rec, int lc);
 int delete_rec   (void *f, char *key, int key_lc);
 int next_rec     (void *f, char *key, int *key_lc, int max_key_lc,
                           void *rec, int *rec_lc, int max_rec_lc);
+int check_fcb(struct fcb *f);
 int prev_rec     (void *f, char *key, int *key_lc, int max_key_lc,
                           void *rec, int *rec_lc, int max_rec_lc);
 int get_subrec   (void *f, void *pointer, int offset, int bytes_to_read,

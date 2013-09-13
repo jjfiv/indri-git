@@ -388,7 +388,7 @@ static void set_error2(struct fcb *f, int err, char caption[], int code1, int co
 /*   to the package.  All others are considered permanent and  */
 /*   are not reset.                                            */
 
-static boolean check_fcb(struct fcb *f)
+boolean check_fcb(struct fcb *f)
 { boolean ok;
 
   ok = (f->marker==keyf) && f->file_ok && !error_is_fatal(f->error_code);

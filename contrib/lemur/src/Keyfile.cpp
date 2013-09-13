@@ -130,7 +130,7 @@ bool lemur::file::Keyfile::next( char* key, int& keyLength, char* value, int& va
                         &valueLength,
                         valueLength );
 
-  if( error && error != ateof_err )
+  if( error && error != ateof_err && !check_fcb((struct fcb *)_handle) )
     LEMUR_THROW( LEMUR_KEYFILE_IO_ERROR, "Caught an internal error while trying to fetch next record." );
 
   return error != ateof_err;
@@ -148,7 +148,7 @@ bool lemur::file::Keyfile::previous( char* key, int& keyLength, char* value, int
                         &valueLength,
                         valueLength );
 
-  if( error && error != ateof_err )
+  if( error && error != ateof_err && !check_fcb((struct fcb *)_handle)) 
     LEMUR_THROW( LEMUR_KEYFILE_IO_ERROR, "Caught an internal error while trying to fetch previous record." );
 
   return error != ateof_err;
