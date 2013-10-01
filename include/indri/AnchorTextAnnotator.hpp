@@ -200,6 +200,7 @@ namespace indri
     AnchorTextAnnotator() {
       tokenizer = indri::parse::TokenizerFactory::get("Word");
       _handler = 0;
+      _in = 0;
       linkLine = new char[LINKLINE_SIZE];
     }
 
