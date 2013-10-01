@@ -283,23 +283,34 @@ const std::vector<indri::infnet::EvaluatorNode*>& indri::infnet::InferenceNetwor
 }
 
 void indri::infnet::InferenceNetwork::_evaluateIndex( indri::index::Index& index ) {
-  indri::index::DeletedDocumentList::read_transaction* deleted = _repository.deletedList().getReadTransaction();
-
-  lemur::api::DOCID_T lastCandidate = MAX_INT32; // 64
-  lemur::api::DOCID_T maximumDocument = index.documentMaximum();
-  int scoredDocuments = 0;
-  lemur::api::DOCID_T candidate = 0;
-
   // don't need to do anything unless there are some
   // evaluators in the network that need full evaluation
 
   if( _complexEvaluators.size() ) {
+    lemur::api::DOCID_T maximumDocument = index.documentMaximum();
+    
+    if (maximumDocument == index.documentBase()) {
+      // empty memory index, nothing to score.
+      return;
+    }
+
+    lemur::api::DOCID_T lastCandidate = MAX_INT32; // 64
+    int scoredDocuments = 0;
+    lemur::api::DOCID_T candidate = 0;
+    indri::index::DeletedDocumentList::read_transaction* deleted;
+    deleted = _repository.deletedList().getReadTransaction();
+
     while(1) {
       // ask the root node for a candidate document
       // this asks the whole inference network for the
       // first document that might possibly produce a
       // usable (above the max score threshold) score
       candidate = _nextCandidateDocument( deleted );
+      if (candidate < index.documentBase()) {
+        std::cerr << candidate << " < index.documentBase()" << std::endl;
+        break;
+      }
+      
       assert( candidate >= index.documentBase() );
 
       // if candidate is MAX_INT32, we're done
@@ -326,9 +337,8 @@ void indri::infnet::InferenceNetwork::_evaluateIndex( indri::index::Index& index
       lastCandidate = candidate+1;
       assert( candidate >= index.documentBase() );
     }
+    delete deleted;
   }
-
-  delete deleted;
 }
 
 //
