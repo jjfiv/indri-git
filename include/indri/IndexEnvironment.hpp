@@ -35,6 +35,7 @@
 #include "indri/ParserFactory.hpp"
 #include "indri/FileClassEnvironmentFactory.hpp"
 #include <map>
+#include <set>
 namespace indri 
 {
   ///indri classes that provide services to applications programmers
@@ -103,12 +104,18 @@ namespace indri
       ParsedDocument* _applyAnnotators( std::vector<indri::parse::Transformation*>& annotators, 
                                         ParsedDocument* parsed ); 
 
+      std::set<std::string> _blackedDocs;
 
     public:
       friend class QueryEnvironment;
 
       IndexEnvironment();
       ~IndexEnvironment();
+
+      /// Spam documents filtering
+      /// Each line of blackListFile is a docno
+      /// Returns the number of docnos blacked
+      int setBlackList( const std::string& blackListFile);
 
       /// Set offset annotations root path.
       /// @param offsetAnnotationsRoot path to offset annotations root.

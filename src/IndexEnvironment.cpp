@@ -24,6 +24,7 @@
 #include "indri/IndriTokenizer.hpp"
 #include "indri/Path.hpp"
 #include "indri/Conflater.hpp"
+#include <iostream>
 
 void indri::api::IndexEnvironment::_getParsingContext( indri::parse::Parser** parser,
                                                        indri::parse::Tokenizer** tokenizer,
@@ -140,6 +141,23 @@ indri::api::IndexEnvironment::~IndexEnvironment() {
   close();
   indri::utility::delete_map_contents<std::string, indri::parse::FileClassEnvironment>( _environments );
 }
+
+int indri::api::IndexEnvironment::setBlackList( const std::string& blackListFile)
+{
+    ifstream inf(blackListFile.data(), ifstream::in);
+
+    std::string line;
+
+    while(getline(inf, line))
+    {
+        _blackedDocs.insert(line);
+    }
+
+    inf.close();
+
+    return _blackedDocs.size();
+}
+
 
 void indri::api::IndexEnvironment::setNormalization( bool flag ) {
   _parameters.set( "normalize", flag );
@@ -395,6 +413,10 @@ void indri::api::IndexEnvironment::addFile( const std::string& fileName, const s
             break;
           }
         }
+        // Check if blacklisted
+        if(_blackedDocs.find(docIDStr)!=_blackedDocs.end())
+            continue;
+
         // look up the id.
         std::vector<lemur::api::DOCID_T> ids = _repository.collection()->retrieveIDByMetadatum("docno", docIDStr);
         // if not found, add the document.

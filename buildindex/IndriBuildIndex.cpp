@@ -957,6 +957,13 @@ int main(int argc, char * argv[]) {
     env.setInjectURL( parameters.get("injectURL", true));
     env.setStoreDocs( parameters.get("storeDocs", true));
 
+    std::string blackList = parameters.get("blacklist", "");
+    if( blackList.length() ) {
+        int count = env.setBlackList(blackList);
+        std::cout << "Added to blacklist: "<< count << std::endl;
+        std::cout.flush();
+    }
+
     std::string offsetAnnotationHint=parameters.get("offsetannotationhint", "default");
     if (offsetAnnotationHint=="ordered") {
       env.setOffsetAnnotationIndexHint(indri::parse::OAHintOrderedAnnotations);
