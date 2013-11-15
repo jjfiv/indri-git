@@ -3243,6 +3243,181 @@ SWIGEXPORT jstring JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1re
 }
 
 
+SWIGEXPORT jstring JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1stemTerm(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jstring jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  {
+    try {
+      result = (arg1)->stemTerm((std::string const &)*arg2);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1termCountUnique(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  INT64 result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  {
+    try {
+      result = (INT64)(arg1)->termCountUnique();
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1stemCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jlong jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  INT64 result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  {
+    try {
+      result = (INT64)(arg1)->stemCount((std::string const &)*arg2);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1stemFieldCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2, jstring jarg3) {
+  jlong jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  INT64 result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  if(!jarg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg3_pstr = (const char *)jenv->GetStringUTFChars(jarg3, 0); 
+  if (!arg3_pstr) return 0;
+  std::string arg3_str(arg3_pstr);
+  arg3 = &arg3_str;
+  jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
+  {
+    try {
+      result = (INT64)(arg1)->stemFieldCount((std::string const &)*arg2,(std::string const &)*arg3);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_lemurproject_indri_indriJNI_QueryEnvironment_1documentStemCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jlong jresult = 0 ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  INT64 result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(indri::api::QueryEnvironment **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null std::string");
+    return 0;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  {
+    try {
+      result = (INT64)(arg1)->documentStemCount((std::string const &)*arg2);
+    } catch( lemur::api::Exception& e ) {
+      {
+        SWIG_JavaException(jenv, SWIG_RuntimeError, e.what().c_str()); return 0; 
+      };
+      // control does not leave method when thrown. (fixed in 1.3.25
+      // return 0;
+    }
+  }
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_lemurproject_indri_indriJNI_delete_1QueryEnvironment(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
   

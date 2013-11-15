@@ -428,4 +428,54 @@ public String reformulateQuery(String query) {
     return indriJNI.QueryEnvironment_reformulateQuery(swigCPtr, this, query);
   }
 
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public String stemTerm(String term) {
+    return indriJNI.QueryEnvironment_stemTerm(swigCPtr, this, term);
+  }
+
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public long termCountUnique() {
+    return indriJNI.QueryEnvironment_termCountUnique(swigCPtr, this);
+  }
+
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public long stemCount(String term) {
+    return indriJNI.QueryEnvironment_stemCount(swigCPtr, this, term);
+  }
+
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public long stemFieldCount(String term, String field) {
+    return indriJNI.QueryEnvironment_stemFieldCount(swigCPtr, this, term, field);
+  }
+
+  
+/**
+        Return all the length of a document.
+       @param documentID The internal document id.
+       @return the length of the document.
+*/
+public long documentStemCount(String stem) {
+    return indriJNI.QueryEnvironment_documentStemCount(swigCPtr, this, stem);
+  }
+
 }

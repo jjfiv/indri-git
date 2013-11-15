@@ -241,6 +241,35 @@ public class QueryEnvironment : IDisposable {
     return ret;
   }
 
+  public string stemTerm(string term) {
+    string ret = indri_csharpPINVOKE.QueryEnvironment_stemTerm(swigCPtr, term);
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public long termCountUnique() {
+    long ret = indri_csharpPINVOKE.QueryEnvironment_termCountUnique(swigCPtr);
+    return ret;
+  }
+
+  public long stemCount(string term) {
+    long ret = indri_csharpPINVOKE.QueryEnvironment_stemCount(swigCPtr, term);
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public long stemFieldCount(string term, string field) {
+    long ret = indri_csharpPINVOKE.QueryEnvironment_stemFieldCount(swigCPtr, term, field);
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public long documentStemCount(string stem) {
+    long ret = indri_csharpPINVOKE.QueryEnvironment_documentStemCount(swigCPtr, stem);
+    if (indri_csharpPINVOKE.SWIGPendingException.Pending) throw indri_csharpPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
 }
 
 }

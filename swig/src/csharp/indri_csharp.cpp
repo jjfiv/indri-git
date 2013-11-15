@@ -10339,6 +10339,101 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_QueryEnvironment_reformulateQuery(void * ja
 }
 
 
+SWIGEXPORT char * SWIGSTDCALL CSharp_QueryEnvironment_stemTerm(void * jarg1, char * jarg2) {
+  char * jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  result = (arg1)->stemTerm((std::string const &)*arg2);
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT long long SWIGSTDCALL CSharp_QueryEnvironment_termCountUnique(void * jarg1) {
+  long long jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  INT64 result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  result = (INT64)(arg1)->termCountUnique();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT long long SWIGSTDCALL CSharp_QueryEnvironment_stemCount(void * jarg1, char * jarg2) {
+  long long jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  INT64 result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  result = (INT64)(arg1)->stemCount((std::string const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT long long SWIGSTDCALL CSharp_QueryEnvironment_stemFieldCount(void * jarg1, char * jarg2, char * jarg3) {
+  long long jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  INT64 result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  if (!jarg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg3_str(jarg3);
+  arg3 = &arg3_str; 
+  result = (INT64)(arg1)->stemFieldCount((std::string const &)*arg2,(std::string const &)*arg3);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT long long SWIGSTDCALL CSharp_QueryEnvironment_documentStemCount(void * jarg1, char * jarg2) {
+  long long jresult ;
+  indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
+  std::string *arg2 = 0 ;
+  INT64 result;
+  
+  arg1 = (indri::api::QueryEnvironment *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  result = (INT64)(arg1)->documentStemCount((std::string const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_QueryEnvironment(void * jarg1) {
   indri::api::QueryEnvironment *arg1 = (indri::api::QueryEnvironment *) 0 ;
   

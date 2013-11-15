@@ -50,6 +50,11 @@ public class indriJNI {
   public final static native int QueryEnvironment_documentLength(long jarg1, QueryEnvironment jarg1_, int jarg2) throws java.lang.Exception;
   public final static native void QueryEnvironment_setFormulationParameters(long jarg1, QueryEnvironment jarg1_, Map jarg2);
   public final static native String QueryEnvironment_reformulateQuery(long jarg1, QueryEnvironment jarg1_, String jarg2);
+  public final static native String QueryEnvironment_stemTerm(long jarg1, QueryEnvironment jarg1_, String jarg2);
+  public final static native long QueryEnvironment_termCountUnique(long jarg1, QueryEnvironment jarg1_);
+  public final static native long QueryEnvironment_stemCount(long jarg1, QueryEnvironment jarg1_, String jarg2);
+  public final static native long QueryEnvironment_stemFieldCount(long jarg1, QueryEnvironment jarg1_, String jarg2, String jarg3);
+  public final static native long QueryEnvironment_documentStemCount(long jarg1, QueryEnvironment jarg1_, String jarg2);
   public final static native void delete_QueryEnvironment(long jarg1);
   public final static native void delete_QueryExpander(long jarg1);
   public final static native ScoredExtentResult[] QueryExpander_runExpandedQuery__SWIG_0(long jarg1, QueryExpander jarg1_, String jarg2, int jarg3, boolean jarg4);

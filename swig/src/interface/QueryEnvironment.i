@@ -388,6 +388,12 @@ public";
 
       void setFormulationParameters(indri::api::Parameters &p);
       std::string reformulateQuery(const std::string &query);
+
+      std::string stemTerm(const std::string &term);
+      INT64 termCountUnique();
+      INT64 stemCount( const std::string& term );
+      INT64 stemFieldCount( const std::string& term, const std::string& field );
+      INT64 documentStemCount( const std::string& stem );
     };
   }
 }

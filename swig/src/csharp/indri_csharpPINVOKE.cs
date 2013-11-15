@@ -1752,6 +1752,21 @@ class indri_csharpPINVOKE {
   [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_reformulateQuery")]
   public static extern string QueryEnvironment_reformulateQuery(HandleRef jarg1, string jarg2);
 
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_stemTerm")]
+  public static extern string QueryEnvironment_stemTerm(HandleRef jarg1, string jarg2);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_termCountUnique")]
+  public static extern long QueryEnvironment_termCountUnique(HandleRef jarg1);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_stemCount")]
+  public static extern long QueryEnvironment_stemCount(HandleRef jarg1, string jarg2);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_stemFieldCount")]
+  public static extern long QueryEnvironment_stemFieldCount(HandleRef jarg1, string jarg2, string jarg3);
+
+  [DllImport("indri_csharp", EntryPoint="CSharp_QueryEnvironment_documentStemCount")]
+  public static extern long QueryEnvironment_documentStemCount(HandleRef jarg1, string jarg2);
+
   [DllImport("indri_csharp", EntryPoint="CSharp_delete_QueryEnvironment")]
   public static extern void delete_QueryEnvironment(HandleRef jarg1);
 
