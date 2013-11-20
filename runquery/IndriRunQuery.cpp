@@ -541,6 +541,7 @@ public:
   }
 
   UINT64 initialize() {
+    try {        
     _environment.setSingleBackgroundModel( _parameters.get("singleBackgroundModel", false) );
 
     std::vector<std::string> stopwords;
@@ -601,6 +602,15 @@ public:
     if (_parameters.exists("maxWildcardTerms")) {
       _environment.setMaxWildcardTerms((int)_parameters.get("maxWildcardTerms"));
     }    
+    } catch ( lemur::api::Exception& e ) {      
+      while( _queries.size() ) {
+        query_t *query = _queries.front();
+        _queries.pop();
+        _output.push( new query_t( query->index, query->number, "query: " + query->number + " QueryThread::_initialize exception\n" ) );
+        _queueEvent.notifyAll();
+        LEMUR_RETHROW(e, "QueryThread::_initialize");
+      }
+    }
     return 0;
   }
 

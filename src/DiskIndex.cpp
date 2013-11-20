@@ -24,7 +24,7 @@
 #include "indri/Parameters.hpp"
 #include "indri/DiskDocumentDataIterator.hpp"
 #include "indri/CombinedVocabularyIterator.hpp"
-
+#include "lemur/Exception.hpp"
 #include "indri/DiskFrequentVocabularyIterator.hpp"
 #include "indri/DiskKeyfileVocabularyIterator.hpp"
 #include "indri/DiskTermListFileIterator.hpp"
@@ -33,6 +33,26 @@ void indri::index::DiskIndex::_readManifest( const std::string& path ) {
   indri::api::Parameters manifest;
   manifest.loadFile( path );
 
+  // FR #78 -- Check if the index is too old to use with the current rev.
+  std::string version = manifest.get("indri-distribution");
+  std::string dist(INDRI_DISTRIBUTION);
+  std::size_t space = dist.rfind(' ');
+  std::size_t dot = dist.rfind('.');
+  if (space != std::string::npos) {
+      int distmajor = atoi(dist.substr(space+1, dot-space-1).c_str());
+      int distminor = atoi(dist.substr(dot+1).c_str());
+      int vermajor = atoi(version.substr(space+1, dot-space-1).c_str());
+      int verminor = atoi(version.substr(dot+1).c_str());
+      // by fiat, all major version changes are incompatible with previous
+      if ((distmajor != vermajor) ||
+          // special case for 5.0..5.2
+          (vermajor == 5 && verminor < 3) || 
+          // two year span
+          ((distminor - verminor) > 4)) {
+        LEMUR_THROW( LEMUR_RUNTIME_ERROR, "_readManifest: Cannot open index created with version " + version.substr(space+1) + " using my version " +   dist.substr(space+1) + ". You need to reindex your data with this version."); 
+      } 
+  }
+  
   indri::api::Parameters corpus = manifest["corpus"];
 
   _corpusStatistics.totalDocuments = (int) corpus["total-documents"];
