@@ -144,6 +144,8 @@ namespace indri
           }
 
           if (!linkLine[0]) continue;
+          // stop adding extents, keep reading the lines to flush
+          if (terms.size() > 125000) continue;
           char *textStart = linkLine+6;
           size_t textLen = strlen(textStart);
           // now insert the terms with a separate inlink for each
