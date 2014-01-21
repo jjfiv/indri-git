@@ -106,8 +106,8 @@ inline int remove( const char* fileName ) {
 }
 
 #ifdef LEMUR_USES_ENUM_OPENMODE
-inline std::_Ios_Openmode ios_mode_cast( int mode ) {
-  return std::_Ios_Openmode(mode);
+  inline std::ios::openmode ios_mode_cast( int mode ) {
+  return std::ios::openmode(mode);
 }
 #else
 inline int ios_mode_cast( int mode ) {
