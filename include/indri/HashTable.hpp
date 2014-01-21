@@ -63,7 +63,7 @@ namespace indri
         const char* k = kp;
         char c;
 
-        for( ; c = *k; k++ ){
+        for( ; (c = *k); k++ ){
           hash = ((hash << 5) + hash) + c;
         }
 
