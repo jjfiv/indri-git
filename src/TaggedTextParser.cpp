@@ -76,7 +76,7 @@ indri::parse::TaggedTextParser::tag_properties* indri::parse::TaggedTextParser::
 
   tag_properties* result = 0;
 
-  if ( result = _findTag( name.c_str() ) )
+  if ( (result = _findTag( name.c_str()) ) )
     return result;
 
   result = (tag_properties*) malloc( sizeof(tag_properties) + name.length() + 1 );

@@ -269,7 +269,8 @@ std::string indri::index::DiskIndex::term( lemur::api::TERMID_T termID ) {
 int indri::index::DiskIndex::documentLength( lemur::api::DOCID_T documentID ) {
   unsigned int documentOffset = documentID - _corpusStatistics.baseDocument;
 
-  if( documentOffset < 0 || _corpusStatistics.totalDocuments <= documentOffset ) 
+  if( documentID < _corpusStatistics.baseDocument ||
+      _corpusStatistics.totalDocuments <= documentOffset ) 
     return 0;
 
   int length;

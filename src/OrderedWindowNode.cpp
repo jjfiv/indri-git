@@ -63,7 +63,7 @@ bool indri::infnet::OrderedWindowNode::findNextPossibleOccurrence(int i,
       
       _pointers[i].iter++;
       // if we're out of word positions for any term, then we're done
-      if( _pointers[i].iter == _pointers[i].end )
+      if( _pointers[i].iter == _pointers[i].end ) {          
         // used to always be "return" but we can't because if we
         // overshot on a nested extent (see below) we could bail
         // too early. However, if we're so far behind that we're
@@ -76,6 +76,7 @@ bool indri::infnet::OrderedWindowNode::findNextPossibleOccurrence(int i,
           --_pointers[i].iter;
           break;
         }
+      }
     }
   } else {
     // but when there are nested extents, we might have overshot and

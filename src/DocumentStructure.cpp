@@ -338,7 +338,7 @@ indri::index::DocumentStructure::fieldId( const std::string path ) {
 
   int seen = 0;
   
-  while ( loc >= 0 && loc < path.size() ) {
+  while ( loc != std::string::npos && loc < path.size() ) {
   
     // seek to first path name
     int typeBegin = path.find_first_not_of( "/", loc );

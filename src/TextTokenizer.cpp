@@ -3563,7 +3563,7 @@ indri::parse::TokenizedDocument* indri::parse::TextTokenizer::tokenize( indri::p
 
   int type;
 
-  while ( type = toklex() ) {
+  while ( (type = toklex()) ) {
 
     switch ( type ) {
 

@@ -395,7 +395,7 @@ void indri::api::IndexEnvironment::addFile( const std::string& fileName, const s
       // notify caller that the file was successfully parsed
       if( _callback ) (*_callback)( indri::api::IndexStatus::FileOpen, fileName, _error, _documentsIndexed, _documentsSeen );
 
-      while( document = iterator->nextDocument() ) {
+      while( (document = iterator->nextDocument()) ) {
         _documentsSeen++;
 
         tokenized = tokenizer->tokenize( document );

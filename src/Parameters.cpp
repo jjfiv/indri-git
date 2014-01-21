@@ -45,7 +45,7 @@ void indri::api::Parameters::_parseNextSegment( std::string& segment, int& array
   size_t openBracket = segment.find( '[' );
   size_t closeBracket = segment.find( ']' );
 
-  if( openBracket >= 0 && closeBracket > openBracket ) {
+  if( openBracket != std::string::npos && closeBracket > openBracket ) {
     arrayIndex = 0;
 
     for( size_t i=openBracket+1; i<closeBracket; i++ ) {
@@ -422,8 +422,8 @@ void indri::api::Parameters::_loadXML( indri::xml::XMLNode* node ) {
     if( appends.find(*iter) != appends.end() )
       continue;
 
-    if( exists(*iter) && 
-        get(*iter).size() > 1 ||
+    if( (exists(*iter) && 
+         get(*iter).size() > 1) ||
         arrays.find(*iter) != arrays.end() ) {
       remove(*iter);
       appends.insert(*iter);

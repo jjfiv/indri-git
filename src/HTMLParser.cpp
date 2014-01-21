@@ -155,9 +155,9 @@ void indri::parse::HTMLParser::handleTag( TagEvent* te ) {
               }
             }
             for( c = urlText; *c; c++ ) {              
-              if( *c >= 'A' && *c <= 'Z' ||
-                  *c >= 'a' && *c <= 'z' ||
-                  *c >= '0' && *c <= '9' ) 
+              if( (*c >= 'A' && *c <= 'Z') ||
+                  (*c >= 'a' && *c <= 'z') ||
+                  (*c >= '0' && *c <= '9') ) 
                 {
                   if( lastSkipped ) {
                     lastSkipped = false;

@@ -568,7 +568,7 @@ indri::file::BulkTreeIterator* indri::file::BulkTreeReader::findFirst(const char
   int rootID = int(_fileLength / BULK_BLOCK_SIZE) - 1;
 
   if( rootID < 0 )
-    return false;
+    return NULL;
 
   int nextID = rootID;
 
@@ -584,7 +584,7 @@ indri::file::BulkTreeIterator* indri::file::BulkTreeReader::findFirst(const char
     bool result = block->findGreater( key, keyLength, (char*) &nextID, actual, sizeof(nextID) );
 
     if( !result )
-      return false;
+      return NULL;
 
     assert( actual == sizeof(nextID) );
   }

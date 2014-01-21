@@ -190,7 +190,7 @@ int main( int argc, char* argv[] ) {
 
     // this handles the threading issue by only allowing one
     // connection at a time; for our current uses this is fine
-    while( connection = listener.accept() ) {
+    while( (connection = listener.accept()) ) {
       connection_info* info = build_connection( connection, &server );
       connections.push_back( info );
 
