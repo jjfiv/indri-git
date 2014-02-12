@@ -208,21 +208,8 @@
     <ClCompile Include="pagerank.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\contrib\lemur\lemur-VS2012.vcxproj">
-      <Project>{8416a7bd-3bb5-45e6-8a5b-98f8fa933a78}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\contrib\xpdf\xpdf-VS2012.vcxproj">
-      <Project>{1c44b55a-f815-42e6-b91b-d07741d1f7c4}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\contrib\zlib\zlib-VS2012.vcxproj">
-      <Project>{f1667f44-3873-44da-af33-6dfe942a024e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\src\indri-VS2012.vcxproj">
-      <Project>{5c8d97a4-e7fa-4b9d-b18a-f159560a4a40}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\dist\dist-VS2012.vcxproj">
+      <Project>{96c92d82-4468-4e36-9cfc-c4ea0a792e99}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
