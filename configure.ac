@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT([Indri],[5.6],[project@lemurproject.org])
 CFLAGS=${CFLAGS:-"-g -O3"}
 CXXFLAGS=${CXXFLAGS:-"-g -O3"}
-AC_CONFIG_SRCDIR(indri.sln)
+AC_CONFIG_SRCDIR(indri-VS2012.sln)
 AC_CONFIG_FILES(MakeDefns Makefile.app)
 AC_CONFIG_FILES([site-search/build.param site-search/crawl-index site-search/seeds.txt site-search/excluded_hosts], [test -f site-search/crawl-index && chmod +x site-search/crawl-index])
 dnl To use a header file instead of command line -D defs, use
