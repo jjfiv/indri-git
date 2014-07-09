@@ -66,6 +66,7 @@
 #include <string>
 #include <set>
 #include <utility>
+#include <algorithm>
 
 #include "indri/Buffer.hpp"
 #include "indri/Transformation.hpp"
