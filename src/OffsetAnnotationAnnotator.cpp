@@ -946,7 +946,8 @@ indri::api::ParsedDocument* indri::parse::OffsetAnnotationAnnotator::transform( 
         i != converted_tags->end(); i++ ) {
     document->tags.push_back( (*i) );
   }
-
+  // resort in case there were any annotations inline.
+  std::sort( document->tags.begin(), document->tags.end(), indri::parse::LessTagExtent() );
   converted_tags->clear();
   //never inserted in _converted_annotations, delete it
   delete(converted_tags);
