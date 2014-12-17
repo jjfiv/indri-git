@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([Indri],[5.7],[project@lemurproject.org])
+AC_INIT([Indri],[5.8],[project@lemurproject.org])
 CFLAGS=${CFLAGS:-"-g -O3"}
 CXXFLAGS=${CXXFLAGS:-"-g -O3"}
 AC_CONFIG_SRCDIR(indri-VS2012.sln)
