@@ -193,6 +193,7 @@ inline const char* strcasestr( const char* one, const char* two ) {
 }
 #endif
 
+
 #if defined(WORDS_BIGENDIAN)
 inline double htond( double native ) {
   return native;
@@ -211,6 +212,7 @@ inline double ntohd( double native ) {
 }
 #endif 
 
+#ifndef __APPLE__
 #if defined(WORDS_BIGENDIAN)
 inline UINT64 htonll( UINT64 native ) {
   return native;
@@ -227,6 +229,7 @@ inline UINT64 htonll( UINT64 native ) {
 inline UINT64 ntohll( UINT64 native ) {
   return flipll( native );
 }
+#endif
 #endif
 
 void initializeNetwork();
