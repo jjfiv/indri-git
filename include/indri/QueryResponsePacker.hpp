@@ -65,7 +65,11 @@ namespace indri
                 byteSwapped.end = htonl(unswapped.end);
                 byteSwapped.document = htonl(unswapped.document );
                 byteSwapped.score = lemur_compat::htond(unswapped.score);
+#ifndef __APPLE__
+                byteSwapped.number = lemur_compat::htonll(unswapped.number);
+#else
                 byteSwapped.number = htonll(unswapped.number);
+#endif
                 byteSwapped.ordinal = htonl(unswapped.ordinal);
                 byteSwapped.parentOrdinal = htonl(unswapped.parentOrdinal);
 
