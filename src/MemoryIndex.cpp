@@ -83,6 +83,9 @@ indri::index::MemoryIndex::MemoryIndex( lemur::api::DOCID_T docBase, const std::
 //----------------------------
 
 indri::index::MemoryIndex::~MemoryIndex() {
+  //get the lock back before destroying the terms if the vocabulary iterator 
+  //is running
+  indri::thread::ScopedLock sl( _readLock );
   // delete term lists
   std::list<indri::utility::Buffer*>::iterator bufferIter;
   for( bufferIter = _termLists.begin(); bufferIter != _termLists.end(); bufferIter++ ) {

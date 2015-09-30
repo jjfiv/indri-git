@@ -17,6 +17,7 @@
 //
 
 #include "indri/InferenceNetworkBuilder.hpp"
+#include "indri/ScopedLock.hpp"
 
 #include "indri/ContextCountAccumulator.hpp"
 #include "indri/ContextSimpleCountAccumulator.hpp"
@@ -1228,6 +1229,7 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WildcardTerm* w
     for (size_t i=0; i < numIndexes; i++) {
       // get the index.
       indri::index::Index* thisIndex = (*theIndexes)[i];
+      indri::thread::ScopedLock iterators( thisIndex->iteratorLock() );
 
       // for each index in the repository...
       // get a the vocabulary iterator from the index...
@@ -1272,6 +1274,8 @@ void indri::infnet::InferenceNetworkBuilder::after( indri::lang::WildcardTerm* w
         delete vIter;
 
       } // end if (vIter)
+      iterators.unlock();
+
     } // end for (int i=0; i < numIndexes; i++)
 
     // ok - now we can create our ExtentOrNode...
