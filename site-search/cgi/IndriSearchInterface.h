@@ -58,6 +58,8 @@ private:
 
   string stripHtmlTags(string inputString);
 
+  string escapeHtmlTags(string inputString);
+
   std::string getASCIIFromPercentEncoding(std::string inputSequence);
 
   std::string normalizeURL(std::string inputURL);

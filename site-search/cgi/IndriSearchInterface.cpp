@@ -115,6 +115,25 @@ string IndriSearchInterface::stripHtmlTags(string inputString) {
   return retString;
 }
 
+string IndriSearchInterface::escapeHtmlTags(string s) {
+  stringstream outputString;
+
+  int sLen=s.length();
+  for (int i=0; i < sLen; i++) {
+    char cChar=s[i];
+    switch(cChar) {                                                                                                                                                           
+    case 38 :  outputString << "&amp;";       break;                                                                                                                      \
+    case 34  : outputString << "&quot;";      break;                                                                                                                      \
+    case 39  : outputString << "&apos;";      break;                                                                                                                      \
+    case 60:  outputString << "&lt;";        break;                                                                                                                       \
+    case 62:  outputString << "&gt;";        break;                                                                                                                       \
+    default:   outputString << cChar;        break;
+    }
+  }
+  return outputString.str();
+}
+
+
 #define INDRI_SNIPPET_MAX_WINDOWSIZE 50
 
 std::string IndriSearchInterface::getScoredExtentSummaryString(indri::api::ScoredExtentResult &result, std::vector<std::string> *nodes, std::map< std::string, std::vector<indri::api::ScoredExtentResult> > *annotations, string docext) {
@@ -715,10 +734,11 @@ void IndriSearchInterface::performSearch(string &query, int maxNumResults,
 						  totalNumResults);
   } catch (...) {
     output->resetResultsPage();
-    output->setResultQuery(origQueryCopy);
+    string escapedResultQuery = escapeHtmlTags(origQueryCopy);
+    output->setResultQuery(escapedResultQuery);
     output->setResultStatistics(0, 0, 0, 0);
     output->displayResultsPageBeginning();
-    output->outputString("The query &quot;&nbsp;<strong>" + origQueryCopy + "</strong>&nbsp;&quot; could not be properly parsed. Please restate the query.");
+    output->outputString("The query &quot;&nbsp;<strong>" + escapedResultQuery + "</strong>&nbsp;&quot; could not be properly parsed. Please restate the query.");
     output->displayResultsPageEnding();
     if (oQueryLog) {
       fprintf(oQueryLog, "(exception thrown)\n");
@@ -739,7 +759,8 @@ void IndriSearchInterface::performSearch(string &query, int maxNumResults,
 
   // reset out results page to initialize it...
   output->resetResultsPage();
-  output->setResultQuery(origQueryCopy);
+  string resultQuery = escapeHtmlTags(origQueryCopy);
+  output->setResultQuery(resultQuery);
 
   if (oQueryLog) {
     fprintf(oQueryLog, "(%ld results)\n", finalResults.size());
