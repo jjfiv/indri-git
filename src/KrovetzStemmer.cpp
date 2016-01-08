@@ -1146,7 +1146,7 @@ namespace indri
     static const char *exceptions[] = {
       "aide",
       "bathe", "caste", "cute", "dame", "dime", "doge", "done", "dune",
-      "envelope", "gage", "grille", "grippe", "lobe", "mane", "mare",
+      "emeritus", "envelope", "gage", "grille", "grippe", "lobe", "mane", "mare",
       "nape", "node", "pane", "pate", "plane", "pope", "programme",
       "quite", "ripe", "rote", "rune", "sage", "severe", "shoppe",
       "sine", "slime", "snipe", "steppe", "suite", "swinge", "tare",
@@ -1232,6 +1232,7 @@ namespace indri
         {"crises", "crisis"},
         {"dwarves", "dwarf"},
         {"eerily", "eerie"},
+        {"emerita", "emeritus"}, {"emeriti", "emeritus"},
         {"housewives", "housewife"},
         {"midwives", "midwife"},
         {"oases", "oasis"},
