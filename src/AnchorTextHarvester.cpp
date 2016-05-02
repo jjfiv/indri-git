@@ -4,7 +4,6 @@
 #include <list>
 #include <map>
 #include <sstream>
-#include <iostream>
 
 using namespace indri::parse;
 using namespace indri::api;
