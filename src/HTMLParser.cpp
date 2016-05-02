@@ -70,7 +70,7 @@ void indri::parse::HTMLParser::initialize( TokenizedDocument* tokenized, indri::
 
   _urlBuffer.clear();
   //  _urlBuffer.grow( parsed->textLength * 4 ); // will this be large enough?
-  _urlBuffer.grow( 1024 * 1024 * 25 );
+  _urlBuffer.grow( 1024 * 1024 * 30 );
 }
 
 void indri::parse::HTMLParser::cleanup( indri::parse::TokenizedDocument* tokenized, indri::api::ParsedDocument* parsed ) {
@@ -140,7 +140,15 @@ void indri::parse::HTMLParser::handleTag( TagEvent* te ) {
             memcpy( write_location, tmp_buf, len + 1 );
             // hack to make whole url available to harvest links
             _document.terms.push_back( write_location );
-            write_location = _urlBuffer.write( len + 1 );
+	    size_t bufferSize1 = _urlBuffer.size();
+	    write_location = _urlBuffer.write( len + 1 );
+	    size_t bufferSize2 = _urlBuffer.size();
+	    // This is a hack to prevent a SegFault in Harvest links
+	    // Throws in exception if the buffer grows because if the buffer grows
+	    // the pointers in the document are not updated and a SegFault is thrown
+	    if (bufferSize2 > bufferSize1) {
+	      throw std::out_of_range("_urlBuffer is not big enough.  Increase _urlBuffer.grow in HTMLParser.cpp");
+	    }
             memcpy( write_location, tmp_buf, len + 1 );
             cnt++; tokens_excluded--;
             // end hack -- dmf
