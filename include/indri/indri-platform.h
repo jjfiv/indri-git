@@ -18,7 +18,7 @@
  *    * type size constants
  *    * typedefs
  *
- * As this is a Indri header, it is also appropriate to put general
+ * As this is an Indri header, it is also appropriate to put general
  * Indri-specific typedefs here.
  */
 
@@ -28,7 +28,7 @@
 #include "lemur/lemur-platform.h"
 
 #define INDRID_PORT ( 16743 )
-#define INDRI_DISTRIBUTION "Indri development release 5.8"
+#define INDRI_DISTRIBUTION "Indri release 5.11"
 
 #endif /* INDRI_PLATFORM_H */
 
